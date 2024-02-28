@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from typing import Optional
 
 import pystac
 from shapely.geometry import Polygon, mapping
@@ -10,14 +11,16 @@ from shapely.geometry import Polygon, mapping
 
 class StacGenerator(ABC):
     """STAC generator base class."""
+
     def __init__(self, data_type, data_file) -> None:
         self.data_type = data_type
         self.data_file = data_file
-        self.standard_file = f"./standards/{self.data_type}_standard.csv"
+        self.schema_file = f"./schemas/{self.data_type}_schema.csv"
+        self.catalog: Optional[pystac.Catalog] = None
 
     def read_standard(self) -> str:
         """Open the standard definition file and return the contents as a string."""
-        with open(self.standard_file, encoding='utf-8') as f:
+        with open(self.schema_file, encoding="utf-8") as f:
             standard = f.readline().strip("\n")
             return standard
 
@@ -27,7 +30,7 @@ class StacGenerator(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def generate(self):
+    def generate(self) -> pystac.Catalog:
         """Generate a STAC catalog for the provided metadata implementation."""
         raise NotImplementedError
 
@@ -39,26 +42,27 @@ class StacGenerator(ABC):
 
 class DroneStacGenerator(StacGenerator):
     """STAC generator for drone data."""
+
     def __init__(self, data_file) -> None:
         super().__init__("drone", data_file)
 
     def validate_data(self) -> bool:
-        with open(self.data_file, encoding='utf-8') as data:
+        with open(self.data_file, encoding="utf-8") as data:
             data_keys = data.readline().strip("\n")
             standard_keys = self.read_standard()
             if data_keys != standard_keys:
                 raise ValueError("The data keys do not match the standard keys.")
             return True
 
-    def generate(self):
+    def generate(self) -> pystac.Catalog:
         # Create the STAC catalog.
-        catalog = pystac.Catalog(
-            id="test_catalog", description="This is a test catalog."
-        )
+        catalog = pystac.Catalog(id="test_catalog", description="This is a test catalog.")
         location = "s3://example.com"
         # Get the bounding box of the item.
-        bbox = [0, 0, 1, 1]
-        footprint = Polygon([[0, 0], [0, 1], [1, 0], [1, 1], [0, 0]])
+        bbox = [0.0, 0.0, 1.0, 1.0]
+        footprint = Polygon(
+            [[bbox[0], bbox[1]], [bbox[0], bbox[3]], [bbox[2], bbox[3]], [bbox[2], bbox[1]]]
+        )
         # Create the STAC item.
         datetime_utc = datetime.now()
         item = pystac.Item(
@@ -74,26 +78,43 @@ class DroneStacGenerator(StacGenerator):
             key="image",
             asset=pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF),
         )
+        # Save the catalog to disk.
         with TemporaryDirectory() as tmp_dir:
-            catalog.normalize_hrefs((Path(tmp_dir.name) / "stac").name)
+            catalog.normalize_hrefs(str(Path(tmp_dir) / "stac"))
+            catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
+        self.catalog = catalog
+        return self.catalog
 
-        print("Catalog HREF: ", catalog.get_self_href())
-        print("Item HREF: ", item.get_self_href())
-
-    def validate_stac(self):
-        pass
+    def validate_stac(self) -> bool:
+        if self.catalog:
+            if self.catalog.validate():
+                return True
+        return False
 
 
 class SensorStacGenerator(StacGenerator):
     """STAC generator for sensor data."""
+
     def __init__(self, data_file) -> None:
         super().__init__("sensor", data_file)
 
     def validate_data(self) -> bool:
-        return False
+        raise NotImplementedError
 
-    def generate(self):
-        pass
+    def generate(self) -> pystac.Catalog:
+        raise NotImplementedError
 
     def validate_stac(self):
-        pass
+        raise NotImplementedError
+
+
+class StacGeneratorFactory:
+    @staticmethod
+    def get_stac_generator(data_type, data_file) -> StacGenerator:
+        # Get the correct type of generator depending on the data type.
+        if data_type == "drone":
+            return DroneStacGenerator(data_file)
+        elif data_type == "sensor":
+            return SensorStacGenerator(data_file)
+        else:
+            raise Exception(f"{data_type} is not a valid data type.")
