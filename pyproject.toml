@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "stac-generator"
+version = "0.1.0"
+description = "Generate valid STAC catalogs"
+authors = ["Joseph Sclauzero <joseph.sclauzero@adelaide.com.au>"]
+readme = "README.md"
+repository = ""
+packages = [
+    { include = "pystac" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pystac = "^1.9.0"
+shapely = "^2.0.3"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+pytest-cov = "^4.1.0"
+ruff = "^0.1.15"
+pre-commit = "^3.4.0"
+typer = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.coverage.report]
+exclude_also = [
+    "def __repr__",
+    "@(abc\\.)?abstractmethod",
+    "def __getattr__",
+    "if TYPE_CHECKING:"
+]
+
+[tool.ruff]
+line-length = 100
+src = ["stac_generator"]
+target-version = "py311"
