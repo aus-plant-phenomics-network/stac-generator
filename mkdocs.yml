@@ -1,0 +1,40 @@
+site_name: STAC Generator
+theme:
+    name: 'material'
+    palette:
+      - scheme: 'default'
+        media: '(prefers-color-scheme: light)'
+        toggle:
+          icon: 'material/lightbulb'
+          name: "Switch to dark mode"
+      - scheme: 'slate'
+        media: '(prefers-color-scheme: dark)'
+        primary: 'blue'
+        toggle:
+          icon: 'material/lightbulb-outline'
+          name: 'Switch to light mode'
+
+nav:
+  - API Reference:
+    - Generator: generator.md
+    - Schema: schema.md
+    - Utility: utils.md
+    # - Typing: typing.md
+    - Extension:
+      - csv:
+        - Schema: extensions/csv/schema.md
+        - Utils: extensions/csv/utils.md
+
+plugins:
+  - search
+  - autorefs
+  - mkdocstrings:
+      enable_inventory: true
+      handlers:
+        python:
+          options:
+            docstring_style: sphinx
+            show_source: false
+            heading_level: 2
+            members_order: source
+            annotations_path: source
