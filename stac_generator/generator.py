@@ -12,9 +12,10 @@ from shapely.geometry import Polygon, mapping
 class StacGenerator(ABC):
     """STAC generator base class."""
 
-    def __init__(self, data_type, data_file) -> None:
+    def __init__(self, data_type, data_file, location_file) -> None:
         self.data_type = data_type
         self.data_file = data_file
+        self.location_file = location_file
         self.schema_file = f"./schemas/{self.data_type}_schema.csv"
         self.catalog: Optional[pystac.Catalog] = None
 
@@ -43,8 +44,8 @@ class StacGenerator(ABC):
 class DroneStacGenerator(StacGenerator):
     """STAC generator for drone data."""
 
-    def __init__(self, data_file) -> None:
-        super().__init__("drone", data_file)
+    def __init__(self, data_file, location_file) -> None:
+        super().__init__("drone", data_file, location_file)
 
     def validate_data(self) -> bool:
         with open(self.data_file, encoding="utf-8") as data:
@@ -57,27 +58,31 @@ class DroneStacGenerator(StacGenerator):
     def generate(self) -> pystac.Catalog:
         # Create the STAC catalog.
         catalog = pystac.Catalog(id="test_catalog", description="This is a test catalog.")
-        location = "s3://example.com"
-        # Get the bounding box of the item.
-        bbox = [0.0, 0.0, 1.0, 1.0]
-        footprint = Polygon(
-            [[bbox[0], bbox[1]], [bbox[0], bbox[3]], [bbox[2], bbox[3]], [bbox[2], bbox[1]]]
-        )
-        # Create the STAC item.
-        datetime_utc = datetime.now()
-        item = pystac.Item(
-            id="test_item_1",
-            geometry=mapping(footprint),
-            bbox=bbox,
-            datetime=datetime_utc,
-            properties={},
-        )
-        # Add the item to the catalog.
-        catalog.add_item(item)
-        item.add_asset(
-            key="image",
-            asset=pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF),
-        )
+        with open(self.location_file, encoding="utf-8") as locations:
+            counter = 0
+            for line in locations:
+                counter += 1
+                location = line.strip("\n")
+                # Get the bounding box of the item.
+                bbox = [0.0, 0.0, 1.0, 1.0]
+                footprint = Polygon(
+                    [[bbox[0], bbox[1]], [bbox[0], bbox[3]], [bbox[2], bbox[3]], [bbox[2], bbox[1]]]
+                )
+                # Create the STAC item.
+                datetime_utc = datetime.now()
+                item = pystac.Item(
+                    id=f"test_item_{counter}",
+                    geometry=mapping(footprint),
+                    bbox=bbox,
+                    datetime=datetime_utc,
+                    properties={},
+                )
+                # Add the item to the catalog.
+                item.add_asset(
+                    key="image",
+                    asset=pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF),
+                )
+                catalog.add_item(item)
         # Save the catalog to disk.
         with TemporaryDirectory() as tmp_dir:
             catalog.normalize_hrefs(str(Path(tmp_dir) / "stac"))
@@ -95,8 +100,8 @@ class DroneStacGenerator(StacGenerator):
 class SensorStacGenerator(StacGenerator):
     """STAC generator for sensor data."""
 
-    def __init__(self, data_file) -> None:
-        super().__init__("sensor", data_file)
+    def __init__(self, data_file, location_file) -> None:
+        super().__init__("sensor", data_file, location_file)
 
     def validate_data(self) -> bool:
         raise NotImplementedError
@@ -110,11 +115,11 @@ class SensorStacGenerator(StacGenerator):
 
 class StacGeneratorFactory:
     @staticmethod
-    def get_stac_generator(data_type, data_file) -> StacGenerator:
+    def get_stac_generator(data_type, data_file, location_file) -> StacGenerator:
         # Get the correct type of generator depending on the data type.
         if data_type == "drone":
-            return DroneStacGenerator(data_file)
+            return DroneStacGenerator(data_file, location_file)
         elif data_type == "sensor":
-            return SensorStacGenerator(data_file)
+            return SensorStacGenerator(data_file, location_file)
         else:
             raise Exception(f"{data_type} is not a valid data type.")
