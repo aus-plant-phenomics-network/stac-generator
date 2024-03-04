@@ -43,6 +43,7 @@ class StacGenerator(ABC):
 
 class DroneStacGenerator(StacGenerator):
     """STAC generator for drone data."""
+    # TODO: Consider eo stac extension for drone catalog
 
     def __init__(self, data_file, location_file) -> None:
         super().__init__("drone", data_file, location_file)
@@ -64,6 +65,7 @@ class DroneStacGenerator(StacGenerator):
                 counter += 1
                 location = line.strip("\n")
                 # Get the bounding box of the item.
+                # TODO: Instead read the file and get the bbox with rasterio.
                 bbox = [0.0, 0.0, 1.0, 1.0]
                 footprint = Polygon(
                     [[bbox[0], bbox[1]], [bbox[0], bbox[3]], [bbox[2], bbox[3]], [bbox[2], bbox[1]]]
