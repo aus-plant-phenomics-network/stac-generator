@@ -1,5 +1,1 @@
-s3://example_1.com
-s3://example_2.com
-s3://example_3.com
-s3://example_4.com
-s3://example_5.com
+http://localhost:9090/drone-data/first-300-orthophoto.tif
