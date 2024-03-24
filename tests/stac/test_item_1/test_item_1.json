@@ -1,0 +1,60 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "test_item_1",
+  "properties": {
+    "datetime": "2024-03-12T14:35:50.651797Z"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          116.96640192684013,
+          -31.930818992759765
+        ],
+        [
+          116.96640246087752,
+          -31.929350481993794
+        ],
+        [
+          116.96916478816145,
+          -31.92935118254285
+        ],
+        [
+          116.96916429803164,
+          -31.930819693348617
+        ],
+        [
+          116.96640192684013,
+          -31.930818992759765
+        ]
+      ]
+    ]
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "../catalog.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "../catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "image": {
+      "href": "http://localhost:9090/drone-data/first-300-orthophoto.tif",
+      "type": "image/tiff; application=geotiff"
+    }
+  },
+  "bbox": [
+    116.96640192684013,
+    -31.930819693348617,
+    116.96916478816145,
+    -31.929350481993794
+  ],
+  "stac_extensions": []
+}
