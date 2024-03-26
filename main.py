@@ -1,9 +1,7 @@
 from argparse import ArgumentParser
 from pathlib import Path
 
-import requests
-
-from stac_generator.generator import StacGeneratorFactory
+from stac_generator.generator_factory import StacGeneratorFactory
 
 if __name__ == "__main__":
     # Build the CLI argument parser
@@ -20,9 +18,5 @@ if __name__ == "__main__":
     location_file = Path(args.file)
     # Create the STAC catalog
     generator = StacGeneratorFactory().get_stac_generator(data_type, data_file, location_file)
-    generator.validate_data()
-    collection = generator.generate_collection()
-    is_valid = generator.validate_stac()
-    # TODO: Build URL from components rather than hardcode here.
-    api_collections_url = "http://localhost:8082/collections"
-    response = requests.post(api_collections_url, json=collection.to_dict())
+    # print(generator.collection.to_dict())
+    generator.write_to_api()
