@@ -5,6 +5,9 @@ from shapely.ops import transform
 
 
 def get_bbox_and_footprint(raster):
+    # TODO: It is likely not best practice to open the raster multiple times to get different
+    # TODO: pieces of information. Consider opening once and getting everything relevant. For
+    # TODO: now this is the only case of opening the asset so it's OK.
     with rasterio.open(raster) as r:
         bounds = r.bounds
         # Reproject the bbox to WGS84
