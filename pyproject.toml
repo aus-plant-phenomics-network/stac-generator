@@ -29,6 +29,7 @@ matplotlib = "^3.8.3"
 psycopg2 = "^2.9.9"
 datacube = "^1.8.17"
 odc-stac = "^0.3.9"
+rioxarray = "^0.15.1"
 
 
 [tool.poetry.group.api.dependencies]

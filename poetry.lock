@@ -3652,6 +3652,31 @@ files = [
 ]
 
 [[package]]
+name = "rioxarray"
+version = "0.15.1"
+description = "geospatial xarray extension powered by rasterio"
+optional = false
+python-versions = ">=3.10"
+files = [
+    {file = "rioxarray-0.15.1-py3-none-any.whl", hash = "sha256:75c41e5836a9adba2a42a2cdbc62a50b81e01bd4fcc9f55a96f187322182d671"},
+    {file = "rioxarray-0.15.1.tar.gz", hash = "sha256:c6d30d8b1b12924dffc45c4d55764840039fa0c8b551589d6cc1364e158e6055"},
+]
+
+[package.dependencies]
+numpy = ">=1.23"
+packaging = "*"
+pyproj = ">=3.3"
+rasterio = ">=1.3"
+xarray = ">=2022.3.0"
+
+[package.extras]
+all = ["dask", "mypy", "nbsphinx", "netcdf4", "pre-commit", "pylint", "pytest (>=3.6)", "pytest-cov", "pytest-timeout", "scipy", "sphinx-click", "sphinx-rtd-theme"]
+dev = ["dask", "mypy", "nbsphinx", "netcdf4", "pre-commit", "pylint", "pytest (>=3.6)", "pytest-cov", "pytest-timeout", "scipy", "sphinx-click", "sphinx-rtd-theme"]
+doc = ["nbsphinx", "sphinx-click", "sphinx-rtd-theme"]
+interp = ["scipy"]
+test = ["dask", "netcdf4", "pytest (>=3.6)", "pytest-cov", "pytest-timeout"]
+
+[[package]]
 name = "rpds-py"
 version = "0.18.0"
 description = "Python bindings to Rust's persistent data structures (rpds)"
@@ -4667,4 +4692,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f45f13234df461aaf379a4e6e91881c4dc1bf7fbdd03f950b23a9644d46f7efc"
+content-hash = "d2650f22f91e01847de7020ee93ed79f6db739fe23f6295e7d51acd3de41a968"
