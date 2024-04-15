@@ -59,9 +59,11 @@ class DroneStacGenerator(StacGenerator):
         # to load data without specifying particular parameters.
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
+        # TODO: Magic tuple below, must generate from reading file in question.
         shape = (5223, 3256)
         affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i]
                             for i in range(9)]
+        # TODO: Get epsg code from file.
         proj_ext_on_item.apply(epsg="4326", shape=shape, transform=affine_transform)
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
@@ -82,8 +84,8 @@ class DroneStacGenerator(StacGenerator):
         eo_ext_on_item.apply(bands=all_eo_bands, cloud_cover=0.0, snow_cover=0.0)
         eo_ext_on_asset.apply(bands=all_eo_bands)
         # Build the data for the "raster" extension. The raster extension must be present for
-        # odc-stac to be able to load data from a multi-bad tiff asset. Raster does not have
-        # an item level class so add with asset.
+        # odc-stac to be able to load data from a multi-band tiff asset. Raster does not have
+        # an item level class so add to extensions with asset instead.
         raster_ext_on_asset = AssetRasterExtension.ext(asset, add_if_missing=True)
         red_raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
         blue_raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
