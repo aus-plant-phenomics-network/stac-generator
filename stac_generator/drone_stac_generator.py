@@ -60,11 +60,11 @@ class DroneStacGenerator(StacGenerator):
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         # TODO: Magic tuple below, must generate from reading file in question.
-        shape = (5223, 3256)
+        shape = [5223, 3256]
         affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i]
                             for i in range(9)]
         # TODO: Get epsg code from file.
-        proj_ext_on_item.apply(epsg="4326", shape=shape, transform=affine_transform)
+        proj_ext_on_item.apply(epsg=4326, shape=shape, transform=affine_transform)
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
         eo_ext_on_asset = AssetEOExtension.ext(asset)
