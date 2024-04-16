@@ -2,8 +2,10 @@
 from datetime import datetime
 
 import pystac
+import rasterio
 import requests
 from pystac.extensions.eo import AssetEOExtension, ItemEOExtension, Band
+from pystac.extensions.projection import ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 
 from stac_generator.generator import StacGenerator
@@ -40,7 +42,31 @@ class DroneStacGenerator(StacGenerator):
         # Could have RGB, thumbnail, etc. in the future.
         datetime_utc = datetime.now()
         asset = pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF)
+        # Create the STAC item and attach the assets.
+        item = pystac.Item(
+            id=f"multiple_assets_{counter}",
+            geometry=footprint,
+            bbox=bbox,
+            datetime=datetime_utc,
+            properties={},
+        )
+        # Add the asset to the item.
+        item.add_asset(
+            key="image",
+            asset=asset
+        )
+        # Build the data for the "projection" extension. The proj extension allows odc-stac
+        # to load data without specifying particular parameters.
+        proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
+        # Shape order is (y, x)
+        # TODO: Magic tuple below, must generate from reading file in question.
+        shape = [5223, 3256]
+        affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i]
+                            for i in range(9)]
+        # TODO: Get epsg code from file.
+        proj_ext_on_item.apply(epsg=4326, shape=shape, transform=affine_transform)
         # Build the data for the "eo" extension.
+        eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
         eo_ext_on_asset = AssetEOExtension.ext(asset)
         red_eo_band = Band.create(name="R1", common_name="red", description="",
                                   center_wavelength=0.65)
@@ -55,10 +81,12 @@ class DroneStacGenerator(StacGenerator):
         # in different assets they should all use the same values and include the optional 'name'
         # field to enable clients to combine and summarise the bands.
         all_eo_bands = [red_eo_band, blue_eo_band, green_eo_band, nir_eo_band]
+        eo_ext_on_item.apply(bands=all_eo_bands, cloud_cover=0.0, snow_cover=0.0)
         eo_ext_on_asset.apply(bands=all_eo_bands)
         # Build the data for the "raster" extension. The raster extension must be present for
-        # odc-stac to be able to load data from a multi-bad tiff asset.
-        raster_ext_on_asset = AssetRasterExtension.ext(asset)
+        # odc-stac to be able to load data from a multi-band tiff asset. Raster does not have
+        # an item level class so add to extensions with asset instead.
+        raster_ext_on_asset = AssetRasterExtension.ext(asset, add_if_missing=True)
         red_raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
         blue_raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
         green_raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
@@ -68,21 +96,6 @@ class DroneStacGenerator(StacGenerator):
         # TODO: Investigate how the order of bands is mapped.
         all_raster_bands = [red_raster_band, blue_raster_band, green_raster_band, nir_raster_band]
         raster_ext_on_asset.apply(bands=all_raster_bands)
-        # Create the STAC item and attach the assets.
-        item = pystac.Item(
-            id=f"multiple_assets_{counter}",
-            geometry=footprint,
-            bbox=bbox,
-            datetime=datetime_utc,
-            properties={},
-        )
-        # Add the asset to the item.
-        item.add_asset(
-            key="image",
-            asset=asset
-        )
-        eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
-        eo_ext_on_item.apply(bands=all_eo_bands, cloud_cover=0.0, snow_cover=0.0)
         return item
 
     def write_items_to_api(self) -> None:
@@ -107,7 +120,7 @@ class DroneStacGenerator(StacGenerator):
 
     def generate_collection(self) -> pystac.Collection:
         self.generate_catalog()
-        collection_id = "test_col_raster_ext"
+        collection_id = "proj_with_transform"
         description = "Test Collection showing the inclusion of the 'raster' extension."
         # TODO: Magic bbox below, must read from data.
         # TODO: Spatial extent for collection is union of bboxes of items inside.
