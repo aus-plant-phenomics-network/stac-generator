@@ -1,0 +1,54 @@
+{
+    "id": "proj_with_transform",
+    "type": "Collection",
+    "links": [
+        {
+            "rel": "root",
+            "href": "/Users/joseph/projects/stac-generator/tests/stac/collection.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "item",
+            "href": "/Users/joseph/projects/stac-generator/tests/stac/multiple_assets_1/multiple_assets_1.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "item",
+            "href": "/Users/joseph/projects/stac-generator/tests/stac/multiple_assets_2/multiple_assets_2.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "item",
+            "href": "/Users/joseph/projects/stac-generator/tests/stac/multiple_assets_3/multiple_assets_3.json",
+            "type": "application/json"
+        },
+        {
+            "rel": "self",
+            "href": "/Users/joseph/projects/stac-generator/tests/stac/collection.json",
+            "type": "application/json"
+        }
+    ],
+    "extent": {
+        "spatial": {
+            "bbox": [
+                [
+                    116.96640192684013,
+                    -31.930819693348617,
+                    116.96916478816145,
+                    -31.929350481993794
+                ]
+            ]
+        },
+        "temporal": {
+            "interval": [
+                [
+                    "2020-01-01T00:00:00Z",
+                    null
+                ]
+            ]
+        }
+    },
+    "license": "CC-BY-4.0",
+    "description": "Test Collection showing the inclusion of the 'raster' extension.",
+    "stac_version": "1.0.0"
+}
