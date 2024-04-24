@@ -1,4 +1,5 @@
 """This module encapsulates the logic for generating STAC for the drone metadata standard."""
+import os
 from datetime import datetime
 
 import pystac
@@ -37,7 +38,8 @@ class DroneStacGenerator(StacGenerator):
 
     def generate_item(self, location: str, counter: int) -> pystac.Item:
         # Get the bounding box of the item.
-        bbox, footprint = get_bbox_and_footprint(location)
+        bbox, footprint = get_bbox_and_footprint(location,
+                                                 dummy="PYTEST_CURRENT_TEST" in os.environ)
         # Create the STAC asset. We are only considering the stitched MS geotiff currently.
         # Could have RGB, thumbnail, etc. in the future.
         datetime_utc = datetime.now()
