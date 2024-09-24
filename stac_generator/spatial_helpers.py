@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 from pyproj import Transformer
 import rasterio
-from shapely.geometry import Polygon, mapping
+from shapely.geometry import Polygon
 from shapely.ops import transform
 
 

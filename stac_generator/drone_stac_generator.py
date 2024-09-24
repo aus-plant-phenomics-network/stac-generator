@@ -88,25 +88,25 @@ class DroneStacGenerator(StacGenerator):
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
         eo_ext_on_asset = AssetEOExtension.ext(asset)
         red_eo_band = Band.create(name="red",
-                                  common_name="red",
+                                  common_name=EoBands.RED.name.lower(),
                                   description=Band.band_description("red"),
-                                  center_wavelength=0.65)
+                                  center_wavelength=EoBands.RED.value)
         blue_eo_band = Band.create(name="blue",
-                                   common_name="blue",
+                                   common_name=EoBands.BLUE.name.lower(),
                                    description=Band.band_description("blue"),
-                                   center_wavelength=0.47)
+                                   center_wavelength=EoBands.BLUE.value)
         green_eo_band = Band.create(name="green",
-                                    common_name="green",
+                                    common_name=EoBands.GREEN.name.lower(),
                                     description=Band.band_description("green"),
-                                    center_wavelength=0.55)
+                                    center_wavelength=EoBands.GREEN.value)
         nir_eo_band = Band.create(name="nir",
-                                  common_name="nir",
+                                  common_name=EoBands.NIR.name.lower(),
                                   description=Band.band_description("nir"),
-                                  center_wavelength=0.65)
+                                  center_wavelength=EoBands.NIR.value)
         rededge_eo_band = Band.create(name="rededge",
-                                      common_name="rededge",
+                                      common_name=EoBands.REDEDGE.name.lower(),
                                       description=Band.band_description("rededge"),
-                                      center_wavelength=0.47)
+                                      center_wavelength=EoBands.REDEDGE.value)
         ndvi_eo_band = Band.create(name="ndvi",
                                    common_name="ndvi",
                                    description=Band.band_description("ndvi"),
