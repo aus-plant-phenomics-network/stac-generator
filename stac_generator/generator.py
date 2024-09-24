@@ -1,5 +1,6 @@
 """This module encapsulates the logic for generating STAC for a given metadata standard."""
 from abc import ABC, abstractmethod
+import os
 from typing import List, Optional
 
 import pystac
@@ -9,6 +10,9 @@ class StacGenerator(ABC):
     """STAC generator base class."""
 
     def __init__(self, data_type, data_file, location_file) -> None:
+        self.base_url = os.environ.get("STAC_API_URL", None)
+        if self.base_url is None:
+            raise ValueError("Environment variable STAC_API_URL must be defined.")
         self.data_type = data_type
         self.data_file = data_file
         self.location_file = location_file
