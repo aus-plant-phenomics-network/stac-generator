@@ -82,7 +82,8 @@ class DroneStacGenerator(StacGenerator):
         affine_transform = [rasterio.transform.from_bounds(*bbox,
                                                            shape[1], shape[0])[i]
                             for i in range(9)]
-        proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=shape, transform=affine_transform)
+        proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=list(shape),
+                               transform=affine_transform)
 
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)

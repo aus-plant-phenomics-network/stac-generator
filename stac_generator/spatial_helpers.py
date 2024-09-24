@@ -10,7 +10,7 @@ from shapely.ops import transform
 
 @dataclass
 class GeotiffMetadata:
-    crs: str
+    crs: rasterio.crs.CRS
     bounds: List
     wgs84_bbox: List
     footprint: Polygon
