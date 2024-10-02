@@ -186,6 +186,27 @@ def partition_group_df(
 
 
 class PointGenerator(StacGenerator):
+    """Create a point stac generator object
+
+    Args:
+        data_file (str): path to csv file containing Point information
+        X_coord (str): column name representing X coordinate
+        Y_coord (str): column name representing Y coordinate
+        projection (int, optional): EPSG code. Defaults to 4326 - WGS 84
+        date_format (str, optional): date format for parsing time coordinate. Defaults to "ISO8601".
+        bands (Sequence[str] | Sequence[PointBandInfo] | None, optional): band information. Defaults to None.
+        item_group (Sequence[str] | None, optional): column name that separate points into item groups. Defaults to None.
+        catalog_id (str | UUID, optional): id of catalog. Defaults to uuid4().
+        catalog_title (str, optional): title of catalog. Defaults to "Auto-generated catalog title".
+        catalog_description (str, optional): description of catalog. Defaults to "Auto-generated catalog description".
+        collection_id (str | UUID, optional): id of collection. Defaults to uuid4().
+        collection_description (str, optional): description of collection. Defaults to "Auto-generated collection description".
+        license (str, optional): collection license. Defaults to "MIT".
+        keywords (str | None, optional): collection keywords. Defaults to None.
+        datetime (DateTimeT | None, optional): STAC Collection collection datetime. Defaults to None.
+        start_datetime (DateTimeT | None, optional): STAC Collection start datetime. Defaults to None.
+        end_datetime (DateTimeT | None, optional): STAC Collection end datetime. Defaults to None.
+    """
 
     def __init__(
         self,
@@ -216,27 +237,7 @@ class PointGenerator(StacGenerator):
         end_datetime: DateTimeT | None = None,
         **kwargs: Any,
     ) -> None:
-        """Create a point stac generator obj
 
-        Args:
-            data_file (str): _description_
-            X_coord (str): _description_
-            Y_coord (str): _description_
-            projection (int, optional): _description_. Defaults to 4326.
-            date_format (str, optional): _description_. Defaults to "ISO8601".
-            bands (Sequence[str] | Sequence[PointBandInfo] | None, optional): _description_. Defaults to None.
-            item_group (Sequence[str] | None, optional): _description_. Defaults to None.
-            catalog_id (str | UUID, optional): _description_. Defaults to uuid4().
-            catalog_title (str, optional): _description_. Defaults to "Auto-generated catalog title".
-            catalog_description (str, optional): _description_. Defaults to "Auto-generated catalog description".
-            collection_id (str | UUID, optional): _description_. Defaults to uuid4().
-            collection_description (str, optional): _description_. Defaults to "Auto-generated collection description".
-            license (str, optional): _description_. Defaults to "MIT".
-            keywords (str | None, optional): _description_. Defaults to None.
-            datetime (DateTimeT | None, optional): _description_. Defaults to None.
-            start_datetime (DateTimeT | None, optional): _description_. Defaults to None.
-            end_datetime (DateTimeT | None, optional): _description_. Defaults to None.
-        """
         super().__init__(data_type="point", data_file=get_path(data_file), location_file=None)
         self.X_coord = X_coord
         self.Y_coord = Y_coord
