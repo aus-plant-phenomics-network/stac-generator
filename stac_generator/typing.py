@@ -1,5 +1,6 @@
-from typing import Literal, TypedDict
 import datetime
+from typing import Literal, TypedDict
+
 import pandas as pd
 
 DTYPE = Literal[
@@ -29,8 +30,7 @@ DTYPE = Literal[
 
 NumberT = int | float
 DateTimeT = datetime.datetime
-BBoxCoordT = list[NumberT]  # Either 2D or 3D BBoxType
-BBoxT = list[BBoxCoordT]  # [[minX, minY], [maxX, maxY]] format for 2D
+BBoxT = list[NumberT]  # Either 2D or 3D BBoxType
 TimeExtentT = tuple[DateTimeT | None, DateTimeT | None]  # (start_datetime, end_datetime) format
 CSVMediaType = "text/csv"  # https://www.rfc-editor.org/rfc/rfc7111
 ExcelMediaType = "application/vnd.ms-excel"  # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
@@ -66,9 +66,7 @@ class GeometryObj(TypedDict):
     """
 
     type: GeometryT
-    coordinates: (
-        Position | Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | None
-    )
+    coordinates: Position | Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | None
 
 
 # STAC extension types

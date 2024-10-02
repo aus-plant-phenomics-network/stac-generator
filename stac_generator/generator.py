@@ -1,15 +1,17 @@
 """This module encapsulates the logic for generating STAC for a given metadata standard."""
-from abc import ABC, abstractmethod
+
 import os
+from abc import ABC, abstractmethod
 from typing import List, Optional
 
 import pystac
+import requests
 
 
 class StacGenerator(ABC):
     """STAC generator base class."""
 
-    def __init__(self, data_type, data_file, location_file) -> None:
+    def __init__(self, data_type, data_file, location_file, **kwargs) -> None:
         self.base_url = os.environ.get("STAC_API_URL", None)
         if self.base_url is None:
             raise ValueError("Environment variable STAC_API_URL must be defined.")
@@ -37,9 +39,11 @@ class StacGenerator(ABC):
         """Generate a STAC item from the provided file."""
         raise NotImplementedError
 
-    @abstractmethod
     def write_items_to_api(self) -> None:
-        raise NotImplementedError
+        if self.items and self.collection:
+            api_items_url = f"{self.base_url}/collections/{self.collection.id}/items"
+            for item in self.items:
+                requests.post(api_items_url, json=item.to_dict())
 
     @abstractmethod
     def generate_catalog(self) -> pystac.Catalog:
@@ -51,13 +55,15 @@ class StacGenerator(ABC):
         """Generate a STAC collection for the provided metadata implementation."""
         raise NotImplementedError
 
-    @abstractmethod
     def write_collection_to_api(self) -> None:
-        raise NotImplementedError
+        # TODO: Build URL from components rather than hardcode here.
+        api_collections_url = f"{self.base_url}/collections"
+        if self.collection:
+            requests.post(api_collections_url, json=self.collection.to_dict())
 
-    @abstractmethod
     def write_to_api(self) -> None:
-        raise NotImplementedError
+        self.write_collection_to_api()
+        self.write_items_to_api()
 
     @abstractmethod
     def validate_stac(self) -> bool:
