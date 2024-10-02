@@ -1,55 +1,23 @@
+# %%
 import datetime as pydatetime
-from collections.abc import Sequence
-from typing import Any, Literal, TypedDict, cast
+from typing import Any, Literal, cast
 from uuid import UUID, uuid4
-
+from collections.abc import Sequence
 import numpy as np
 import pandas as pd
 import pystac
-from pyproj import CRS, Transformer
+from itertools import chain
+from stac_generator.types import (
+    FrameT,
+    BBoxT,
+    TimeExtentT,
+    DateTimeT,
+    GeometryObj,
+    PointBandInfo,
+    CSVMediaType,
+)
 
-NumberT = int | float
-DateTimeT = pydatetime.datetime
-CoordT = Literal["latlon", "utm"]
-BBoxCoordT = tuple[NumberT, NumberT] | tuple[NumberT, NumberT, NumberT]  # Either 2D or 3D BBoxType
-BBoxT = tuple[BBoxCoordT, BBoxCoordT]
-TimeExtentT = tuple[DateTimeT | None, DateTimeT | None]
-CSVMediaType = "text/csv"  # https://www.rfc-editor.org/rfc/rfc7111
-ExcelMediaType = "application/vnd.ms-excel"  # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-FrameT = pd.DataFrame
-
-# TODO: Band extension?
-# TODO: MultiPoint vs GeometryCollection of Points
-
-GeometryT = Literal["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon", "GeometryCollection"]
-
-
-class GeometryObj(TypedDict):
-    type: GeometryT
-    coordinates: Sequence
-
-
-def convert_coord_to_latlon(
-    df: FrameT,
-    X_coord: str,
-    Y_coord: str,
-    coord_type: CoordT,
-    projection: str = "EPSG:4326",
-    zone: int | None = None,
-    south: bool | None = None,
-) -> FrameT:
-    if coord_type.lower() == "latlon":
-        df["X"], df["Y"] = df[X_coord], df[Y_coord]
-    elif coord_type.lower() == "utm":
-        if "zone" is None or "south" is None:
-            raise ValueError("UTM zone coordinates require utm zone and south information")
-        crs = CRS.from_dict({"proj": "utm", "zone": zone, "south": south})
-        transformer = Transformer.from_crs(crs_from=crs, crs_to=CRS.from_string(projection))
-        values = transformer.transform(df[X_coord].values, df[Y_coord].values)
-        df["X"], df["Y"] = values
-    else:
-        raise ValueError(f"Acceptable coordinate type - latlon, utm. Provided: {coord_type}")
-    return df
+# Helper functions
 
 
 def calculate_spatial_extent(
@@ -70,7 +38,7 @@ def calculate_spatial_extent(
     """
     min_X, max_X = float(df[X_coord].min()), float(df[X_coord].max())
     min_Y, max_Y = float(df[Y_coord].min()), float(df[Y_coord].max())
-    return ((min_X, min_Y), (max_X, max_Y))
+    return [[min_X, min_Y], [max_X, max_Y]]
 
 
 def calculate_temporal_extent(
@@ -97,64 +65,130 @@ def calculate_temporal_extent(
     if start_datetime and end_datetime:
         return start_datetime, end_datetime
     if datetime:
-        return datetime, None
+        return None, datetime
     if df is not None and isinstance(time_col, str):
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
         if not isinstance(df[time_col].dtype, DateTimeT):
-            raise ValueError(f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}")
+            raise ValueError(
+                f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
+            )
         min_T, max_T = df[time_col].min(), df[time_col].max()
         return (min_T, max_T)
     else:
-        return pydatetime.datetime.now(pydatetime.UTC), None
+        return None, pydatetime.datetime.now(pydatetime.UTC)
 
 
-def calculate_geometry(df: FrameT, X_coord: str = "X", Y_coord: str = "Y") -> GeometryObj:
-    coords = np.unique(df.loc[:, [X_coord, Y_coord]].values, axis=0)
-    return GeometryObj(type="MultiPoint", coordinates=coords)
+def create_collection_name(collection_id: str) -> str:
+    if collection_id.lower().endswith("_collection"):
+        return collection_id
+    if collection_id.endswith("_"):
+        return collection_id + "collection"
+    return collection_id + "_collection"
+
+
+def create_item_name(collection_name: str, group_name: str | None = None) -> str:
+    suffix = group_name + "_item" if group_name else "item"
+    # Collection name is guaranteed to contain collection suffix
+    assert collection_name.endswith("collection")
+    parts = collection_name.rsplit("collection", 1)
+    parts[-1] = suffix
+    return "".join(parts)
+
+
+def calculate_geometry(
+    df: FrameT,
+    collection_name: str,
+    X_coord: str = "X",
+    Y_coord: str = "Y",
+    item_group: Sequence[str] | None = None,
+) -> dict[str, GeometryObj]:
+    if not item_group:
+        coords = np.unique(df.loc[:, [X_coord, Y_coord]].values, axis=0)
+        coord_type: Literal["Point", "MultiPoint"] = "Point" if len(coords) == 1 else "MultiPoint"
+        return {create_item_name(collection_name): GeometryObj(type=coord_type, coordinates=coords)}
+    unique_df = df.groupby(item_group).apply(  # type: ignore[call-overload]
+        lambda group: group[[X_coord, Y_coord]].drop_duplicates()
+    )
+    geometry_group = {}
+    for i in range(len(df)):
+        idx = df.index[i]
+        group_name = "_".join(chain(*zip(item_group, idx)))
+        item_name = create_item_name(collection_name, group_name)
+        coords = unique_df.loc[idx]
+        coord_type = "Point" if len(coords) == 1 else "MultiPoint"
+        geometry_group[item_name] = GeometryObj(type=coord_type, coordinates=coords)
+    return geometry_group
 
 
 def read_csv(
     src_path: str,
-    T_coord: str | None = None,
-    date_format: str = "ISO8601",
-) -> FrameT:
-    parse_dates = [T_coord] if isinstance(T_coord, str) else False
-    return pd.read_csv(src_path, parse_dates=parse_dates, date_format=date_format)  # type: ignore[call-overload]
-
-
-def generate_collection(
-    src_path: str,
-    collection_description: str,
-    collection_title: str,
     X_coord: str,
     Y_coord: str,
     T_coord: str | None = None,
     date_format: str = "ISO8601",
-    coord_type: CoordT = "latlon",
-    zone: int | None = None,
-    south: bool = True,
-    projection: str = "EPSG:4326",
+    bands: Sequence[str] | Sequence[PointBandInfo] | None = None,
+    item_group: Sequence[str] | None = None,
+) -> FrameT:
+    parse_dates = [T_coord] if isinstance(T_coord, str) else False
+    usecols = None
+    # If band info is provided, only read in the required columns + the X and Y coordinates
+    if bands:
+        if isinstance(bands[0], str):
+            usecols = [item for item in bands]
+        else:
+            usecols = [item["name"] for item in cast(Sequence[PointBandInfo], bands)]
+        usecols.extend([X_coord, Y_coord])
+        if T_coord:
+            usecols.append(T_coord)
+        # If item group provided -> read in
+        if item_group:
+            usecols.extend(item_group)
+    return pd.read_csv(src_path, parse_dates=parse_dates, date_format=date_format, usecols=usecols)  # type: ignore[call-overload]
+
+
+def generate_collection(
+    # read csv params
+    src_path: str,
+    X_coord: str,
+    Y_coord: str,
+    T_coord: str | None = None,
+    date_format: str = "ISO8601",
+    # Collection metadata information
+    collection_id: str | UUID = uuid4(),
+    collection_title: str = "Auto-generated collection title",
+    collection_description: str = "Auto-generated collection description",
+    license: str = "MIT",
     datetime: DateTimeT | None = None,
     start_datetime: DateTimeT | None = None,
     end_datetime: DateTimeT | None = None,
-    item_id: str | UUID = uuid4(),
-    collection_id: str | UUID = uuid4(),
+    # Item and item partition information
+    bands: Sequence[str] | Sequence[PointBandInfo] | None = None,
+    item_group: Sequence[str] | None = None,
     **kwargs: Any,
 ) -> pystac.Collection:
+    # TODO: license, keyword, other metadata
+    # TODO: band information -
     # Asset
-    asset = pystac.Asset(href=src_path, media_type=CSVMediaType, description="Raw point dataset as a csv file", roles=["data"])
+    asset = pystac.Asset(
+        href=src_path,
+        media_type=CSVMediaType,
+        description="Raw point dataset as a csv file",
+        roles=["data"],
+    )
+
+    # Collection name
+    collection_name = create_collection_name(str(collection_id))
 
     # Determine metadata from csv
-    df = read_csv(src_path=src_path, T_coord=T_coord, date_format=date_format, **kwargs)
-    df = convert_coord_to_latlon(
-        df=df,
+    df = read_csv(
+        src_path=src_path,
         X_coord=X_coord,
         Y_coord=Y_coord,
-        coord_type=coord_type,
-        projection=projection,
-        zone=zone,
-        south=south,
+        T_coord=T_coord,
+        date_format=date_format,
+        bands=bands,
+        item_group=item_group,
     )
 
     space_bbox = calculate_spatial_extent(df=df, X_coord="X", Y_coord="Y")
@@ -165,30 +199,44 @@ def generate_collection(
         start_datetime=start_datetime,
         end_datetime=end_datetime,
     )
-    geometry = calculate_geometry(df=df, X_coord="X", Y_coord="Y")
-
-    # Construct Item and Catalog
-    item = pystac.Item(
-        id=str(item_id),
-        geometry=geometry,  # type: ignore[arg-type]
-        bbox=space_bbox,  # type: ignore[arg-type]
-        datetime=datetime,
-        start_datetime=start_datetime,
-        end_datetime=end_datetime,
-        href=src_path,
-        assets={"source_file": asset},
-        properties={},
+    geometry_group = calculate_geometry(
+        df=df, collection_name=collection_name, X_coord="X", Y_coord="Y", item_group=item_group
     )
-    spatial_extent = pystac.SpatialExtent(cast(list[NumberT], space_bbox))
+
+    # Construct Item from geometry group
+    items = []
+    for item_id, geometry in geometry_group.items():
+        items.append(
+            pystac.Item(
+                id=str(item_id),
+                geometry=geometry,  # type: ignore[arg-type]
+                bbox=space_bbox,  # type: ignore[arg-type]
+                datetime=time_bbox[1],
+                start_datetime=time_bbox[0],
+                end_datetime=time_bbox[1],
+                href=src_path,
+                assets={"source_file": asset},
+                properties={},
+            )
+        )
+
+    # Construct Collection
+    spatial_extent = pystac.SpatialExtent(space_bbox)
     temporal_extent = pystac.TemporalExtent([list(time_bbox)])
     collection = pystac.Collection(
-        id=str(collection_id),
+        id=collection_name,
         title=collection_title,
         description=collection_description,
+        assets={"source_file": asset},
         extent=pystac.Extent(
             spatial=spatial_extent,
             temporal=temporal_extent,
         ),
     )
-    collection.add_item(item)
+    for item in items:
+        collection.add_item(item)
     return collection
+
+
+collection = generate_collection("soilPointDataAllSites_4ML.csv", "Latitude", "Longitude")
+# %%
