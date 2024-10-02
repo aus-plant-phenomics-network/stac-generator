@@ -44,7 +44,7 @@ def ensure_name_suffix(name: str, suffix: str) -> str:
 def create_item_name(collection_name: str, group_name: str | None = None) -> str:
     suffix = group_name + "_item" if group_name else "item"
     # Collection name is guaranteed to contain collection suffix
-    assert collection_name.endswith("collection")  # noqa: S101
+    assert collection_name.endswith("collection")
     parts = collection_name.rsplit("collection", 1)
     parts[-1] = suffix
     return "".join(parts)
@@ -231,7 +231,7 @@ class PointGenerator(StacGenerator):
         collection_title: str = "Auto-generated collection title",
         collection_description: str = "Auto-generated collection description",
         license: str = "MIT",
-        keywords: str | None = None,
+        keywords: list[str] | None = None,
         datetime: DateTimeT | None = None,
         start_datetime: DateTimeT | None = None,
         end_datetime: DateTimeT | None = None,
@@ -293,10 +293,12 @@ class PointGenerator(StacGenerator):
     def validate_stac(self) -> bool:
         return self.validate_data()
 
+    # PLACEHOLDER - Unable to fit the signature
     def generate_item(self, location: str, counter: int) -> pystac.Item:
-        pass
+        return None  # type: ignore
 
     def generate_items(self) -> list[pystac.Item]:
+        # Each STAC Item is fully described by a partition df
         partitions = partition_group_df(self.collection_frame, self.collection_name, self.item_group)
         items: list[pystac.Item] = []
         for item_name, item_df in partitions.items():
@@ -318,9 +320,12 @@ class PointGenerator(StacGenerator):
         return items
 
     def generate_collection(self) -> pystac.Collection:
+        # Calculate extents
         space_bbox = calculate_spatial_extent(df=self.collection_frame, X_coord=self.X_coord, Y_coord=self.Y_coord)
         spatial_extent = pystac.SpatialExtent(space_bbox)
         temporal_extent = pystac.TemporalExtent([[self.start_datetime, self.end_datetime]])
+
+        # Generate collection
         collection = pystac.Collection(
             id=self.collection_name,
             title=self.collection_title,
@@ -330,8 +335,10 @@ class PointGenerator(StacGenerator):
                 spatial=spatial_extent,
                 temporal=temporal_extent,
             ),
+            license=self.license,
+            keywords=self.keywords,
         )
-
+        # Add items to collection
         for item in self.generate_items():
             collection.add_item(item)
         return collection
