@@ -182,9 +182,4 @@ class DroneStacGenerator(StacGenerator):
         self.collection.normalize_hrefs(test_dir)
         return self.collection
 
-    def validate_stac(self) -> bool:
-        if self.catalog and not self.catalog.validate():
-            return False
-        if self.collection and not self.collection.validate():
-            return False
-        return True
+    

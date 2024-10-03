@@ -106,7 +106,9 @@ def calculate_temporal_extent(
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
         if not isinstance(df[time_col].dtype, DateTimeT):
-            raise ValueError(f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}")
+            raise ValueError(
+                f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
+            )
         min_T, max_T = df[time_col].min(), df[time_col].max()
         return (min_T, max_T)
     return None, pydatetime.datetime.now(pydatetime.UTC)
@@ -237,7 +239,6 @@ class PointGenerator(StacGenerator):
         end_datetime: DateTimeT | None = None,
         **kwargs: Any,
     ) -> None:
-
         super().__init__(data_type="point", data_file=get_path(data_file), location_file=None)
         self.X_coord = X_coord
         self.Y_coord = Y_coord
@@ -282,7 +283,9 @@ class PointGenerator(StacGenerator):
 
     # PLACEHOLDER - TODO: CONCRETE Implementation of the methods
     def generate_catalog(self) -> pystac.Catalog:
-        return pystac.Catalog(id=self.catalog_id, description=self.catalog_description, title=self.catalog_title)
+        return pystac.Catalog(
+            id=self.catalog_id, description=self.catalog_description, title=self.catalog_title
+        )
 
     # PLACEHOLDER - TODO: CONCRETE Implementation of the methods
     # Note - fail currently due to missing href since item does not have an URL just yet
@@ -299,7 +302,9 @@ class PointGenerator(StacGenerator):
 
     def generate_items(self) -> list[pystac.Item]:
         # Each STAC Item is fully described by a partition df
-        partitions = partition_group_df(self.collection_frame, self.collection_name, self.item_group)
+        partitions = partition_group_df(
+            self.collection_frame, self.collection_name, self.item_group
+        )
         items: list[pystac.Item] = []
         for item_name, item_df in partitions.items():
             bbox = calculate_spatial_extent(item_df, self.X_coord, self.Y_coord)
@@ -321,7 +326,9 @@ class PointGenerator(StacGenerator):
 
     def generate_collection(self) -> pystac.Collection:
         # Calculate extents
-        space_bbox = calculate_spatial_extent(df=self.collection_frame, X_coord=self.X_coord, Y_coord=self.Y_coord)
+        space_bbox = calculate_spatial_extent(
+            df=self.collection_frame, X_coord=self.X_coord, Y_coord=self.Y_coord
+        )
         spatial_extent = pystac.SpatialExtent(space_bbox)
         temporal_extent = pystac.TemporalExtent([[self.start_datetime, self.end_datetime]])
 
@@ -341,4 +348,6 @@ class PointGenerator(StacGenerator):
         # Add items to collection
         for item in self.generate_items():
             collection.add_item(item)
+
+        collection.normalize_hrefs("./")
         return collection

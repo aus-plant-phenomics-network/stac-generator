@@ -65,7 +65,9 @@ class StacGenerator(ABC):
         self.write_collection_to_api()
         self.write_items_to_api()
 
-    @abstractmethod
     def validate_stac(self) -> bool:
-        """Check that the generated STAC is valid."""
-        raise NotImplementedError
+        if self.catalog and not self.catalog.validate():
+            return False
+        if self.collection and not self.collection.validate():
+            return False
+        return True
