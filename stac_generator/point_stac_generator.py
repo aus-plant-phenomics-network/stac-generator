@@ -187,7 +187,7 @@ def partition_group_df(
     return df_group
 
 
-class PointGenerator(StacGenerator):
+class _PointGenerator(StacGenerator):
     """Create a point stac generator object
 
     Args:
@@ -237,7 +237,6 @@ class PointGenerator(StacGenerator):
         datetime: DateTimeT | None = None,
         start_datetime: DateTimeT | None = None,
         end_datetime: DateTimeT | None = None,
-        **kwargs: Any,
     ) -> None:
         super().__init__(data_type="point", data_file=get_path(data_file), location_file=None)
         self.X_coord = X_coord

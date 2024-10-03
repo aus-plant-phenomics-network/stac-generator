@@ -30,43 +30,12 @@ DTYPE = Literal[
 
 NumberT = int | float
 DateTimeT = datetime.datetime
-BBoxT = list[NumberT]  # Either 2D or 3D BBoxType
 TimeExtentT = tuple[DateTimeT | None, DateTimeT | None]  # (start_datetime, end_datetime) format
 CSVMediaType = "text/csv"  # https://www.rfc-editor.org/rfc/rfc7111
 ExcelMediaType = "application/vnd.ms-excel"  # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 FrameT = pd.DataFrame
-
-# GeoJSON types
-
-GeometryT = Literal[
-    "Point",
-    "MultiPoint",
-    "LineString",
-    "MultiLineString",
-    "Polygon",
-    "MultiPolygon",
-    "GeometryCollection",
-]
-
-Position = tuple[NumberT, NumberT] | tuple[NumberT, NumberT, NumberT]
-Point = Position
-MultiPoint = list[Position]
-LineString = list[Position]
-MultiLineString = list[LineString]
-LinearRing = list[Position]
-Polygon = list[LinearRing]
-MultiPolygon = list[Polygon]
-
-
-class GeometryObj(TypedDict):
-    """Python TypedDict object for GeoJSON Geometry Object.
-
-    <a href=https://datatracker.ietf.org/doc/html/rfc7946#section-3.1>Reference</a>
-
-    """
-
-    type: GeometryT
-    coordinates: Position | Point | MultiPoint | LineString | MultiLineString | Polygon | MultiPolygon | None
+HTTPMethod = Literal["GET", "Get", "get", "POST", "Post", "post"]
+Mode = Literal["append", "overwrite"]
 
 
 # STAC extension types

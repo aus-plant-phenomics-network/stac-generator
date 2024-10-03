@@ -11,6 +11,8 @@ dependencies = [
     "pyproj>=3.7.0",
     "folium>=0.17.0",
     "geopandas>=1.0.1",
+    "pandera>=0.20.4",
+    "httpx>=0.27.2",
 ]
 name = "stac-generator"
 version = "0.1.0"
