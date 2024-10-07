@@ -5,7 +5,7 @@
 groups = ["default", "analysis", "test", "dev", "odc", "api", "type-stubs"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:a882dabb93aa01738ccda6e9a9bc9b4f00ebba4d5b7fe9e48459c7953577c7a7"
+content_hash = "sha256:54423395db759fa4d639188dd8cfb86faf375c6abfca2158b9d5c94ce64d041d"
 
 [[package]]
 name = "affine"
@@ -976,7 +976,7 @@ name = "geojson-pydantic"
 version = "1.1.1"
 requires_python = ">=3.8"
 summary = "Pydantic data models for the GeoJSON spec."
-groups = ["api"]
+groups = ["api", "default"]
 dependencies = [
     "pydantic~=2.0",
 ]
@@ -3340,7 +3340,7 @@ name = "stac-pydantic"
 version = "3.1.2"
 requires_python = ">=3.8"
 summary = "Pydantic data models for the STAC spec"
-groups = ["api"]
+groups = ["api", "default"]
 dependencies = [
     "click>=8.1.7",
     "geojson-pydantic>=1.0.0",

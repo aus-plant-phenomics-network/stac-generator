@@ -1,0 +1,90 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "point_data_Property_Grandview",
+  "properties": {
+    "bands": [
+      {
+        "name": "Ca_Soln",
+        "description": "Calcium Solution concentration in ppm"
+      }
+    ],
+    "start_datetime": "2024-10-06T01:57:02.619849Z",
+    "end_datetime": "2024-10-06T01:57:02.619849Z",
+    "proj:epsg": 4326,
+    "datetime": "2024-10-06T01:57:02.619849Z"
+  },
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        150.5471916,
+        -24.33986861
+      ],
+      [
+        150.5505183,
+        -24.34031206
+      ],
+      [
+        150.5551243,
+        -24.34091973
+      ],
+      [
+        150.5510798,
+        -24.33950805
+      ],
+      [
+        150.5486132,
+        -24.33830917
+      ],
+      [
+        150.552091,
+        -24.33876884
+      ],
+      [
+        150.5541407,
+        -24.33904076
+      ],
+      [
+        150.5534713,
+        -24.33763716
+      ],
+      [
+        150.5558958,
+        -24.33795704
+      ],
+      [
+        150.5516811,
+        -24.33673993
+      ],
+      [
+        150.5538951,
+        -24.33637758
+      ],
+      [
+        150.5560285,
+        -24.33600118
+      ]
+    ]
+  },
+  "links": [],
+  "assets": {
+    "source": {
+      "href": "./point_data.csv",
+      "type": "text/csv",
+      "description": "Raw csv data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "bbox": [
+    150.5471916,
+    -24.34091973,
+    150.5560285,
+    -24.33600118
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+  ]
+}

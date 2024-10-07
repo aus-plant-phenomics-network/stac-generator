@@ -13,6 +13,7 @@ dependencies = [
     "geopandas>=1.0.1",
     "pandera>=0.20.4",
     "httpx>=0.27.2",
+    "stac-pydantic>=3.1.2",
 ]
 name = "stac-generator"
 version = "0.1.0"

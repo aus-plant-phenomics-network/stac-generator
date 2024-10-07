@@ -1,7 +1,9 @@
 import datetime
-from typing import Literal, TypedDict
+from typing import Literal
 
+import geopandas as gpd
 import pandas as pd
+from typing_extensions import TypedDict
 
 DTYPE = Literal[
     "str",
@@ -33,8 +35,9 @@ DateTimeT = datetime.datetime
 TimeExtentT = tuple[DateTimeT | None, DateTimeT | None]  # (start_datetime, end_datetime) format
 CSVMediaType = "text/csv"  # https://www.rfc-editor.org/rfc/rfc7111
 ExcelMediaType = "application/vnd.ms-excel"  # https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-FrameT = pd.DataFrame
-HTTPMethod = Literal["GET", "Get", "get", "POST", "Post", "post"]
+PDFrameT = pd.DataFrame
+FrameT = gpd.GeoDataFrame
+HTTPMethod = Literal["GET", "POST", "PUT", "DELETE", "PATCH"]
 Mode = Literal["append", "overwrite"]
 
 
@@ -45,13 +48,7 @@ class BandInfo(TypedDict):
     """Generic Band Information."""
 
     name: str
-
-
-class PointBandInfo(BandInfo, total=False):
-    """Band information for point data type."""
-
     description: str
-    dtype: DTYPE
 
 
 class EOBandInfo(BandInfo, total=False):
@@ -60,7 +57,6 @@ class EOBandInfo(BandInfo, total=False):
 
     """
 
-    description: str
     common_name: str
     center_wavelength: NumberT
     full_width_half_max: NumberT
