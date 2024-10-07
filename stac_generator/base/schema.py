@@ -1,25 +1,20 @@
 import datetime
-from collections.abc import Iterable, Mapping, Sequence
-from typing import Any, Literal, Self, cast
+from typing import Any, Self, cast
 
 from httpx._types import (
-    PrimitiveData,
     RequestData,
 )
 from pydantic import BaseModel, model_validator
 from stac_pydantic.shared import StacCommonMetadata
 
-from stac_generator.typing import HTTPMethod
-
-QueryParamTypes = (
-    Mapping[str, PrimitiveData | Sequence[PrimitiveData]] | list[tuple[str, PrimitiveData]] | tuple[tuple[str, PrimitiveData], ...] | str | bytes
+from stac_generator.typing import (
+    CookieTypes,
+    HeaderTypes,
+    HTTPMethod,
+    QueryParamTypes,
+    RequestContent,
+    STACEntityT,
 )
-
-HeaderTypes = Mapping[str, str] | Mapping[bytes, bytes] | Sequence[tuple[str, str]] | Sequence[tuple[bytes, bytes]]
-CookieTypes = dict[str, str] | list[tuple[str, str]]
-RequestContent = str | bytes | Iterable[bytes]
-
-STACEntityT = Literal["Item", "ItemCollection", "Collection", "Catalogue"]
 
 
 class SourceConfig(BaseModel):
@@ -106,3 +101,9 @@ class LoadConfig(BaseModel):
     """STAC Json file on disk"""
     stac_api_endpoint: str | None = None
     """STAC API Endpoint"""
+
+    @model_validator(mode="after")
+    def validate_field(self) -> Self:
+        if self.json_location is None and self.stac_api_endpoint is None:
+            raise ValueError("One of json_location or stac_api_endpoint field must be not None")
+        return self
