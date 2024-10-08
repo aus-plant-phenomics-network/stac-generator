@@ -48,8 +48,9 @@ class CSVExtension(BaseModel):
     groupby: list[str] | None = None
     date_format: str = "ISO8601"
 
-    @field_validator("column_info")
-    def coerce_to_object(v: str) -> list[str] | list[ColumnInfo]:
+    @field_validator("column_info", mode="before")
+    @classmethod
+    def coerce_to_object(cls, v: str) -> list[str] | list[ColumnInfo]:
         parsed = json.loads(v)
         if not isinstance(parsed, list):
             raise ValueError("column_info field expects a json serialisation of a list of ColumnInfo or a list of string")

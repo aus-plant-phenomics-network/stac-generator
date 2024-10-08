@@ -9,7 +9,7 @@ from stac_generator.csv.utils import group_df, items_from_group_df
 from stac_generator.types import CSVMediaType
 
 
-class CSVItemGenerator(StacGenerator[CSVConfig]):
+class CSVGenerator(StacGenerator[CSVConfig]):
 
     def __init__(
         self,
@@ -28,7 +28,7 @@ class CSVItemGenerator(StacGenerator[CSVConfig]):
         )
         raw_df = self.driver(source_cfg).get_data()
         group_map = group_df(raw_df, source_cfg.prefix, source_cfg.groupby)
-        properties = CSVExtension.model_validate(source_cfg, from_attributes=True)
+        properties = CSVExtension.model_validate(source_cfg, from_attributes=True).model_dump()
         return items_from_group_df(
             group_map,
             asset,

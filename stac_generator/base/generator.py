@@ -14,6 +14,7 @@ from stac_generator.base.schema import (
     StacCollectionConfig,
     T,
 )
+from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
 from stac_generator.types import StacEntityT
 
 
@@ -41,52 +42,53 @@ class StacGenerator(Generic[T]):
     def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
         raise NotImplementedError
 
-    def _extract_cfg(self) -> list[T]:
+    def extract_cfg(self) -> list[T]:
         return [self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict())) for i in range(len(self.source_df))]
 
-    @property
-    def providers(self) -> list[pystac.Provider] | None:
-        if self.collection_cfg and self.collection_cfg.providers:
-            return [pystac.Provider.from_dict(item.model_dump()) for item in self.collection_cfg.providers]
-        return None
+    def extract_extent(self, items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None) -> Extent:
+        return Extent(extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg))
+
+    def create_collection_from_items(
+        self,
+        items: list[pystac.Item],
+        collection_cfg: StacCollectionConfig | None = None,
+    ) -> pystac.Collection:
+        if collection_cfg is None:
+            raise ValueError("Generating collection requires non null collection config")
+        collection = pystac.Collection(
+            id=collection_cfg.id,
+            description=(
+                collection_cfg.description if collection_cfg.description else f"Auto-generated collection {collection_cfg.id} with stac_generator"
+            ),
+            extent=self.extract_extent(items, collection_cfg),
+            title=collection_cfg.title,
+            license=collection_cfg.license if collection_cfg.license else "proprietary",
+            providers=[pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers] if collection_cfg.providers else None,
+        )
+        collection.add_items(items)
+        return collection
+
+    def create_catalog_from_collection(self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None) -> pystac.Catalog:
+        if catalog_cfg is None:
+            raise ValueError("Generating catalog requires non null catalog config")
+        catalog = pystac.Catalog(id=catalog_cfg.id, description=catalog_cfg.description, title=catalog_cfg.title)
+        catalog.add_child(collection)
+        return catalog
 
     def create_items(self) -> list[pystac.Item]:
-        configs = self._extract_cfg()
+        configs = self.extract_cfg()
         items = []
         for config in configs:
             items.extend(self.create_item_from_config(config))
         return items
 
-    def create_collection(
-        self,
-        items: list[pystac.Item],
-        extent: Extent,
-        asset: pystac.Asset,
-    ) -> pystac.Collection:
-        if self.collection_cfg is None:
-            raise ValueError("Generating collection requires non null collection config")
-        collection = pystac.Collection(
-            id=self.collection_cfg.id,
-            description=(
-                self.collection_cfg.description
-                if self.collection_cfg.description
-                else f"Auto-generated collection {self.collection_cfg.id} with stac_generator"
-            ),
-            extent=extent,
-            title=self.collection_cfg.title,
-            license=self.collection_cfg.license if self.collection_cfg.license else "proprietary",
-            providers=self.providers,
-            assets={"source": asset},
-        )
-        collection.add_items(items)
-        return collection
+    def create_collection(self) -> pystac.Collection:
+        items = self.create_items()
+        return self.create_collection_from_items(items, self.collection_cfg)
 
-    def create_catalog(self, collection: pystac.Collection) -> pystac.Catalog:
-        if self.catalog_cfg is None:
-            raise ValueError("Generating catalog requires non null catalog config")
-        catalog = pystac.Catalog(id=self.catalog_cfg.id, description=self.catalog_cfg.description, title=self.catalog_cfg.title)
-        catalog.add_child(collection)
-        return catalog
+    def create_catalog(self) -> pystac.Catalog:
+        collection = self.create_collection()
+        return self.create_catalog_from_collection(collection, self.catalog_cfg)
 
 
 class StacLoader:
