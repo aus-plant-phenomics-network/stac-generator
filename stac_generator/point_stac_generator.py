@@ -12,7 +12,7 @@ from pystac.extensions.projection import ItemProjectionExtension
 from shapely import MultiPoint, Point, to_geojson
 
 from stac_generator.generator import StacGenerator
-from stac_generator.typing import (
+from stac_generator.types import (
     CSVMediaType,
     DateTimeT,
     FrameT,

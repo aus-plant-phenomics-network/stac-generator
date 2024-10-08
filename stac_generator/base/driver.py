@@ -14,18 +14,22 @@ class IODriver:
     def get_data(self) -> Any:
         raise NotImplementedError
 
-    def fetch(self) -> httpx.Response:
-        return httpx.request(
-            method=str(self.config.method),
-            url=str(self.config.location),
-            params=self.config.params,
-            headers=self.config.headers,
-            json=self.config.json,
-            cookies=self.config.cookies,
-            content=self.config.content,
-            data=self.config.data,
-        )
+    @staticmethod
+    def fetch(config: SourceConfig) -> httpx.Response:
+        """Use config information to send a GET request to an endpoint
 
-    @abc.abstractmethod
-    async def read_local(self) -> Any:
-        raise NotImplementedError
+        :param config: config information containing the url and request headers
+        :type config: SourceConfig
+        :return: raw Response object
+        :rtype: httpx.Response
+        """
+        return httpx.request(
+            method=str(config.method),
+            url=str(config.location),
+            params=config.params,
+            headers=config.headers,
+            json=config.json_body,
+            cookies=config.cookies,
+            content=config.content,
+            data=config.data,
+        )

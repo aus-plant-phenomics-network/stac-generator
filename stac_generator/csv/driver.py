@@ -1,9 +1,7 @@
-from typing import Any
-
 from stac_generator.base.driver import IODriver
 from stac_generator.csv.schema import CSVConfig
 from stac_generator.csv.utils import read_csv, to_gdf
-from stac_generator.typing import FrameT, PDFrameT
+from stac_generator.types import FrameT, PDFrameT
 
 
 class CSVDriver(IODriver):
@@ -15,7 +13,7 @@ class CSVDriver(IODriver):
         return self.read_local()
 
     def to_gdf(self, df: PDFrameT) -> FrameT:
-        return to_gdf(df, self.config.X, self.config.Y, self.config.epgs)
+        return to_gdf(df, self.config.X, self.config.Y, self.config.epsg)
 
     def read_local(self) -> FrameT:
         assert self.config.local is not None
@@ -25,7 +23,7 @@ class CSVDriver(IODriver):
             self.config.Y,
             self.config.T,
             self.config.date_format,
-            self.config.bands,
+            self.config.column_info,
             self.config.groupby,
         )
         return self.to_gdf(df)

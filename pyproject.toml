@@ -1,6 +1,6 @@
 [project]
 authors = [
-    { name = "Joseph Sclauzero", email = "joseph.sclauzero@adelaide.com.au" },
+    { name = "Joseph Sclauzero", email = "joseph.sclauzero@adelaide.edu.au" },
 ]
 requires-python = "==3.11.*"
 dependencies = [
@@ -14,6 +14,7 @@ dependencies = [
     "pandera>=0.20.4",
     "httpx>=0.27.2",
     "stac-pydantic>=3.1.2",
+    "dask[dataframe]>=2024.9.1",
 ]
 name = "stac-generator"
 version = "0.1.0"

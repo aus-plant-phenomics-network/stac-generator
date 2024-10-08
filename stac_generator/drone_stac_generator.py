@@ -77,23 +77,39 @@ class DroneStacGenerator(StacGenerator):
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         shape = metadata.shape
-        affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)]
-        proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform)
+        affine_transform = [
+            rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)
+        ]
+        proj_ext_on_item.apply(
+            epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform
+        )
 
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
         eo_ext_on_asset = AssetEOExtension.ext(asset)
         red_eo_band = Band.create(
-            name="red", common_name=EoBands.RED.name.lower(), description=Band.band_description("red"), center_wavelength=EoBands.RED.value
+            name="red",
+            common_name=EoBands.RED.name.lower(),
+            description=Band.band_description("red"),
+            center_wavelength=EoBands.RED.value,
         )
         blue_eo_band = Band.create(
-            name="blue", common_name=EoBands.BLUE.name.lower(), description=Band.band_description("blue"), center_wavelength=EoBands.BLUE.value
+            name="blue",
+            common_name=EoBands.BLUE.name.lower(),
+            description=Band.band_description("blue"),
+            center_wavelength=EoBands.BLUE.value,
         )
         green_eo_band = Band.create(
-            name="green", common_name=EoBands.GREEN.name.lower(), description=Band.band_description("green"), center_wavelength=EoBands.GREEN.value
+            name="green",
+            common_name=EoBands.GREEN.name.lower(),
+            description=Band.band_description("green"),
+            center_wavelength=EoBands.GREEN.value,
         )
         nir_eo_band = Band.create(
-            name="nir", common_name=EoBands.NIR.name.lower(), description=Band.band_description("nir"), center_wavelength=EoBands.NIR.value
+            name="nir",
+            common_name=EoBands.NIR.name.lower(),
+            description=Band.band_description("nir"),
+            center_wavelength=EoBands.NIR.value,
         )
         rededge_eo_band = Band.create(
             name="rededge",
@@ -101,8 +117,18 @@ class DroneStacGenerator(StacGenerator):
             description=Band.band_description("rededge"),
             center_wavelength=EoBands.REDEDGE.value,
         )
-        ndvi_eo_band = Band.create(name="ndvi", common_name="ndvi", description=Band.band_description("ndvi"), center_wavelength=0.55)
-        ndvi2_eo_band = Band.create(name="ndvi2", common_name="ndvi2", description=Band.band_description("ndvi2"), center_wavelength=0.55)
+        ndvi_eo_band = Band.create(
+            name="ndvi",
+            common_name="ndvi",
+            description=Band.band_description("ndvi"),
+            center_wavelength=0.55,
+        )
+        ndvi2_eo_band = Band.create(
+            name="ndvi2",
+            common_name="ndvi2",
+            description=Band.band_description("ndvi2"),
+            center_wavelength=0.55,
+        )
         # Lidar does not belong in eo, electromagnetic only.
         # lidar_eo_band = Band.create(name="lidar", common_name="lidar", description="")
 
@@ -126,7 +152,15 @@ class DroneStacGenerator(StacGenerator):
         # in different assets they should all use the same values and include the optional 'name'
         # field to enable clients to combine and summarise the bands.
         if metadata.bands_count == 7:
-            all_eo_bands = [red_eo_band, green_eo_band, blue_eo_band, nir_eo_band, rededge_eo_band, ndvi_eo_band, ndvi2_eo_band]
+            all_eo_bands = [
+                red_eo_band,
+                green_eo_band,
+                blue_eo_band,
+                nir_eo_band,
+                rededge_eo_band,
+                ndvi_eo_band,
+                ndvi2_eo_band,
+            ]
             all_raster_bands = [
                 red_raster_band,
                 green_raster_band,
@@ -168,18 +202,20 @@ class DroneStacGenerator(StacGenerator):
         description = "Gilbert site with correct projection."
         # TODO: Magic bbox below, must read from data.
         # TODO: Spatial extent for collection is union of bboxes of items inside.
-        spatial_extent = pystac.SpatialExtent([[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]])
+        spatial_extent = pystac.SpatialExtent(
+            [[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]]
+        )
         # TODO: Magic time range below, must read from data. Temporal extent is first and last
         temporal_extent = pystac.TemporalExtent([[datetime(2020, 1, 1), None]])
         extent = pystac.Extent(spatial_extent, temporal_extent)
         lic = "CC-BY-4.0"
 
-        self.collection = pystac.Collection(id=collection_id, description=description, extent=extent, license=lic)
+        self.collection = pystac.Collection(
+            id=collection_id, description=description, extent=extent, license=lic
+        )
 
         for item in self.items:
             self.collection.add_item(item)
         test_dir = "./tests/stac"
         self.collection.normalize_hrefs(test_dir)
         return self.collection
-
-    
