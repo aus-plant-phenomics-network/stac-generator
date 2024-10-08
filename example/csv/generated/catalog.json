@@ -1,0 +1,25 @@
+{
+  "type": "Catalog",
+  "id": "soil_data_catalog",
+  "stac_version": "1.0.0",
+  "description": "Auto-generated Stac Catalog",
+  "links": [
+    {
+      "rel": "root",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "soil data catalog"
+    },
+    {
+      "rel": "child",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json"
+    }
+  ],
+  "title": "soil data catalog"
+}

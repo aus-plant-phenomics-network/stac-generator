@@ -1,0 +1,94 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "Adelaide_MonteCristo",
+  "properties": {
+    "X": "Longitude",
+    "Y": "Latitude",
+    "column_info": [
+      {
+        "name": "Ca_Soln",
+        "description": "Ca concentration"
+      }
+    ],
+    "datetime": "2024-10-08T23:31:35.978560Z",
+    "start_datetime": "2024-10-08T23:31:35.978560Z",
+    "end_datetime": "2024-10-08T23:31:35.978560Z",
+    "prefix": "Adelaide_MonteCristo",
+    "location": "./example/csv/Adelaide_MonteCristo.csv",
+    "local": "example/csv/Adelaide_MonteCristo.csv",
+    "proj:epsg": 4326
+  },
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        1708700.52,
+        -3274604.885
+      ],
+      [
+        1707940.341,
+        -3274174.877
+      ],
+      [
+        1768763.353,
+        -3187979.848
+      ],
+      [
+        1769108.786,
+        -3188092.457
+      ],
+      [
+        1769342.855,
+        -3187726.196
+      ],
+      [
+        1768999.874,
+        -3187614.782
+      ]
+    ]
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "soil data catalog"
+    },
+    {
+      "rel": "collection",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/Adelaide_MonteCristo/Adelaide_MonteCristo.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "source": {
+      "href": "./example/csv/Adelaide_MonteCristo.csv",
+      "type": "text/csv",
+      "description": "Raw csv data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "bbox": [
+    1707940.341,
+    -3274604.885,
+    1769342.855,
+    -3187614.782
+  ],
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+  ],
+  "collection": "soil_data_collection"
+}

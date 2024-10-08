@@ -1,0 +1,61 @@
+{
+  "type": "Collection",
+  "id": "soil_data_collection",
+  "stac_version": "1.0.0",
+  "description": "Auto-generated Stac Collection",
+  "links": [
+    {
+      "rel": "root",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "soil data catalog"
+    },
+    {
+      "rel": "item",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/Grandview/Grandview.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/Sunbury/Sunbury.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/Adelaide_MonteCristo/Adelaide_MonteCristo.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "soil data catalog"
+    },
+    {
+      "rel": "self",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/soil_data_collection/collection.json",
+      "type": "application/json"
+    }
+  ],
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          149.7922199,
+          -3274604.885,
+          1769342.855,
+          -24.33986861
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2024-10-08T23:31:35.947805Z",
+          "2024-10-08T23:31:35.947805Z"
+        ]
+      ]
+    }
+  },
+  "license": "proprietary"
+}

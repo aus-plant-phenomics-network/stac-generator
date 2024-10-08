@@ -1,4 +1,4 @@
 prefix,location,local,X,Y,epgs,column_info
-Grandview,./Grandview.csv,example/csv/Grandview.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}, {""name"": ""pH"", ""description"": ""soil pH""}]"
-Sunbury,./Sunbury.csv,example/csv/Sunbury.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"
-Adelaide_MonteCristo,./Adelaide_MonteCristo.csv,example/csv/Adelaide_MonteCristo.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"
+Grandview,./example/csv/Grandview.csv,example/csv/Grandview.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}, {""name"": ""pH"", ""description"": ""soil pH""}]"
+Sunbury,./example/csv/Sunbury.csv,example/csv/Sunbury.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"
+Adelaide_MonteCristo,./example/csv/Adelaide_MonteCristo.csv,example/csv/Adelaide_MonteCristo.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"
