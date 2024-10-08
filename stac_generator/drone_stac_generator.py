@@ -1,4 +1,4 @@
-"""This module encapsulates the logic for generating STAC for the drone metadata standard."""
+"""This module encapsulates the logic for generating Stac for the drone metadata standard."""
 
 from datetime import datetime, timezone
 
@@ -30,7 +30,7 @@ class DTypeFactory:
 
 
 class DroneStacGenerator(StacGenerator):
-    """STAC generator for drone data."""
+    """Stac generator for drone data."""
 
     def __init__(self, data_file, location_file) -> None:
         super().__init__("drone", data_file, location_file)
@@ -57,10 +57,10 @@ class DroneStacGenerator(StacGenerator):
         metadata = get_metadata_from_geotiff(location)
         data_type = DTypeFactory.get_pystac_dtype(metadata.dtype)
         datetime_utc = _datetime
-        # Create the STAC asset. We are only considering the stitched MS geotiff currently.
+        # Create the Stac asset. We are only considering the stitched MS geotiff currently.
         # Could have RGB, thumbnail, etc. in the future.
         asset = pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF)
-        # Create the STAC item and attach the assets.
+        # Create the Stac item and attach the assets.
         bbox = [metadata.bounds[0], metadata.bounds[1], metadata.bounds[2], metadata.bounds[3]]
         item = pystac.Item(
             id=f"item_{counter}",
@@ -77,12 +77,8 @@ class DroneStacGenerator(StacGenerator):
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         shape = metadata.shape
-        affine_transform = [
-            rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)
-        ]
-        proj_ext_on_item.apply(
-            epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform
-        )
+        affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)]
+        proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform)
 
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
@@ -185,7 +181,7 @@ class DroneStacGenerator(StacGenerator):
         return item
 
     def generate_catalog(self) -> pystac.Catalog:
-        # Create the STAC catalog.
+        # Create the Stac catalog.
         catalog = pystac.Catalog(id="test_catalog", description="This is a test catalog.")
         for item in self.items:
             catalog.add_item(item)
@@ -202,17 +198,13 @@ class DroneStacGenerator(StacGenerator):
         description = "Gilbert site with correct projection."
         # TODO: Magic bbox below, must read from data.
         # TODO: Spatial extent for collection is union of bboxes of items inside.
-        spatial_extent = pystac.SpatialExtent(
-            [[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]]
-        )
+        spatial_extent = pystac.SpatialExtent([[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]])
         # TODO: Magic time range below, must read from data. Temporal extent is first and last
         temporal_extent = pystac.TemporalExtent([[datetime(2020, 1, 1), None]])
         extent = pystac.Extent(spatial_extent, temporal_extent)
         lic = "CC-BY-4.0"
 
-        self.collection = pystac.Collection(
-            id=collection_id, description=description, extent=extent, license=lic
-        )
+        self.collection = pystac.Collection(id=collection_id, description=description, extent=extent, license=lic)
 
         for item in self.items:
             self.collection.add_item(item)

@@ -1,4 +1,4 @@
-"""This module encapsulates the logic for generating STAC for a given metadata standard."""
+"""This module encapsulates the logic for generating Stac for a given metadata standard."""
 
 import os
 from abc import ABC, abstractmethod
@@ -9,12 +9,12 @@ import requests
 
 
 class StacGenerator(ABC):
-    """STAC generator base class."""
+    """Stac generator base class."""
 
     def __init__(self, data_type, data_file, location_file, **kwargs) -> None:
-        self.base_url = os.environ.get("STAC_API_URL", None)
+        self.base_url = os.environ.get("Stac_API_URL", None)
         if self.base_url is None:
-            raise ValueError("Environment variable STAC_API_URL must be defined.")
+            raise ValueError("Environment variable Stac_API_URL must be defined.")
         self.data_type = data_type
         self.data_file = data_file
         self.location_file = location_file
@@ -36,7 +36,7 @@ class StacGenerator(ABC):
 
     @abstractmethod
     def generate_item(self, location: str, counter: int) -> pystac.Item:
-        """Generate a STAC item from the provided file."""
+        """Generate a Stac item from the provided file."""
         raise NotImplementedError
 
     def write_items_to_api(self) -> None:
@@ -47,12 +47,12 @@ class StacGenerator(ABC):
 
     @abstractmethod
     def generate_catalog(self) -> pystac.Catalog:
-        """Generate a STAC catalog for the provided metadata implementation."""
+        """Generate a Stac catalog for the provided metadata implementation."""
         raise NotImplementedError
 
     @abstractmethod
     def generate_collection(self) -> pystac.Collection:
-        """Generate a STAC collection for the provided metadata implementation."""
+        """Generate a Stac collection for the provided metadata implementation."""
         raise NotImplementedError
 
     def write_collection_to_api(self) -> None:

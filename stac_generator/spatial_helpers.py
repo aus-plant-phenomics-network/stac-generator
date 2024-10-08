@@ -2,8 +2,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Tuple
 
-from pyproj import Transformer
 import rasterio
+from pyproj import Transformer
 from shapely.geometry import Polygon
 from shapely.ops import transform
 
@@ -23,12 +23,7 @@ def get_metadata_from_geotiff(raster_file) -> GeotiffMetadata:
     with rasterio.open(raster_file) as r:
         bounds = r.bounds
         transformer = Transformer.from_crs(r.crs, "EPSG:4326", always_xy=True)
-        footprint = Polygon([
-            [bounds.left, bounds.bottom],
-            [bounds.left, bounds.top],
-            [bounds.right, bounds.top],
-            [bounds.right, bounds.bottom]
-        ])
+        footprint = Polygon([[bounds.left, bounds.bottom], [bounds.left, bounds.top], [bounds.right, bounds.top], [bounds.right, bounds.bottom]])
         wgs84_footprint = transform(transformer.transform, footprint)
         wgs84_bounds = wgs84_footprint.bounds
         wgs84_bbox = [wgs84_bounds[0], wgs84_bounds[1], wgs84_bounds[2], wgs84_bounds[3]]
@@ -39,13 +34,14 @@ def get_metadata_from_geotiff(raster_file) -> GeotiffMetadata:
             wgs84_bbox=wgs84_bbox,
             shape=(r.height, r.width),
             bands_count=r.count,
-            dtype=r.dtypes[0]
+            dtype=r.dtypes[0],
         )
     return metadata
 
 
 class EoBands(Enum):
-    """Describes the valid options for common_name of bands in the EO STAC extension."""
+    """Describes the valid options for common_name of bands in the EO Stac extension."""
+
     COASTAL = 0.43
     BLUE = 0.47
     GREEN = 0.55

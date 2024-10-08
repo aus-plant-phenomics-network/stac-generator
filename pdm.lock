@@ -2099,7 +2099,7 @@ files = [
 name = "odc-stac"
 version = "0.3.10"
 requires_python = ">=3.8"
-summary = "Tooling for converting STAC metadata to ODC data model"
+summary = "Tooling for converting Stac metadata to ODC data model"
 groups = ["odc"]
 dependencies = [
     "affine",
@@ -2666,7 +2666,7 @@ files = [
 name = "pypgstac"
 version = "0.9.1"
 requires_python = ">=3.8"
-summary = "Schema, functions and a python library for storing and accessing STAC collections and items in PostgreSQL"
+summary = "Schema, functions and a python library for storing and accessing Stac collections and items in PostgreSQL"
 groups = ["api"]
 dependencies = [
     "cachetools==5.3.*",
@@ -2728,7 +2728,7 @@ files = [
 name = "pystac"
 version = "1.10.1"
 requires_python = ">=3.9"
-summary = "Python library for working with the SpatioTemporal Asset Catalog (STAC) specification"
+summary = "Python library for working with the SpatioTemporal Asset Catalog (Stac) specification"
 groups = ["default", "odc"]
 dependencies = [
     "python-dateutil>=2.7.0",
@@ -3345,7 +3345,7 @@ files = [
 name = "stac-fastapi-api"
 version = "3.0.2"
 requires_python = ">=3.8"
-summary = "An implementation of STAC API based on the FastAPI framework."
+summary = "An implementation of Stac API based on the FastAPI framework."
 groups = ["api"]
 dependencies = [
     "brotli-asgi",
@@ -3360,7 +3360,7 @@ files = [
 name = "stac-fastapi-extensions"
 version = "3.0.2"
 requires_python = ">=3.8"
-summary = "An implementation of STAC API based on the FastAPI framework."
+summary = "An implementation of Stac API based on the FastAPI framework."
 groups = ["api"]
 dependencies = [
     "stac-fastapi-api~=3.0",
@@ -3375,7 +3375,7 @@ files = [
 name = "stac-fastapi-types"
 version = "3.0.2"
 requires_python = ">=3.8"
-summary = "An implementation of STAC API based on the FastAPI framework."
+summary = "An implementation of Stac API based on the FastAPI framework."
 groups = ["api"]
 dependencies = [
     "attrs>=23.2.0",
@@ -3393,7 +3393,7 @@ files = [
 name = "stac-pydantic"
 version = "3.1.2"
 requires_python = ">=3.8"
-summary = "Pydantic data models for the STAC spec"
+summary = "Pydantic data models for the Stac spec"
 groups = ["api", "default"]
 dependencies = [
     "click>=8.1.7",

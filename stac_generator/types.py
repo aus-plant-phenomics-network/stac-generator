@@ -19,20 +19,11 @@ HTTPMethod = Literal["GET", "POST", "PUT", "DELETE", "PATCH"]
 Mode = Literal["append", "overwrite"]
 
 QueryParamTypes = (
-    Mapping[str, PrimitiveData | Sequence[PrimitiveData]]
-    | list[tuple[str, PrimitiveData]]
-    | tuple[tuple[str, PrimitiveData], ...]
-    | str
-    | bytes
+    Mapping[str, PrimitiveData | Sequence[PrimitiveData]] | list[tuple[str, PrimitiveData]] | tuple[tuple[str, PrimitiveData], ...] | str | bytes
 )
 
-HeaderTypes = (
-    Mapping[str, str]
-    | Mapping[bytes, bytes]
-    | Sequence[tuple[str, str]]
-    | Sequence[tuple[bytes, bytes]]
-)
+HeaderTypes = Mapping[str, str] | Mapping[bytes, bytes] | Sequence[tuple[str, str]] | Sequence[tuple[bytes, bytes]]
 CookieTypes = dict[str, str] | list[tuple[str, str]]
 RequestContent = str | bytes | Iterable[bytes]
 
-STACEntityT = Literal["Item", "ItemCollection", "Collection", "Catalogue"]
+StacEntityT = Literal["Item", "ItemCollection", "Collection", "Catalogue"]

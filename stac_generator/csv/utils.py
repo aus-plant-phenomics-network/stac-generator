@@ -73,7 +73,7 @@ def calculate_temporal_extent(
     start_datetime: DateTimeT | None = None,
     end_datetime: DateTimeT | None = None,
 ) -> TimeExtentT:
-    """Get temporal extent based on STAC specification.
+    """Get temporal extent based on Stac specification.
 
     Use `start_datetime` and `end_datetime` if provided. Otherwise, use `datetime` if provided.
     If the dataframe and time column are provided, the function will obtain the start datetime and end datetime from the dataframe.
@@ -109,14 +109,10 @@ def calculate_temporal_extent(
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
         if not isinstance(df[time_col].dtype, DateTimeT):
-            raise ValueError(
-                f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
-            )
+            raise ValueError(f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}")
         min_T, max_T = df[time_col].min(), df[time_col].max()
         return (min_T, max_T)
-    raise ValueError(
-        "If datetime is None, both start_datetime and end_datetime values must be provided"
-    )
+    raise ValueError("If datetime is None, both start_datetime and end_datetime values must be provided")
 
 
 def calculate_geometry(
@@ -171,9 +167,7 @@ def group_df(
     partition_df = partition_df.reset_index(level=-1, drop=True)
     df_group = {}
     for i in range(len(partition_df)):
-        idx = (
-            partition_df.index[i] if len(groupby) != 1 else [partition_df.index[i]]
-        )  # If groupby has one single item, convert idx to list of 1
+        idx = partition_df.index[i] if len(groupby) != 1 else [partition_df.index[i]]  # If groupby has one single item, convert idx to list of 1
         group_name = "_".join([str(item) for item in chain(*zip(groupby, idx, strict=True))])
         item_name = f"{prefix}_{group_name}"
         df_group[item_name] = partition_df.loc[idx, :].reset_index(drop=True)
@@ -219,9 +213,7 @@ def items_from_group_df(
     assets = {"source": asset}
     items = []
     for item_id, item_df in group_df.items():
-        _start_datetime, _end_datetime = calculate_temporal_extent(
-            item_df, T, datetime, start_datetime, end_datetime
-        )
+        _start_datetime, _end_datetime = calculate_temporal_extent(item_df, T, datetime, start_datetime, end_datetime)
         _start_datetime = _start_datetime if _start_datetime is not None else start_datetime
         _end_datetime = _end_datetime if _end_datetime is not None else end_datetime
         _datetime = datetime if datetime else _end_datetime

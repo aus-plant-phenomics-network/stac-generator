@@ -10,7 +10,7 @@ from pandera import DataFrameModel
 from pandera.api.pandas.model_config import BaseConfig
 from pandera.engines.pandas_engine import PydanticModel
 from pydantic import BaseModel, model_validator
-from stac_pydantic.shared import StacCommonMetadata
+from stac_pydantic.shared import StacCommonMetadata as _StacCommonMetaData
 
 from stac_generator.types import (  # noqa: TCH001
     CookieTypes,
@@ -18,23 +18,16 @@ from stac_generator.types import (  # noqa: TCH001
     HTTPMethod,
     QueryParamTypes,
     RequestContent,
-    STACEntityT,
+    StacEntityT,
 )
 
 T = TypeVar("T", bound="SourceConfig")
 
 
-class STACConfig(StacCommonMetadata):
-    """This config provides additional information that can not be derived from source file, which includes
-    <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">STAC Common Metadata</a>
-    and other descriptive information such as the id of the new entity
+class StacCommonMetadata(_StacCommonMetaData):
+    """Stac Common Metadata. Automatically sets datetime values to
+    current datetime if neither datetime nor start_datetime and end_datetime are provided
     """
-
-    # STAC Information
-    id: str
-    """Item/collection id"""
-    prefix: str | None = None
-    """Item prefix when generating multiple items. If prefix is not provided, will use id as prefix for generating contained STAC entities"""
 
     @model_validator(mode="before")
     @classmethod
@@ -51,17 +44,59 @@ class STACConfig(StacCommonMetadata):
         return data
 
 
-class SourceConfig(STACConfig):
+class StacCatalogConfig(BaseModel):
+    """Contains parameters to pass to Catalog constructor"""
+
+    id: str
+    """Catalog id"""
+    title: str
+    """Catalog title"""
+    href: str | None = None
+    """Catalog href"""
+    description: str = "Auto-generated Stac Catalog"
+    """Catalog description"""
+
+
+class StacCollectionConfig(StacCommonMetadata):
+    """Contains parameters to pass to Collection constructor. Also contains other metadata
+
+    This config provides additional information that can not be derived from source file, which includes
+    <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
+    and other descriptive information such as the id of the new entity
+    """
+
+    # Stac Information
+    id: str
+    """Collection id"""
+    description: str = "Auto-generated Stac Collection"
+    """Collection description"""
+
+
+class StacItemConfig(StacCommonMetadata):
+    """Contains parameters to pass to Item constructor.
+
+    This config provides additional information that can not be derived from source file, which includes
+    <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
+    and other descriptive information such as the id of the new entity
+    """
+
+    prefix: str
+    """Item prefix - doubles as ID if there is only one item extracted from the source file"""
+    description: str = "Auto-generated Stac Item"
+    """Item description"""
+
+
+class SourceConfig(StacItemConfig):
     """Base source config that should be subclassed for different file extensions.
 
     Source files contain raw spatial information (i.e. geotiff, shp, csv) from which
-    some STAC metadata can be derived. SourceConfig describes:
+    some Stac metadata can be derived. SourceConfig describes:
 
     - The access mechanisms for the source file: stored on local disk, or hosted somewhere behind an api endpoint. If the source
     file must be accessed through an endpoint, users can provide additional HTTP information that forms the HTTP request to the host server.
     - Processing information that are unique for the source type. Users should inherit `SourceConfig` for file extensions
     currently unsupported.
-    - Additional STAC Metadata from `STACConfig`
+    - Additional Stac Metadata from `StacConfig`
     """
 
     location: str
@@ -98,19 +133,17 @@ class SourceConfig(STACConfig):
     @model_validator(mode="after")
     def validate_require_extension_when_source_is_remote(self) -> Self:
         if self.local is None and self.extension is None:
-            raise ValueError(
-                "If source is must be accessed through an endpoint, extension field must be specified"
-            )
+            raise ValueError("If source is must be accessed through an endpoint, extension field must be specified")
         return self
 
 
 class LoadConfig(BaseModel):
-    entity: STACEntityT
-    """STAC Entity type - Item, ItemCollection, Collection, Catalog"""
+    entity: StacEntityT
+    """Stac Entity type - Item, ItemCollection, Collection, Catalog"""
     json_location: str | None = None
-    """STAC Json file on disk"""
+    """Stac Json file on disk"""
     stac_api_endpoint: str | None = None
-    """STAC API Endpoint"""
+    """Stac API Endpoint"""
 
     @model_validator(mode="after")
     def validate_field(self) -> Self:

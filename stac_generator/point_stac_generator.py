@@ -67,9 +67,9 @@ class _PointGenerator(StacGenerator):
         collection_description (str, optional): description of collection. Defaults to "Auto-generated collection description".
         license (str, optional): collection license. Defaults to "MIT".
         keywords (str | None, optional): collection keywords. Defaults to None.
-        datetime (DateTimeT | None, optional): STAC Collection collection datetime. Defaults to None.
-        start_datetime (DateTimeT | None, optional): STAC Collection start datetime. Defaults to None.
-        end_datetime (DateTimeT | None, optional): STAC Collection end datetime. Defaults to None.
+        datetime (DateTimeT | None, optional): Stac Collection collection datetime. Defaults to None.
+        start_datetime (DateTimeT | None, optional): Stac Collection start datetime. Defaults to None.
+        end_datetime (DateTimeT | None, optional): Stac Collection end datetime. Defaults to None.
     """
 
     def __init__(
@@ -161,7 +161,7 @@ class _PointGenerator(StacGenerator):
         return None  # type: ignore
 
     def generate_items(self) -> list[pystac.Item]:
-        # Each STAC Item is fully described by a partition df
+        # Each Stac Item is fully described by a partition df
         partitions = partition_group_df(self.collection_frame, self.collection_name, self.item_group)
         items: list[pystac.Item] = []
         for item_name, item_df in partitions.items():

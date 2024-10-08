@@ -12,7 +12,7 @@ class CSVDriver(IODriver):
     def get_data(self) -> FrameT:
         return self.read_local()
 
-    def to_gdf(self, df: PDFrameT) -> FrameT:
+    def _to_gdf(self, df: PDFrameT) -> FrameT:
         return to_gdf(df, self.config.X, self.config.Y, self.config.epsg)
 
     def read_local(self) -> FrameT:
@@ -26,4 +26,4 @@ class CSVDriver(IODriver):
             self.config.column_info,
             self.config.groupby,
         )
-        return self.to_gdf(df)
+        return self._to_gdf(df)

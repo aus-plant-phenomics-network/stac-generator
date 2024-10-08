@@ -7,11 +7,17 @@ from pandera.typing import DataFrame
 from pystac.collection import Extent
 
 from stac_generator.base.driver import IODriver
-from stac_generator.base.schema import DataFrameSchema, LoadConfig, STACConfig, T
-from stac_generator.types import STACEntityT
+from stac_generator.base.schema import (
+    DataFrameSchema,
+    LoadConfig,
+    StacCatalogConfig,
+    StacCollectionConfig,
+    T,
+)
+from stac_generator.types import StacEntityT
 
 
-class STACGenerator(Generic[T]):
+class StacGenerator(Generic[T]):
     source_type: type[T]
 
     @classmethod
@@ -22,9 +28,9 @@ class STACGenerator(Generic[T]):
     def __init__(
         self,
         source_df: DataFrame[DataFrameSchema[T]],
-        driver: IODriver,
-        catalog_cfg: STACConfig | None = None,
-        collection_cfg: STACConfig | None = None,
+        driver: type[IODriver],
+        catalog_cfg: StacCatalogConfig | None = None,
+        collection_cfg: StacCollectionConfig | None = None,
     ) -> None:
         self.catalog_cfg = catalog_cfg
         self.collection_cfg = collection_cfg
@@ -68,7 +74,7 @@ class STACGenerator(Generic[T]):
             ),
             extent=extent,
             title=self.collection_cfg.title,
-            license=self.collection_cfg.license if self.collection_cfg.license else "proprietory",
+            license=self.collection_cfg.license if self.collection_cfg.license else "proprietary",
             providers=self.providers,
             assets={"source": asset},
         )
@@ -83,9 +89,9 @@ class STACGenerator(Generic[T]):
         return catalog
 
 
-class STACLoader:
+class StacLoader:
     @staticmethod
-    def _load_from_file(entity: STACEntityT, location: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
+    def _load_from_file(entity: StacEntityT, location: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
         match entity:
             case "Item":
                 return pystac.Item.from_file(location)
@@ -96,10 +102,10 @@ class STACLoader:
             case "Catalogue":
                 return pystac.Catalog.from_file(location)
             case _:
-                raise ValueError(f"Invalid STAC type: {entity}")
+                raise ValueError(f"Invalid Stac type: {entity}")
 
     @staticmethod
-    def _load_from_api(entity: STACEntityT, api_endpoint: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
+    def _load_from_api(entity: StacEntityT, api_endpoint: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
         response = httpx.get(api_endpoint)
         json_data = response.json()
         match entity:
@@ -112,13 +118,13 @@ class STACLoader:
             case "Catalogue":
                 return pystac.Catalog(**json_data)
             case _:
-                raise ValueError(f"Invalid STAC type: {entity}")
+                raise ValueError(f"Invalid Stac type: {entity}")
 
     @staticmethod
     def from_config(
         load_cfg: LoadConfig,
     ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        """Get a STAC entity using information from load_cfg
+        """Get a Stac entity using information from load_cfg
 
         :param load_cfg: load information
         :type load_cfg: LoadConfig
@@ -126,5 +132,5 @@ class STACLoader:
         :rtype: pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection
         """
         if load_cfg.json_location:
-            return STACLoader._load_from_file(load_cfg.entity, load_cfg.json_location)
-        return STACLoader._load_from_api(load_cfg.entity, cast(str, load_cfg.stac_api_endpoint))
+            return StacLoader._load_from_file(load_cfg.entity, load_cfg.json_location)
+        return StacLoader._load_from_api(load_cfg.entity, cast(str, load_cfg.stac_api_endpoint))
