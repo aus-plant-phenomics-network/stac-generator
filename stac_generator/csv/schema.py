@@ -80,5 +80,3 @@ class CSVExtension(BaseModel):
 
 class CSVConfig(SourceConfig, CSVExtension):
     """Source config exteneded with CSVExtension fields"""
-
-    ...

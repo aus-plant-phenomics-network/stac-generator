@@ -7,7 +7,7 @@ __all__ = ("StacGeneratorFactory",)
 
 class StacGeneratorFactory:
     @staticmethod
-    def get_stac_generator(data_type, data_file, location_file) -> StacGenerator:
+    def get_stac_generator(data_type, data_file, location_file) -> StacGenerator:  # type: ignore[no-untyped-def]
         # Get the correct type of generator depending on the data type.
         if data_type == "drone":
             return DroneStacGenerator(data_file, location_file)

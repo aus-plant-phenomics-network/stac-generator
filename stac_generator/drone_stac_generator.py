@@ -24,7 +24,7 @@ _datetime = datetime.now(UTC)
 
 class DTypeFactory:
     @staticmethod
-    def get_pystac_dtype(dtype) -> DataType:
+    def get_pystac_dtype(dtype) -> DataType:  # type: ignore[no-untyped-def]
         if dtype == "uint8":
             return DataType.UINT8
         if dtype == "uint16":
@@ -37,7 +37,7 @@ class DTypeFactory:
 class DroneStacGenerator(StacGenerator):
     """Stac generator for drone data."""
 
-    def __init__(self, data_file, location_file) -> None:
+    def __init__(self, data_file, location_file) -> None:  # type: ignore[no-untyped-def]
         super().__init__("drone", data_file, location_file)
         self.validate_data()
         with Path(self.location_file).open(encoding="utf-8") as locations:

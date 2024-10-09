@@ -13,7 +13,7 @@ __all__ = ("StacGenerator",)
 class StacGenerator(ABC):
     """Stac generator base class."""
 
-    def __init__(self, data_type, data_file, location_file, **kwargs) -> None:
+    def __init__(self, data_type, data_file, location_file, **kwargs) -> None:  # type: ignore[no-untyped-def]
         self.base_url = os.environ.get("STAC_API_URL", None)
         if self.base_url is None:
             raise ValueError("Environment variable Stac_API_URL must be defined.")

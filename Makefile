@@ -122,6 +122,6 @@ test-all: test test-examples 						## Run all tests
 check-all: lint test-all coverage                   ## Run all linting, tests, and coverage checks
 
 
-.PHONY: docs 
+.PHONY: docs
 docs: 												## Serve mkdocs
-	@$(PDM) run mkdocs serve 						
+	@$(PDM) run mkdocs serve

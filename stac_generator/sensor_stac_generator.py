@@ -10,7 +10,7 @@ __all__ = ("SensorStacGenerator",)
 class SensorStacGenerator(StacGenerator):
     """Stac generator for sensor data."""
 
-    def __init__(self, data_file, location_file) -> None:
+    def __init__(self, data_file, location_file) -> None:  # type: ignore[no-untyped-def]
         super().__init__("sensor", data_file, location_file)
 
     def validate_data(self) -> bool:
