@@ -1,16 +1,11 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import cast
 
 import rasterio
 from pyproj import Transformer
 from shapely.geometry import Polygon
 from shapely.ops import transform
-
-__all__ = (
-    "EoBands",
-    "GeotiffMetadata",
-    "get_metadata_from_geotiff",
-)
 
 
 @dataclass
@@ -26,6 +21,7 @@ class GeotiffMetadata:
 
 def get_metadata_from_geotiff(raster_file: str) -> GeotiffMetadata:
     with rasterio.open(raster_file) as r:
+        r = cast(rasterio.DatasetReader, r)
         bounds = r.bounds
         transformer = Transformer.from_crs(r.crs, "EPSG:4326", always_xy=True)
         footprint = Polygon(
@@ -58,7 +54,7 @@ class EoBands(Enum):
     GREEN = 0.55
     RED = 0.65
     YELLOW = 0.60
-    PAN = 0.70
+    PAN = 0.6001
     REDEDGE = 0.75
     NIR = 0.87
     NIR08 = 0.82

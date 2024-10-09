@@ -12,7 +12,9 @@ NumberT = int | float
 """Datetime"""
 DateTimeT = datetime.datetime
 """tuple of start and end dates"""
-TimeExtentT = tuple[DateTimeT | None, DateTimeT | None]  # (start_datetime, end_datetime) format
+TimeExtentT = tuple[
+    datetime.datetime | None, datetime.datetime | None
+]  # (start_datetime, end_datetime) format
 
 """<a href="https://www.rfc-editor.org/rfc/rfc7111">CSV MIME type</a>"""
 CSVMediaType = "text/csv"

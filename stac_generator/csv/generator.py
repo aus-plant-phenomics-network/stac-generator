@@ -8,17 +8,17 @@ from stac_generator.csv.schema import CSVConfig, CSVExtension
 from stac_generator.csv.utils import group_df, items_from_group_df
 from stac_generator.types import CSVMediaType
 
-__all__ = ("CSVGenerator",)
-
 
 class CSVGenerator(StacGenerator[CSVConfig]):
     def __init__(
         self,
-        source_df: DataFrame[DataFrameSchema[CSVConfig]],
+        source_df: DataFrame,
         catalog_cfg: StacCatalogConfig | None = None,
         collection_cfg: StacCollectionConfig | None = None,
     ) -> None:
+        source_df = DataFrameSchema[CSVConfig](source_df)  # type: ignore[call-arg]
         super().__init__(source_df, CSVDriver, catalog_cfg, collection_cfg)
+        self.driver: type[CSVDriver]
 
     def create_item_from_config(self, source_cfg: CSVConfig) -> list[pystac.Item]:
         asset = pystac.Asset(

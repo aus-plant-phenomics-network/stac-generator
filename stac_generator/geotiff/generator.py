@@ -1,82 +1,45 @@
-"""This module encapsulates the logic for generating Stac for the drone metadata standard."""
-
-from datetime import UTC, datetime
-from pathlib import Path
-
 import pystac
 import rasterio
+from pandera.typing.pandas import DataFrame
 from pystac.extensions.eo import AssetEOExtension, Band, ItemEOExtension
 from pystac.extensions.projection import ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely.geometry import mapping
 
-from stac_generator.generator import StacGenerator
-from stac_generator.spatial_helpers import EoBands, get_metadata_from_geotiff
-
-__all__ = (
-    "DTypeFactory",
-    "DroneStacGenerator",
-)
+from stac_generator.base.generator import StacGenerator
+from stac_generator.base.schema import DataFrameSchema, StacCatalogConfig, StacCollectionConfig
+from stac_generator.geotiff.schema import GeoTiffConfig
+from stac_generator.geotiff.utils import EoBands, get_metadata_from_geotiff
 
 
-_datetime = datetime.now(UTC)
-
-
-class DTypeFactory:
-    @staticmethod
-    def get_pystac_dtype(dtype) -> DataType:  # type: ignore[no-untyped-def]
-        if dtype == "uint8":
-            return DataType.UINT8
-        if dtype == "uint16":
-            return DataType.UINT16
-        if dtype == "float32":
-            return DataType.FLOAT32
-        raise Exception(f"Unsupported data type {dtype}")
-
-
-class DroneStacGenerator(StacGenerator):
+class GeoTiffGenerator(StacGenerator[GeoTiffConfig]):
     """Stac generator for drone data."""
 
-    def __init__(self, data_file, location_file) -> None:  # type: ignore[no-untyped-def]
-        super().__init__("drone", data_file, location_file)
-        self.validate_data()
-        with Path(self.location_file).open(encoding="utf-8") as locations:
-            for counter, line in enumerate(locations):
-                location = line.strip("\n")
-                self.items.append(self.generate_item(location, counter))
-        self.generate_collection()
-        self.validate_stac()
+    def __init__(
+        self,
+        source_df: DataFrame[DataFrameSchema[GeoTiffConfig]],
+        catalog_cfg: StacCatalogConfig | None = None,
+        collection_cfg: StacCollectionConfig | None = None,
+    ) -> None:
+        super().__init__(source_df, None, catalog_cfg, collection_cfg)
 
-    def validate_data(self) -> bool:
-        with Path(self.data_file).open(encoding="utf-8") as data:
-            data_keys = data.readline().strip("\n")
-            standard_keys = self.read_standard()
-            if data_keys != standard_keys:
-                raise ValueError("The data keys do not match the standard keys.")
-            return True
-
-    def generate_item(self, location: str, counter: int) -> pystac.Item:
-        # Get the metadata of the item.
-        metadata = get_metadata_from_geotiff(location)
-        data_type = DTypeFactory.get_pystac_dtype(metadata.dtype)
-        datetime_utc = _datetime
+    def create_item_from_config(self, source_cfg: GeoTiffConfig) -> list[pystac.Item]:
+        metadata = get_metadata_from_geotiff(source_cfg.location)
+        data_type = DataType(metadata.dtype)
+        bbox = metadata.bounds
         # Create the Stac asset. We are only considering the stitched MS geotiff currently.
         # Could have RGB, thumbnail, etc. in the future.
-        asset = pystac.Asset(href=location, media_type=pystac.MediaType.GEOTIFF)
-        # Create the Stac item and attach the assets.
-        bbox = [metadata.bounds[0], metadata.bounds[1], metadata.bounds[2], metadata.bounds[3]]
+        asset = pystac.Asset(href=source_cfg.location, media_type=pystac.MediaType.GEOTIFF)
         item = pystac.Item(
-            id=f"item_{counter}",
+            id=source_cfg.prefix,
             geometry=mapping(metadata.footprint),
             bbox=bbox,
-            datetime=datetime_utc,
+            assets={"image": asset},
+            datetime=source_cfg.datetime,
+            start_datetime=source_cfg.start_datetime,
+            end_datetime=source_cfg.end_datetime,
             properties={},
         )
-        print(metadata)
-        # Add the asset to the item.
-        item.add_asset(key="image", asset=asset)
-        # Build the data for the "projection" extension. The proj extension allows odc-stac
-        # to load data without specifying particular parameters.
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         shape = metadata.shape
@@ -185,40 +148,4 @@ class DroneStacGenerator(StacGenerator):
         eo_ext_on_item.apply(bands=all_eo_bands, cloud_cover=0.0, snow_cover=0.0)
         eo_ext_on_asset.apply(bands=all_eo_bands)
         raster_ext_on_asset.apply(bands=all_raster_bands)
-        return item
-
-    def generate_catalog(self) -> pystac.Catalog:
-        # Create the Stac catalog.
-        catalog = pystac.Catalog(id="test_catalog", description="This is a test catalog.")
-        for item in self.items:
-            catalog.add_item(item)
-        # Save the catalog to disk.
-        test_dir = "./tests/stac"
-        catalog.normalize_hrefs(test_dir)
-        catalog.save(catalog_type=pystac.CatalogType.SELF_CONTAINED)
-        self.catalog = catalog
-        return self.catalog
-
-    def generate_collection(self) -> pystac.Collection:
-        # self.generate_catalog()
-        collection_id = "uq_gilbert_fixed_proj"
-        description = "Gilbert site with correct projection."
-        # TODO: Magic bbox below, must read from data.
-        # TODO: Spatial extent for collection is union of bboxes of items inside.
-        spatial_extent = pystac.SpatialExtent(
-            [[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]]
-        )
-        # TODO: Magic time range below, must read from data. Temporal extent is first and last
-        temporal_extent = pystac.TemporalExtent([[_datetime, None]])
-        extent = pystac.Extent(spatial_extent, temporal_extent)
-        lic = "CC-BY-4.0"
-
-        self.collection = pystac.Collection(
-            id=collection_id, description=description, extent=extent, license=lic
-        )
-
-        for item in self.items:
-            self.collection.add_item(item)
-        test_dir = "./tests/stac"
-        self.collection.normalize_hrefs(test_dir)
-        return self.collection
+        return [item]

@@ -17,14 +17,10 @@ from stac_generator.base.schema import (
 from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
 from stac_generator.types import StacEntityT
 
-__all__ = (
-    "StacGenerator",
-    "StacLoader",
-)
-
 
 class StacGenerator(Generic[T]):
     source_type: type[T]
+    """SourceConfig subclass that contains information used for parsing the source file"""
 
     @classmethod
     def __class_getitem__(cls, source_type: type) -> type:
@@ -34,10 +30,22 @@ class StacGenerator(Generic[T]):
     def __init__(
         self,
         source_df: DataFrame[DataFrameSchema[T]],
-        driver: type[IODriver],
+        driver: type[IODriver] | None = None,
         catalog_cfg: StacCatalogConfig | None = None,
         collection_cfg: StacCollectionConfig | None = None,
     ) -> None:
+        """Base STACGenerator object. Users should extend this class for handling different file extensions.
+        Please see CSVStacGenerator source code.
+
+        :param source_df: source data config
+        :type source_df: DataFrame[DataFrameSchema[T]]
+        :param driver: driver that handles T file extension using config for extension type T. Note that this field is not required
+        :type driver: type[IODriver] | None, optional
+        :param catalog_cfg: catalog config for generating catalog. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
+        :type catalog_cfg: StacCatalogConfig | None, optional
+        :param collection_cfg: collection config for generating collection. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
+        :type collection_cfg: StacCollectionConfig | None, optional
+        """
         self.catalog_cfg = catalog_cfg
         self.collection_cfg = collection_cfg
         self.source_df = source_df
@@ -45,6 +53,7 @@ class StacGenerator(Generic[T]):
 
     @abc.abstractmethod
     def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
+        """Abstract method that handles `pystac.Item` generation from the appropriate config"""
         raise NotImplementedError
 
     def extract_cfg(self) -> list[T]:
@@ -144,19 +153,58 @@ class StacGenerator(Generic[T]):
         :type href: str
         """
         collection = self.create_collection()
-        collection.normalize_and_save(href)
+        collection.normalize_hrefs(href)
+        collection.validate_all()
+        collection.save_object(dest_href=href)
 
-    def generate_catalog_and_save(self, href: str) -> None:
-        """Generate STAC Catalog and save to disk
+    def generate_catalog_and_save(self, href: str | None) -> None:
+        """Write the catalog generated from source dataframe to local disk
 
-        This is a convenient method
-        that combines `self.create_catalog` and `catalog.normalize_and_save(href)`
+        If `href` is not provided, will attemp to use `href` under `StacCatalogConfig`
 
-        :param href: disk location of the generated catalog
-        :type href: str
+        :param href: disk location
+        :type href: str | None
+        :raises ValueError: if href parameter is not provided as method argument or config attribute
         """
+        if not href and not (self.catalog_cfg and self.catalog_cfg.href):
+            raise ValueError("Href must be provided as argument or under catalog config")
         catalog = self.create_catalog()
-        catalog.normalize_and_save(href)
+        href = (
+            href if href is not None else cast(str, cast(StacCatalogConfig, self.catalog_cfg).href)
+        )
+        catalog.normalize_hrefs(href)
+        catalog.validate_all()
+        catalog.save_object(dest_href=href)
+
+    async def write_to_api(self, endpoint: str | None = None) -> None:
+        """Write the catalog generated from source dataframe to an endpoint
+
+        If endpoint is not provided, will attempt to use the endpoint under `StacCatalogConfig`
+
+        :param endpoint: STAC api endpoint, defaults to None
+        :type endpoint: str | None, optional
+        :raises ValueError: if endpoint parameter is not provided as method argument or config attribute
+        """
+        if not endpoint and not (self.catalog_cfg and self.catalog_cfg.endpoint):
+            raise ValueError("Endpoint must be provided as argument or to catalog config")
+        catalog = self.create_catalog()
+        endpoint = (
+            endpoint
+            if endpoint is not None
+            else cast(str, cast(StacCatalogConfig, self.catalog_cfg).endpoint)
+        )
+        catalog.normalize_hrefs(endpoint)
+        catalog.validate_all()
+        async with httpx.AsyncClient() as client:
+            for collection in catalog.get_collections():
+                for item in collection.get_all_items():
+                    await client.post(
+                        f"{endpoint}/collection/{item.collection_id}/items/{item.id}",
+                        json=item.to_dict(),
+                    )
+                await client.post(
+                    f"{endpoint}/collection/{collection.id}", json=collection.to_dict()
+                )
 
 
 class StacLoader:

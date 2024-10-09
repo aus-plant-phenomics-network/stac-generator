@@ -6,7 +6,7 @@
 make install
 ```
 
-## Adding a new dependency 
+## Adding a new dependency
 
 ```bash
 pdm add <package>
@@ -14,7 +14,7 @@ pdm add <package>
 
 ## Adding a new dependency under a dependency group:
 
-```bash 
+```bash
 pdm add -dG <group> <package>
 ```
 
@@ -30,9 +30,9 @@ pdm remove <package>
 make docs
 ```
 
-## Fixing CI 
+## Fixing CI
 
-Run the linter. This runs all methods in pre-commit - i.e. checking for exports, format the code, etc, followed by mypy. This has a one to one correspondence with validate-ci 
+Run the linter. This runs all methods in pre-commit - i.e. checking for exports, format the code, etc, followed by mypy. This has a one to one correspondence with validate-ci
 
 ```bash
 make lint

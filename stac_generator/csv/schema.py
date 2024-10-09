@@ -4,14 +4,7 @@ from typing import Literal, NotRequired, Required
 from pydantic import BaseModel, field_validator
 from typing_extensions import TypedDict
 
-from stac_generator.base.schema import SourceConfig
-
-__all__ = (
-    "CSVConfig",
-    "CSVExtension",
-    "ColumnInfo",
-)
-
+from stac_generator.base.schema import DataFrameSchema, SourceConfig
 
 DTYPE = Literal[
     "str",
@@ -80,3 +73,6 @@ class CSVExtension(BaseModel):
 
 class CSVConfig(SourceConfig, CSVExtension):
     """Source config exteneded with CSVExtension fields"""
+
+
+CSVDataFrameSchema = DataFrameSchema[CSVConfig]

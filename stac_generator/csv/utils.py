@@ -10,16 +10,7 @@ from pystac.extensions.projection import ItemProjectionExtension
 from shapely import MultiPoint, Point, to_geojson
 
 from stac_generator.csv.schema import ColumnInfo
-from stac_generator.types import DateTimeT, FrameT, PDFrameT, TimeExtentT
-
-__all__ = (
-    "calculate_geometry",
-    "calculate_temporal_extent",
-    "group_df",
-    "items_from_group_df",
-    "read_csv",
-    "to_gdf",
-)
+from stac_generator.types import FrameT, PDFrameT, TimeExtentT
 
 
 def read_csv(
@@ -81,9 +72,9 @@ def to_gdf(df: PDFrameT, X_coord: str, Y_coord: str, epsg: int) -> FrameT:
 def calculate_temporal_extent(
     df: FrameT | None = None,
     time_col: str | None = None,
-    datetime: DateTimeT | None = None,
-    start_datetime: DateTimeT | None = None,
-    end_datetime: DateTimeT | None = None,
+    datetime: datetime.datetime | None = None,
+    start_datetime: datetime.datetime | None = None,
+    end_datetime: datetime.datetime | None = None,
 ) -> TimeExtentT:
     """Get temporal extent based on Stac specification.
 
@@ -97,13 +88,13 @@ def calculate_temporal_extent(
     :type time_col: str | None, optional
 
     :param datetime: Datetime.
-    :type datetime: DateTimeT | None, optional
+    :type datetime: datetime.datetime | None, optional
 
     :param start_datetime: Start datetime.
-    :type start_datetime: DateTimeT | None, optional
+    :type start_datetime: datetime.datetime | None, optional
 
     :param end_datetime: End datetime.
-    :type end_datetime: DateTimeT | None, optional
+    :type end_datetime: datetime.datetime | None, optional
 
     :return: Start datetime, end datetime.
     :rtype: TimeExtentT
@@ -115,7 +106,7 @@ def calculate_temporal_extent(
     if df is not None and isinstance(time_col, str):
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
-        if not isinstance(df[time_col].dtype, DateTimeT):
+        if not isinstance(df[time_col].dtype, datetime.datetime):
             raise ValueError(
                 f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
             )
@@ -130,6 +121,8 @@ def calculate_geometry(
     df: FrameT,
 ) -> Point | MultiPoint:
     """Calculate the geometry from geopandas dataframe.
+
+    Work only on point based data
 
     Returns a `shapely.Point` or `shapely.MultiPoint` depending on the number
     of unique points in the dataframe.
@@ -191,9 +184,9 @@ def items_from_group_df(
     asset: pystac.Asset,
     epsg: int,
     T: str | None = None,
-    datetime: DateTimeT | None = None,
-    start_datetime: DateTimeT | None = None,
-    end_datetime: DateTimeT | None = None,
+    datetime: datetime.datetime | None = None,
+    start_datetime: datetime.datetime | None = None,
+    end_datetime: datetime.datetime | None = None,
     properties: dict[str, Any] | None = None,
 ) -> list[pystac.Item]:
     """Extract `shapely.Point` data from partitioned dataframe maps.
@@ -211,11 +204,11 @@ def items_from_group_df(
     :param T: name of the time column, defaults to None
     :type T: str | None, optional
     :param datetime: pystac datetime metadata, defaults to None
-    :type datetime: DateTimeT | None, optional
+    :type datetime: datetime.datetime | None, optional
     :param start_datetime: pystac start_datetime metadata, defaults to None
-    :type start_datetime: DateTimeT | None, optional
+    :type start_datetime: datetime.datetime | None, optional
     :param end_datetime: pystac end_datetime metadata, defaults to None
-    :type end_datetime: DateTimeT | None, optional
+    :type end_datetime: datetime.datetime | None, optional
     :param properties: additional properties to be added to item
     :type properties: dict[str, Any] | None, optional
     :return: list of generated stac items

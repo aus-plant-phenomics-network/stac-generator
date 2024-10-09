@@ -21,17 +21,6 @@ from stac_generator.types import (  # noqa: TCH001
     StacEntityT,
 )
 
-__all__ = (
-    "DataFrameSchema",
-    "LoadConfig",
-    "SourceConfig",
-    "StacCatalogConfig",
-    "StacCollectionConfig",
-    "StacCommonMetadata",
-    "StacItemConfig",
-)
-
-
 T = TypeVar("T", bound="SourceConfig")
 
 
@@ -63,7 +52,9 @@ class StacCatalogConfig(BaseModel):
     title: str
     """Catalog title"""
     href: str | None = None
-    """Catalog href"""
+    """Href for saving the catalog on local disk"""
+    endpoint: str | None = None
+    """Href for saving the catalog behind a STAC API"""
     description: str = "Auto-generated Stac Catalog"
     """Catalog description"""
 

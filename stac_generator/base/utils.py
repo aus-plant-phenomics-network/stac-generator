@@ -16,12 +16,6 @@ from shapely import (
 
 from stac_generator.base.schema import StacCollectionConfig
 
-__all__ = (
-    "extract_spatial_extent",
-    "extract_temporal_extent",
-    "geometry_from_dict",
-)
-
 
 def geometry_from_dict(item: dict[str, Any]) -> Geometry:
     """Create a `shapely.Geometry` object from dictionary
