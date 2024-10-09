@@ -53,11 +53,18 @@ class StacGenerator(Generic[T]):
         self.catalog_cfg = (
             catalog_cfg
             if catalog_cfg
-            else StacCatalogConfig(id=collection_cfg.id, title=collection_cfg.title, description=collection_cfg.description)
+            else StacCatalogConfig(
+                id=collection_cfg.id,
+                title=collection_cfg.title,
+                description=collection_cfg.description,
+            )
         )
         self.source_df = source_df
         self.driver = driver
-        self.configs = [self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict())) for i in range(len(self.source_df))]
+        self.configs = [
+            self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict()))
+            for i in range(len(self.source_df))
+        ]
         self.href = href
 
     @abc.abstractmethod
@@ -66,7 +73,9 @@ class StacGenerator(Generic[T]):
         raise NotImplementedError
 
     @staticmethod
-    def extract_extent(items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None) -> Extent:
+    def extract_extent(
+        items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None
+    ) -> Extent:
         return Extent(extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg))
 
     def _create_collection_from_items(
@@ -79,17 +88,25 @@ class StacGenerator(Generic[T]):
         collection = pystac.Collection(
             id=collection_cfg.id,
             description=(
-                collection_cfg.description if collection_cfg.description else f"Auto-generated collection {collection_cfg.id} with stac_generator"
+                collection_cfg.description
+                if collection_cfg.description
+                else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
             extent=self.extract_extent(items, collection_cfg),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
-            providers=[pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers] if collection_cfg.providers else None,
+            providers=[
+                pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers
+            ]
+            if collection_cfg.providers
+            else None,
         )
         collection.add_items(items)
         return collection
 
-    def _create_catalog_from_collection(self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None) -> pystac.Catalog:
+    def _create_catalog_from_collection(
+        self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None
+    ) -> pystac.Catalog:
         if catalog_cfg is None:
             raise ValueError("Generating catalog requires non null catalog config")
         catalog = pystac.Catalog(
@@ -193,7 +210,9 @@ class StacGenerator(Generic[T]):
 
 class StacLoader:
     @staticmethod
-    def _load_from_file(entity: StacEntityT, location: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
+    def _load_from_file(
+        entity: StacEntityT, location: str
+    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
         match entity:
             case "Item":
                 return pystac.Item.from_file(location)
@@ -207,7 +226,9 @@ class StacLoader:
                 raise ValueError(f"Invalid Stac type: {entity}")
 
     @staticmethod
-    def _load_from_api(entity: StacEntityT, api_href: str) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
+    def _load_from_api(
+        entity: StacEntityT, api_href: str
+    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
         response = httpx.get(api_href)
         json_data = response.json()
         match entity:
