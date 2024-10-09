@@ -92,23 +92,18 @@ def calculate_temporal_extent(
 
     :param df: Provided dataframe.
     :type df: FrameT | None, optional
-    :default: None
 
     :param time_col: Name of time column.
     :type time_col: str | None, optional
-    :default: None
 
     :param datetime: Datetime.
     :type datetime: DateTimeT | None, optional
-    :default: None
 
     :param start_datetime: Start datetime.
     :type start_datetime: DateTimeT | None, optional
-    :default: None
 
     :param end_datetime: End datetime.
     :type end_datetime: DateTimeT | None, optional
-    :default: None
 
     :return: Start datetime, end datetime.
     :rtype: TimeExtentT
@@ -171,7 +166,6 @@ def group_df(
 
     :param groupby: Fields to partition the dataframe. Must be present in the original dataframe.
     :type groupby: Sequence[str] | None, optional
-    :default: None
 
     :return: Mapping of group name to sub-dataframe.
     :rtype: dict[str, FrameT]

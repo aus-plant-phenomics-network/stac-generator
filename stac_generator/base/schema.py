@@ -166,6 +166,10 @@ class LoadConfig(BaseModel):
 
 
 class DataFrameSchema(Generic[T]):
+    """DataFrameSchema that can be used for validating DataFrame object. User must provide the type
+    parameter `T` that is a subclass of `SourceConfig` for validation.
+    """
+
     @classmethod
     def __class_getitem__(cls, cfg_type: type) -> type:
         class Config(BaseConfig):

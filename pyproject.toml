@@ -46,7 +46,14 @@ api = [
     "pypgstac>=0.9.1",
 ]
 type-stubs = ["pandas-stubs>=2.2.2.240909"]
-
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.5.39",
+    "mkdocstrings-python>=1.11.1",
+    "markdown-exec>=1.9.3",
+    "mkdocs-version-annotations>=1.0.0",
+    "mkdocs-autorefs>=1.2.0",
+]
 
 [tool.coverage.report]
 exclude_also = [

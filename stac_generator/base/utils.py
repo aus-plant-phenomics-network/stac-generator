@@ -24,6 +24,18 @@ __all__ = (
 
 
 def geometry_from_dict(item: dict[str, Any]) -> Geometry:
+    """Create a `shapely.Geometry` object from dictionary
+
+    :param item: dictionary that must conform to geojson <a href="https://datatracker.ietf.org/doc/html/rfc7946">geometry object</a>
+    :type item: dict[str, Any]
+    :raises ValueError: if item is None
+    :raises ValueError: if no `type` key is found in item
+    :raises ValueError: if `type` is not `GeometryCollection` but no `coordinates` key is found in item
+    :raises ValueError: if `type` is `GeometryCollection` but no `geometries` key is found in item
+    :raises ValueError: if `type` is not a valid geojson geometry type from rfc7946
+    :return: geometry item as `shapely.Geometry` object
+    :rtype: Geometry
+    """
     if not item:
         raise ValueError("Expects non null geometry")
     if "type" not in item:
@@ -58,6 +70,13 @@ def geometry_from_dict(item: dict[str, Any]) -> Geometry:
 
 
 def extract_spatial_extent(items: list[pystac.Item]) -> pystac.SpatialExtent:
+    """Extract spatial extent for a collection from child items
+
+    :param items: list of all `pystac.Item`
+    :type items: list[pystac.Item]
+    :return: spatial extent object
+    :rtype: pystac.SpatialExtent
+    """
     geometries: list[Geometry] = []
     for item in items:
         if (geo := item.geometry) is not None:
@@ -70,6 +89,19 @@ def extract_spatial_extent(items: list[pystac.Item]) -> pystac.SpatialExtent:
 def extract_temporal_extent(
     items: list[pystac.Item], collection: StacCollectionConfig | None = None
 ) -> pystac.TemporalExtent:
+    """Extract spatial extent for a collection from a list of items and collection config.
+
+    If temporal extent (`start_datetime`, `end_datetime` or `datetime`) is in `collection`, generate
+    `pystac.TemporalExtent` from those fields. Otherwise, extract the fields from the provided items.
+
+    :param items: list of Items
+    :type items: list[pystac.Item]
+    :param collection: collection config, defaults to None
+    :type collection: StacCollectionConfig | None, optional
+    :raises ValueError: if a pystac.Item has neither `datetime` nor both `start_datetime` and `end_datetime`
+    :return: extracted temporal extent
+    :rtype: pystac.TemporalExtent
+    """
     if collection:
         if collection.start_datetime and collection.end_datetime:
             return pystac.TemporalExtent([[collection.start_datetime, collection.end_datetime]])

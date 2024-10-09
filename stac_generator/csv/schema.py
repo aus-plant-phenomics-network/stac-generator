@@ -38,6 +38,8 @@ DTYPE = Literal[
 
 
 class ColumnInfo(TypedDict):
+    """TypedDict description of CSV columns"""
+
     name: Required[str]
     """Column name"""
     description: NotRequired[str]
@@ -47,17 +49,27 @@ class ColumnInfo(TypedDict):
 
 
 class CSVExtension(BaseModel):
+    """CSV metadata required for parsing geospatial data from csv source."""
+
     X: str
+    """Column to be treated as X coordinate"""
     Y: str
+    """Column to be treated as Y coordinate"""
     epsg: int = 4326
+    """EPSG code"""
     T: str | None = None
+    """Column to be treated as time coordinate"""
     column_info: list[str] | list[ColumnInfo] | None = None
+    """Description of attributes collected from the csv"""
     groupby: list[str] | None = None
+    """Columns used to sub-divide points in the csv into groups"""
     date_format: str = "ISO8601"
+    """Format to parse dates - will be used if T column is provided"""
 
     @field_validator("column_info", mode="before")
     @classmethod
     def coerce_to_object(cls, v: str) -> list[str] | list[ColumnInfo]:
+        """Convert json serialised string of column info into matched object"""
         parsed = json.loads(v)
         if not isinstance(parsed, list):
             raise ValueError(
@@ -66,4 +78,7 @@ class CSVExtension(BaseModel):
         return parsed
 
 
-class CSVConfig(SourceConfig, CSVExtension): ...
+class CSVConfig(SourceConfig, CSVExtension):
+    """Source config exteneded with CSVExtension fields"""
+
+    ...
