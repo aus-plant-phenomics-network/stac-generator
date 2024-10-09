@@ -5,17 +5,23 @@ import fiona
 from shapely.geometry import mapping
 from datetime import datetime
 from pystac.extensions.projection import ItemProjectionExtension
-from typing import List
-from generator import StacGenerator
+from stac_generator.generator import StacGenerator
 
 
 class VectorPolygonStacGenerator(StacGenerator):
     """STAC generator for vector polygon data."""
 
-    def __init__(self, data_type, geojson_file, zip_file, output_dir) -> None:
-        super().__init__(data_type, geojson_file, zip_file)
-        self.output_dir = output_dir  # Directory where STAC files will be saved
-        os.makedirs(self.output_dir, exist_ok=True)
+    def __init__(self, data_file, location_file) -> None:
+        super().__init__("vector", data_file, location_file)
+        self.output_dir = "./tests/stac"  # Directory where STAC files will be saved
+        with open(self.location_file, encoding="utf-8") as locations:
+            counter = 0
+            for line in locations:
+                counter += 1
+                location = line.strip("\n")
+                self.items.append(self.generate_item(location, counter))
+        self.generate_collection()
+        self.validate_stac()
 
     def validate_data(self) -> bool:
         """Validate the structure of the provided data file."""
@@ -41,6 +47,11 @@ class VectorPolygonStacGenerator(StacGenerator):
     def generate_item(self, location: str, counter: int) -> pystac.Item:
         """Generate a STAC item from a vector polygon file."""
         # Read the vector file (shapefile, geojson) using Fiona
+        if location.endswith(".zip"):  # assume zip shape archive
+            if location.startswith("http"):  # archive is hosted somewhere
+                location = "zip+" + location
+            else:  # archive is on disk
+                location = "zip//" + location
         with fiona.open(location) as src:
             crs = src.crs
             bbox = src.bounds
@@ -77,7 +88,6 @@ class VectorPolygonStacGenerator(StacGenerator):
         print(f"STAC Item saved to {item_path}")
 
         # Add to items list
-        self.items.append(item)
         return item
 
     def generate_collection(self) -> pystac.Collection:
@@ -96,6 +106,8 @@ class VectorPolygonStacGenerator(StacGenerator):
         # Add items to the collection
         for item in self.items:
             self.collection.add_item(item)
+        test_dir = "./tests/stac"
+        self.collection.normalize_hrefs(test_dir)
 
         # Save the collection to a file
         collection_path = os.path.join(self.output_dir, f"{self.data_type}_collection.json")
