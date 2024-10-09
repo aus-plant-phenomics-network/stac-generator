@@ -4,7 +4,7 @@ from typing import Literal, NotRequired, Required
 from pydantic import BaseModel, field_validator
 from typing_extensions import TypedDict
 
-from stac_generator.base.schema import DataFrameSchema, SourceConfig
+from stac_generator.base.schema import SourceConfig
 
 DTYPE = Literal[
     "str",
@@ -31,7 +31,7 @@ DTYPE = Literal[
 
 
 class ColumnInfo(TypedDict):
-    """TypedDict description of CSV columns"""
+    """TypedDict description of Csv columns"""
 
     name: Required[str]
     """Column name"""
@@ -41,8 +41,8 @@ class ColumnInfo(TypedDict):
     """Column data type"""
 
 
-class CSVExtension(BaseModel):
-    """CSV metadata required for parsing geospatial data from csv source."""
+class CsvExtension(BaseModel):
+    """Csv metadata required for parsing geospatial data from csv source."""
 
     X: str
     """Column to be treated as X coordinate"""
@@ -71,8 +71,5 @@ class CSVExtension(BaseModel):
         return parsed
 
 
-class CSVConfig(SourceConfig, CSVExtension):
-    """Source config exteneded with CSVExtension fields"""
-
-
-CSVDataFrameSchema = DataFrameSchema[CSVConfig]
+class CsvConfig(SourceConfig, CsvExtension):
+    """Source config exteneded with CsvExtension fields"""

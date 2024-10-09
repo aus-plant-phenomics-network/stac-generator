@@ -11,8 +11,8 @@ def test_generator() -> None:
     # data_type = data_file.stem.split("_")[0]
     # assert data_type == "drone"
     # location_file = Path("tests/test_data/drone_test_files.csv")
-    # # Create the Stac catalog.
-    # os.environ["Stac_API_URL"] = "placeholder"
+    # # Create the STAC catalog.
+    # os.environ["STAC_API_URL"] = "placeholder"
     # generator = StacGeneratorFactory().get_stac_generator(data_type, data_file,
     #                                                       location_file)
     # assert isinstance(generator, DroneStacGenerator)
@@ -20,7 +20,7 @@ def test_generator() -> None:
     # # Checks for the collection.
     # assert generator.collection
     # actual_col = generator.collection.to_dict()
-    # # Stac contains relative paths in the links field that are not constant. Cannot compare outputs
+    # # STAC contains relative paths in the links field that are not constant. Cannot compare outputs
     # # directly.
     # # expected_col_file = Path("tests/test_data/expected_collection.json")
     # # with open(expected_col_file, 'r') as f:

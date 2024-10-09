@@ -1,21 +1,23 @@
+import geopandas as gpd
+import pandas as pd
+
 from stac_generator.base.driver import IODriver
-from stac_generator.csv.schema import CSVConfig
+from stac_generator.csv.schema import CsvConfig
 from stac_generator.csv.utils import read_csv, to_gdf
-from stac_generator.types import FrameT, PDFrameT
 
 
-class CSVDriver(IODriver):
-    def __init__(self, config: CSVConfig) -> None:
+class CsvDriver(IODriver):
+    def __init__(self, config: CsvConfig) -> None:
         super().__init__(config)
-        self.config: CSVConfig
+        self.config: CsvConfig
 
-    def get_data(self) -> FrameT:
+    def get_data(self) -> gpd.GeoDataFrame:
         return self.read_local()
 
-    def _to_gdf(self, df: PDFrameT) -> FrameT:
+    def _to_gdf(self, df: pd.DataFrame) -> gpd.GeoDataFrame:
         return to_gdf(df, self.config.X, self.config.Y, self.config.epsg)
 
-    def read_local(self) -> FrameT:
+    def read_local(self) -> gpd.GeoDataFrame:
         assert self.config.local is not None
         df = read_csv(
             self.config.local,

@@ -51,10 +51,6 @@ class StacCatalogConfig(BaseModel):
     """Catalog id"""
     title: str
     """Catalog title"""
-    href: str | None = None
-    """Href for saving the catalog on local disk"""
-    endpoint: str | None = None
-    """Href for saving the catalog behind a STAC API"""
     description: str = "Auto-generated Stac Catalog"
     """Catalog description"""
 
@@ -70,6 +66,8 @@ class StacCollectionConfig(StacCommonMetadata):
     # Stac Information
     id: str
     """Collection id"""
+    title: str
+    """Collection title"""
     description: str = "Auto-generated Stac Collection"
     """Collection description"""
 

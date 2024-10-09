@@ -1,27 +1,17 @@
 import pystac
 import rasterio
-from pandera.typing.pandas import DataFrame
 from pystac.extensions.eo import AssetEOExtension, Band, ItemEOExtension
 from pystac.extensions.projection import ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely.geometry import mapping
 
 from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import DataFrameSchema, StacCatalogConfig, StacCollectionConfig
 from stac_generator.geotiff.schema import GeoTiffConfig
 from stac_generator.geotiff.utils import EoBands, get_metadata_from_geotiff
 
 
 class GeoTiffGenerator(StacGenerator[GeoTiffConfig]):
     """Stac generator for drone data."""
-
-    def __init__(
-        self,
-        source_df: DataFrame[DataFrameSchema[GeoTiffConfig]],
-        catalog_cfg: StacCatalogConfig | None = None,
-        collection_cfg: StacCollectionConfig | None = None,
-    ) -> None:
-        super().__init__(source_df, None, catalog_cfg, collection_cfg)
 
     def create_item_from_config(self, source_cfg: GeoTiffConfig) -> list[pystac.Item]:
         metadata = get_metadata_from_geotiff(source_cfg.location)

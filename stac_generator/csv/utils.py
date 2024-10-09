@@ -1,3 +1,4 @@
+import datetime as pydatetime
 import json
 from collections.abc import Sequence
 from itertools import chain
@@ -10,7 +11,7 @@ from pystac.extensions.projection import ItemProjectionExtension
 from shapely import MultiPoint, Point, to_geojson
 
 from stac_generator.csv.schema import ColumnInfo
-from stac_generator.types import FrameT, PDFrameT, TimeExtentT
+from stac_generator.types import TimeExtentT
 
 
 def read_csv(
@@ -21,7 +22,7 @@ def read_csv(
     date_format: str = "ISO8601",
     columns: list[str] | list[ColumnInfo] | None = None,
     groupby: list[str] | None = None,
-) -> PDFrameT:
+) -> pd.DataFrame:
     """Read in csv from local disk
 
     Users must provide at the bare minimum the location of the csv, and the names of the columns to be
@@ -43,14 +44,14 @@ def read_csv(
     :param groupby: list of fields that partition the points into groups, defaults to None
     :type groupby: list[str] | None, optional
     :return: read dataframe
-    :rtype: PDFrameT
+    :rtype: pd.DataFrame
     """
-    parse_dates = [T_coord] if isinstance(T_coord, str) else False
-    usecols = None
+    parse_dates: list[str] | bool = [T_coord] if isinstance(T_coord, str) else False
+    usecols: list[str] | None = None
     # If band info is provided, only read in the required columns + the X and Y coordinates
     if columns:
         if isinstance(columns[0], str):
-            usecols = list(columns)
+            usecols = cast(list[str], list(columns))
         else:
             usecols = [item["name"] for item in cast(list[ColumnInfo], columns)]
         usecols.extend([X_coord, Y_coord])
@@ -59,22 +60,24 @@ def read_csv(
         # If item group provided -> read in
         if groupby:
             usecols.extend(groupby)
-    return cast(
-        PDFrameT,
-        pd.read_csv(src_path, parse_dates=parse_dates, date_format=date_format, usecols=usecols),  # type: ignore[call-overload]
+    return pd.read_csv(
+        filepath_or_buffer=src_path,
+        usecols=usecols,
+        date_format=date_format,
+        parse_dates=parse_dates,
     )
 
 
-def to_gdf(df: PDFrameT, X_coord: str, Y_coord: str, epsg: int) -> FrameT:
+def to_gdf(df: pd.DataFrame, X_coord: str, Y_coord: str, epsg: int) -> gpd.GeoDataFrame:
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
 
 
 def calculate_temporal_extent(
-    df: FrameT | None = None,
+    df: gpd.GeoDataFrame | None = None,
     time_col: str | None = None,
-    datetime: datetime.datetime | None = None,
-    start_datetime: datetime.datetime | None = None,
-    end_datetime: datetime.datetime | None = None,
+    datetime: pydatetime.datetime | None = None,
+    start_datetime: pydatetime.datetime | None = None,
+    end_datetime: pydatetime.datetime | None = None,
 ) -> TimeExtentT:
     """Get temporal extent based on Stac specification.
 
@@ -82,7 +85,7 @@ def calculate_temporal_extent(
     If the dataframe and time column are provided, the function will obtain the start datetime and end datetime from the dataframe.
 
     :param df: Provided dataframe.
-    :type df: FrameT | None, optional
+    :type df: gpd.GeoDataFrame | None, optional
 
     :param time_col: Name of time column.
     :type time_col: str | None, optional
@@ -106,7 +109,7 @@ def calculate_temporal_extent(
     if df is not None and isinstance(time_col, str):
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
-        if not isinstance(df[time_col].dtype, datetime.datetime):
+        if not isinstance(df[time_col].dtype, pydatetime.datetime):
             raise ValueError(
                 f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
             )
@@ -118,7 +121,7 @@ def calculate_temporal_extent(
 
 
 def calculate_geometry(
-    df: FrameT,
+    df: gpd.GeoDataFrame,
 ) -> Point | MultiPoint:
     """Calculate the geometry from geopandas dataframe.
 
@@ -128,7 +131,7 @@ def calculate_geometry(
     of unique points in the dataframe.
 
     :param df: source dataframe
-    :type df: FrameT
+    :type df: gpd.GeoDataFrame
     :return: shapely geometry object
     :rtype: Point | MultiPoint
     """
@@ -139,10 +142,10 @@ def calculate_geometry(
 
 
 def group_df(
-    df: FrameT,
+    df: gpd.GeoDataFrame,
     prefix: str,
     groupby: Sequence[str] | None = None,
-) -> dict[str, FrameT]:
+) -> dict[str, gpd.GeoDataFrame]:
     """Partition dataframe into sub-dataframes based on fields in `groupby`.
     Each partition will be assigned an item name obtained from the collection name and field values.
 
@@ -152,7 +155,7 @@ def group_df(
     If `groupby` is not provided, return a single collection item which is the full dataframe.
 
     :param df: Source dataframe.
-    :type df: FrameT
+    :type df: gpd.GeoDataFrame
 
     :param prefix: Prefix for each item ID.
     :type prefix: str
@@ -161,7 +164,7 @@ def group_df(
     :type groupby: Sequence[str] | None, optional
 
     :return: Mapping of group name to sub-dataframe.
-    :rtype: dict[str, FrameT]
+    :rtype: dict[str, gpd.GeoDataFrame]
     """
     if not groupby:
         item_name = prefix
@@ -180,13 +183,13 @@ def group_df(
 
 
 def items_from_group_df(
-    group_df: dict[str, FrameT],
+    group_df: dict[str, gpd.GeoDataFrame],
     asset: pystac.Asset,
     epsg: int,
     T: str | None = None,
-    datetime: datetime.datetime | None = None,
-    start_datetime: datetime.datetime | None = None,
-    end_datetime: datetime.datetime | None = None,
+    datetime: pydatetime.datetime | None = None,
+    start_datetime: pydatetime.datetime | None = None,
+    end_datetime: pydatetime.datetime | None = None,
     properties: dict[str, Any] | None = None,
 ) -> list[pystac.Item]:
     """Extract `shapely.Point` data from partitioned dataframe maps.
@@ -196,7 +199,7 @@ def items_from_group_df(
     a list of pystac.Item based on information from the dataframe.
 
     :param group_df: dictionary of point group and their source csv
-    :type group_df: dict[str, FrameT]
+    :type group_df: dict[str, gpd.GeoDataFrame]
     :param asset: source data asset
     :type asset: pystac.Asset
     :param epsg: epsg code of the source dataframe

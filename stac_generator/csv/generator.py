@@ -1,35 +1,41 @@
+import pandas as pd
 import pystac
-from pandera.typing.pandas import DataFrame
 
 from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import DataFrameSchema, StacCatalogConfig, StacCollectionConfig
-from stac_generator.csv.driver import CSVDriver
-from stac_generator.csv.schema import CSVConfig, CSVExtension
+from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
+from stac_generator.csv.driver import CsvDriver
+from stac_generator.csv.schema import CsvConfig, CsvExtension
 from stac_generator.csv.utils import group_df, items_from_group_df
-from stac_generator.types import CSVMediaType
+from stac_generator.types import CsvMediaType
 
 
-class CSVGenerator(StacGenerator[CSVConfig]):
+class CsvGenerator(StacGenerator[CsvConfig]):
     def __init__(
         self,
-        source_df: DataFrame,
+        source_df: pd.DataFrame,
+        collection_cfg: StacCollectionConfig,
         catalog_cfg: StacCatalogConfig | None = None,
-        collection_cfg: StacCollectionConfig | None = None,
+        href: str | None = None,
     ) -> None:
-        source_df = DataFrameSchema[CSVConfig](source_df)  # type: ignore[call-arg]
-        super().__init__(source_df, CSVDriver, catalog_cfg, collection_cfg)
-        self.driver: type[CSVDriver]
+        super().__init__(
+            source_df=source_df,
+            collection_cfg=collection_cfg,
+            catalog_cfg=catalog_cfg,
+            href=href,
+            driver=CsvDriver,
+        )
+        self.driver: type[CsvDriver]
 
-    def create_item_from_config(self, source_cfg: CSVConfig) -> list[pystac.Item]:
+    def create_item_from_config(self, source_cfg: CsvConfig) -> list[pystac.Item]:
         asset = pystac.Asset(
             href=source_cfg.location,
             description="Raw csv data",
             roles=["data"],
-            media_type=CSVMediaType,
+            media_type=CsvMediaType,
         )
         raw_df = self.driver(source_cfg).get_data()
         group_map = group_df(raw_df, source_cfg.prefix, source_cfg.groupby)
-        properties = CSVExtension.model_validate(source_cfg, from_attributes=True).model_dump()
+        properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump()
         return items_from_group_df(
             group_map,
             asset,
