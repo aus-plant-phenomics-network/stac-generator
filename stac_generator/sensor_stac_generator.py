@@ -4,6 +4,8 @@ import pystac
 
 from stac_generator.generator import StacGenerator
 
+__all__ = ("SensorStacGenerator",)
+
 
 class SensorStacGenerator(StacGenerator):
     """Stac generator for sensor data."""

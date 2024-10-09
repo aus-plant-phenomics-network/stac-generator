@@ -1,6 +1,8 @@
 from stac_generator.drone_stac_generator import DroneStacGenerator
-from stac_generator.sensor_stac_generator import SensorStacGenerator
 from stac_generator.generator import StacGenerator
+from stac_generator.sensor_stac_generator import SensorStacGenerator
+
+__all__ = ("StacGeneratorFactory",)
 
 
 class StacGeneratorFactory:
@@ -9,7 +11,6 @@ class StacGeneratorFactory:
         # Get the correct type of generator depending on the data type.
         if data_type == "drone":
             return DroneStacGenerator(data_file, location_file)
-        elif data_type == "sensor":
+        if data_type == "sensor":
             return SensorStacGenerator(data_file, location_file)
-        else:
-            raise Exception(f"{data_type} is not a valid data type.")
+        raise Exception(f"{data_type} is not a valid data type.")

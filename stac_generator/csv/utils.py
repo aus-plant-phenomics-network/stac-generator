@@ -12,6 +12,15 @@ from shapely import MultiPoint, Point, to_geojson
 from stac_generator.csv.schema import ColumnInfo
 from stac_generator.types import DateTimeT, FrameT, PDFrameT, TimeExtentT
 
+__all__ = (
+    "calculate_geometry",
+    "calculate_temporal_extent",
+    "group_df",
+    "items_from_group_df",
+    "read_csv",
+    "to_gdf",
+)
+
 
 def read_csv(
     src_path: str,
@@ -59,7 +68,10 @@ def read_csv(
         # If item group provided -> read in
         if groupby:
             usecols.extend(groupby)
-    return pd.read_csv(src_path, parse_dates=parse_dates, date_format=date_format, usecols=usecols)  # type: ignore[call-overload]
+    return cast(
+        PDFrameT,
+        pd.read_csv(src_path, parse_dates=parse_dates, date_format=date_format, usecols=usecols),  # type: ignore[call-overload]
+    )
 
 
 def to_gdf(df: PDFrameT, X_coord: str, Y_coord: str, epsg: int) -> FrameT:
@@ -109,10 +121,14 @@ def calculate_temporal_extent(
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
         if not isinstance(df[time_col].dtype, DateTimeT):
-            raise ValueError(f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}")
+            raise ValueError(
+                f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
+            )
         min_T, max_T = df[time_col].min(), df[time_col].max()
         return (min_T, max_T)
-    raise ValueError("If datetime is None, both start_datetime and end_datetime values must be provided")
+    raise ValueError(
+        "If datetime is None, both start_datetime and end_datetime values must be provided"
+    )
 
 
 def calculate_geometry(
@@ -167,7 +183,9 @@ def group_df(
     partition_df = partition_df.reset_index(level=-1, drop=True)
     df_group = {}
     for i in range(len(partition_df)):
-        idx = partition_df.index[i] if len(groupby) != 1 else [partition_df.index[i]]  # If groupby has one single item, convert idx to list of 1
+        idx = (
+            partition_df.index[i] if len(groupby) != 1 else [partition_df.index[i]]
+        )  # If groupby has one single item, convert idx to list of 1
         group_name = "_".join([str(item) for item in chain(*zip(groupby, idx, strict=True))])
         item_name = f"{prefix}_{group_name}"
         df_group[item_name] = partition_df.loc[idx, :].reset_index(drop=True)
@@ -213,7 +231,9 @@ def items_from_group_df(
     assets = {"source": asset}
     items = []
     for item_id, item_df in group_df.items():
-        _start_datetime, _end_datetime = calculate_temporal_extent(item_df, T, datetime, start_datetime, end_datetime)
+        _start_datetime, _end_datetime = calculate_temporal_extent(
+            item_df, T, datetime, start_datetime, end_datetime
+        )
         _start_datetime = _start_datetime if _start_datetime is not None else start_datetime
         _end_datetime = _end_datetime if _end_datetime is not None else end_datetime
         _datetime = datetime if datetime else _end_datetime

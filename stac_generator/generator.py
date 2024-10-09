@@ -2,32 +2,33 @@
 
 import os
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from pathlib import Path
 
 import pystac
 import requests
+
+__all__ = ("StacGenerator",)
 
 
 class StacGenerator(ABC):
     """Stac generator base class."""
 
     def __init__(self, data_type, data_file, location_file, **kwargs) -> None:
-        self.base_url = os.environ.get("Stac_API_URL", None)
+        self.base_url = os.environ.get("STAC_API_URL", None)
         if self.base_url is None:
             raise ValueError("Environment variable Stac_API_URL must be defined.")
         self.data_type = data_type
         self.data_file = data_file
         self.location_file = location_file
         self.standard_file = f"./standards/{self.data_type}_standard.csv"
-        self.items: List[pystac.Item] = []
-        self.catalog: Optional[pystac.Catalog] = None
-        self.collection: Optional[pystac.Collection] = None
+        self.items: list[pystac.Item] = []
+        self.catalog: pystac.Catalog | None = None
+        self.collection: pystac.Collection | None = None
 
     def read_standard(self) -> str:
         """Open the standard definition file and return the contents as a string."""
-        with open(self.standard_file, encoding="utf-8") as f:
-            standard = f.readline().strip("\n")
-            return standard
+        with Path(self.standard_file).open(encoding="utf-8") as f:
+            return f.readline().strip("\n")
 
     @abstractmethod
     def validate_data(self) -> bool:
@@ -68,6 +69,4 @@ class StacGenerator(ABC):
     def validate_stac(self) -> bool:
         if self.catalog and not self.catalog.validate():
             return False
-        if self.collection and not self.collection.validate():
-            return False
-        return True
+        return not (self.collection and not self.collection.validate())

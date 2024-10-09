@@ -6,6 +6,13 @@ from typing_extensions import TypedDict
 
 from stac_generator.base.schema import SourceConfig
 
+__all__ = (
+    "CSVConfig",
+    "CSVExtension",
+    "ColumnInfo",
+)
+
+
 DTYPE = Literal[
     "str",
     "int",
@@ -53,7 +60,9 @@ class CSVExtension(BaseModel):
     def coerce_to_object(cls, v: str) -> list[str] | list[ColumnInfo]:
         parsed = json.loads(v)
         if not isinstance(parsed, list):
-            raise ValueError("column_info field expects a json serialisation of a list of ColumnInfo or a list of string")
+            raise ValueError(
+                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
+            )
         return parsed
 
 

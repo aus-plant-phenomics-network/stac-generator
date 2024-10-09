@@ -16,13 +16,19 @@ from shapely import (
 
 from stac_generator.base.schema import StacCollectionConfig
 
+__all__ = (
+    "extract_spatial_extent",
+    "extract_temporal_extent",
+    "geometry_from_dict",
+)
+
 
 def geometry_from_dict(item: dict[str, Any]) -> Geometry:
     if not item:
         raise ValueError("Expects non null geometry")
     if "type" not in item:
         raise ValueError("Invalid geojson geometry object: no type field")
-    if "type" != "GeometryCollection" and "coordinates" not in item:
+    if item["type"] != "GeometryCollection" and "coordinates" not in item:
         raise ValueError(
             "Invalid geojson geometry object: no coordinates field for non GeometryCollection"
         )

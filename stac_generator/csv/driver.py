@@ -3,6 +3,8 @@ from stac_generator.csv.schema import CSVConfig
 from stac_generator.csv.utils import read_csv, to_gdf
 from stac_generator.types import FrameT, PDFrameT
 
+__all__ = ("CSVDriver",)
+
 
 class CSVDriver(IODriver):
     def __init__(self, config: CSVConfig) -> None:

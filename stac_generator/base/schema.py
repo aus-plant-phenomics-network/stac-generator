@@ -21,6 +21,17 @@ from stac_generator.types import (  # noqa: TCH001
     StacEntityT,
 )
 
+__all__ = (
+    "DataFrameSchema",
+    "LoadConfig",
+    "SourceConfig",
+    "StacCatalogConfig",
+    "StacCollectionConfig",
+    "StacCommonMetadata",
+    "StacItemConfig",
+)
+
+
 T = TypeVar("T", bound="SourceConfig")
 
 
@@ -133,7 +144,9 @@ class SourceConfig(StacItemConfig):
     @model_validator(mode="after")
     def validate_require_extension_when_source_is_remote(self) -> Self:
         if self.local is None and self.extension is None:
-            raise ValueError("If source is must be accessed through an endpoint, extension field must be specified")
+            raise ValueError(
+                "If source is must be accessed through an endpoint, extension field must be specified"
+            )
         return self
 
 
@@ -154,7 +167,7 @@ class LoadConfig(BaseModel):
 
 class DataFrameSchema(Generic[T]):
     @classmethod
-    def __class_getitem__(cls, cfg_type: type):
+    def __class_getitem__(cls, cfg_type: type) -> type:
         class Config(BaseConfig):
             dtype = PydanticModel(cfg_type)
             coerce = True

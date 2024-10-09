@@ -1,10 +1,10 @@
 """This module encapsulates the logic for generating Stac for the drone metadata standard."""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+from pathlib import Path
 
 import pystac
 import rasterio
-import requests
 from pystac.extensions.eo import AssetEOExtension, Band, ItemEOExtension
 from pystac.extensions.projection import ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
@@ -13,7 +13,13 @@ from shapely.geometry import mapping
 from stac_generator.generator import StacGenerator
 from stac_generator.spatial_helpers import EoBands, get_metadata_from_geotiff
 
-_datetime = datetime.now(timezone.utc)
+__all__ = (
+    "DTypeFactory",
+    "DroneStacGenerator",
+)
+
+
+_datetime = datetime.now(UTC)
 
 
 class DTypeFactory:
@@ -21,12 +27,11 @@ class DTypeFactory:
     def get_pystac_dtype(dtype) -> DataType:
         if dtype == "uint8":
             return DataType.UINT8
-        elif dtype == "uint16":
+        if dtype == "uint16":
             return DataType.UINT16
-        elif dtype == "float32":
+        if dtype == "float32":
             return DataType.FLOAT32
-        else:
-            raise Exception(f"Unsupported data type {dtype}")
+        raise Exception(f"Unsupported data type {dtype}")
 
 
 class DroneStacGenerator(StacGenerator):
@@ -35,17 +40,15 @@ class DroneStacGenerator(StacGenerator):
     def __init__(self, data_file, location_file) -> None:
         super().__init__("drone", data_file, location_file)
         self.validate_data()
-        with open(self.location_file, encoding="utf-8") as locations:
-            counter = 0
-            for line in locations:
-                counter += 1
+        with Path(self.location_file).open(encoding="utf-8") as locations:
+            for counter, line in enumerate(locations):
                 location = line.strip("\n")
                 self.items.append(self.generate_item(location, counter))
         self.generate_collection()
         self.validate_stac()
 
     def validate_data(self) -> bool:
-        with open(self.data_file, encoding="utf-8") as data:
+        with Path(self.data_file).open(encoding="utf-8") as data:
             data_keys = data.readline().strip("\n")
             standard_keys = self.read_standard()
             if data_keys != standard_keys:
@@ -77,8 +80,12 @@ class DroneStacGenerator(StacGenerator):
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         shape = metadata.shape
-        affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)]
-        proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform)
+        affine_transform = [
+            rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)
+        ]
+        proj_ext_on_item.apply(
+            epsg=metadata.crs.to_epsg(), shape=list(shape), transform=affine_transform
+        )
 
         # Build the data for the "eo" extension.
         eo_ext_on_item = ItemEOExtension.ext(item, add_if_missing=True)
@@ -198,13 +205,17 @@ class DroneStacGenerator(StacGenerator):
         description = "Gilbert site with correct projection."
         # TODO: Magic bbox below, must read from data.
         # TODO: Spatial extent for collection is union of bboxes of items inside.
-        spatial_extent = pystac.SpatialExtent([[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]])
+        spatial_extent = pystac.SpatialExtent(
+            [[116.96640192684013, -31.930819693348617, 116.96916478816145, -31.929350481993794]]
+        )
         # TODO: Magic time range below, must read from data. Temporal extent is first and last
-        temporal_extent = pystac.TemporalExtent([[datetime(2020, 1, 1), None]])
+        temporal_extent = pystac.TemporalExtent([[_datetime, None]])
         extent = pystac.Extent(spatial_extent, temporal_extent)
         lic = "CC-BY-4.0"
 
-        self.collection = pystac.Collection(id=collection_id, description=description, extent=extent, license=lic)
+        self.collection = pystac.Collection(
+            id=collection_id, description=description, extent=extent, license=lic
+        )
 
         for item in self.items:
             self.collection.add_item(item)

@@ -17,6 +17,11 @@ from stac_generator.base.schema import (
 from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
 from stac_generator.types import StacEntityT
 
+__all__ = (
+    "StacGenerator",
+    "StacLoader",
+)
+
 
 class StacGenerator(Generic[T]):
     source_type: type[T]
@@ -48,12 +53,13 @@ class StacGenerator(Generic[T]):
             for i in range(len(self.source_df))
         ]
 
+    @staticmethod
     def extract_extent(
-        self, items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None
+        items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None
     ) -> Extent:
         return Extent(extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg))
 
-    def create_collection_from_items(
+    def _create_collection_from_items(
         self,
         items: list[pystac.Item],
         collection_cfg: StacCollectionConfig | None = None,
@@ -79,7 +85,7 @@ class StacGenerator(Generic[T]):
         collection.add_items(items)
         return collection
 
-    def create_catalog_from_collection(
+    def _create_catalog_from_collection(
         self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None
     ) -> pystac.Catalog:
         if catalog_cfg is None:
@@ -88,12 +94,16 @@ class StacGenerator(Generic[T]):
             id=catalog_cfg.id,
             description=catalog_cfg.description,
             title=catalog_cfg.title,
-            href=catalog_cfg.href,
         )
         catalog.add_child(collection)
         return catalog
 
     def create_items(self) -> list[pystac.Item]:
+        """Generate STAC Items from source dataframe
+
+        :return: list of generated STAC Item
+        :rtype: list[pystac.Item]
+        """
         configs = self.extract_cfg()
         items = []
         for config in configs:
@@ -101,12 +111,52 @@ class StacGenerator(Generic[T]):
         return items
 
     def create_collection(self) -> pystac.Collection:
+        """Generate STAC Collection that includes all STAC Items from source dataframe
+
+        collection_cfg must be provided to constructor for this method to work
+
+        :return: STAC Collection that includes all generated STAC Items
+        :rtype: pystac.Collection
+        """
         items = self.create_items()
-        return self.create_collection_from_items(items, self.collection_cfg)
+        return self._create_collection_from_items(items, self.collection_cfg)
 
     def create_catalog(self) -> pystac.Catalog:
+        """Generate STAC Catalog that includes a STAC Collection containing all STAC Item generated from
+        source dataframe
+
+        Both collection_cfg and catalog_cfg must be provided for this method to work
+
+        :return: STAC Catalog
+        :rtype: pystac.Catalog
+        """
         collection = self.create_collection()
-        return self.create_catalog_from_collection(collection, self.catalog_cfg)
+        return self._create_catalog_from_collection(collection, self.catalog_cfg)
+
+    def generate_collection_and_save(self, href: str) -> None:
+        """Generate STAC Collection and save to disk.
+
+        This is a convenient method
+        that combines `self.create_collection` and `collection.normalize_and_save(href)`
+
+
+        :param href: disk location of the generated collection
+        :type href: str
+        """
+        collection = self.create_collection()
+        collection.normalize_and_save(href)
+
+    def generate_catalog_and_save(self, href: str) -> None:
+        """Generate STAC Catalog and save to disk
+
+        This is a convenient method
+        that combines `self.create_catalog` and `catalog.normalize_and_save(href)`
+
+        :param href: disk location of the generated catalog
+        :type href: str
+        """
+        catalog = self.create_catalog()
+        catalog.normalize_and_save(href)
 
 
 class StacLoader:

@@ -5,6 +5,8 @@ import httpx
 
 from stac_generator.base.schema import SourceConfig
 
+__all__ = ("IODriver",)
+
 
 class IODriver:
     """Base driver for handling IO for different file formats/extensions

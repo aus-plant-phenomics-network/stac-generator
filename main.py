@@ -8,7 +8,9 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     # TODO: Best CLI design TBD.
     parser.add_argument("metadata", type=str, help="Path to the dataset's metadata schema.")
-    parser.add_argument("-f", "--file", type=str, help="Path to the file containing a list of data locations.")
+    parser.add_argument(
+        "-f", "--file", type=str, help="Path to the file containing a list of data locations."
+    )
     # Get the filepaths
     args = parser.parse_args()
     metadata_file = Path(args.metadata)
