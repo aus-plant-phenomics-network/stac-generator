@@ -7,11 +7,11 @@ on:
 
 jobs:
   validate:
-    uses: ./.github/workflows/validate_ci.yaml
+    uses: ./.github/workflows/validate_ci.yml
 
   analysis:
     needs: validate
-    uses: ./.github/workflows/analysis_ci.yaml
+    uses: ./.github/workflows/analysis_ci.yml
 
   # test:
   #   needs: validate
