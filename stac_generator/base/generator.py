@@ -6,6 +6,7 @@ import pandas as pd
 import pystac
 from pystac.collection import Extent
 
+from stac_generator._types import StacEntityT
 from stac_generator.base.driver import IODriver
 from stac_generator.base.schema import (
     LoadConfig,
@@ -14,7 +15,6 @@ from stac_generator.base.schema import (
     T,
 )
 from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
-from stac_generator.types import StacEntityT
 
 
 class StacGenerator(Generic[T]):

@@ -1,12 +1,12 @@
 import pandas as pd
 import pystac
 
+from stac_generator._types import CsvMediaType
 from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from stac_generator.csv.driver import CsvDriver
 from stac_generator.csv.schema import CsvConfig, CsvExtension
 from stac_generator.csv.utils import group_df, items_from_group_df
-from stac_generator.types import CsvMediaType
 
 
 class CsvGenerator(StacGenerator[CsvConfig]):

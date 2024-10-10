@@ -1,18 +1,15 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Generic, Self, TypeVar, cast
+from typing import Any, Self, TypeVar, cast
 
 from httpx._types import (
     RequestData,  # noqa: TCH002
 )
-from pandera import DataFrameModel
-from pandera.api.pandas.model_config import BaseConfig
-from pandera.engines.pandas_engine import PydanticModel
 from pydantic import BaseModel, model_validator
 from stac_pydantic.shared import StacCommonMetadata as _StacCommonMetaData
 
-from stac_generator.types import (  # noqa: TCH001
+from stac_generator._types import (  # noqa: TCH001
     CookieTypes,
     HeaderTypes,
     HTTPMethod,
@@ -152,22 +149,3 @@ class LoadConfig(BaseModel):
         if self.json_location is None and self.stac_api_endpoint is None:
             raise ValueError("One of json_location or stac_api_endpoint field must be not None")
         return self
-
-
-class DataFrameSchema(Generic[T]):
-    """DataFrameSchema that can be used for validating DataFrame object. User must provide the type
-    parameter `T` that is a subclass of `SourceConfig` for validation.
-    """
-
-    @classmethod
-    def __class_getitem__(cls, cfg_type: type) -> type:
-        class Config(BaseConfig):
-            dtype = PydanticModel(cfg_type)
-            coerce = True
-            add_missing_columns = True
-
-        return type(
-            "DataFrameSchema",
-            (DataFrameModel,),
-            {"Config": Config},
-        )

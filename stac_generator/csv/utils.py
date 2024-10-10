@@ -10,8 +10,8 @@ import pystac
 from pystac.extensions.projection import ItemProjectionExtension
 from shapely import MultiPoint, Point, to_geojson
 
+from stac_generator._types import TimeExtentT
 from stac_generator.csv.schema import ColumnInfo
-from stac_generator.types import TimeExtentT
 
 
 def read_csv(
