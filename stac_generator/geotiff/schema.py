@@ -1,7 +1,8 @@
 import json
-from typing import NotRequired, Required, TypedDict
+from typing import NotRequired, Required
 
 from pydantic import field_validator
+from typing_extensions import TypedDict
 
 from stac_generator.base.schema import SourceConfig
 
@@ -20,13 +21,11 @@ class EOBandInfo(TypedDict):
 class GeoTiffConfig(SourceConfig):
     bands: list[EOBandInfo] | None = None
 
-    @field_validator("column_info", mode="before")
+    @field_validator("bands", mode="before")
     @classmethod
     def coerce_to_object(cls, v: str) -> list[EOBandInfo]:
         """Convert json serialised string of column info into matched object"""
         parsed = json.loads(v)
         if not isinstance(parsed, list):
-            raise ValueError(
-                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
-            )
+            raise ValueError("bands field expects a json serialisation of a list of EOBandInfo")
         return parsed

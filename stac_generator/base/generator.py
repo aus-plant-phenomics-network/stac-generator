@@ -23,8 +23,8 @@ class StacGenerator(Generic[T]):
 
     @classmethod
     def __class_getitem__(cls, source_type: type) -> type:
-        cls.source_type = source_type
-        return cls
+        kwargs = {"source_type": source_type}
+        return type(f"StacGenerator[{source_type.__name__}]", (StacGenerator,), kwargs)
 
     def __init__(
         self,
@@ -164,7 +164,7 @@ class StacGenerator(Generic[T]):
         collection = self.create_collection()
         collection.normalize_hrefs(href)
         collection.validate_all()
-        collection.save_object(dest_href=href)
+        collection.save()
 
     def generate_catalog_and_save(self, href: str | None) -> None:
         """Write the catalog generated from source dataframe to local disk
@@ -181,7 +181,7 @@ class StacGenerator(Generic[T]):
         href = href if href is not None else cast(str, self.href)
         catalog.normalize_hrefs(href)
         catalog.validate_all()
-        catalog.save_object(dest_href=href)
+        catalog.save()
 
     async def write_to_api(self, href: str | None = None) -> None:
         """Write the catalog generated from source dataframe to an href

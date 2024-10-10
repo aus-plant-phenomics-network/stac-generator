@@ -1,5 +1,24 @@
 # stac-generator
 
+## Run example
+
+First [install packages](#install-pdm-and-all-packages). Once completed, active the environment with
+
+```bash
+source .venv/bin/activate
+```
+
+Run the example csv:
+
+```bash
+python main.py csv example/csv/source_config.csv --to_local example/generated --id csv_point_data
+```
+
+View CLI help
+```bash
+python main.py --help
+```
+
 ## Install pdm and all packages
 
 ```bash

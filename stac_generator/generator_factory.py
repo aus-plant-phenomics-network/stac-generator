@@ -5,8 +5,6 @@ from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from stac_generator.csv.generator import CsvGenerator
 from stac_generator.geotiff.generator import GeoTiffGenerator
 
-__all__ = ("StacGeneratorFactory",)
-
 
 class StacGeneratorFactory:
     @staticmethod
