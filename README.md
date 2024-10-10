@@ -1,23 +1,36 @@
 # stac-generator
 
-## Run example
-
-First [install packages](#install-pdm-and-all-packages). Once completed, active the environment with
+## Install Package
 
 ```bash
-source .venv/bin/activate
+pip install pystac_generator
 ```
 
-Run the example csv:
+Note: stac-generator name is already used by someone else.
+
+## Run as CLI
 
 ```bash
-python main.py csv example/csv/source_config.csv --to_local example/generated --id csv_point_data
+stac_generator --help
 ```
 
-View CLI help
-```bash
-python main.py --help
+## Run as python package
+
+```python
+from stac_generator.generator_factor import StacGeneratorFactory
 ```
+
+## Run the current example
+
+Note that you will need to either clone the repository or download the [example](./example/) directory in the repository
+
+To run the example as CLI
+
+```bash
+stac_generator csv example/csv/source_config.csv --id point_data --to_local generated
+```
+
+To run the example as python module: see the [notebook](./demo_csv.ipynb)
 
 ## Install pdm and all packages
 

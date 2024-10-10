@@ -5,12 +5,15 @@ import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+from stac_generator.__version__ import __version__
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from stac_generator.generator_factory import StacGeneratorFactory
 
-if __name__ == "__main__":
+
+def run_cli() -> None:
     # Build the CLI argument parser
     parser = ArgumentParser(prog="stac_generator", description="CLI tool to generator STAC records")
+    parser.add_argument("-v", "--version", action="version", version=__version__)
     # Source commands
     parser.add_argument("data_type", type=str, help="data type of the source data")
     parser.add_argument("source_file", type=str, help="path to the source config csv")
@@ -171,3 +174,7 @@ if __name__ == "__main__":
     if args.to_local:
         generator.generate_catalog_and_save(href=args.to_local)
         print(f"Catalog successfully save to {args.to_local}")
+
+
+if __name__ == "__main__":
+    run_cli()
