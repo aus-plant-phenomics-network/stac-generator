@@ -1,9 +1,9 @@
-import os
 import zipfile
 import pystac
 import fiona
 from shapely.geometry import mapping
 from datetime import datetime
+from pathlib import Path
 from pystac.extensions.projection import ItemProjectionExtension
 from typing import List
 from generator import StacGenerator
@@ -14,8 +14,8 @@ class VectorPolygonStacGenerator(StacGenerator):
 
     def __init__(self, data_type, geojson_file, zip_file, output_dir) -> None:
         super().__init__(data_type, geojson_file, zip_file)
-        self.output_dir = output_dir  # Directory where STAC files will be saved
-        os.makedirs(self.output_dir, exist_ok=True)
+        self.output_dir = Path(output_dir)  # Use Path object for the output directory
+        self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def validate_data(self) -> bool:
         """Validate the structure of the provided data file."""
@@ -27,32 +27,35 @@ class VectorPolygonStacGenerator(StacGenerator):
                 raise ValueError("The data keys do not match the standard keys.")
             return True
 
-    def extract_shapefile_from_zip(self, zip_file_path: str, extract_to: str) -> str:
-        """Extract the shapefile from the ZIP archive and return the path to the .shp file."""
-        with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-            zip_ref.extractall(extract_to)
+    def generate_item(self, zip_file: str = None, shapefile_name: str = None, location: str = None, counter: int = 1) -> pystac.Item:
+        """Generate a STAC item from a vector polygon file.
+        Handles both GeoJSON files and shapefiles inside ZIP archives."""
 
-        # Return the path to the extracted shapefile
-        for file in os.listdir(extract_to):
-            if file.endswith(".shp"):
-                return os.path.join(extract_to, file)
-        raise FileNotFoundError("No shapefile found in the zip archive.")
+        # If it's a ZIP file, use Fiona to open the shapefile inside the zip without extracting
+        if zip_file and shapefile_name:
+            zip_path = f"/vsizip/{zip_file}/{shapefile_name}"  # Explicitly use /vsizip/ to read from ZIP
+            with fiona.open(zip_path) as src:
+                crs = src.crs
+                bbox = src.bounds
+                geometries = [feature['geometry'] for feature in src]
+                geometry = mapping(geometries[0]) if geometries else None
 
-    def generate_item(self, location: str, counter: int) -> pystac.Item:
-        """Generate a STAC item from a vector polygon file."""
-        # Read the vector file (shapefile, geojson) using Fiona
-        with fiona.open(location) as src:
-            crs = src.crs
-            bbox = src.bounds
-            geometries = [feature['geometry'] for feature in src]
-            geometry = mapping(geometries[0]) if geometries else None
+        # If it's a GeoJSON file, open it directly
+        elif location:
+            with fiona.open(location) as src:
+                crs = src.crs
+                bbox = src.bounds
+                geometries = [feature['geometry'] for feature in src]
+                geometry = mapping(geometries[0]) if geometries else None
+        else:
+            raise ValueError("You must provide either a location (GeoJSON) or a zip_file and shapefile_name.")
 
         # Create the STAC item
         item_id = f"{self.data_type}_item_{counter}"
         item = pystac.Item(
             id=item_id,
             geometry=geometry,
-            bbox=[bbox[0], bbox[1], bbox[2], bbox[3]],
+            bbox=bbox,
             datetime=datetime.now(),
             properties={}
         )
@@ -60,32 +63,45 @@ class VectorPolygonStacGenerator(StacGenerator):
         # Apply Projection Extension
         proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
         proj_ext.epsg = crs['init'].split(':')[-1] if 'init' in crs else None
-        proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
+        proj_ext.bbox = bbox
 
-        # Add asset (assume GeoJSON or Shapefile based on location file extension)
+        # Add asset (based on file type)
         asset = pystac.Asset(
-            href=location,
-            media_type=pystac.MediaType.GEOJSON if location.endswith('.geojson') else 'application/x-shapefile',
+            href=str(location if location else f"{zip_file}!{shapefile_name}"),
+            media_type=pystac.MediaType.GEOJSON if location else 'application/x-shapefile',
             roles=["data"],
             title="Vector Polygon Data"
         )
         item.add_asset("data", asset)
 
         # Save the STAC item to a file
-        item_path = os.path.join(self.output_dir, f"{item_id}_stac.json")
-        item.save_object(dest_href=item_path)
+        item_path = self.output_dir / f"{item_id}_stac.json"
+        item.save_object(dest_href=str(item_path))
         print(f"STAC Item saved to {item_path}")
 
         # Add to items list
         self.items.append(item)
         return item
 
+
     def generate_collection(self) -> pystac.Collection:
         """Generate a STAC collection for the vector polygon data."""
-        spatial_extent = pystac.SpatialExtent([item.bbox for item in self.items])
+        
+        # Calculate the combined bounding box (min_x, min_y, max_x, max_y)
+        min_x = min(item.bbox[0] for item in self.items)
+        min_y = min(item.bbox[1] for item in self.items)
+        max_x = max(item.bbox[2] for item in self.items)
+        max_y = max(item.bbox[3] for item in self.items)
+
+        combined_bbox = [min_x, min_y, max_x, max_y]
+
+        # Create the spatial extent using the combined bounding box
+        spatial_extent = pystac.SpatialExtent([combined_bbox])
+        
+        # Temporal extent (can adjust as needed)
         temporal_extent = pystac.TemporalExtent([[datetime.now(), None]])
 
-        # Create collection
+        # Create the STAC collection
         self.collection = pystac.Collection(
             id=f"{self.data_type}_collection",
             description=f"STAC Collection for {self.data_type} data",
@@ -98,29 +114,39 @@ class VectorPolygonStacGenerator(StacGenerator):
             self.collection.add_item(item)
 
         # Save the collection to a file
-        collection_path = os.path.join(self.output_dir, f"{self.data_type}_collection.json")
-        self.collection.save_object(dest_href=collection_path)
+        collection_path = self.output_dir / f"{self.data_type}_collection.json"
+        self.collection.save_object(dest_href=str(collection_path))
         print(f"STAC Collection saved to {collection_path}")
         
         return self.collection
-
     def generate_catalog(self) -> pystac.Catalog:
         """Generate a STAC catalog for the vector polygon data."""
+        
+        # Create the catalog
         self.catalog = pystac.Catalog(
             id=f"{self.data_type}_catalog",
             description=f"STAC Catalog for {self.data_type} data"
         )
+        
+        # Set the href for the catalog (self link)
+        catalog_path = self.output_dir / f"{self.data_type}_catalog.json"
+        self.catalog.set_self_href(str(catalog_path))  # Set the self-href for the root catalog
 
         # Add items to the catalog
         for item in self.items:
             self.catalog.add_item(item)
 
+        # Ensure all links have valid href values
+        for link in self.catalog.links:
+            if link.href is None or link.href == "":
+                raise ValueError(f"Link href cannot be None or empty. Link: {link}")
+        
         # Save the catalog to a file
-        catalog_path = os.path.join(self.output_dir, f"{self.data_type}_catalog.json")
-        self.catalog.save_object(dest_href=catalog_path)
+        self.catalog.save_object(dest_href=str(catalog_path))
         print(f"STAC Catalog saved to {catalog_path}")
 
         return self.catalog
+
 
     def write_items_to_api(self) -> None:
         """Write items to the STAC API."""
