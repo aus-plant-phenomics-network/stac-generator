@@ -4,7 +4,7 @@ from shapely.geometry import mapping
 from datetime import datetime
 from pathlib import Path
 from pystac.extensions.projection import ItemProjectionExtension
-from generator import StacGenerator
+from .generator import StacGenerator
 
 
 class VectorPolygonStacGenerator(StacGenerator):
