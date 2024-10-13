@@ -75,7 +75,7 @@ class VectorPolygonStacGenerator(StacGenerator):
         # Apply Projection Extension
         proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
         proj_ext.epsg = crs['init'].split(':')[-1] if 'init' in crs else None
-        proj_ext.bbox = bbox
+        proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
 
         # Add asset (based on file type)
         asset = pystac.Asset(
@@ -125,8 +125,7 @@ class VectorPolygonStacGenerator(StacGenerator):
         # Add items to the collection
         for item in self.items:
             self.collection.add_item(item)
-        test_dir = "./tests/stac"
-        self.collection.normalize_hrefs(test_dir)
+        self.collection.normalize_hrefs(self.output_dir.as_posix())
 
         # Save the collection to a file
         collection_path = self.output_dir / f"{self.data_type}_collection.json"
