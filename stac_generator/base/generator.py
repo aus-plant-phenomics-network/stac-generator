@@ -17,7 +17,7 @@ from stac_generator.base.schema import (
 from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
 
 
-class StacGenerator(Generic[T]):
+class StacGenerator(abc.ABC, Generic[T]):
     source_type: type[T]
     """SourceConfig subclass that contains information used for parsing the source file"""
 
