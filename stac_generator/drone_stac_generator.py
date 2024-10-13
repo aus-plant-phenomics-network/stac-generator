@@ -79,8 +79,7 @@ class DroneStacGenerator(StacGenerator):
         proj_ext_on_item = ItemProjectionExtension.ext(item, add_if_missing=True)
         # Shape order is (y, x)
         shape = metadata.shape
-        affine_transform = [rasterio.transform.from_bounds(*bbox,
-                                                           shape[1], shape[0])[i]
+        affine_transform = [rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i]
                             for i in range(9)]
         proj_ext_on_item.apply(epsg=metadata.crs.to_epsg(), shape=list(shape),
                                transform=affine_transform)
