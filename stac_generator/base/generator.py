@@ -195,12 +195,12 @@ class StacGenerator(abc.ABC, Generic[T]):
         catalog.validate_all()
         async with httpx.AsyncClient() as client:
             for collection in catalog.get_collections():
+                await client.post(f"{href}/collections", json=collection.to_dict())
                 for item in collection.get_all_items():
                     await client.post(
-                        f"{href}/collection/{item.collection_id}/items/{item.id}",
+                        f"{href}/collections/{item.collection_id}/items",
                         json=item.to_dict(),
                     )
-                await client.post(f"{href}/collection/{collection.id}", json=collection.to_dict())
 
 
 class StacLoader:
