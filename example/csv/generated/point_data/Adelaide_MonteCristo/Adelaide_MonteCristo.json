@@ -1,0 +1,95 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+  ],
+  "id": "Adelaide_MonteCristo",
+  "geometry": {
+    "type": "MultiPoint",
+    "coordinates": [
+      [
+        1708700.52,
+        -3274604.885
+      ],
+      [
+        1707940.341,
+        -3274174.877
+      ],
+      [
+        1768763.353,
+        -3187979.848
+      ],
+      [
+        1769108.786,
+        -3188092.457
+      ],
+      [
+        1769342.855,
+        -3187726.196
+      ],
+      [
+        1768999.874,
+        -3187614.782
+      ]
+    ]
+  },
+  "bbox": [
+    1707940.341,
+    -3274604.885,
+    1769342.855,
+    -3187614.782
+  ],
+  "properties": {
+    "X": "Longitude",
+    "Y": "Latitude",
+    "column_info": [
+      {
+        "name": "Ca_Soln",
+        "description": "Ca concentration"
+      }
+    ],
+    "datetime": "2024-10-21T01:12:10.168937Z",
+    "start_datetime": "2024-10-21T01:12:10.168937Z",
+    "end_datetime": "2024-10-21T01:12:10.168937Z",
+    "prefix": "Adelaide_MonteCristo",
+    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/Test_Data_Container/csv/Adelaide_MonteCristo.csv",
+    "proj:epsg": 4326
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "collection",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/point_data/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "self",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/point_data/Adelaide_MonteCristo/Adelaide_MonteCristo.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/home/hoangson/stac-generator/example/csv/generated/point_data/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    }
+  ],
+  "assets": {
+    "source": {
+      "href": "https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/Test_Data_Container/csv/Adelaide_MonteCristo.csv",
+      "type": "text/csv",
+      "description": "Raw csv data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "point_data"
+}
