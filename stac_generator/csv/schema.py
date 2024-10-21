@@ -61,8 +61,10 @@ class CsvExtension(BaseModel):
 
     @field_validator("column_info", mode="before")
     @classmethod
-    def coerce_to_object(cls, v: str) -> list[str] | list[ColumnInfo]:
+    def coerce_to_object(cls, v: str | list[str]) -> list[str] | list[ColumnInfo]:
         """Convert json serialised string of column info into matched object"""
+        if isinstance(v, list):
+            return v
         parsed = json.loads(v)
         if not isinstance(parsed, list):
             raise ValueError(

@@ -7,7 +7,6 @@ import pystac
 from pystac.collection import Extent
 
 from stac_generator._types import StacEntityT
-from stac_generator.base.driver import IODriver
 from stac_generator.base.schema import (
     LoadConfig,
     StacCatalogConfig,
@@ -32,7 +31,6 @@ class StacGenerator(abc.ABC, Generic[T]):
         collection_cfg: StacCollectionConfig,
         catalog_cfg: StacCatalogConfig | None = None,
         href: str | None = None,
-        driver: type[IODriver] | None = None,
     ) -> None:
         """Base STACGenerator object. Users should extend this class for handling different file extensions.
         Please see CsvStacGenerator source code.
@@ -45,8 +43,6 @@ class StacGenerator(abc.ABC, Generic[T]):
         :type catalog_cfg: StacCatalogConfig | None, optional
         :param href: catalog href for serialisation.
         :type href: str | None, optional
-        :param driver: driver that handles T file extension using config for extension type T. Note that this field is not required
-        :type driver: type[IODriver] | None, optional
 
         """
         self.collection_cfg = collection_cfg
@@ -60,7 +56,6 @@ class StacGenerator(abc.ABC, Generic[T]):
             )
         )
         self.source_df = source_df
-        self.driver = driver
         self.configs = [
             self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict()))
             for i in range(len(self.source_df))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Self, TypeVar, cast
+from typing import Any, Self, TypeVar
 
 from httpx._types import (
     RequestData,  # noqa: TCH002
@@ -97,12 +97,8 @@ class SourceConfig(StacItemConfig):
     """
 
     location: str
-    """Asset's href. If `local` is not provided, will be used as endpoint for fetching data file, using other config parameters.
-    If the file is on disk, it is acceptable to set location as ./path/to/source/file
+    """Asset's href.
     """
-    local: str | None = None
-    """Path to the source file on local disk. This is for reading in and processing local file.
-    If local is not provided, HTTP methods and other parameters must be provided for reading in the file from `location` field"""
     extension: str | None = None
     """Explicit file extension specification. If the file is stored behind an api endpoint, the field `extension` must be provided"""
     # HTTP Parameters
@@ -125,15 +121,7 @@ class SourceConfig(StacItemConfig):
     def source_extension(self) -> str:
         if self.extension:
             return self.extension
-        return (cast(str, self.local)).split(".")[-1]
-
-    @model_validator(mode="after")
-    def validate_require_extension_when_source_is_remote(self) -> Self:
-        if self.local is None and self.extension is None:
-            raise ValueError(
-                "If source is must be accessed through an endpoint, extension field must be specified"
-            )
-        return self
+        return self.location.split(".")[-1]
 
 
 class LoadConfig(BaseModel):
