@@ -6,7 +6,7 @@ build-backend = "pdm.backend"
 authors = [
     { name = "Joseph Sclauzero", email = "joseph.sclauzero@adelaide.edu.au" },
 ]
-requires-python = "==3.11.*"
+requires-python = ">=3.11"
 dependencies = [
     "pystac>=1.10.1",
     "shapely>=2.0.6",
