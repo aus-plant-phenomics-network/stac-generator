@@ -16,11 +16,10 @@ theme:
 
 nav:
   - API Reference:
-    - Driver: driver.md
     - Generator: generator.md
     - Schema: schema.md
     - Utility: utils.md
-    - Typing: typing.md
+    # - Typing: typing.md
     - Extension:
       - csv:
         - Schema: extensions/csv/schema.md
