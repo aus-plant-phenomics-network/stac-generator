@@ -5,23 +5,23 @@ from pystac.extensions.projection import ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely.geometry import mapping
 
-from stac_generator.base.generator import StacGenerator
+from stac_generator.base.generator import ItemGenerator
 from stac_generator.geotiff.schema import GeoTiffConfig
 from stac_generator.geotiff.utils import EoBands, get_metadata_from_geotiff
 
 
-class GeoTiffGenerator(StacGenerator[GeoTiffConfig]):
+class GeoTiffGenerator(ItemGenerator[GeoTiffConfig]):
     """Stac generator for drone data."""
 
     def create_item_from_config(self, source_cfg: GeoTiffConfig) -> list[pystac.Item]:
         metadata = get_metadata_from_geotiff(source_cfg.location)
         data_type = DataType(metadata.dtype)
-        bbox = metadata.bounds
+        bbox = [metadata.bounds[0], metadata.bounds[1], metadata.bounds[2], metadata.bounds[3]]
         # Create the Stac asset. We are only considering the stitched MS geotiff currently.
         # Could have RGB, thumbnail, etc. in the future.
         asset = pystac.Asset(href=source_cfg.location, media_type=pystac.MediaType.GEOTIFF)
         item = pystac.Item(
-            id=source_cfg.prefix,
+            id=source_cfg.id,
             geometry=mapping(metadata.footprint),
             bbox=bbox,
             assets={"image": asset},
