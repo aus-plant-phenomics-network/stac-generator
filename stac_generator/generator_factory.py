@@ -26,19 +26,18 @@ class StacGeneratorFactory:
                 catalog_cfg=catalog_cfg,
                 href=href,
             )
-        elif data_type == "csv":
+        if data_type == "csv":
             return CsvGenerator(
                 source_df,
                 collection_cfg=collection_cfg,
                 catalog_cfg=catalog_cfg,
                 href=href,
             )
-        elif data_type == "vector_polygon":
+        if data_type == "vector_polygon":
             return VectorPolygonGenerator(
                 source_df,
                 collection_cfg=collection_cfg,
                 catalog_cfg=catalog_cfg,
                 href=href,
             )
-        else:
-            raise Exception(f"{data_type} is not a valid data type.")
+        raise Exception(f"{data_type} is not a valid data type.")

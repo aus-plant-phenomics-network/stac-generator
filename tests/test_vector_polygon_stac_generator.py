@@ -72,8 +72,7 @@ def stac_generator(create_sample_shapefile, create_sample_geojson):
     data_file = create_sample_shapefile
     location_file = create_sample_geojson
 
-    generator = VectorPolygonStacGenerator(data_file=data_file, location_file=location_file)
-    return generator
+    return VectorPolygonStacGenerator(data_file=data_file, location_file=location_file)
 
 
 def test_output_directory_exists(stac_generator):

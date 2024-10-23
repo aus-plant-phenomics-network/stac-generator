@@ -1,16 +1,13 @@
+from datetime import UTC, datetime
+
+import fiona
 import pandas as pd
 import pystac
-import fiona
-from shapely.geometry import mapping
-from datetime import datetime
 from pystac.extensions.projection import ItemProjectionExtension
-from pathlib import Path
+from shapely.geometry import mapping
 
-from stac_generator._types import CsvMediaType
 from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig, SourceConfig
-from stac_generator.csv.schema import CsvConfig, CsvExtension
-from stac_generator.csv.utils import group_df, items_from_group_df, read_csv, to_gdf
+from stac_generator.base.schema import SourceConfig, StacCatalogConfig, StacCollectionConfig
 
 
 class VectorPolygonGenerator(StacGenerator[SourceConfig]):
@@ -28,7 +25,7 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
             href=href,
         )
 
-    def create_item_from_config(self, source_cfg: CsvConfig) -> list[pystac.Item]:
+    def create_item_from_config(self, source_cfg: SourceConfig) -> list[pystac.Item]:
         if source_cfg.location.endswith(".zip"):  # Assume zip shape archive
             shapefile_name = source_cfg.location.split("/")[-1].replace(
                 ".zip", ".shp"
@@ -50,14 +47,18 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
             geometries = [feature["geometry"] for feature in src]
             geometry = mapping(geometries[0]) if geometries else None
         # Create the STAC item
-        item_id = f"vector_polygon_item"
+        item_id = "vector_polygon_item"
         item = pystac.Item(
-            id=item_id, geometry=geometry, bbox=bbox, datetime=datetime.now(), properties={}
+            id=item_id,
+            geometry=geometry,
+            bbox=bbox,
+            datetime=datetime.now(UTC),
+            properties={},
         )
         # Apply Projection Extension
         proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
-        proj_ext.epsg = crs["init"].split(":")[-1] if "init" in crs else None
-        proj_ext.epsg = int(proj_ext.epsg) if proj_ext.epsg.isdigit() else None
+        epsg = crs.get("init", "").split(":")[-1] if isinstance(crs, dict) else None
+        proj_ext.epsg = int(epsg) if epsg and epsg.isdigit() else None
         proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
         asset = pystac.Asset(
             href=str(source_cfg.location),
