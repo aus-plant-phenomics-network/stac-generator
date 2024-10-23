@@ -1,5 +1,3 @@
-from datetime import UTC, datetime
-
 import fiona
 import pandas as pd
 import pystac
