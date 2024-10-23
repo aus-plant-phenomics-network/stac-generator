@@ -1,0 +1,92 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+  ],
+  "id": "vector_polygon_item",
+  "geometry": {
+    "coordinates": [
+      [
+        [
+          434067.17171849194,
+          6950926.87036265,
+          89.6024202614145
+        ],
+        [
+          434149.1392231734,
+          6951062.34869196,
+          89.2244218809093
+        ],
+        [
+          434208.6646524757,
+          6951026.562412331,
+          89.18530879761826
+        ],
+        [
+          434125.020386994,
+          6950889.883355473,
+          89.4874715302785
+        ],
+        [
+          434067.17171849194,
+          6950926.87036265,
+          89.6024202614145
+        ]
+      ]
+    ],
+    "type": "Polygon"
+  },
+  "bbox": [
+    434067.17171849194,
+    6950889.883355473,
+    434208.6646524757,
+    6951062.34869196
+  ],
+  "properties": {
+    "proj:epsg": 28356,
+    "proj:bbox": [
+      434067.17171849194,
+      6950889.883355473,
+      434208.6646524757,
+      6951062.34869196
+    ],
+    "datetime": "2024-10-23T13:09:26.925107Z"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "collection",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "self",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_item/vector_polygon_item.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "example/shapefiles/GilbertN2OuterBoundary.zip",
+      "type": "application/x-shapefile",
+      "title": "Vector Polygon Data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "vector_polygon"
+}

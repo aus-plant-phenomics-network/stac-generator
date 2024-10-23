@@ -1,0 +1,57 @@
+{
+  "type": "Collection",
+  "id": "vector_polygon",
+  "stac_version": "1.0.0",
+  "description": "Auto-generated",
+  "links": [
+    {
+      "rel": "root",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "item",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_item/vector_polygon_item.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "item",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_item/vector_polygon_item.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    }
+  ],
+  "title": "Auto-generated.",
+  "extent": {
+    "spatial": {
+      "bbox": [
+        [
+          138.62863776330823,
+          -34.96914105537954,
+          434208.6646524757,
+          6951062.34869196
+        ]
+      ]
+    },
+    "temporal": {
+      "interval": [
+        [
+          "2024-10-23T02:39:26.880764Z",
+          "2024-10-23T02:39:26.880764Z"
+        ]
+      ]
+    }
+  },
+  "license": "proprietary"
+}
