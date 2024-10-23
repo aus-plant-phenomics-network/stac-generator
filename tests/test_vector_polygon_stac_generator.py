@@ -1,15 +1,16 @@
-import pytest
 import json
 import zipfile
-from pathlib import Path
 from datetime import datetime
-from shapely.geometry import Polygon, mapping
+
 import fiona
-from fiona.crs import from_epsg
-import pystac
-from stac_generator.vector_polygon.generator import VectorPolygonGenerator
-from stac_generator.base.schema import SourceConfig, StacCollectionConfig
 import pandas as pd
+import pystac
+import pytest
+from fiona.crs import from_epsg
+from shapely.geometry import Polygon, mapping
+
+from stac_generator.base.schema import SourceConfig, StacCollectionConfig
+from stac_generator.vector_polygon.generator import VectorPolygonGenerator
 
 
 @pytest.fixture
@@ -76,19 +77,21 @@ def vector_polygon_generator():
         license="CC-BY-4.0",
         extent=pystac.Extent(
             spatial=pystac.SpatialExtent([[-180, -90, 180, 90]]),
-            temporal=pystac.TemporalExtent([[datetime.now(), None]])
-        )
+            temporal=pystac.TemporalExtent([[datetime.now(), None]]),
+        ),
     )
     # Create a sample DataFrame
-    sample_df = pd.DataFrame({
-        'id': ['test_vector'],
-        'data_file': ['test.geojson'],
-        'location_file': ['test.geojson'],
-        'datetime': ['2023-01-01T00:00:00Z'],
-        'properties': [{}],
-        'prefix': ['test_prefix'],
-        'location': ['http://example.com/test.geojson']
-    })
+    sample_df = pd.DataFrame(
+        {
+            "id": ["test_vector"],
+            "data_file": ["test.geojson"],
+            "location_file": ["test.geojson"],
+            "datetime": ["2023-01-01T00:00:00Z"],
+            "properties": [{}],
+            "prefix": ["test_prefix"],
+            "location": ["http://example.com/test.geojson"],
+        }
+    )
     return VectorPolygonGenerator(source_df=sample_df, collection_cfg=collection_cfg)
 
 
@@ -100,7 +103,7 @@ def test_create_item_from_config_shapefile(vector_polygon_generator, create_samp
         datetime="2023-01-01T00:00:00Z",
         properties={},
         prefix="test_prefix",
-        location=create_sample_shapefile
+        location=create_sample_shapefile,
     )
 
     items = vector_polygon_generator.create_item_from_config(source_config)
@@ -123,7 +126,7 @@ def test_create_item_from_config_geojson(vector_polygon_generator, create_sample
         datetime="2023-01-01T00:00:00Z",
         properties={},
         prefix="test_prefix",
-        location=create_sample_geojson
+        location=create_sample_geojson,
     )
 
     items = vector_polygon_generator.create_item_from_config(source_config)
