@@ -1,24 +1,24 @@
 {
   "type": "Catalog",
-  "id": "point_data",
+  "id": "vector_polygon",
   "stac_version": "1.0.0",
   "description": "Auto-generated",
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "child",
-      "href": "/home/hoangson/stac-generator/example/csv/generated/point_data/collection.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/stac-generator/example/csv/generated/catalog.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
       "type": "application/json"
     }
   ],
