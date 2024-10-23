@@ -52,7 +52,9 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
             id=item_id,
             geometry=geometry,
             bbox=bbox,
-            datetime=datetime.now(UTC),
+            datetime=source_cfg.datetime,
+            start_datetime=source_cfg.start_datetime,
+            end_datetime=source_cfg.end_datetime,
             properties={},
         )
         # Apply Projection Extension
