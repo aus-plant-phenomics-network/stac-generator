@@ -1,14 +1,19 @@
 import pandas as pd
 import pystac
+import fiona
+from shapely.geometry import mapping
+from datetime import datetime
+from pystac.extensions.projection import ItemProjectionExtension
+from pathlib import Path
 
 from stac_generator._types import CsvMediaType
 from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
+from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig, SourceConfig
 from stac_generator.csv.schema import CsvConfig, CsvExtension
 from stac_generator.csv.utils import group_df, items_from_group_df, read_csv, to_gdf
 
 
-class CsvGenerator(StacGenerator[CsvConfig]):
+class VectorPolygonGenerator(StacGenerator[SourceConfig]):
     def __init__(
         self,
         source_df: pd.DataFrame,
@@ -24,31 +29,44 @@ class CsvGenerator(StacGenerator[CsvConfig]):
         )
 
     def create_item_from_config(self, source_cfg: CsvConfig) -> list[pystac.Item]:
+        if source_cfg.location.endswith(".zip"):  # Assume zip shape archive
+            shapefile_name = source_cfg.location.split("/")[-1].replace(
+                ".zip", ".shp"
+            )  # Extract .shp file name
+
+            if source_cfg.location.startswith("http"):  # Remote file (HTTP/HTTPS)
+                zip_path = f"/vsicurl/{source_cfg.location}/{shapefile_name}"  # Use /vsicurl/ to read from remote ZIP file
+            else:  # Local file
+                zip_path = f"/vsizip/{source_cfg.location}/{shapefile_name}"  # Use /vsizip/ to read from local ZIP file
+        else:
+            if source_cfg.location.startswith("http"):  # Remote non-ZIP file (GeoJSON or shapefile)
+                zip_path = f"/vsicurl/{source_cfg.location}"  # Use /vsicurl/ for remote files
+            else:  # Local non-ZIP file
+                zip_path = source_cfg.location  # Use the local path directly
+
+        with fiona.open(zip_path) as src:
+            crs = src.crs
+            bbox = src.bounds
+            geometries = [feature["geometry"] for feature in src]
+            geometry = mapping(geometries[0]) if geometries else None
+        # Create the STAC item
+        item_id = f"vector_polygon_item"
+        item = pystac.Item(
+            id=item_id, geometry=geometry, bbox=bbox, datetime=datetime.now(), properties={}
+        )
+        # Apply Projection Extension
+        proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
+        proj_ext.epsg = crs["init"].split(":")[-1] if "init" in crs else None
+        proj_ext.epsg = int(proj_ext.epsg) if proj_ext.epsg.isdigit() else None
+        proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
         asset = pystac.Asset(
-            href=source_cfg.location,
-            description="Raw csv data",
+            href=str(source_cfg.location),
+            media_type=pystac.MediaType.GEOJSON
+            if source_cfg.location.endswith(".geojson")
+            else "application/x-shapefile",
             roles=["data"],
-            media_type=CsvMediaType,
+            title="Vector Polygon Data",
         )
-        raw_df = read_csv(
-            source_cfg.location,
-            source_cfg.X,
-            source_cfg.Y,
-            source_cfg.T,
-            source_cfg.date_format,
-            source_cfg.column_info,
-            source_cfg.groupby,
-        )
-        raw_df = to_gdf(raw_df, source_cfg.X, source_cfg.Y, source_cfg.epsg)
-        group_map = group_df(raw_df, source_cfg.prefix, source_cfg.groupby)
-        properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump()
-        return items_from_group_df(
-            group_map,
-            asset,
-            source_cfg.epsg,
-            source_cfg.T,
-            source_cfg.datetime,
-            source_cfg.start_datetime,
-            source_cfg.end_datetime,
-            properties,
-        )
+
+        item.add_asset("data", asset)
+        return [item]

@@ -50,7 +50,7 @@ def geometry_from_dict(item: dict[str, Any]) -> Geometry:
         case "MultiLineString":
             return MultiLineString(cast(list, coordinates))
         case "Polygon":
-            return Polygon(cast(list, coordinates))
+            return Polygon(*cast(list, coordinates))
         case "MultiPolygon":
             return MultiPolygon(cast(list, coordinates))
         case "GeometryCollection":
