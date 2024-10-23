@@ -28,18 +28,11 @@ readme = "README.md"
 license = { text = "MIT" }
 keywords = ["stac", "generator", "stac-generator"]
 
+[tool.pdm]
+distribution = true
 [tool.pdm.version]
 source = "file"
 path = "stac_generator/__version__.py"
-
-[project.urls]
-repository = "https://github.com/JosephUoA/stac-generator"
-
-[project.scripts]
-stac_generator="stac_generator.__main__:run_cli"
-
-[tool.pdm]
-distribution = true
 
 [tool.pdm.build]
 excludes = ["./**/.git"]
@@ -71,6 +64,15 @@ docs = [
     "mkdocs-autorefs>=1.2.0",
     "mkdocs-jupyter>=0.25.0",
 ]
+cli = [
+    "rich-argparse>=1.5.2",
+]
+
+[project.urls]
+repository = "https://github.com/JosephUoA/stac-generator"
+
+[project.scripts]
+stac_generator="stac_generator.__main__:run_cli"
 
 [tool.coverage.report]
 exclude_also = [
@@ -197,5 +199,5 @@ warn_unused_configs = true
 warn_unused_ignores = false
 
 [[tool.mypy.overrides]]
-module = "rasterio.*,requests.*,shapely.*,geopandas.*,fiona.*"
+module = "rasterio.*,requests.*,shapely.*,geopandas.*,fiona.*,yaml.*"
 ignore_missing_imports = true
