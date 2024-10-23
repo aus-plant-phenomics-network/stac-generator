@@ -1,26 +1,20 @@
-import pandas as pd
+from typing import Any
+
 import pystac
 
 from stac_generator._types import CsvMediaType
-from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
+from stac_generator.base.generator import ItemGenerator
 from stac_generator.csv.schema import CsvConfig, CsvExtension
 from stac_generator.csv.utils import group_df, items_from_group_df, read_csv, to_gdf
 
 
-class CsvGenerator(StacGenerator[CsvConfig]):
+class CsvGenerator(ItemGenerator[CsvConfig]):
     def __init__(
         self,
-        source_df: pd.DataFrame,
-        collection_cfg: StacCollectionConfig,
-        catalog_cfg: StacCatalogConfig | None = None,
-        href: str | None = None,
+        configs: list[dict[str, Any]],
     ) -> None:
         super().__init__(
-            source_df=source_df,
-            collection_cfg=collection_cfg,
-            catalog_cfg=catalog_cfg,
-            href=href,
+            configs=configs,
         )
 
     def create_item_from_config(self, source_cfg: CsvConfig) -> list[pystac.Item]:
@@ -40,7 +34,7 @@ class CsvGenerator(StacGenerator[CsvConfig]):
             source_cfg.groupby,
         )
         raw_df = to_gdf(raw_df, source_cfg.X, source_cfg.Y, source_cfg.epsg)
-        group_map = group_df(raw_df, source_cfg.prefix, source_cfg.groupby)
+        group_map = group_df(raw_df, source_cfg.id, source_cfg.groupby)
         properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump()
         return items_from_group_df(
             group_map,

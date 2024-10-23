@@ -1,77 +1,32 @@
-import abc
-from typing import Any, Generic, cast
+from __future__ import annotations
 
-import httpx
-import pandas as pd
+import abc
+from typing import TYPE_CHECKING, Any, Generic
+
 import pystac
 from pystac.collection import Extent
 
-from stac_generator._types import StacEntityT
 from stac_generator.base.schema import (
-    LoadConfig,
-    StacCatalogConfig,
     StacCollectionConfig,
     T,
 )
-from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
+from stac_generator.base.utils import (
+    extract_spatial_extent,
+    extract_temporal_extent,
+    force_write_to_stac_api,
+    href_is_local,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
-class StacGenerator(abc.ABC, Generic[T]):
-    source_type: type[T]
-    """SourceConfig subclass that contains information used for parsing the source file"""
-
-    @classmethod
-    def __class_getitem__(cls, source_type: type) -> type:
-        kwargs = {"source_type": source_type}
-        return type(f"StacGenerator[{source_type.__name__}]", (StacGenerator,), kwargs)
-
+class CollectionGenerator:
     def __init__(
-        self,
-        source_df: pd.DataFrame,
-        collection_cfg: StacCollectionConfig,
-        catalog_cfg: StacCatalogConfig | None = None,
-        href: str | None = None,
+        self, collection_cfg: StacCollectionConfig, generators: Sequence[ItemGenerator]
     ) -> None:
-        """Base STACGenerator object. Users should extend this class for handling different file extensions.
-        Please see CsvStacGenerator source code.
-
-        :param source_df: source data config
-        :type source_df: pd.DataFrame
-        :param collection_cfg: collection config for generating collection. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
-        :type collection_cfg: StacCollectionConfig
-        :param catalog_cfg: catalog config for generating catalog. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
-        :type catalog_cfg: StacCatalogConfig | None, optional
-        :param href: catalog href for serialisation.
-        :type href: str | None, optional
-
-        """
         self.collection_cfg = collection_cfg
-        self.catalog_cfg = (
-            catalog_cfg
-            if catalog_cfg
-            else StacCatalogConfig(
-                id=collection_cfg.id,
-                title=collection_cfg.title,
-                description=collection_cfg.description,
-            )
-        )
-        self.source_df = source_df
-        self.configs = [
-            self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict()))
-            for i in range(len(self.source_df))
-        ]
-        self.href = href
-
-    @abc.abstractmethod
-    def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
-        """Abstract method that handles `pystac.Item` generation from the appropriate config"""
-        raise NotImplementedError
-
-    @staticmethod
-    def extract_extent(
-        items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None
-    ) -> Extent:
-        return Extent(extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg))
+        self.generators = generators
 
     def _create_collection_from_items(
         self,
@@ -87,7 +42,9 @@ class StacGenerator(abc.ABC, Generic[T]):
                 if collection_cfg.description
                 else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
-            extent=self.extract_extent(items, collection_cfg),
+            extent=Extent(
+                extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg)
+            ),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
             providers=[
@@ -99,21 +56,41 @@ class StacGenerator(abc.ABC, Generic[T]):
         collection.add_items(items)
         return collection
 
-    def _create_catalog_from_collection(
-        self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None
-    ) -> pystac.Catalog:
-        if catalog_cfg is None:
-            raise ValueError("Generating catalog requires non null catalog config")
-        catalog = pystac.Catalog(
-            id=catalog_cfg.id,
-            description=catalog_cfg.description,
-            title=catalog_cfg.title,
-        )
-        catalog.add_child(collection)
-        return catalog
+    def create_collection(self) -> pystac.Collection:
+        items = []
+        for generator in self.generators:
+            items.extend(generator.create_items())
+        return self._create_collection_from_items(items, self.collection_cfg)
+
+
+class ItemGenerator(abc.ABC, Generic[T]):
+    source_type: type[T]
+    """SourceConfig subclass that contains information used for parsing the source file"""
+
+    @classmethod
+    def __class_getitem__(cls, source_type: type) -> type:
+        kwargs = {"source_type": source_type}
+        return type(f"ItemGenerator[{source_type.__name__}]", (ItemGenerator,), kwargs)
+
+    def __init__(
+        self,
+        configs: list[dict[str, Any]],
+    ) -> None:
+        """Base ItemGenerator object. Users should extend this class for handling different file extensions.
+        Please see CsvGenerator source code.
+
+        :param configs: source data configs - either from csv config or yaml/json
+        :type configs: list[dict[str, Any]]
+        """
+        self.configs = [self.source_type(**config) for config in configs]
+
+    @abc.abstractmethod
+    def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
+        """Abstract method that handles `pystac.Item` generation from the appropriate config"""
+        raise NotImplementedError
 
     def create_items(self) -> list[pystac.Item]:
-        """Generate STAC Items from source dataframe
+        """Generate STAC Items from `configs` metadata
 
         :return: list of generated STAC Item
         :rtype: list[pystac.Item]
@@ -123,132 +100,44 @@ class StacGenerator(abc.ABC, Generic[T]):
             items.extend(self.create_item_from_config(config))
         return items
 
-    def create_collection(self) -> pystac.Collection:
-        """Generate STAC Collection that includes all STAC Items from source dataframe
 
-        collection_cfg must be provided to constructor for this method to work
+class StacSerialiser:
+    def __init__(self, generator: CollectionGenerator, href: str) -> None:
+        self.generator = generator
+        self.collection = generator.create_collection()
+        self.href = href
+        StacSerialiser.pre_serialisation_hook(self.collection, self.href)
 
-        :return: STAC Collection that includes all generated STAC Items
-        :rtype: pystac.Collection
-        """
-        items = self.create_items()
-        return self._create_collection_from_items(items, self.collection_cfg)
+    @staticmethod
+    def pre_serialisation_hook(collection: pystac.Collection, href: str) -> None:
+        """Hook that can be overwritten to provide pre-serialisation functionality.
+        By default, this normalises collection href and performs validation
 
-    def create_catalog(self) -> pystac.Catalog:
-        """Generate STAC Catalog that includes a STAC Collection containing all STAC Item generated from
-        source dataframe
-
-        Both collection_cfg and catalog_cfg must be provided for this method to work
-
-        :return: STAC Catalog
-        :rtype: pystac.Catalog
-        """
-        collection = self.create_collection()
-        return self._create_catalog_from_collection(collection, self.catalog_cfg)
-
-    def generate_collection_and_save(self, href: str) -> None:
-        """Generate STAC Collection and save to disk.
-
-        This is a convenient method
-        that combines `self.create_collection` and `collection.normalize_and_save(href)`
-
-
-        :param href: disk location of the generated collection
+        :param collection: collection object
+        :type collection: pystac.Collection
+        :param href: serialisation href
         :type href: str
         """
-        collection = self.create_collection()
         collection.normalize_hrefs(href)
         collection.validate_all()
-        collection.save()
 
-    def generate_catalog_and_save(self, href: str | None) -> None:
-        """Write the catalog generated from source dataframe to local disk
+    def __call__(self) -> None:
+        if href_is_local(self.href):
+            return self.to_json()
+        return self.to_api()
 
-        If `href` is not provided, will attemp to use `href` under `StacCatalogConfig`
+    def to_json(self) -> None:
+        """Generate STAC Collection and save to disk as json files"""
+        self.collection.save()
 
-        :param href: disk location
-        :type href: str | None
-        :raises ValueError: if href parameter is not provided as method argument or config attribute
+    def to_api(self) -> None:
+        """_Generate STAC Collection and push to remote API.
+        The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
-        if not href and not (self.catalog_cfg and self.href):
-            raise ValueError("Href must be provided as argument or under catalog config")
-        catalog = self.create_catalog()
-        href = href if href is not None else cast(str, self.href)
-        catalog.normalize_hrefs(href)
-        catalog.validate_all()
-        catalog.save()
-
-    async def write_to_api(self, href: str | None = None) -> None:
-        """Write the catalog generated from source dataframe to an href
-
-        If href is not provided, will attempt to use the href under `StacCatalogConfig`
-
-        :param href: STAC api href, defaults to None
-        :type href: str | None, optional
-        :raises ValueError: if href parameter is not provided as method argument or config attribute
-        """
-        if not href and not (self.catalog_cfg and self.href):
-            raise ValueError("href must be provided as argument or to catalog config")
-        catalog = self.create_catalog()
-        href = href if href is not None else cast(str, self.href)
-        catalog.normalize_hrefs(href)
-        catalog.validate_all()
-        async with httpx.AsyncClient() as client:
-            for collection in catalog.get_collections():
-                await client.post(f"{href}/collections", json=collection.to_dict())
-                for item in collection.get_all_items():
-                    await client.post(
-                        f"{href}/collections/{item.collection_id}/items",
-                        json=item.to_dict(),
-                    )
-
-
-class StacLoader:
-    @staticmethod
-    def _load_from_file(
-        entity: StacEntityT, location: str
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        match entity:
-            case "Item":
-                return pystac.Item.from_file(location)
-            case "ItemCollection":
-                return pystac.ItemCollection.from_file(location)
-            case "Collection":
-                return pystac.Collection.from_file(location)
-            case "Catalogue":
-                return pystac.Catalog.from_file(location)
-            case _:
-                raise ValueError(f"Invalid Stac type: {entity}")
-
-    @staticmethod
-    def _load_from_api(
-        entity: StacEntityT, api_href: str
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        response = httpx.get(api_href)
-        json_data = response.json()
-        match entity:
-            case "Item":
-                return pystac.Item(**json_data)
-            case "ItemCollection":
-                return pystac.ItemCollection(**json_data)
-            case "Collection":
-                return pystac.Collection(**json_data)
-            case "Catalogue":
-                return pystac.Catalog(**json_data)
-            case _:
-                raise ValueError(f"Invalid Stac type: {entity}")
-
-    @staticmethod
-    def from_config(
-        load_cfg: LoadConfig,
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        """Get a Stac entity using information from load_cfg
-
-        :param load_cfg: load information
-        :type load_cfg: LoadConfig
-        :return: pystac entity
-        :rtype: pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection
-        """
-        if load_cfg.json_location:
-            return StacLoader._load_from_file(load_cfg.entity, load_cfg.json_location)
-        return StacLoader._load_from_api(load_cfg.entity, cast(str, load_cfg.stac_api_endpoint))
+        force_write_to_stac_api(
+            f"{self.href}/collections/{self.collection.id}", json=self.collection.to_dict()
+        )
+        for item in self.collection.get_all_items():
+            force_write_to_stac_api(
+                f"{self.href}/collections/{self.collection.id}/items/{item.id}", json=item.to_dict()
+            )
