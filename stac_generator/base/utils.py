@@ -1,9 +1,14 @@
 import datetime
+import json
 from collections.abc import Sequence
-from typing import TYPE_CHECKING
+from pathlib import Path
+from typing import TYPE_CHECKING, Any, cast
 
 import geopandas as gpd
+import httpx
+import pandas as pd
 import pystac
+import yaml
 from shapely.geometry import shape
 
 from stac_generator.base.schema import StacCollectionConfig
@@ -64,3 +69,61 @@ def extract_temporal_extent(
             max_dt = max(max_dt, item.datetime)
     max_dt = max(max_dt, min_dt)
     return pystac.TemporalExtent([[min_dt, max_dt]])
+
+
+def href_is_local(href: str) -> bool:
+    """Check if href points to a local resource
+
+    :param href: path to resource
+    :type href: str
+    :return: local or non-local
+    :rtype: bool
+    """
+    return not href.startswith(("http", "https"))
+
+
+def force_write_to_stac_api(url: str, json: dict[str, Any]) -> None:
+    """Force write a json object to a stac api endpoint.
+    This function will try sending a POST request and if a 409 error is encountered,
+    try sending a PUT request
+
+    :param url: path to stac resource for creation/update
+    :type url: str
+    :param json: json object
+    :type json: dict[str, Any]
+    """
+    try:
+        response = httpx.post(url=url, json=json)
+        response.raise_for_status()
+    except httpx.HTTPStatusError:
+        response = httpx.put(url=url, json=json)
+        response.raise_for_status()
+
+
+def read_source_config(href: str) -> list[dict[str, Any]]:
+    if not href.endswith(("json", "yaml", "yml", "csv")):
+        raise ValueError(
+            "Unsupported extension. We currently allow json/yaml/csv files to be used as config"
+        )
+    if href.endswith(".csv"):
+        df = pd.read_csv(href)
+        return cast(list[dict[str, Any]], df.to_dict("records"))
+    if href_is_local(href):
+        with Path(href).open("r") as file:
+            if href.endswith(("yaml", "yml")):
+                result = yaml.safe_load(file)
+            if href.endswith("json"):
+                result = json.load(file)
+    else:
+        response = httpx.get(href, follow_redirects=True)
+        response.raise_for_status()
+        if href.endswith("json"):
+            result = response.json()
+        if href.endswith(("yaml", "yml")):
+            result = yaml.safe_load(response.content.decode("utf-8"))
+
+    if isinstance(result, dict):
+        return [result]
+    if isinstance(result, list):
+        return result
+    raise ValueError(f"Expects config to be read as a list of dictionary. Provided: {type(result)}")
