@@ -47,7 +47,7 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
             geometries = [feature["geometry"] for feature in src]
             geometry = mapping(geometries[0]) if geometries else None
         # Create the STAC item
-        item_id = "vector_polygon_item"
+        item_id = source_cfg.prefix
         item = pystac.Item(
             id=item_id,
             geometry=geometry,

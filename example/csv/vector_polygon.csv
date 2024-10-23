@@ -1,3 +1,3 @@
 prefix,location,epsg
-feature_geojson,example/geojson/WaiteOvalTest1.geojson,4326
-feature_shapefile,example/shapefiles/GilbertN2OuterBoundary.zip,4326
+vector_polygon,example/geojson/WaiteOvalTest1.geojson,4326
+vector_polygon,example/shapefiles/GilbertN2OuterBoundary.zip,4326
