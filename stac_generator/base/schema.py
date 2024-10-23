@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 import datetime
-from typing import Any, Self, TypeVar
+from typing import Any, TypeVar
 
 from httpx._types import (
     RequestData,  # noqa: TCH002
 )
-from pydantic import BaseModel, model_validator
+from pydantic import model_validator
 from stac_pydantic.shared import StacCommonMetadata as _StacCommonMetaData
 
 from stac_generator._types import (  # noqa: TCH001
@@ -15,7 +15,6 @@ from stac_generator._types import (  # noqa: TCH001
     HTTPMethod,
     QueryParamTypes,
     RequestContent,
-    StacEntityT,
 )
 
 T = TypeVar("T", bound="SourceConfig")
@@ -39,17 +38,6 @@ class StacCommonMetadata(_StacCommonMetaData):
             data["start_datetime"] = now
             data["end_datetime"] = now
         return data
-
-
-class StacCatalogConfig(BaseModel):
-    """Contains parameters to pass to Catalog constructor"""
-
-    id: str
-    """Catalog id"""
-    title: str
-    """Catalog title"""
-    description: str = "Auto-generated Stac Catalog"
-    """Catalog description"""
 
 
 class StacCollectionConfig(StacCommonMetadata):
@@ -77,8 +65,8 @@ class StacItemConfig(StacCommonMetadata):
     and other descriptive information such as the id of the new entity
     """
 
-    prefix: str
-    """Item prefix - doubles as ID if there is only one item extracted from the source file"""
+    id: str
+    """Item id - doubles as prefix if there are multiple items extracted from the source file"""
     description: str = "Auto-generated Stac Item"
     """Item description"""
 
@@ -122,18 +110,3 @@ class SourceConfig(StacItemConfig):
         if self.extension:
             return self.extension
         return self.location.split(".")[-1]
-
-
-class LoadConfig(BaseModel):
-    entity: StacEntityT
-    """Stac Entity type - Item, ItemCollection, Collection, Catalog"""
-    json_location: str | None = None
-    """Stac Json file on disk"""
-    stac_api_endpoint: str | None = None
-    """Stac API Endpoint"""
-
-    @model_validator(mode="after")
-    def validate_field(self) -> Self:
-        if self.json_location is None and self.stac_api_endpoint is None:
-            raise ValueError("One of json_location or stac_api_endpoint field must be not None")
-        return self
