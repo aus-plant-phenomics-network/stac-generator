@@ -24,20 +24,17 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
         )
 
     def create_item_from_config(self, source_cfg: SourceConfig) -> list[pystac.Item]:
-        if source_cfg.location.endswith(".zip"):  # Assume zip shape archive
-            shapefile_name = source_cfg.location.split("/")[-1].replace(
-                ".zip", ".shp"
-            )  # Extract .shp file name
-
-            if source_cfg.location.startswith("http"):  # Remote file (HTTP/HTTPS)
-                zip_path = f"/vsicurl/{source_cfg.location}/{shapefile_name}"  # Use /vsicurl/ to read from remote ZIP file
-            else:  # Local file
-                zip_path = f"/vsizip/{source_cfg.location}/{shapefile_name}"  # Use /vsizip/ to read from local ZIP file
+        if source_cfg.location.endswith(".zip"):  # ZIP archive case
+            if source_cfg.location.startswith("http"):  # Remote ZIP file
+                zip_path = f"zip+{source_cfg.location}"  # Use Fiona's zip+https protocol for remote files
+            else:  # Local ZIP file
+                zip_path = f"zip://{source_cfg.location}"  # Use Fiona's zip:// protocol for local files
         else:
             if source_cfg.location.startswith("http"):  # Remote non-ZIP file (GeoJSON or shapefile)
-                zip_path = f"/vsicurl/{source_cfg.location}"  # Use /vsicurl/ for remote files
+                zip_path = source_cfg.location  # Use the URL directly
             else:  # Local non-ZIP file
                 zip_path = source_cfg.location  # Use the local path directly
+
 
         with fiona.open(zip_path) as src:
             crs = src.crs
