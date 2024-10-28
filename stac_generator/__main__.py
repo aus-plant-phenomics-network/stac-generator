@@ -54,7 +54,7 @@ def run_cli() -> None:
                 If path is an endpoint, the collection and item json files will be pushed using STAC api methods
             """,
     )
-    parser.add_argument("--version", action="version", version=__version__)
+    parser.add_argument("-V", "--version", action="version", version=__version__)
 
     # Collection Information
     collection_metadata = parser.add_argument_group("STAC collection metadata")
