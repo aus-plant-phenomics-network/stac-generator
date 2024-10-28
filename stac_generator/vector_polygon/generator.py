@@ -5,7 +5,8 @@ from pystac.extensions.projection import ItemProjectionExtension
 from shapely.geometry import mapping
 
 from stac_generator.base.generator import StacGenerator
-from stac_generator.base.schema import SourceConfig, StacCatalogConfig, StacCollectionConfig
+from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
+
 from .schema import VectorPolygonSourceConfig
 
 
@@ -28,15 +29,18 @@ class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
         print(source_cfg)
         if source_cfg.location.endswith(".zip"):  # ZIP archive case
             if source_cfg.location.startswith("http"):  # Remote ZIP file
-                zip_path = f"zip+{source_cfg.location}"  # Use Fiona's zip+https protocol for remote files
+                zip_path = (
+                    f"zip+{source_cfg.location}"  # Use Fiona's zip+https protocol for remote files
+                )
             else:  # Local ZIP file
-                zip_path = f"zip://{source_cfg.location}"  # Use Fiona's zip:// protocol for local files
+                zip_path = (
+                    f"zip://{source_cfg.location}"  # Use Fiona's zip:// protocol for local files
+                )
         else:
             if source_cfg.location.startswith("http"):  # Remote non-ZIP file (GeoJSON or shapefile)
                 zip_path = source_cfg.location  # Use the URL directly
             else:  # Local non-ZIP file
                 zip_path = source_cfg.location  # Use the local path directly
-
 
         with fiona.open(zip_path) as src:
             crs = src.crs
@@ -60,7 +64,9 @@ class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
         epsg = crs.to_epsg()
         print(epsg)
         if source_cfg.epsg != epsg:
-            raise ValueError(f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match shapefile EPSG ({epsg}).")
+            raise ValueError(
+                f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match shapefile EPSG ({epsg})."
+            )
 
         proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
         asset = pystac.Asset(
