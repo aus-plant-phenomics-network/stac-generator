@@ -1,59 +1,201 @@
-[tool.poetry]
-name = "stac-generator"
-version = "0.1.0"
-description = "Generate valid STAC catalogs"
-authors = ["Joseph Sclauzero <joseph.sclauzero@adelaide.com.au>"]
-readme = "README.md"
-repository = "https://github.com/JosephUoA/stac-generator"
-packages = []
-
-[tool.poetry.dependencies]
-python = "^3.11"
-pystac = "^1.9.0"
-shapely = "^2.0.3"
-jsonschema = "^4.21.1"
-rasterio = "^1.3.9"
-pyproj = "^3.6.1"
-folium = "^0.17.0"
-fiona = "^1.10.1"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.4"
-pytest-cov = "^4.1.0"
-ruff = "^0.1.15"
-pre-commit = "^3.4.0"
-mypy = "^1.8.0"
-jupyter = "^1.0.0"
-matplotlib = "^3.8.3"
-
-
-[tool.poetry.group.odc.dependencies]
-psycopg2 = "^2.9.9"
-datacube = "^1.8.17"
-odc-stac = "^0.3.9"
-rioxarray = "^0.15.1"
-
-
-[tool.poetry.group.api.dependencies]
-stac-fastapi-api = "^2.4.9"
-stac-fastapi-types = "^2.4.9"
-stac-fastapi-extensions = "^2.4.9"
-uvicorn = "^0.27.1"
-pypgstac = "^0.8.4"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    { name = "Joseph Sclauzero", email = "joseph.sclauzero@adelaide.edu.au" },
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pystac>=1.10.1",
+    "shapely>=2.0.6",
+    "jsonschema>=4.23.0",
+    "rasterio>=1.4.1",
+    "pyproj>=3.7.0",
+    "folium>=0.17.0",
+    "geopandas>=1.0.1",
+    "pandera>=0.20.4",
+    "httpx>=0.27.2",
+    "stac-pydantic>=3.1.2",
+    "dask[dataframe]>=2024.9.1",
+    "fiona>=1.10.1",
+]
+name = "pystac-generator"
+dynamic = ["version"]
+description = "A python package and CLI tool for generating STAC catalog from spatial data files"
+readme = "README.md"
+license = { text = "MIT" }
+keywords = ["stac", "generator", "stac-generator"]
+
+[tool.pdm.version]
+source = "file"
+path = "stac_generator/__version__.py"
+
+[project.urls]
+repository = "https://github.com/JosephUoA/stac-generator"
+
+[project.scripts]
+stac_generator="stac_generator.__main__:run_cli"
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.build]
+excludes = ["./**/.git"]
+
+[tool.pdm.dev-dependencies]
+test = ["pytest>=8.3.3", "pytest-cov>=5.0.0"]
+analysis = ["mypy>=1.11.2", "ruff>=0.6.8", "pre-commit>=3.8.0"]
+dev = ["jupyter>=1.1.1", "matplotlib>=3.9.2"]
+odc = [
+    "psycopg2>=2.9.9",
+    "datacube>=1.8.19",
+    "odc-stac>=0.3.10",
+    "rioxarray>=0.17.0",
+]
+api = [
+    "stac-fastapi-api>=3.0.2",
+    "stac-fastapi-types>=3.0.2",
+    "stac-fastapi-extensions>=3.0.2",
+    "uvicorn>=0.31.0",
+    "pypgstac>=0.9.1",
+]
+type-stubs = ["pandas-stubs>=2.2.2.240909"]
+docs = [
+    "mkdocs>=1.6.1",
+    "mkdocs-material>=9.5.39",
+    "mkdocstrings-python>=1.11.1",
+    "markdown-exec>=1.9.3",
+    "mkdocs-version-annotations>=1.0.0",
+    "mkdocs-autorefs>=1.2.0",
+    "mkdocs-jupyter>=0.25.0",
+]
 
 [tool.coverage.report]
 exclude_also = [
     "def __repr__",
     "@(abc\\.)?abstractmethod",
     "def __getattr__",
-    "if TYPE_CHECKING:"
+    "if TYPE_CHECKING:",
 ]
 
 [tool.ruff]
+lint.select = [
+    "A",   # flake8-builtins
+    "B",   # flake8-bugbear
+    "BLE", # flake8-blind-except
+    "C4",  # flake8-comprehensions
+    "C90", # mccabe
+    "D",   # pydocstyle
+    "DJ",  # flake8-django
+    "DTZ", # flake8-datetimez
+    "E",   # pycodestyle errors
+    "ERA", # eradicate
+    "EXE", # flake8-executable
+    "F",   # pyflakes
+    "G",   # flake8-logging-format
+    "I",   # isort
+    "ICN", # flake8-import-conventions
+    "ISC", # flake8-implicit-str-concat
+    "PIE", # flake8-pie
+    "PLC", # pylint - convention
+    "PLE", # pylint - error
+    "PLW", # pylint - warning
+    "PTH", # flake8-use-pathlib
+    "Q",   # flake8-quotes
+    "RET", # flake8-return
+    "RUF", # Ruff-specific rules
+    "SIM", # flake8-simplify
+    "T10", # flake8-debugger
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+    "W",   # pycodestyle - warning
+    "YTT", # flake8-2020
+]
 line-length = 100
+lint.ignore = [
+    "A003",    # flake8-builtins - class attribute {name} is shadowing a python builtin
+    "B010",    # flake8-bugbear - do not call setattr with a constant attribute value
+    "D100",    # pydocstyle - missing docstring in public module
+    "D101",    # pydocstyle - missing docstring in public class
+    "D102",    # pydocstyle - missing docstring in public method
+    "D103",    # pydocstyle - missing docstring in public function
+    "D104",    # pydocstyle - missing docstring in public package
+    "D105",    # pydocstyle - missing docstring in magic method
+    "D106",    # pydocstyle - missing docstring in public nested class
+    "D107",    # pydocstyle - missing docstring in __init__
+    "D202",    # pydocstyle - no blank lines allowed after function docstring
+    "D205",    # pydocstyle - 1 blank line required between summary line and description
+    "D415",    # pydocstyle - first line should end with a period, question mark, or exclamation point
+    "E501",    # pycodestyle line too long, handled by ruff format
+    "PLW2901", # pylint - for loop variable overwritten by assignment target
+    "RUF012",  # Ruff-specific rule - annotated with classvar
+    "ISC001",  # Ruff formatter incompatible
+    "A002",    # Argument id shadowing scope id
+    "ERA001",  # Commented out code
+]
+
 src = ["stac_generator"]
 target-version = "py311"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.mccabe]
+max-complexity = 12
+
+[tool.ruff.lint.isort]
+known-first-party = ["stac_generator"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 90
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.*" = [
+    "A",
+    "ARG",
+    "B",
+    "BLE",
+    "C901",
+    "D",
+    "DTZ",
+    "EM",
+    "FBT",
+    "G",
+    "N",
+    "PGH",
+    "PIE",
+    "PLR",
+    "PLW",
+    "PTH",
+    "RSE",
+    "S",
+    "S101",
+    "SIM",
+    "TCH",
+    "TRY",
+]
+
+[tool.mypy]
+packages = ["stac_generator"]
+python_version = "3.11"
+
+disallow_any_generics = false
+disallow_untyped_decorators = true
+disallow_untyped_calls = true
+enable_error_code = "ignore-without-code"
+implicit_reexport = false
+show_error_codes = true
+strict = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = false
+
+[[tool.mypy.overrides]]
+module = "rasterio.*,requests.*,shapely.*,geopandas.*,fiona.*"
+ignore_missing_imports = true
