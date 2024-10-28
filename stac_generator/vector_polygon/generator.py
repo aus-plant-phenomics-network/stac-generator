@@ -6,9 +6,10 @@ from shapely.geometry import mapping
 
 from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import SourceConfig, StacCatalogConfig, StacCollectionConfig
+from .schema import VectorPolygonSourceConfig
 
 
-class VectorPolygonGenerator(StacGenerator[SourceConfig]):
+class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
     def __init__(
         self,
         source_df: pd.DataFrame,
@@ -23,7 +24,8 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
             href=href,
         )
 
-    def create_item_from_config(self, source_cfg: SourceConfig) -> list[pystac.Item]:
+    def create_item_from_config(self, source_cfg: VectorPolygonSourceConfig) -> list[pystac.Item]:
+        print(source_cfg)
         if source_cfg.location.endswith(".zip"):  # ZIP archive case
             if source_cfg.location.startswith("http"):  # Remote ZIP file
                 zip_path = f"zip+{source_cfg.location}"  # Use Fiona's zip+https protocol for remote files
@@ -54,8 +56,12 @@ class VectorPolygonGenerator(StacGenerator[SourceConfig]):
         )
         # Apply Projection Extension
         proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
-        epsg = crs.get("init", "").split(":")[-1] if isinstance(crs, dict) else None
-        proj_ext.epsg = int(epsg) if epsg and epsg.isdigit() else None
+        print(crs)
+        epsg = crs.to_epsg()
+        print(epsg)
+        if source_cfg.epsg != epsg:
+            raise ValueError(f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match shapefile EPSG ({epsg}).")
+
         proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
         asset = pystac.Asset(
             href=str(source_cfg.location),
