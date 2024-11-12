@@ -1,6 +1,6 @@
 {
   "type": "Catalog",
-  "id": "vector_polygon",
+  "id": "raster",
   "stac_version": "1.0.0",
   "description": "Auto-generated",
   "links": [
@@ -12,7 +12,7 @@
     },
     {
       "rel": "child",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/raster/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },

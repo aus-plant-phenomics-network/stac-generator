@@ -5,7 +5,7 @@ from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from stac_generator.csv.generator import CsvGenerator
 from stac_generator.geotiff.generator import GeoTiffGenerator
 from stac_generator.vector_polygon.generator import VectorPolygonGenerator
-
+from stac_generator.raster_data.generator import RasterGenerator
 
 class StacGeneratorFactory:
     @staticmethod
@@ -35,6 +35,13 @@ class StacGeneratorFactory:
             )
         if data_type == "vector_polygon":
             return VectorPolygonGenerator(
+                source_df,
+                collection_cfg=collection_cfg,
+                catalog_cfg=catalog_cfg,
+                href=href,
+            )
+        if data_type == "raster":
+            return RasterGenerator(
                 source_df,
                 collection_cfg=collection_cfg,
                 catalog_cfg=catalog_cfg,
