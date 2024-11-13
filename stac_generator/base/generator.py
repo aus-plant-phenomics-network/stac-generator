@@ -14,7 +14,8 @@ from stac_generator.base.utils import (
     extract_spatial_extent,
     extract_temporal_extent,
     force_write_to_stac_api,
-    href_is_local,
+    href_is_stac_api_endpoint,
+    parse_href,
 )
 
 if TYPE_CHECKING:
@@ -122,7 +123,7 @@ class StacSerialiser:
         collection.validate_all()
 
     def __call__(self) -> None:
-        if href_is_local(self.href):
+        if href_is_stac_api_endpoint(self.href):
             return self.to_json()
         return self.to_api()
 
@@ -135,9 +136,11 @@ class StacSerialiser:
         The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
         force_write_to_stac_api(
-            f"{self.href}/collections/{self.collection.id}", json=self.collection.to_dict()
+            url=parse_href(self.href, f"collections/{self.collection.id}"),
+            json=self.collection.to_dict(),
         )
         for item in self.collection.get_all_items():
             force_write_to_stac_api(
-                f"{self.href}/collections/{self.collection.id}/items/{item.id}", json=item.to_dict()
+                url=parse_href(self.href, f"collections/{self.collection.id}/items/{item.id}"),
+                json=item.to_dict(),
             )
