@@ -1,5 +1,6 @@
 import datetime
 import json
+import urllib.parse
 from collections.abc import Sequence
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, cast
@@ -15,6 +16,8 @@ from stac_generator.base.schema import StacCollectionConfig
 
 if TYPE_CHECKING:
     from shapely import Geometry
+
+SUPPORTED_URI_SCHEMES = ["http", "https"]
 
 
 def extract_spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
@@ -35,7 +38,8 @@ def extract_spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent
 
 
 def extract_temporal_extent(
-    items: Sequence[pystac.Item], collection: StacCollectionConfig | None = None
+    items: Sequence[pystac.Item],
+    collection: StacCollectionConfig | None = None,
 ) -> pystac.TemporalExtent:
     """Extract spatial extent for a collection from a Sequence of items and collection config.
 
@@ -71,21 +75,39 @@ def extract_temporal_extent(
     return pystac.TemporalExtent([[min_dt, max_dt]])
 
 
-def href_is_local(href: str) -> bool:
-    """Check if href points to a local resource
+def parse_href(base_url: str, collection_id: str, item_id: str | None = None) -> str:
+    """Generate href for collection or item based on id
+
+    :param base_url: path to catalog.
+    :type base_url: str
+    :param collection_id: collection id
+    :type collection_id: str
+    :param item_id: item id, defaults to None
+    :type item_id: str | None, optional
+    :return: uri to collection or item
+    :rtype: str
+    """
+    if item_id:
+        return urllib.parse.urljoin(base_url, f"{collection_id}/{item_id}")
+    return urllib.parse.urljoin(base_url, f"{collection_id}")
+
+
+def href_is_stac_api_endpoint(href: str) -> bool:
+    """Check if href points to a resource behind a stac api
 
     :param href: path to resource
     :type href: str
     :return: local or non-local
     :rtype: bool
     """
-    return not href.startswith(("http", "https"))
+    output = urllib.parse.urlsplit(href)
+    return output.scheme == ""
 
 
 def force_write_to_stac_api(url: str, json: dict[str, Any]) -> None:
     """Force write a json object to a stac api endpoint.
     This function will try sending a POST request and if a 409 error is encountered,
-    try sending a PUT request
+    try sending a PUT request. Other exceptions if occured will be raised
 
     :param url: path to stac resource for creation/update
     :type url: str
@@ -95,9 +117,12 @@ def force_write_to_stac_api(url: str, json: dict[str, Any]) -> None:
     try:
         response = httpx.post(url=url, json=json)
         response.raise_for_status()
-    except httpx.HTTPStatusError:
-        response = httpx.put(url=url, json=json)
-        response.raise_for_status()
+    except httpx.HTTPStatusError as err:
+        if err.response.status_code == 409:
+            response = httpx.put(url=url, json=json)
+            response.raise_for_status()
+        else:
+            raise err
 
 
 def read_source_config(href: str) -> list[dict[str, Any]]:
@@ -108,7 +133,7 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
     if href.endswith(".csv"):
         df = pd.read_csv(href)
         return cast(list[dict[str, Any]], df.to_dict("records"))
-    if href_is_local(href):
+    if not href.startswith(("http", "https")):
         with Path(href).open("r") as file:
             if href.endswith(("yaml", "yml")):
                 result = yaml.safe_load(file)
