@@ -45,11 +45,13 @@ class CsvExtension(BaseModel):
     """Csv metadata required for parsing geospatial data from csv source."""
 
     X: str
-    """Column to be treated as X coordinate"""
+    """Column to be treated as longitude/X coordinate"""
     Y: str
-    """Column to be treated as Y coordinate"""
+    """Column to be treated as latitude/Y coordinate"""
     epsg: int = 4326
     """EPSG code"""
+    Z: str | None = None
+    """Column to be treated as altitude/Z coordinate"""
     T: str | None = None
     """Column to be treated as time coordinate"""
     column_info: list[str] | list[ColumnInfo] | None = None
