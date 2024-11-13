@@ -3,7 +3,7 @@
         "id": "Grandview",
         "location": "example/csv/Grandview.csv",
         "X": "Longitude",
-        "Y": "Latitude", 
+        "Y": "Latitude",
         "epsg": 4326,
         "column_info": [{"name": "Ca_Soln", "description": "Ca concentration"}, {"name": "pH", "description": "soil pH"}]
     }
