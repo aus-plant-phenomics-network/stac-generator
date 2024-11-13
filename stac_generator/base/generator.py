@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import abc
+import logging
 from typing import TYPE_CHECKING, Any, Generic
 
 import pystac
@@ -21,11 +22,24 @@ from stac_generator.base.utils import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+logger = logging.getLogger(__name__)
+
 
 class CollectionGenerator:
+    """CollectionGenerator class. User should not need to subclass this class unless greater control over how collection is generated from items is needed."""
+
     def __init__(
-        self, collection_cfg: StacCollectionConfig, generators: Sequence[ItemGenerator]
+        self,
+        collection_cfg: StacCollectionConfig,
+        generators: Sequence[ItemGenerator],
     ) -> None:
+        """CollectionGenerator - generate collection from generators attribute
+
+        :param collection_cfg: collection metadata
+        :type collection_cfg: StacCollectionConfig
+        :param generators: sequence of ItemGenerator subclasses.
+        :type generators: Sequence[ItemGenerator]
+        """
         self.collection_cfg = collection_cfg
         self.generators = generators
 
@@ -34,6 +48,7 @@ class CollectionGenerator:
         items: list[pystac.Item],
         collection_cfg: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
+        logger.debug("generating collection from items")
         if collection_cfg is None:
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
@@ -43,9 +58,7 @@ class CollectionGenerator:
                 if collection_cfg.description
                 else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
-            extent=Extent(
-                extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg)
-            ),
+            extent=Extent(extract_spatial_extent(items), extract_temporal_extent(items)),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
             providers=[
@@ -58,6 +71,15 @@ class CollectionGenerator:
         return collection
 
     def create_collection(self) -> pystac.Collection:
+        """Generate collection from all gathered items
+
+        Spatial extent is the bounding box enclosing all items
+        Temporal extent is the time interval enclosing temporal extent of all items. Note that this value is automatically calculated
+        and provided temporal extent fields (start_datetime, end_datetime) at collection level will be ignored
+
+        :return: generated collection
+        :rtype: pystac.Collection
+        """
         items = []
         for generator in self.generators:
             items.extend(generator.create_items())
@@ -65,6 +87,8 @@ class CollectionGenerator:
 
 
 class ItemGenerator(abc.ABC, Generic[T]):
+    """Base ItemGenerator object. Users should extend this class for handling different file extensions."""
+
     source_type: type[T]
     """SourceConfig subclass that contains information used for parsing the source file"""
 
@@ -78,11 +102,11 @@ class ItemGenerator(abc.ABC, Generic[T]):
         configs: list[dict[str, Any]],
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
-        Please see CsvGenerator source code.
 
         :param configs: source data configs - either from csv config or yaml/json
         :type configs: list[dict[str, Any]]
         """
+        logger.debug("validating config")
         self.configs = [self.source_type(**config) for config in configs]
 
     @abc.abstractmethod
@@ -96,6 +120,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
         :return: list of generated STAC Item
         :rtype: list[pystac.Item]
         """
+        logger.debug(f"generating items using {self.__class__.__name__}")
         items = []
         for config in self.configs:
             items.append(self.create_item_from_config(config))
@@ -119,6 +144,7 @@ class StacSerialiser:
         :param href: serialisation href
         :type href: str
         """
+        logger.debug("validating generated collection and items")
         collection.normalize_hrefs(href)
         collection.validate_all()
 
@@ -129,12 +155,15 @@ class StacSerialiser:
 
     def to_json(self) -> None:
         """Generate STAC Collection and save to disk as json files"""
+        logger.debug("saving collection as local json")
         self.collection.save()
+        logger.info(f"successfully save collection to {self.href}")
 
     def to_api(self) -> None:
         """_Generate STAC Collection and push to remote API.
         The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
+        logger.debug("save collection to STAC API")
         force_write_to_stac_api(
             url=parse_href(self.href, f"collections/{self.collection.id}"),
             json=self.collection.to_dict(),
@@ -144,3 +173,4 @@ class StacSerialiser:
                 url=parse_href(self.href, f"collections/{self.collection.id}/items/{item.id}"),
                 json=item.to_dict(),
             )
+        logger.info(f"successfully save collection to {self.href}")
