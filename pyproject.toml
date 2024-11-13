@@ -92,6 +92,7 @@ lint.ignore = [
     "ISC001",  # Ruff formatter incompatible
     "A002",    # Argument id shadowing scope id
     "ERA001",  # Commented out code
+    "G004",    # flake8-logging-format - logging-f-string
 ]
 
 src = ["stac_generator"]

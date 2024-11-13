@@ -1,11 +1,16 @@
+import datetime
 import json
 import urllib.parse
 
 import httpx
+import pystac
 import pytest
 import pytest_httpx
+import shapely
 
 from stac_generator.base.utils import (
+    extract_spatial_extent,
+    extract_temporal_extent,
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
     parse_href,
@@ -25,7 +30,6 @@ VALID_NETWORKED_CONFIG_FILES = [
     "unit_tests/valid_yaml_config.yaml",
     "unit_tests/valid_json_config.json",
 ]
-
 
 CONFIG_OUTPUT = [
     {
@@ -178,3 +182,43 @@ def test_read_source_config_given_valid_remote_files_expects_correct_config_outp
 ) -> None:
     actual = read_source_config(urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), href))
     assert actual == CONFIG_OUTPUT
+
+
+SINGLE_POINT_ITEM = pystac.Item(
+    id="point_item",
+    geometry=shapely.Point(150.5471916, -24.33986861),
+    bbox=[150.5471916, -24.34031206, 150.5505183, -24.33986861],
+    start_datetime=datetime.datetime(2016, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+    end_datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+    datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+    properties={},
+)
+MULTIPOINTS_ITEM = pystac.Item(
+    id="points_item",
+    geometry=shapely.MultiPoint([[150.5571916, -24.34986861], [150.5515183, -24.34131206]]),
+    bbox=[150.5515183, -24.34986861, 150.5571916, -24.34131206],
+    start_datetime=datetime.datetime(2016, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
+    end_datetime=datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
+    datetime=datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
+    properties={},
+)
+
+EXP_SPATIAL_EXTENT = pystac.SpatialExtent([150.5471916, -24.34986861, 150.5571916, -24.33986861])
+EXP_TEMPORAL_EXTENT = pystac.TemporalExtent(
+    [
+        [
+            datetime.datetime(2016, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+            datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
+        ]
+    ]
+)
+
+
+def test_extract_spatial_extent() -> None:
+    actual = extract_spatial_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
+    assert actual.bboxes == EXP_SPATIAL_EXTENT.bboxes
+
+
+def test_extract_temporal_extent() -> None:
+    actual = extract_temporal_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
+    assert actual.intervals == EXP_TEMPORAL_EXTENT.intervals
