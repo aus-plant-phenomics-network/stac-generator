@@ -54,8 +54,6 @@ class CsvExtension(BaseModel):
     """Column to be treated as time coordinate"""
     column_info: list[str] | list[ColumnInfo] | None = None
     """Description of attributes collected from the csv"""
-    groupby: list[str] | None = None
-    """Columns used to sub-divide points in the csv into groups"""
     date_format: str = "ISO8601"
     """Format to parse dates - will be used if T column is provided"""
 
