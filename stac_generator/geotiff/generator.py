@@ -13,7 +13,7 @@ from stac_generator.geotiff.utils import EoBands, get_metadata_from_geotiff
 class GeoTiffGenerator(ItemGenerator[GeoTiffConfig]):
     """Stac generator for drone data."""
 
-    def create_item_from_config(self, source_cfg: GeoTiffConfig) -> list[pystac.Item]:
+    def create_item_from_config(self, source_cfg: GeoTiffConfig) -> pystac.Item:
         metadata = get_metadata_from_geotiff(source_cfg.location)
         data_type = DataType(metadata.dtype)
         bbox = [metadata.bounds[0], metadata.bounds[1], metadata.bounds[2], metadata.bounds[3]]
@@ -138,4 +138,4 @@ class GeoTiffGenerator(ItemGenerator[GeoTiffConfig]):
         eo_ext_on_item.apply(bands=all_eo_bands, cloud_cover=0.0, snow_cover=0.0)
         eo_ext_on_asset.apply(bands=all_eo_bands)
         raster_ext_on_asset.apply(bands=all_raster_bands)
-        return [item]
+        return item

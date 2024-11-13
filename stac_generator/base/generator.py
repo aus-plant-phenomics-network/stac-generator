@@ -86,7 +86,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
         self.configs = [self.source_type(**config) for config in configs]
 
     @abc.abstractmethod
-    def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
+    def create_item_from_config(self, source_cfg: T) -> pystac.Item:
         """Abstract method that handles `pystac.Item` generation from the appropriate config"""
         raise NotImplementedError
 
@@ -98,7 +98,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
         """
         items = []
         for config in self.configs:
-            items.extend(self.create_item_from_config(config))
+            items.append(self.create_item_from_config(config))
         return items
 
 

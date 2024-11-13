@@ -1,8 +1,6 @@
 import datetime as pydatetime
 import json
-from collections.abc import Sequence
-from itertools import chain
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import geopandas as gpd
 import pandas as pd
@@ -12,6 +10,9 @@ from shapely import MultiPoint, Point, to_geojson
 
 from stac_generator._types import TimeExtentT
 from stac_generator.csv.schema import ColumnInfo
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
 def read_csv(
@@ -141,49 +142,9 @@ def calculate_geometry(
     return MultiPoint([[p.x, p.y] for p in points])
 
 
-def group_df(
-    df: gpd.GeoDataFrame,
-    prefix: str,
-    groupby: Sequence[str] | None = None,
-) -> dict[str, gpd.GeoDataFrame]:
-    """Partition dataframe into sub-dataframes based on fields in `groupby`.
-    Each partition will be assigned an item name obtained from the collection name and field values.
-
-    For example, if the collection name is `point_data` and `groupby = ["sites"]` with values being `["A", "B"]`,
-    the resulting item names will be `point_data_site_A_item` and `point_data_site_B_item`.
-
-    If `groupby` is not provided, return a single collection item which is the full dataframe.
-
-    :param df: Source dataframe.
-    :type df: gpd.GeoDataFrame
-
-    :param prefix: Prefix for each item ID.
-    :type prefix: str
-
-    :param groupby: Fields to partition the dataframe. Must be present in the original dataframe.
-    :type groupby: Sequence[str] | None, optional
-
-    :return: Mapping of group name to sub-dataframe.
-    :rtype: dict[str, gpd.GeoDataFrame]
-    """
-    if not groupby:
-        item_name = prefix
-        return {item_name: df}
-    partition_df = df.groupby(groupby).apply(lambda group: group.drop_duplicates())  # type: ignore[call-overload]
-    partition_df = partition_df.reset_index(level=-1, drop=True)
-    df_group = {}
-    for i in range(len(partition_df)):
-        idx = (
-            partition_df.index[i] if len(groupby) != 1 else [partition_df.index[i]]
-        )  # If groupby has one single item, convert idx to list of 1
-        group_name = "_".join([str(item) for item in chain(*zip(groupby, idx, strict=True))])
-        item_name = f"{prefix}_{group_name}"
-        df_group[item_name] = partition_df.loc[idx, :].reset_index(drop=True)
-    return df_group
-
-
-def items_from_group_df(
-    group_df: dict[str, gpd.GeoDataFrame],
+def df_to_item(
+    item_id: str,
+    item_df: gpd.GeoDataFrame,
     asset: pystac.Asset,
     epsg: int,
     T: str | None = None,
@@ -191,15 +152,14 @@ def items_from_group_df(
     start_datetime: pydatetime.datetime | None = None,
     end_datetime: pydatetime.datetime | None = None,
     properties: dict[str, Any] | None = None,
-) -> list[pystac.Item]:
-    """Extract `shapely.Point` data from partitioned dataframe maps.
+) -> pystac.Item:
+    """This function takes a df to generate
+    a pystac.Item based on information from the dataframe.
 
-    This function takes a group_df - i.e. dictionary of point group name and their
-    dataframe (as obtained from `stac_generator.csv.utils.group_df` method) to generate
-    a list of pystac.Item based on information from the dataframe.
-
-    :param group_df: dictionary of point group and their source csv
-    :type group_df: dict[str, gpd.GeoDataFrame]
+    :param item_id: id of item
+    :type item_id: str
+    :param item_df: point data in csv
+    :type item_df: gpd.GeoDataFrame
     :param asset: source data asset
     :type asset: pystac.Asset
     :param epsg: epsg code of the source dataframe
@@ -218,27 +178,24 @@ def items_from_group_df(
     :rtype: list[pystac.Item]
     """
     _properties = properties if properties else {}
-    assets = {"source": asset}
-    items = []
-    for item_id, item_df in group_df.items():
-        _start_datetime, _end_datetime = calculate_temporal_extent(
-            item_df, T, datetime, start_datetime, end_datetime
-        )
-        _start_datetime = _start_datetime if _start_datetime is not None else start_datetime
-        _end_datetime = _end_datetime if _end_datetime is not None else end_datetime
-        _datetime = datetime if datetime else _end_datetime
-        _geometry = json.loads(to_geojson(calculate_geometry(item_df)))
-        item = pystac.Item(
-            item_id,
-            bbox=item_df.total_bounds.tolist(),
-            geometry=_geometry,
-            datetime=_datetime,
-            start_datetime=_start_datetime,
-            end_datetime=_end_datetime,
-            properties=_properties,
-            assets=assets,
-        )
-        proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
-        proj_ext.apply(epsg=epsg)
-        items.append(item)
-    return items
+    assets = {"data": asset}
+    _start_datetime, _end_datetime = calculate_temporal_extent(
+        item_df, T, datetime, start_datetime, end_datetime
+    )
+    _start_datetime = _start_datetime if _start_datetime is not None else start_datetime
+    _end_datetime = _end_datetime if _end_datetime is not None else end_datetime
+    _datetime = datetime if datetime else _end_datetime
+    _geometry = json.loads(to_geojson(calculate_geometry(item_df)))
+    item = pystac.Item(
+        item_id,
+        bbox=item_df.total_bounds.tolist(),
+        geometry=_geometry,
+        datetime=_datetime,
+        start_datetime=_start_datetime,
+        end_datetime=_end_datetime,
+        properties=_properties,
+        assets=assets,
+    )
+    proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
+    proj_ext.apply(epsg=epsg)
+    return item
