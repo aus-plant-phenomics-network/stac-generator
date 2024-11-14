@@ -51,7 +51,7 @@ class StacCollectionConfig(StacCommonMetadata):
     # Stac Information
     id: str
     """Collection id"""
-    title: str
+    title: str = "Auto-generated"
     """Collection title"""
     description: str = "Auto-generated Stac Collection"
     """Collection description"""

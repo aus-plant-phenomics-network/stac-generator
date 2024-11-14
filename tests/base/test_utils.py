@@ -190,6 +190,13 @@ SINGLE_POINT_ITEM = pystac.Item(
     datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
     properties={},
 )
+SINGLE_POINT_ITEM_NO_START_END_DATETIME = pystac.Item(
+    id="point_item",
+    geometry=shapely.Point(150.5471916, -24.33986861),
+    bbox=[150.5471916, -24.34031206, 150.5505183, -24.33986861],
+    datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+    properties={},
+)
 MULTIPOINTS_ITEM = pystac.Item(
     id="points_item",
     geometry=shapely.MultiPoint([[150.5571916, -24.34986861], [150.5515183, -24.34131206]]),
@@ -209,6 +216,14 @@ EXP_TEMPORAL_EXTENT = pystac.TemporalExtent(
         ]
     ]
 )
+EXP_TEMPORAL_EXTENT_NO_START_END = pystac.TemporalExtent(
+    [
+        [
+            datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+            datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+        ]
+    ]
+)
 
 
 def test_extract_spatial_extent() -> None:
@@ -216,6 +231,11 @@ def test_extract_spatial_extent() -> None:
     assert actual.bboxes == EXP_SPATIAL_EXTENT.bboxes
 
 
-def test_extract_temporal_extent() -> None:
+def test_extract_temporal_extent_given_start_end_datetime_expect_datetime_range() -> None:
     actual = extract_temporal_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
     assert actual.intervals == EXP_TEMPORAL_EXTENT.intervals
+
+
+def test_extract_temporal_extent_given_datetime_expect_range_to_be_datetime() -> None:
+    actual = extract_temporal_extent([SINGLE_POINT_ITEM_NO_START_END_DATETIME])
+    assert actual.intervals == EXP_TEMPORAL_EXTENT_NO_START_END.intervals
