@@ -13,6 +13,9 @@ on:
           type: string
           default: "ubuntu-latest"
 
+env:
+  REMOTE_FIXTURE_URL: "https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/TestData/"
+
 jobs:
     test:
       runs-on: ${{inputs.os}}
@@ -43,8 +46,7 @@ jobs:
         - name: Test with pytest
           run: pdm run pytest tests --cov=src --cov-report=xml --cov-fail-under=0
 
-          env:
-            REMOTE_FIXTURE_URL: ${{ vars.REMOTE_FIXTURE_URL}}
+
 
         - name: Rename coverage file
           if: inputs.do-coverage
