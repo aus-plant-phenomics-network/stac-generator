@@ -44,7 +44,7 @@ jobs:
           run: pdm run pytest tests --cov=src --cov-report=xml --cov-fail-under=0
 
           env:
-            REMOTE_FIXTURE_URL: ${{ secrets.REMOTE_FIXTURE_URL}}
+            REMOTE_FIXTURE_URL: ${{ vars.REMOTE_FIXTURE_URL}}
 
         - name: Rename coverage file
           if: inputs.do-coverage
