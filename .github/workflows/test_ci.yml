@@ -19,7 +19,7 @@ env:
 jobs:
     test:
       runs-on: ${{inputs.os}}
-      environment: BasicEnv
+      environment: test_environment
       defaults:
         run:
           shell: bash
