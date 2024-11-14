@@ -26,8 +26,8 @@ jobs:
       steps:
         - name: Checkout repository
           uses: actions/checkout@v4
-        
-        - name: Check environment accessiable 
+
+        - name: Check environment accessiable
           run: echo $REMOTE_FIXTURE_URL
 
         - name: Set up Python ${{ inputs.python-version }}
