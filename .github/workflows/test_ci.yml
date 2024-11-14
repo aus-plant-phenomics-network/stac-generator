@@ -14,7 +14,7 @@ on:
           default: "ubuntu-latest"
 
 env:
-  REMOTE_FIXTURE_URL: $${ vars.REMOTE_FIXTURE_URL}
+  REMOTE_FIXTURE_URL: ${{vars.REMOTE_FIXTURE_URL}}
 
 jobs:
     test:
