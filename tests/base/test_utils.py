@@ -173,9 +173,6 @@ def test_read_source_config_given_valid_local_files_expects_correct_config_outpu
     assert actual == CONFIG_OUTPUT
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize("href", VALID_NETWORKED_CONFIG_FILES)
 def test_read_source_config_given_valid_remote_files_expects_correct_config_output(
     href: str,

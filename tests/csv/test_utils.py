@@ -76,9 +76,6 @@ START_DATE_DUMMY = pydatetime.datetime(2011, 1, 1, 12, 4, 5, tzinfo=pydatetime.U
 END_DATE_DUMMY = pydatetime.datetime(2011, 2, 1, 12, 4, 5, tzinfo=pydatetime.UTC)
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.fixture(scope="module")
 def multipoint_with_date_df() -> gpd.GeoDataFrame:
     return read_csv(
@@ -91,9 +88,6 @@ def multipoint_with_date_df() -> gpd.GeoDataFrame:
     )
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.fixture(scope="module")
 def multipoint_no_date_df() -> gpd.GeoDataFrame:
     return read_csv(
@@ -101,9 +95,6 @@ def multipoint_no_date_df() -> gpd.GeoDataFrame:
     )
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.fixture(scope="module")
 def single_point_with_date_df() -> gpd.GeoDataFrame:
     return read_csv(
@@ -116,9 +107,6 @@ def single_point_with_date_df() -> gpd.GeoDataFrame:
     )
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.fixture(scope="module")
 def single_point_no_date_df() -> gpd.GeoDataFrame:
     return read_csv(
@@ -126,9 +114,6 @@ def single_point_no_date_df() -> gpd.GeoDataFrame:
     )
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 def test_read_csv_given_no_args_read_all_columns() -> None:
     df = read_csv(
         urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_WITH_DATE), X, Y, epsg=EPSG
@@ -137,9 +122,6 @@ def test_read_csv_given_no_args_read_all_columns() -> None:
     assert set(df.columns) == expected
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "z_col, t_col, columns",
     [
@@ -172,9 +154,6 @@ def test_read_csv_given_selected_columns_read_selected_columns(
     assert set(df.columns) == expected_columns
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "datetime, start_datetime, end_datetime",
     [
@@ -199,9 +178,6 @@ def test_calculate_temporal_extent_given_single_point_with_date_always_return_df
     assert actual == expected
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "datetime, start_datetime, end_datetime",
     [
@@ -226,9 +202,6 @@ def test_calculate_temporal_extent_given_multiple_points_with_date_always_return
     assert actual == expected
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "datetime, start_datetime, end_datetime, expected",
     [
@@ -250,9 +223,6 @@ def test_calculate_temporal_extent_given_single_point_no_date_return_date_argume
     assert actual == expected
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "datetime, start_datetime, end_datetime, expected",
     [
@@ -274,9 +244,6 @@ def test_calculate_temporal_extent_given_multipoint_no_date_return_date_argument
     assert actual == expected
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "source_cfg, exp_datetime, exp_start_datetime, exp_end_datetime",
     [
@@ -324,9 +291,6 @@ def test_df_to_item_single_point_with_date_given_no_config_date_column_expect_da
     assert item.geometry == SINGLE_POINT_GEOMETRY
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "source_cfg, exp_datetime, exp_start_datetime, exp_end_datetime",
     [
@@ -374,9 +338,6 @@ def test_df_to_item_single_point_no_date(
     assert item.geometry == SINGLE_POINT_GEOMETRY
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "source_cfg",
     [
@@ -413,9 +374,6 @@ def test_df_to_item_single_point_given_config_with_date_column_expect_date_from_
     assert item.geometry == SINGLE_POINT_GEOMETRY
 
 
-@pytest.mark.skipif(
-    REMOTE_FIXTURE_URL is None, reason="REMOTE_FIXTURE_URL environment variable unset"
-)
 @pytest.mark.parametrize(
     "source_cfg",
     [
