@@ -164,5 +164,8 @@ cython_debug/
 .idea/
 .ruff_cache/
 
-tests/stac/
 .pdm-python
+.env
+.vscode
+.vscode/
+.vscode/settings.json
