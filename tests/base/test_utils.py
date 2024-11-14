@@ -27,8 +27,8 @@ VALID_CONFIG_FILES = [
 ]
 
 VALID_NETWORKED_CONFIG_FILES = [
-    "unit_tests/valid_yaml_config.yaml",
-    "unit_tests/valid_json_config.json",
+    "unit_tests/config_test/valid_yaml_config.yaml",
+    "unit_tests/config_test/valid_json_config.json",
 ]
 
 CONFIG_OUTPUT = [

@@ -4,6 +4,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 import geopandas as gpd
+import numpy as np
 import pandas as pd
 import pystac
 from pystac.extensions.projection import ItemProjectionExtension
@@ -73,7 +74,7 @@ def read_csv(
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
 
 
-def _calculate_temporal_extent(
+def calculate_temporal_extent(
     df: gpd.GeoDataFrame | None = None,
     time_col: str | None = None,
     datetime: pydatetime.datetime | None = None,
@@ -107,7 +108,7 @@ def _calculate_temporal_extent(
     if df is not None and isinstance(time_col, str):
         if time_col not in df.columns:
             raise KeyError(f"Cannot find time_col: {time_col} in given dataframe")
-        if not isinstance(df[time_col].dtype, pydatetime.datetime):
+        if not np.issubdtype(df[time_col].dtype, np.datetime64):
             raise ValueError(
                 f"Dtype of time_col: {time_col} must be of datetime type: {df[time_col].dtype}"
             )
@@ -162,7 +163,7 @@ def df_to_item(
     :return: generated pystac.Item
     :rtype: pystac.Item
     """
-    start_datetime, end_datetime = _calculate_temporal_extent(
+    start_datetime, end_datetime = calculate_temporal_extent(
         df,
         source_cfg.T,
         source_cfg.datetime,
