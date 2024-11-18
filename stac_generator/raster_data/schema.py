@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, List, Optional
 import json
+from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
+
 from stac_generator.base.schema import SourceConfig
 
 
@@ -12,9 +13,9 @@ class BandInfo(BaseModel):
     """Band information for raster data"""
 
     name: str
-    wavelength: Optional[float] = Field(default=None)  # Can be float or None
-    nodata: Optional[float] = Field(default=0)  # Default nodata value
-    data_type: Optional[str] = Field(default="uint16")  # Default data type for raster band
+    wavelength: float | None = Field(default=None)  # Can be float or None
+    nodata: float | None = Field(default=0)  # Default nodata value
+    data_type: str | None = Field(default="uint16")  # Default data type for raster band
 
     @model_validator(mode="before")
     @classmethod
@@ -34,11 +35,11 @@ class RasterSourceConfig(SourceConfig):
     """EPSG code for the raster's coordinate reference system"""
     collection_date: str  # Changed to str to handle the input format
     collection_time: str  # Changed to str to handle the input format
-    bands: List[BandInfo]
+    bands: list[BandInfo]
     """List of band information"""
-    transform: Optional[List[float]] = Field(default=None)
+    transform: list[float] | None = Field(default=None)
     """Affine transform of the raster"""
-    shape: Optional[List[int]] = Field(default=None)
+    shape: list[int] | None = Field(default=None)
     """Shape of the raster as [height, width]"""
 
     @classmethod

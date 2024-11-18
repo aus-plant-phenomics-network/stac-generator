@@ -4,8 +4,8 @@ from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from stac_generator.csv.generator import CsvGenerator
 from stac_generator.geotiff.generator import GeoTiffGenerator
-from stac_generator.vector_polygon.generator import VectorPolygonGenerator
 from stac_generator.raster_data.generator import RasterGenerator
+from stac_generator.vector_polygon.generator import VectorPolygonGenerator
 
 
 class StacGeneratorFactory:

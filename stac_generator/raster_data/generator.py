@@ -1,23 +1,22 @@
-import rasterio
+import csv
+import logging
+
 import pandas as pd
 import pystac
-from pystac.extensions.eo import EOExtension, Band
+import rasterio
+from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.projection import ProjectionExtension
-from pystac.extensions.raster import AssetRasterExtension, RasterBand, DataType
-from shapely.geometry import mapping
-from typing import List, Dict
-import logging
-import csv
+from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely.geometry import Polygon, mapping
 
 from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
-from .schema import RasterSourceConfig
 
+from .schema import RasterSourceConfig
 
 # In case the config file has different names for bands
 # (lowercase/uppercase/space in between etc)
-BAND_MAPPING: Dict[str, str] = {
+BAND_MAPPING: dict[str, str] = {
     "red": "red",
     "green": "green",
     "blue": "blue",
@@ -48,7 +47,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
             href=href,
         )
 
-    def create_item_from_config(self, source_cfg: RasterSourceConfig) -> List[pystac.Item]:
+    def create_item_from_config(self, source_cfg: RasterSourceConfig) -> list[pystac.Item]:
         logging.info(f"Processing raster from: {source_cfg.location}")
 
         try:
