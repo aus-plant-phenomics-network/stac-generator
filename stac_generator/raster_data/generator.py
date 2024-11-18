@@ -1,7 +1,7 @@
 import csv
 import json
 import logging
-from datetime import UTC, datetime
+from datetime import UTC
 from typing import Any
 
 import pandas as pd
@@ -90,18 +90,14 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 )
                 geometry_geojson = mapping(geometry)
 
-                if isinstance(source_cfg.datetime, str):
-                    datetime_aware = datetime.strptime(
-                        source_cfg.datetime, "%Y-%m-%dT%H:%M:%S"
-                    ).replace(tzinfo=UTC)
-                elif isinstance(source_cfg.datetime, datetime):
-                    datetime_aware = (
-                        source_cfg.datetime
-                        if source_cfg.datetime.tzinfo
-                        else source_cfg.datetime.replace(tzinfo=UTC)
-                    )
+                if source_cfg.datetime is None:
+                    raise ValueError("source_cfg.datetime cannot be None")
+
+                # Ensure datetime is timezone-aware
+                if source_cfg.datetime.tzinfo is None:
+                    datetime_aware = source_cfg.datetime.replace(tzinfo=UTC)
                 else:
-                    raise ValueError("Invalid datetime format: %s", source_cfg.datetime)
+                    datetime_aware = source_cfg.datetime
 
                 # Create STAC Item
                 item = pystac.Item(
@@ -169,7 +165,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
 
     @classmethod
     def from_csv(
-        cls, csv_path: str, collection_cfg: StacCollectionConfig, **kwargs
+        cls: type[StacGenerator], csv_path: str, collection_cfg: StacCollectionConfig, **kwargs: Any
     ) -> StacGenerator:
         df = pd.read_csv(csv_path, quoting=csv.QUOTE_MINIMAL)
         return cls(df, collection_cfg, **kwargs)
