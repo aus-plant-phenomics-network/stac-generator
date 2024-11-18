@@ -41,7 +41,6 @@ class RasterSourceConfig(SourceConfig):
     shape: Optional[List[int]] = Field(default=None)
     """Shape of the raster as [height, width]"""
 
-    @model_validator(mode="before")
     @classmethod
     def parse_fields(cls, data: Any) -> Any:
         """Parse all fields that need preprocessing"""
