@@ -135,7 +135,9 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                     )
                     eo_bands.append(eo_band)
 
-                    raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
+                    raster_band = RasterBand.create(
+                        nodata=band_info.nodata or 0, data_type=DataType(band_info.data_type or "uint16")
+                    )
                     raster_bands.append(raster_band)
 
                 item.properties["eo:bands"] = [band.to_dict() for band in eo_bands]
@@ -165,6 +167,6 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
             raise RuntimeError("Failed to process raster file") from e
 
     @classmethod
-    def from_csv(cls, csv_path: str, collection_cfg: StacCollectionConfig, **kwargs):
+    def from_csv(cls, csv_path: str, collection_cfg: StacCollectionConfig, **kwargs) -> StacGenerator:
         df = pd.read_csv(csv_path, quoting=csv.QUOTE_MINIMAL)
         return cls(df, collection_cfg, **kwargs)
