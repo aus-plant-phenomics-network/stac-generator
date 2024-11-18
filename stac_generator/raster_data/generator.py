@@ -124,13 +124,6 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 # Add eo:bands to Asset
                 asset.extra_fields["eo:bands"] = [band.to_dict() for band in eo_bands]
 
-                # Add STAC Extensions
-                item.stac_extensions = [
-                    "https://stac-extensions.github.io/projection/v1.1.0/schema.json",
-                    "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
-                    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
-                ]
-
                 # Validate the Item
                 item.validate()
                 return [item]

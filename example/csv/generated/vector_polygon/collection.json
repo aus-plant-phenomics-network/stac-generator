@@ -12,12 +12,12 @@
     },
     {
       "rel": "item",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_item/vector_polygon_item.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_geojson/vector_polygon_geojson.json",
       "type": "application/json"
     },
     {
       "rel": "item",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_item/vector_polygon_item.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_zip/vector_polygon_zip.json",
       "type": "application/json"
     },
     {
@@ -47,8 +47,8 @@
     "temporal": {
       "interval": [
         [
-          "2024-10-23T02:39:26.880764Z",
-          "2024-10-23T02:39:26.880764Z"
+          "2024-11-18T09:23:27.200248Z",
+          "2024-11-18T09:23:27.200248Z"
         ]
       ]
     }
