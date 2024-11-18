@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
@@ -42,6 +42,7 @@ class RasterSourceConfig(SourceConfig):
     shape: list[int] | None = Field(default=None)
     """Shape of the raster as [height, width]"""
 
+    @model_validator(mode="before")
     @classmethod
     def parse_fields(cls, data: Any) -> Any:
         """Parse all fields that need preprocessing"""
@@ -49,39 +50,40 @@ class RasterSourceConfig(SourceConfig):
             # Parse bands if it's a string
             if isinstance(data.get("bands"), str):
                 try:
-                    # Remove any single quotes and replace with double quotes for valid JSON
-                    bands_str = data["bands"].replace("'", '"')
-                    data["bands"] = json.loads(bands_str)
+                    data["bands"] = json.loads(data["bands"])
                 except json.JSONDecodeError as e:
-                    raise ValueError(f"Invalid bands JSON: {e}")
+                    raise ValueError(f"Invalid bands JSON: {e}") from e
 
             # Ensure each band is properly formatted
             if isinstance(data.get("bands"), list):
-                processed_bands = []
-                for band in data["bands"]:
-                    if isinstance(band, str):
-                        # Handle case where band might be a string
-                        processed_bands.append({"name": band, "wavelength": None})
-                    elif isinstance(band, dict):
-                        # Keep dictionary format
-                        processed_bands.append(band)
-                data["bands"] = processed_bands
-
+                data["bands"] = [
+                    {"name": band, "wavelength": None} if isinstance(band, str) else band
+                    for band in data["bands"]
+                ]
         return data
 
     @model_validator(mode="after")
     def set_datetime_from_collection(self) -> RasterSourceConfig:
         """Set datetime fields based on collection date and time"""
         try:
-            # Parse the date string
-            collection_date = datetime.strptime(self.collection_date, "%Y-%m-%d").date()
-            # Parse the time string
-            collection_time = datetime.strptime(
-                self.collection_time.replace("Z", "+00:00"), "%H:%M:%S%z"
-            ).time()
+            # Parse the date string as timezone-aware
+            collection_date = datetime.strptime(self.collection_date, "%Y-%m-%d").replace(
+                tzinfo=UTC
+            )
 
-            # Combine date and time
-            collection_datetime = datetime.combine(collection_date, collection_time)
+            # Handle trailing 'Z' in time string and ensure timezone-awareness
+            collection_time_str = self.collection_time.strip()
+            if collection_time_str.endswith("Z"):
+                collection_time = datetime.strptime(collection_time_str, "%H:%M:%SZ").replace(
+                    tzinfo=UTC
+                )
+            else:
+                collection_time = datetime.strptime(collection_time_str, "%H:%M:%S").replace(
+                    tzinfo=UTC
+                )
+
+            # Combine date and time into a single timezone-aware datetime object
+            collection_datetime = datetime.combine(collection_date.date(), collection_time.timetz())
 
             # Set the datetime fields
             self.datetime = collection_datetime
@@ -89,7 +91,7 @@ class RasterSourceConfig(SourceConfig):
             self.end_datetime = collection_datetime
 
         except ValueError as e:
-            raise ValueError(f"Error parsing date/time: {e}")
+            raise ValueError(f"Error parsing date/time: {e}") from e
 
         return self
 
