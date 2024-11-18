@@ -1,5 +1,7 @@
 import csv
 import logging
+from typing import Any
+import json
 
 import pandas as pd
 import pystac
@@ -8,14 +10,13 @@ from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.projection import ProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely.geometry import Polygon, mapping
+from datetime import datetime, timezone
 
 from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
-
 from .schema import RasterSourceConfig
 
 # In case the config file has different names for bands
-# (lowercase/uppercase/space in between etc)
 BAND_MAPPING: dict[str, str] = {
     "red": "red",
     "green": "green",
@@ -37,9 +38,26 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
         catalog_cfg: StacCatalogConfig | None = None,
         href: str | None = None,
     ) -> None:
+        # Reset the DataFrame index
         source_df = source_df.reset_index(drop=True)
+        
+        # Ensure the EPSG column is properly formatted
         if "epsg" in source_df.columns:
             source_df["epsg"] = source_df["epsg"].astype(int)
+        
+        # Parse the 'bands' column into a list if it is a JSON-encoded string
+        if "bands" in source_df.columns:
+            def parse_bands(bands: Any) -> Any:
+                if isinstance(bands, str):
+                    try:
+                        return json.loads(bands)
+                    except json.JSONDecodeError as e:
+                        raise ValueError(f"Error parsing 'bands': {bands}") from e
+                return bands
+            
+            source_df["bands"] = source_df["bands"].apply(parse_bands)
+        
+        # Pass the modified DataFrame to the base class
         super().__init__(
             source_df=source_df,
             collection_cfg=collection_cfg,
@@ -47,8 +65,9 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
             href=href,
         )
 
+
     def create_item_from_config(self, source_cfg: RasterSourceConfig) -> list[pystac.Item]:
-        logging.info(f"Processing raster from: {source_cfg.location}")
+        logging.info("Processing raster from: %s", source_cfg.location)
 
         try:
             with rasterio.open(source_cfg.location) as src:
@@ -70,12 +89,19 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 )
                 geometry_geojson = mapping(geometry)
 
+                if isinstance(source_cfg.datetime, str):
+                    datetime_aware = datetime.strptime(source_cfg.datetime, "%Y-%m-%dT%H:%M:%S").replace(tzinfo=timezone.utc)
+                elif isinstance(source_cfg.datetime, datetime):
+                    datetime_aware = source_cfg.datetime if source_cfg.datetime.tzinfo else source_cfg.datetime.replace(tzinfo=timezone.utc)
+                else:
+                    raise ValueError(f"Invalid datetime format: {source_cfg.datetime}")
+
                 # Create STAC Item
                 item = pystac.Item(
                     id=source_cfg.prefix,
                     geometry=geometry_geojson,
                     bbox=bbox,
-                    datetime=source_cfg.datetime,
+                    datetime=datetime_aware,
                     properties={
                         "eo:snow_cover": 0,
                         "eo:cloud_cover": 0,
@@ -128,8 +154,8 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 return [item]
 
         except Exception as e:
-            logging.error(f"Error processing raster file: {e}")
-            raise
+            logging.error("Error processing raster file %s: %s", source_cfg.location, e)
+            raise RuntimeError("Failed to process raster file") from e
 
     @classmethod
     def from_csv(cls, csv_path: str, collection_cfg: StacCollectionConfig, **kwargs):
