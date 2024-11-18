@@ -8,12 +8,9 @@ import pytest
 from pystac.utils import datetime_to_str
 
 from stac_generator._types import CsvMediaType
+from stac_generator.base.generator import VectorGenerator
+from stac_generator.csv.generator import read_csv
 from stac_generator.csv.schema import CsvConfig
-from stac_generator.csv.utils import (
-    calculate_temporal_extent,
-    df_to_item,
-    read_csv,
-)
 from tests import REMOTE_FIXTURE_URL
 
 ALL_COLUMNS = {
@@ -63,12 +60,12 @@ SINGLE_POINT_NO_DATE_ASSET = pystac.Asset(
 
 SINGLE_POINT_GEOMETRY = {"type": "Point", "coordinates": [-34.9524, 138.5196]}
 MULTIPOINT_GEOMETRY = {
-    "type": "MultiPoint",
-    "coordinates": [
-        [-34.9524, 138.5196],
-        [-34.9624, 138.5296],
-        [-34.9724, 138.5396],
-        [-34.9824, 138.5496],
+    "type": "GeometryCollection",
+    "geometries": [
+        {"type": "Point", "coordinates": [-34.9524, 138.5196]},
+        {"type": "Point", "coordinates": [-34.9624, 138.5296]},
+        {"type": "Point", "coordinates": [-34.9724, 138.5396]},
+        {"type": "Point", "coordinates": [-34.9824, 138.5496]},
     ],
 }
 
@@ -168,7 +165,7 @@ def test_calculate_temporal_extent_given_single_point_with_date_always_return_df
     end_datetime: pydatetime.datetime | None,
     single_point_with_date_df: gpd.GeoDataFrame,
 ) -> None:
-    actual = calculate_temporal_extent(
+    actual = VectorGenerator.temporal_extent(
         single_point_with_date_df, T, datetime, start_datetime, end_datetime
     )
     expected = (
@@ -192,7 +189,7 @@ def test_calculate_temporal_extent_given_multiple_points_with_date_always_return
     end_datetime: pydatetime.datetime | None,
     multipoint_with_date_df: gpd.GeoDataFrame,
 ) -> None:
-    actual = calculate_temporal_extent(
+    actual = VectorGenerator.temporal_extent(
         multipoint_with_date_df, T, datetime, start_datetime, end_datetime
     )
     expected = (
@@ -217,7 +214,7 @@ def test_calculate_temporal_extent_given_single_point_no_date_return_date_argume
     expected: tuple[pydatetime.datetime, pydatetime.datetime],
     single_point_no_date_df: gpd.GeoDataFrame,
 ) -> None:
-    actual = calculate_temporal_extent(
+    actual = VectorGenerator.temporal_extent(
         single_point_no_date_df, None, datetime, start_datetime, end_datetime
     )
     assert actual == expected
@@ -238,7 +235,7 @@ def test_calculate_temporal_extent_given_multipoint_no_date_return_date_argument
     expected: tuple[pydatetime.datetime, pydatetime.datetime],
     multipoint_no_date_df: gpd.GeoDataFrame,
 ) -> None:
-    actual = calculate_temporal_extent(
+    actual = VectorGenerator.temporal_extent(
         multipoint_no_date_df, None, datetime, start_datetime, end_datetime
     )
     assert actual == expected
@@ -277,11 +274,13 @@ def test_df_to_item_single_point_with_date_given_no_config_date_column_expect_da
     exp_end_datetime: pydatetime.datetime,
     single_point_with_date_df: gpd.GeoDataFrame,
 ) -> None:
-    item = df_to_item(
+    item = VectorGenerator.df_to_item(
         single_point_with_date_df,
         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
         source_cfg=source_cfg,
         properties={},
+        time_col=source_cfg.T,
+        epsg=source_cfg.epsg,
     )
     assert item.id == source_cfg.id
     assert item.datetime == exp_datetime
@@ -324,11 +323,13 @@ def test_df_to_item_single_point_no_date(
     exp_end_datetime: pydatetime.datetime,
     single_point_no_date_df: gpd.GeoDataFrame,
 ) -> None:
-    item = df_to_item(
+    item = VectorGenerator.df_to_item(
         single_point_no_date_df,
         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
         source_cfg=source_cfg,
         properties={},
+        time_col=source_cfg.T,
+        epsg=source_cfg.epsg,
     )
     assert item.id == source_cfg.id
     assert item.datetime == exp_datetime
@@ -359,13 +360,15 @@ def test_df_to_item_single_point_given_config_with_date_column_expect_date_from_
     source_cfg: CsvConfig,
     single_point_with_date_df: gpd.GeoDataFrame,
 ) -> None:
-    item = df_to_item(
+    item = VectorGenerator.df_to_item(
         single_point_with_date_df,
         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
         source_cfg=source_cfg,
         properties={},
+        time_col=source_cfg.T,
+        epsg=source_cfg.epsg,
     )
-    min_date, max_date = calculate_temporal_extent(single_point_with_date_df, T)
+    min_date, max_date = VectorGenerator.temporal_extent(single_point_with_date_df, T)
     assert item.id == source_cfg.id
     assert item.datetime == max_date
     assert item.properties["start_datetime"] == datetime_to_str(cast(pydatetime.datetime, min_date))
@@ -395,13 +398,15 @@ def test_df_to_item_multipoint_with_date_given_config_with_date_column_expect_da
     source_cfg: CsvConfig,
     multipoint_with_date_df: gpd.GeoDataFrame,
 ) -> None:
-    item = df_to_item(
+    item = VectorGenerator.df_to_item(
         multipoint_with_date_df,
         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
         source_cfg=source_cfg,
         properties={},
+        time_col=source_cfg.T,
+        epsg=source_cfg.epsg,
     )
-    min_date, max_date = calculate_temporal_extent(multipoint_with_date_df, T)
+    min_date, max_date = VectorGenerator.temporal_extent(multipoint_with_date_df, T)
     assert item.id == source_cfg.id
     assert item.datetime == max_date
     assert item.properties["start_datetime"] == datetime_to_str(cast(pydatetime.datetime, min_date))

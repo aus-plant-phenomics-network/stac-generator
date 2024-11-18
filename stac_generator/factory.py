@@ -9,10 +9,17 @@ from stac_generator.base import (
 from stac_generator.base.utils import read_source_config
 from stac_generator.csv import CsvGenerator
 from stac_generator.geotiff import GeoTiffGenerator
+from stac_generator.vector import VectorGenerator
 
 EXTENSION_MAP: dict[str, type[ItemGenerator]] = {
     "csv": CsvGenerator,
     "geotiff": GeoTiffGenerator,
+    "tiff": GeoTiffGenerator,
+    "zip": VectorGenerator,
+    "geojson": VectorGenerator,
+    "json": VectorGenerator,
+    "gpkg": VectorGenerator,  # Can also contain raster data. TODO: overhaul interface
+    "shp": VectorGenerator,
 }
 
 

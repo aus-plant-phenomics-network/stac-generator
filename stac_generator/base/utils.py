@@ -1,67 +1,15 @@
-import datetime
 import json
 import logging
 import urllib.parse
-from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, cast
+from typing import Any, cast
 
-import geopandas as gpd
 import httpx
 import pandas as pd
-import pystac
 import yaml
-from pystac.utils import datetime_to_str, str_to_datetime
-from shapely.geometry import shape
-
-if TYPE_CHECKING:
-    from shapely import Geometry
 
 SUPPORTED_URI_SCHEMES = ["http", "https"]
 logger = logging.getLogger(__name__)
-
-
-def extract_spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
-    """Extract spatial extent for a collection from child items
-
-    :param items: Sequence of all `pystac.Item`
-    :type items: Sequence[pystac.Item]
-    :return: spatial extent object
-    :rtype: pystac.SpatialExtent
-    """
-    geometries: list[Geometry] = []
-    for item in items:
-        if (geo := item.geometry) is not None:
-            geometries.append(shape(geo))
-    geo_series = gpd.GeoSeries(data=geometries)
-    bbox = geo_series.total_bounds.tolist()
-    logger.debug(f"collection bbox: {bbox}")
-    return pystac.SpatialExtent(bbox)
-
-
-def extract_temporal_extent(
-    items: Sequence[pystac.Item],
-) -> pystac.TemporalExtent:
-    """Extract spatial extent for a collection from a Sequence of items.
-
-    :param items: Sequence of Items
-    :type items: Sequence[pystac.Item]
-    :return: extracted temporal extent
-    :rtype: pystac.TemporalExtent
-    """
-
-    min_dt = datetime.datetime.now(datetime.UTC)
-    max_dt = datetime.datetime(1, 1, 1, tzinfo=datetime.UTC)
-    for item in items:
-        if "start_datetime" in item.properties and "end_datetime" in item.properties:
-            min_dt = min(min_dt, str_to_datetime(item.properties["start_datetime"]))
-            max_dt = max(max_dt, str_to_datetime(item.properties["end_datetime"]))
-        elif item.datetime is not None:
-            min_dt = min(min_dt, item.datetime)
-            max_dt = max(max_dt, item.datetime)
-    max_dt = max(max_dt, min_dt)
-    logger.debug(f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}")
-    return pystac.TemporalExtent([[min_dt, max_dt]])
 
 
 def parse_href(base_url: str, collection_id: str, item_id: str | None = None) -> str:

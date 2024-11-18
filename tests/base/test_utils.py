@@ -8,9 +8,8 @@ import pytest
 import pytest_httpx
 import shapely
 
+from stac_generator.base.generator import CollectionGenerator
 from stac_generator.base.utils import (
-    extract_spatial_extent,
-    extract_temporal_extent,
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
     parse_href,
@@ -226,16 +225,16 @@ EXP_TEMPORAL_EXTENT_NO_START_END = pystac.TemporalExtent(
 )
 
 
-def test_extract_spatial_extent() -> None:
-    actual = extract_spatial_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
+def test_get_collection_spatial_extent() -> None:
+    actual = CollectionGenerator.spatial_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
     assert actual.bboxes == EXP_SPATIAL_EXTENT.bboxes
 
 
-def test_extract_temporal_extent_given_start_end_datetime_expect_datetime_range() -> None:
-    actual = extract_temporal_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
+def test_get_collection_temporal_extent_given_start_end_datetime_expect_datetime_range() -> None:
+    actual = CollectionGenerator.temporal_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
     assert actual.intervals == EXP_TEMPORAL_EXTENT.intervals
 
 
-def test_extract_temporal_extent_given_datetime_expect_range_to_be_datetime() -> None:
-    actual = extract_temporal_extent([SINGLE_POINT_ITEM_NO_START_END_DATETIME])
+def test_get_collection_temporal_extent_given_datetime_expect_range_to_be_datetime() -> None:
+    actual = CollectionGenerator.temporal_extent([SINGLE_POINT_ITEM_NO_START_END_DATETIME])
     assert actual.intervals == EXP_TEMPORAL_EXTENT_NO_START_END.intervals
