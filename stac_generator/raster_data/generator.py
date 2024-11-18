@@ -1,23 +1,32 @@
 import rasterio
 import pandas as pd
-import pystac, csv
+import pystac
 from pystac.extensions.eo import EOExtension, Band
 from pystac.extensions.projection import ProjectionExtension
+from pystac.extensions.raster import AssetRasterExtension, RasterBand, DataType
+from shapely.geometry import mapping
 from typing import List, Dict
 import logging
+import csv
+from shapely.geometry import Polygon, mapping
 
 from stac_generator.base.generator import StacGenerator
 from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
 from .schema import RasterSourceConfig
 
-# Map raw band names to STAC-compliant common names
+
+# In case the config file has different names for bands
+# (lowercase/uppercase/space in between etc)
 BAND_MAPPING: Dict[str, str] = {
-    'red': 'red',
-    'green': 'green',
-    'blue': 'blue',
-    'nir': 'nir',
-    'rededge': 'rededge'
+    "red": "red",
+    "green": "green",
+    "blue": "blue",
+    "nir": "nir",
+    "rededge": "rededge",
+    "ndvi": "ndvi",
+    "ndvi2": "ndvi2",
 }
+
 
 class RasterGenerator(StacGenerator[RasterSourceConfig]):
     source_type = RasterSourceConfig
@@ -30,8 +39,8 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
         href: str | None = None,
     ) -> None:
         source_df = source_df.reset_index(drop=True)
-        if 'epsg' in source_df.columns:
-            source_df['epsg'] = source_df['epsg'].astype(int)
+        if "epsg" in source_df.columns:
+            source_df["epsg"] = source_df["epsg"].astype(int)
         super().__init__(
             source_df=source_df,
             collection_cfg=collection_cfg,
@@ -41,88 +50,91 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
 
     def create_item_from_config(self, source_cfg: RasterSourceConfig) -> List[pystac.Item]:
         logging.info(f"Processing raster from: {source_cfg.location}")
-        
+
         try:
             with rasterio.open(source_cfg.location) as src:
                 bounds = src.bounds
                 bbox = [bounds.left, bounds.bottom, bounds.right, bounds.top]
                 transform = src.transform
                 crs = src.crs
-                
-                geometry = {
-                    "type": "Polygon",
-                    "coordinates": [[
-                        [bounds.left, bounds.bottom],
-                        [bounds.left, bounds.top],
-                        [bounds.right, bounds.top],
-                        [bounds.right, bounds.bottom],
-                        [bounds.left, bounds.bottom]
-                    ]]
-                }
+                shape = [src.height, src.width]
 
-                # Create base item
+                # Create geometry as Shapely Polygon
+                geometry = Polygon(
+                    [
+                        (bounds.left, bounds.bottom),
+                        (bounds.left, bounds.top),
+                        (bounds.right, bounds.top),
+                        (bounds.right, bounds.bottom),
+                        (bounds.left, bounds.bottom),
+                    ]
+                )
+                geometry_geojson = mapping(geometry)
+
+                # Create STAC Item
                 item = pystac.Item(
                     id=source_cfg.prefix,
-                    geometry=geometry,
+                    geometry=geometry_geojson,
                     bbox=bbox,
                     datetime=source_cfg.datetime,
-                    properties={}  # properties will be managed by extensions
+                    properties={
+                        "eo:snow_cover": 0,
+                        "eo:cloud_cover": 0,
+                        "proj:epsg": crs.to_epsg(),
+                        "proj:shape": shape,
+                        "proj:transform": list(transform)[:9],
+                    },
                 )
 
-                # Initialize EOExtension and set eo:bands as Band objects
-                eo_ext = EOExtension.ext(item, add_if_missing=True)
+                # Initialize extensions
+                EOExtension.ext(item, add_if_missing=True)
+                proj_ext = ProjectionExtension.ext(item, add_if_missing=True)
+                proj_ext.apply(epsg=crs.to_epsg(), shape=shape, transform=list(transform)[:9])
+
+                # Create EO and Raster bands
                 eo_bands = []
+                raster_bands = []
                 for idx, band_info in enumerate(source_cfg.bands, start=1):
-                    band = Band.create(
+                    eo_band = Band.create(
                         name=f"B{idx}",
                         common_name=BAND_MAPPING.get(band_info.name.lower(), None),
-                        center_wavelength=float(band_info.wavelength) if band_info.wavelength not in [None, "no band specified"] else None
+                        center_wavelength=band_info.wavelength,
+                        description=f"Common name: {BAND_MAPPING.get(band_info.name.lower(), 'unknown')}",
                     )
-                    eo_bands.append(band)
+                    eo_bands.append(eo_band)
 
-                # Ensure eo:bands is managed by EOExtension only
-                eo_ext.bands = eo_bands
+                    raster_band = RasterBand.create(nodata=0, data_type=DataType.UINT16)
+                    raster_bands.append(raster_band)
 
-                # Update other properties
-                item.properties.update({
-                    "gsd": float(src.res[0]),
-                    "platform": "UAV",
-                    "instruments": ["Multispectral Camera"],
-                })
+                item.properties["eo:bands"] = [band.to_dict() for band in eo_bands]
 
-                # Add projection extension
-                proj_ext = ProjectionExtension.ext(item, add_if_missing=True)
-                if source_cfg.epsg != crs.to_epsg():
-                    raise ValueError(f"EPSG mismatch: {source_cfg.epsg} vs {crs.to_epsg()}")
-                proj_ext.epsg = crs.to_epsg()
-                proj_ext.transform = list(transform)[:6]
-                proj_ext.shape = [src.height, src.width]
-
-                # Add the asset
-                media_type = pystac.MediaType.COG if src.driver.upper() == 'COG' else pystac.MediaType.GEOTIFF
+                # Create Asset and Add to Item
                 asset = pystac.Asset(
-                    href=str(source_cfg.location),
-                    media_type=media_type,
+                    href=source_cfg.location,
+                    media_type=pystac.MediaType.GEOTIFF,
                     roles=["data"],
-                    title="Raster Data"
+                    title="Raster Data",
                 )
-                item.add_asset("data", asset)
+                item.add_asset("image", asset)
 
-                # Add STAC extensions
+                # Apply Raster Extension to the Asset
+                raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
+                raster_ext.apply(bands=raster_bands)
+
+                # Add eo:bands to Asset
+                asset.extra_fields["eo:bands"] = [band.to_dict() for band in eo_bands]
+
+                # Add STAC Extensions
                 item.stac_extensions = [
+                    "https://stac-extensions.github.io/projection/v1.1.0/schema.json",
                     "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
-                    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+                    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
                 ]
 
-                # Force cleanup of any erroneous eo:bands in item.properties
-                if "eo:bands" in item.properties:
-                    del item.properties["eo:bands"]
-
-                # Validate the item to check schema compliance
+                # Validate the Item
                 item.validate()
-
                 return [item]
-                
+
         except Exception as e:
             logging.error(f"Error processing raster file: {e}")
             raise

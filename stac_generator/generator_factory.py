@@ -7,6 +7,7 @@ from stac_generator.geotiff.generator import GeoTiffGenerator
 from stac_generator.vector_polygon.generator import VectorPolygonGenerator
 from stac_generator.raster_data.generator import RasterGenerator
 
+
 class StacGeneratorFactory:
     @staticmethod
     def get_stac_generator(
