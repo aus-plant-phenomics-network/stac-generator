@@ -12,6 +12,17 @@ logger = logging.getLogger(__name__)
 
 
 def extract_epsg(crs: CRS) -> int | None:
+    """Extract epsg information from crs object.
+    If epsg info can be extracted directly from crs, return that value.
+    Otherwise, try to convert the crs info to WKT2 and extract EPSG using regex
+
+    Note that this method may yield unreliable result
+
+    :param crs: crs object
+    :type crs: CRS
+    :return: epsg information
+    :rtype: int | None
+    """
     if (result := crs.to_epsg()) is not None:
         return result
     wkt = crs.to_wkt()
@@ -22,7 +33,17 @@ def extract_epsg(crs: CRS) -> int | None:
 
 
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):
+    """ItemGenerator class that handles vector data with common vector formats - i.e (shp, zipped shp, gpkg, geojson)"""
+
     def create_item_from_config(self, source_cfg: VectorConfig) -> pystac.Item:
+        """Create item from vector config
+
+        :param source_cfg: config information
+        :type source_cfg: VectorConfig
+        :raises ValueError: if config epsg information is different from epsg information from vector file
+        :return: stac metadata of the file described by source_cfg
+        :rtype: pystac.Item
+        """
         assets = {
             "data": pystac.Asset(
                 href=str(source_cfg.location),

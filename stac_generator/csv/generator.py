@@ -68,15 +68,16 @@ def read_csv(
 
 
 class CsvGenerator(VectorGenerator[CsvConfig]):
-    def __init__(
-        self,
-        configs: list[dict[str, Any]],
-    ) -> None:
-        super().__init__(
-            configs=configs,
-        )
+    """ItemGenerator class that handles point data in csv format"""
 
     def create_item_from_config(self, source_cfg: CsvConfig) -> pystac.Item:
+        """Create item from source csv config
+
+        :param source_cfg: config which contains csv metadata
+        :type source_cfg: CsvConfig
+        :return: stac metadata of the item described in source_cfg
+        :rtype: pystac.Item
+        """
         assets = {
             "data": pystac.Asset(
                 href=source_cfg.location,

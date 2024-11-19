@@ -15,15 +15,21 @@ theme:
           name: 'Switch to light mode'
 
 nav:
+  - Home: index.md
+  - Usage: usage.md
+  - Data config: data_config.md
   - API Reference:
     - Generator: generator.md
     - Schema: schema.md
     - Utility: utils.md
     # - Typing: typing.md
     - Extension:
-      - csv:
+      - CSV:
+        - Generator: extensions/csv/generator.md
         - Schema: extensions/csv/schema.md
-        - Utils: extensions/csv/utils.md
+      - Vector:
+        - Generator: extensions/vector/generator.md
+        - Schema: extensions/vector/schema.md
 
 plugins:
   - search
