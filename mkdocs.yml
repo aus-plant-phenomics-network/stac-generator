@@ -16,8 +16,6 @@ theme:
 
 nav:
   - Home: index.md
-  - Usage: usage.md
-  - Data config: data_config.md
   - API Reference:
     - Generator: generator.md
     - Schema: schema.md
