@@ -41,7 +41,7 @@ def href_is_stac_api_endpoint(href: str) -> bool:
     return output.scheme == ""
 
 
-def force_write_to_stac_api(url: str, json: dict[str, Any]) -> None:
+def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
     """Force write a json object to a stac api endpoint.
     This function will try sending a POST request and if a 409 error is encountered,
     try sending a PUT request. Other exceptions if occured will be raised
@@ -58,7 +58,7 @@ def force_write_to_stac_api(url: str, json: dict[str, Any]) -> None:
     except httpx.HTTPStatusError as err:
         if err.response.status_code == 409:
             logger.debug(f"sending PUT request to {url}")
-            response = httpx.put(url=url, json=json)
+            response = httpx.put(url=f"{url}/{id}", json=json)
             response.raise_for_status()
         else:
             raise err

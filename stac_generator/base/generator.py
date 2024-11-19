@@ -4,7 +4,7 @@ import abc
 import datetime as pydatetime
 import json
 import logging
-from typing import TYPE_CHECKING, Any, Generic
+from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
 import numpy as np
@@ -12,7 +12,16 @@ import pystac
 from pystac.collection import Extent
 from pystac.extensions.projection import ItemProjectionExtension
 from pystac.utils import datetime_to_str, str_to_datetime
-from shapely import GeometryCollection, to_geojson
+from shapely import (
+    Geometry,
+    LineString,
+    MultiLineString,
+    MultiPoint,
+    MultiPolygon,
+    Point,
+    Polygon,
+    to_geojson,
+)
 from shapely.geometry import shape
 
 from stac_generator.base.schema import (
@@ -28,8 +37,6 @@ from stac_generator.base.utils import (
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-
-    from shapely import Geometry
 
     from stac_generator._types import TimeExtentT
 
@@ -181,28 +188,67 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
 
 class VectorGenerator(ItemGenerator[T]):
+    @staticmethod
+    def bounding_geometry(df: gpd.GeoDataFrame) -> Polygon:
+        min_x, min_y, max_x, max_y = df.total_bounds
+        coords = ((min_x, min_y), (min_x, max_y), (max_x, max_y), (max_x, min_y), (min_x, min_y))
+        return Polygon(coords)
+
     @classmethod
     def __class_getitem__(cls, source_type: type) -> type:
         kwargs = {"source_type": source_type}
         return type(f"VectorGenerator[{source_type.__name__}]", (VectorGenerator,), kwargs)
 
     @staticmethod
-    def geometry(
+    def geometry(  # noqa: C901
         df: gpd.GeoDataFrame,
     ) -> Geometry:
         """Calculate the geometry from geopandas dataframe.
 
         If geopandas dataframe has only one item, the geometry will be that of the item.
-        If geopandas dataframe has multiple items, the geometry will be a GeometryCollection with
-        all geometries
+        If geopandas dataframe has less than 10 items of the same type, the geometry will be the Multi version of the type.
+        Note that MultiPoint will be unpacked into points for the 10 items limit.
+        If there are more than 10 items of the same type or there are items of different types i.e. Point and LineString, the returned
+        geometry will be the Polygon of the bounding box. Note that Point and MultiPoint are treated as the same type (so are type and its Multi version).
 
         :param df: input dataframe
         :type df: gpd.GeoDataFrame
         """
         points: Sequence[Geometry] = df["geometry"].unique()
+        # One item
         if len(points) == 1:
             return points[0]
-        return GeometryCollection(points)
+        # Multiple Items of the same type
+        curr_type = None
+        curr_collection: list[Geometry] = []
+        for point in points:
+            if curr_type is None:
+                match point:
+                    case Point() | MultiPoint():
+                        curr_type = MultiPoint
+                    case LineString() | MultiLineString():
+                        curr_type = MultiLineString
+                    case Polygon() | MultiPolygon():
+                        curr_type = MultiPolygon
+                    case _:
+                        return VectorGenerator.bounding_geometry(df)
+            if isinstance(point, Point) and curr_type == MultiPoint:
+                curr_collection.append(point)
+            elif isinstance(point, MultiPoint) and curr_type == MultiPoint:
+                curr_collection.extend(point.geoms)
+            elif isinstance(point, LineString) and curr_type == MultiLineString:
+                curr_collection.append(point)
+            elif isinstance(point, MultiLineString) and curr_type == MultiLineString:
+                curr_collection.extend(point.geoms)
+            elif isinstance(point, Polygon) and curr_type == MultiPolygon:
+                curr_collection.append(point)
+            elif isinstance(point, MultiPolygon) and curr_type == MultiPolygon:
+                curr_collection.extend(point.geoms)
+            else:
+                return VectorGenerator.bounding_geometry(df)
+        if len(curr_collection) > 10:
+            return VectorGenerator.bounding_geometry(df)
+        return cast(Geometry, curr_type)(curr_collection)
 
     @staticmethod
     def temporal_extent(
@@ -322,7 +368,6 @@ class StacSerialiser:
         """
         logger.debug("validating generated collection and items")
         collection.normalize_hrefs(href)
-        breakpoint()
         collection.validate_all()
 
     def __call__(self) -> None:
@@ -342,12 +387,14 @@ class StacSerialiser:
         """
         logger.debug("save collection to STAC API")
         force_write_to_stac_api(
-            url=parse_href(self.href, f"collections/{self.collection.id}"),
+            url=parse_href(self.href, "collections"),
+            id=self.collection.id,
             json=self.collection.to_dict(),
         )
         for item in self.collection.get_all_items():
             force_write_to_stac_api(
-                url=parse_href(self.href, f"collections/{self.collection.id}/items/{item.id}"),
+                url=parse_href(self.href, f"collections/{self.collection.id}/items"),
+                id=item.id,
                 json=item.to_dict(),
             )
         logger.info(f"successfully save collection to {self.href}")

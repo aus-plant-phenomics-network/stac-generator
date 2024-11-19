@@ -29,6 +29,13 @@ repository = "https://github.com/JosephUoA/stac-generator"
 [project.scripts]
 stac_generator="stac_generator.__main__:run_cli"
 
+[tool.coverage.run]
+source=["stac_generator"]
+omit = [
+    "stac_generator.__main__",
+    "stac_generator.__version__"
+]
+
 [tool.coverage.report]
 exclude_also = [
     "def __repr__",

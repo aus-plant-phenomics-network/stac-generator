@@ -2,13 +2,15 @@ import datetime
 import json
 import urllib.parse
 
+import geopandas as gpd
 import httpx
 import pystac
 import pytest
 import pytest_httpx
 import shapely
+from shapely import Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon
 
-from stac_generator.base.generator import CollectionGenerator
+from stac_generator.base.generator import CollectionGenerator, VectorGenerator
 from stac_generator.base.utils import (
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
@@ -113,7 +115,7 @@ def test_force_write_to_stac_api_given_intial_response_ok_expects_no_resend(
     # Error 500 should be raise if this test fails
     httpx_mock.add_response(status_code=500, method="PUT")
     try:
-        force_write_to_stac_api("http://localhost:8082/test_collection", {})
+        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
     except Exception:
         raise
 
@@ -124,7 +126,7 @@ def test_force_write_to_stac_api_given_intial_response_409_expects_send_put_resp
     httpx_mock.add_response(status_code=409, method="POST")
     httpx_mock.add_response(status_code=200, method="PUT")
     try:
-        force_write_to_stac_api("http://localhost:8082/test_collection", {})
+        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
     except Exception:
         raise
 
@@ -136,7 +138,7 @@ def test_force_write_to_stac_api_given_intial_response_4xx_or_5xx_expects_raises
 ) -> None:
     httpx_mock.add_response(status_code=code, method="POST")
     with pytest.raises(httpx.HTTPStatusError) as exp_ctx:
-        force_write_to_stac_api("http://localhost:8082/test_collection", {})
+        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
     assert exp_ctx.value.response.status_code == code
 
 
@@ -148,7 +150,7 @@ def test_force_write_to_stac_api_given_intial_response_409_final_response_expect
     httpx_mock.add_response(status_code=409, method="POST")
     httpx_mock.add_response(status_code=code, method="PUT")
     with pytest.raises(httpx.HTTPStatusError) as exp_ctx:
-        force_write_to_stac_api("http://localhost:8082/test_collection", {})
+        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
     assert exp_ctx.value.response.status_code == code
 
 
@@ -238,3 +240,153 @@ def test_get_collection_temporal_extent_given_start_end_datetime_expect_datetime
 def test_get_collection_temporal_extent_given_datetime_expect_range_to_be_datetime() -> None:
     actual = CollectionGenerator.temporal_extent([SINGLE_POINT_ITEM_NO_START_END_DATETIME])
     assert actual.intervals == EXP_TEMPORAL_EXTENT_NO_START_END.intervals
+
+
+#######################################################################
+# Test geometry method
+#######################################################################
+
+GEOMETRY_TEST_SET = {
+    "ONE_POINT": (
+        gpd.GeoDataFrame(crs="EPSG:4326", data={"geometry": [Point(1, 2)]}),
+        Point(1, 2),
+    ),
+    "MULTIPOINT": (
+        gpd.GeoDataFrame(crs="EPSG:4326", data={"geometry": [Point(1, 2), Point(3, 4)]}),
+        MultiPoint(((1, 2), (3, 4))),
+    ),
+    "POINT_AND_MULTIPOINT": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={"geometry": [Point(1, 2), Point(3, 4), MultiPoint(((5, 6), (7, 8)))]},
+        ),
+        MultiPoint(((1, 2), (3, 4), (5, 6), (7, 8))),
+    ),
+    "LINESTRING": (
+        gpd.GeoDataFrame(crs="EPSG:4326", data={"geometry": [LineString(((1, 2), (3, 4)))]}),
+        LineString(((1, 2), (3, 4))),
+    ),
+    "MULTILINESTRING": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    LineString(((1, 2), (3, 4))),
+                    LineString(((5, 6), (7, 8))),
+                ]
+            },
+        ),
+        MultiLineString((((1, 2), (3, 4)), ((5, 6), (7, 8)))),
+    ),
+    "LINESTRING_AND_MULTILINESTRING": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    LineString(((1, 2), (3, 4))),
+                    LineString(((5, 6), (7, 8))),
+                    MultiLineString(
+                        [
+                            ((9, 10), (11, 12)),
+                            ((13, 14), (15, 16)),
+                        ]
+                    ),
+                ]
+            },
+        ),
+        MultiLineString(
+            [
+                ((1, 2), (3, 4)),
+                ((5, 6), (7, 8)),
+                ((9, 10), (11, 12)),
+                ((13, 14), (15, 16)),
+            ]
+        ),
+    ),
+    "POLYGON": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    Polygon(((1, 2), (3, 4), (5, 6), (1, 2))),
+                ]
+            },
+        ),
+        Polygon(((1, 2), (3, 4), (5, 6), (1, 2))),
+    ),
+    "MULTIPOLYGON": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    Polygon(((1, 2), (3, 4), (5, 6), (1, 2))),
+                    Polygon(((7, 8), (9, 10), (11, 12), (7, 8))),
+                ]
+            },
+        ),
+        MultiPolygon(
+            [
+                (((1, 2), (3, 4), (5, 6), (1, 2)), None),
+                (((7, 8), (9, 10), (11, 12), (7, 8)), None),
+            ]
+        ),
+    ),
+    "POLYGON_AND_MULTIPOLYGON": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    Polygon(((1, 2), (3, 4), (5, 6), (1, 2))),
+                    Polygon(((7, 8), (9, 10), (11, 12), (7, 8))),
+                    MultiPolygon(
+                        [
+                            (((13, 14), (15, 16), (17, 18), (13, 14)), None),
+                            (((19, 20), (21, 22), (23, 24), (19, 20)), None),
+                        ]
+                    ),
+                ]
+            },
+        ),
+        MultiPolygon(
+            [
+                (((1, 2), (3, 4), (5, 6), (1, 2)), None),
+                (((7, 8), (9, 10), (11, 12), (7, 8)), None),
+                (((13, 14), (15, 16), (17, 18), (13, 14)), None),
+                (((19, 20), (21, 22), (23, 24), (19, 20)), None),
+            ]
+        ),
+    ),
+    "COMPOSITE": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}
+        ),
+        Polygon(((1, 2), (1, 6), (5, 6), (5, 2), (1, 2))),
+    ),
+    "MORE_THAN_10": (
+        gpd.GeoDataFrame(
+            crs="EPSG:4326",
+            data={
+                "geometry": [
+                    Point(1, 2),
+                    Point(3, 4),
+                    Point(5, 6),
+                    Point(7, 8),
+                    Point(9, 10),
+                    Point(11, 12),
+                    Point(13, 14),
+                    Point(15, 16),
+                    Point(17, 18),
+                    Point(19, 20),
+                    Point(21, 22),
+                ]
+            },
+        ),
+        Polygon(((1, 2), (1, 22), (21, 22), (21, 2), (1, 2))),
+    ),
+}
+
+
+@pytest.mark.parametrize("df, geom", GEOMETRY_TEST_SET.values(), ids=GEOMETRY_TEST_SET.keys())
+def test_geometry(df: gpd.GeoDataFrame, geom: Geometry) -> None:
+    actual = VectorGenerator.geometry(df)
+    assert actual == geom

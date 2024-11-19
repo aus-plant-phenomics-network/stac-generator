@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import math
 from typing import Any, TypeVar
 
 from httpx._types import (
@@ -28,15 +29,22 @@ class StacCommonMetadata(_StacCommonMetaData):
     @model_validator(mode="before")
     @classmethod
     def set_datetime(self, data: Any) -> Any:
-        if isinstance(data, dict) and (
-            ("datetime" not in data or data["datetime"] is None)
-            and ("start_datetime" not in data or data["start_datetime"] is None)
-            and ("end_datetime" not in data or data["end_datetime"] is None)
-        ):
-            now = datetime.datetime.now(datetime.UTC)
-            data["datetime"] = now
-            data["start_datetime"] = now
-            data["end_datetime"] = now
+        if isinstance(data, dict):
+            if "datetime" not in data or (
+                data["datetime"] is not None
+                and not isinstance(data["datetime"], datetime.datetime)
+                and math.isnan(data["datetime"])
+            ):
+                data["datetime"] = None
+            if (
+                (data["datetime"] is None)
+                and ("start_datetime" not in data or data["start_datetime"] is None)
+                and ("end_datetime" not in data or data["end_datetime"] is None)
+            ):
+                now = datetime.datetime.now(datetime.UTC)
+                data["datetime"] = now
+                data["start_datetime"] = now
+                data["end_datetime"] = now
         return data
 
 

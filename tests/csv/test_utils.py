@@ -60,12 +60,12 @@ SINGLE_POINT_NO_DATE_ASSET = pystac.Asset(
 
 SINGLE_POINT_GEOMETRY = {"type": "Point", "coordinates": [-34.9524, 138.5196]}
 MULTIPOINT_GEOMETRY = {
-    "type": "GeometryCollection",
-    "geometries": [
-        {"type": "Point", "coordinates": [-34.9524, 138.5196]},
-        {"type": "Point", "coordinates": [-34.9624, 138.5296]},
-        {"type": "Point", "coordinates": [-34.9724, 138.5396]},
-        {"type": "Point", "coordinates": [-34.9824, 138.5496]},
+    "type": "MultiPoint",
+    "coordinates": [
+        [-34.9524, 138.5196],
+        [-34.9624, 138.5296],
+        [-34.9724, 138.5396],
+        [-34.9824, 138.5496],
     ],
 }
 
