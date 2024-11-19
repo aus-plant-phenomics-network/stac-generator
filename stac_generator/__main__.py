@@ -55,7 +55,7 @@ def run_cli() -> None:
             """,
     )
     parser.add_argument("-V", "--version", action="version", version=__version__)
-
+    parser.add_argument("-v", action="store_true", help="increase verbosity for debugging")
     # Collection Information
     collection_metadata = parser.add_argument_group("STAC collection metadata")
     collection_metadata.add_argument("--id", type=str, help="id of collection")
@@ -123,6 +123,12 @@ def run_cli() -> None:
         help="path to json file describing the metadata",
     )
     args = parser.parse_args()
+
+    # Change logging level
+    if args.v:
+        import logging
+
+        logging.getLogger().setLevel(logging.DEBUG)
 
     # Build collection config and catalog config
     metadata_json = {}
