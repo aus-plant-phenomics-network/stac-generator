@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, Field, model_validator
@@ -61,39 +60,3 @@ class RasterSourceConfig(SourceConfig):
                     for band in data["bands"]
                 ]
         return data
-
-    @model_validator(mode="after")
-    def set_datetime_from_collection(self) -> RasterSourceConfig:
-        """Set datetime fields based on collection date and time"""
-        try:
-            # Parse the date string as timezone-aware
-            collection_date = datetime.strptime(self.collection_date, "%Y-%m-%d").replace(
-                tzinfo=UTC
-            )
-
-            # Handle trailing 'Z' in time string and ensure timezone-awareness
-            collection_time_str = self.collection_time.strip()
-            if collection_time_str.endswith("Z"):
-                collection_time = datetime.strptime(collection_time_str, "%H:%M:%SZ").replace(
-                    tzinfo=UTC
-                )
-            else:
-                collection_time = datetime.strptime(collection_time_str, "%H:%M:%S").replace(
-                    tzinfo=UTC
-                )
-
-            # Combine date and time into a single timezone-aware datetime object
-            collection_datetime = datetime.combine(collection_date.date(), collection_time.timetz())
-
-            # Set the datetime fields
-            self.datetime = collection_datetime
-            self.start_datetime = collection_datetime
-            self.end_datetime = collection_datetime
-
-        except ValueError as e:
-            raise ValueError(f"Error parsing date/time: {e}") from e
-
-        return self
-
-    class Config:
-        arbitrary_types_allowed = True

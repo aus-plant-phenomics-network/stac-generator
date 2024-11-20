@@ -41,8 +41,6 @@
     6951062.348691959
   ],
   "properties": {
-    "eo:snow_cover": 0,
-    "eo:cloud_cover": 0,
     "proj:epsg": 28356,
     "proj:shape": [
       16613,
@@ -100,7 +98,7 @@
         "center_wavelength": 860.0
       }
     ],
-    "datetime": "2023-07-09T12:39:51Z"
+    "datetime": "2024-11-20T18:11:58.999598Z"
   },
   "links": [
     {
