@@ -98,7 +98,7 @@
         "center_wavelength": 860.0
       }
     ],
-    "datetime": "2024-11-20T18:11:58.999598Z"
+    "datetime": "2024-11-20T23:28:42.713963Z"
   },
   "links": [
     {
@@ -126,7 +126,7 @@
     }
   ],
   "assets": {
-    "image": {
+    "data": {
       "href": "example/tiff/INVITA_Scott_GilbertN_2023-09-07_10-00-00_m3m_bgreni_40m_transparent_reflectance_packed.tif",
       "type": "image/tiff; application=geotiff",
       "title": "Raster Data",

@@ -174,7 +174,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                     roles=["data"],
                     title="Raster Data",
                 )
-                item.add_asset("image", asset)
+                item.add_asset("data", asset)
 
                 # Apply Raster Extension to the Asset
                 raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
