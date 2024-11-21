@@ -36,10 +36,6 @@ class RasterSourceConfig(SourceConfig):
     collection_time: str  # Changed to str to handle the input format
     bands: list[BandInfo]
     """List of band information"""
-    transform: list[float] | None = Field(default=None)
-    """Affine transform of the raster"""
-    shape: list[int] | None = Field(default=None)
-    """Shape of the raster as [height, width]"""
 
     @model_validator(mode="before")
     @classmethod

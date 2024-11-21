@@ -41,9 +41,6 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
     ) -> None:
         source_df = source_df.reset_index(drop=True)
 
-        if "epsg" in source_df.columns:
-            source_df["epsg"] = source_df["epsg"].astype(int)
-
         if "bands" in source_df.columns:
             source_df["bands"] = source_df["bands"].apply(self.parse_bands)
 
