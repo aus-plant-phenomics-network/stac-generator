@@ -123,7 +123,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 epsg = crs.to_epsg()
                 if source_cfg.epsg != epsg:
                     raise ValueError(
-                        f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match shapefile EPSG ({epsg})."
+                        f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match EPSG ({epsg})."
                     )
 
                 # Create STAC Item
@@ -133,8 +133,6 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                     bbox=bbox,
                     datetime=datetime_aware,
                     properties={
-                        "eo:snow_cover": 0,
-                        "eo:cloud_cover": 0,
                         "proj:epsg": epsg,
                         "proj:shape": shape,
                         "proj:transform": list(transform)[:9],
@@ -165,7 +163,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                     raster_bands.append(raster_band)
 
                 eo_ext = EOExtension.ext(item, add_if_missing=True)
-                eo_ext.apply(bands=eo_bands)
+                eo_ext.apply(bands=eo_bands, cloud_cover=0.0, snow_cover=0.0)
 
                 # Create Asset and Add to Item
                 asset = pystac.Asset(

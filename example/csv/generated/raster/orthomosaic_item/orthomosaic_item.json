@@ -98,7 +98,9 @@
         "center_wavelength": 860.0
       }
     ],
-    "datetime": "2024-11-20T23:28:42.713963Z"
+    "eo:cloud_cover": 0.0,
+    "eo:snow_cover": 0.0,
+    "datetime": "2024-11-21T06:06:03.931753Z"
   },
   "links": [
     {
