@@ -20,6 +20,7 @@ dependencies = [
     "stac-pydantic>=3.1.2",
     "dask[dataframe]>=2024.9.1",
     "fiona>=1.10.1",
+    "timezonefinder>=6.5.5",
 ]
 name = "pystac-generator"
 dynamic = ["version"]

@@ -5,6 +5,7 @@ from typing import Any
 
 import pandas as pd
 import pystac
+import pytz
 import rasterio
 from pyproj import Transformer
 from pystac.extensions.eo import Band, EOExtension
@@ -60,7 +61,7 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
                 raise ValueError(f"Error parsing 'bands': {bands}") from e
         return bands
 
-    def get_timezone_from_geotiff(self, src: rasterio.io.DatasetReader) -> str:
+    def get_timezone_from_geotiff(self, src: rasterio.io.DatasetReader) -> Any:
         """Determine the timezone from the GeoTIFF file's centroid."""
         # Extract the bounding box
         bounds = src.bounds
@@ -113,7 +114,9 @@ class RasterGenerator(StacGenerator[RasterSourceConfig]):
 
                 # Ensure datetime is timezone-aware
                 if source_cfg.datetime.tzinfo is None:
-                    datetime_aware = source_cfg.datetime.replace(tzinfo=file_timezone)
+                    datetime_aware = source_cfg.datetime.replace(
+                        tzinfo=pytz.timezone(file_timezone)
+                    )
                 else:
                     datetime_aware = source_cfg.datetime
 
