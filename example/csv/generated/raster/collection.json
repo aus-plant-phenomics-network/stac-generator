@@ -1,6 +1,6 @@
 {
   "type": "Collection",
-  "id": "vector_polygon",
+  "id": "raster",
   "stac_version": "1.0.0",
   "description": "Auto-generated",
   "links": [
@@ -12,17 +12,12 @@
     },
     {
       "rel": "item",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_geojson/vector_polygon_geojson.json",
-      "type": "application/json"
-    },
-    {
-      "rel": "item",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_zip/vector_polygon_zip.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/raster/orthomosaic_item/orthomosaic_item.json",
       "type": "application/json"
     },
     {
       "rel": "self",
-      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/raster/collection.json",
       "type": "application/json"
     },
     {
@@ -37,18 +32,18 @@
     "spatial": {
       "bbox": [
         [
-          138.62863776330823,
-          -34.96914105537954,
-          434208.6646524757,
-          6951062.34869196
+          434067.17171849194,
+          6950889.892785188,
+          434208.66175697366,
+          6951062.348691959
         ]
       ]
     },
     "temporal": {
       "interval": [
         [
-          "2024-11-18T09:23:27.200248Z",
-          "2024-11-18T09:23:27.200248Z"
+          "2024-11-25T13:35:32.819195Z",
+          "2024-11-25T13:35:32.819195Z"
         ]
       ]
     }

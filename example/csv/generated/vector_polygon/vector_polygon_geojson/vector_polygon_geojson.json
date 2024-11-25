@@ -1,0 +1,89 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json"
+  ],
+  "id": "vector_polygon_geojson",
+  "geometry": {
+    "coordinates": [
+      [
+        [
+          138.62868748123367,
+          -34.96914105537954
+        ],
+        [
+          138.6294879005062,
+          -34.96911524715655
+        ],
+        [
+          138.6294004102982,
+          -34.96855545871302
+        ],
+        [
+          138.62863776330823,
+          -34.96857677371414
+        ],
+        [
+          138.62868748123367,
+          -34.96914105537954
+        ]
+      ]
+    ],
+    "type": "Polygon"
+  },
+  "bbox": [
+    138.62863776330823,
+    -34.96914105537954,
+    138.6294879005062,
+    -34.96855545871302
+  ],
+  "properties": {
+    "start_datetime": "2024-11-18T09:23:27.203789Z",
+    "end_datetime": "2024-11-18T09:23:27.203789Z",
+    "proj:epsg": 4326,
+    "proj:bbox": [
+      138.62863776330823,
+      -34.96914105537954,
+      138.6294879005062,
+      -34.96855545871302
+    ],
+    "datetime": "2024-11-18T09:23:27.203789Z"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/catalog.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "collection",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "self",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/vector_polygon_geojson/vector_polygon_geojson.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/Users/a1234648/stac-generator/example/csv/generated/vector_polygon/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "https://vectorpolygon.s3.ap-south-1.amazonaws.com/WaiteOvalTest1.geojson",
+      "type": "application/geo+json",
+      "title": "Vector Polygon Data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "vector_polygon"
+}

@@ -47,6 +47,7 @@ class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
             bbox = src.bounds
             geometries = [feature["geometry"] for feature in src]
             geometry = mapping(geometries[0]) if geometries else None
+
         # Create the STAC item
         item_id = source_cfg.prefix
         item = pystac.Item(
@@ -58,17 +59,22 @@ class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
             end_datetime=source_cfg.end_datetime,
             properties={},
         )
+
         # Apply Projection Extension
         proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
-        print(crs)
         epsg = crs.to_epsg()
-        print(epsg)
         if source_cfg.epsg != epsg:
             raise ValueError(
                 f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match shapefile EPSG ({epsg})."
             )
 
-        proj_ext.bbox = [bbox[0], bbox[1], bbox[2], bbox[3]]
+        # Add proj:epsg to the item
+        proj_ext.apply(
+            epsg=epsg,
+            bbox=[bbox[0], bbox[1], bbox[2], bbox[3]],
+        )
+
+        # Add asset
         asset = pystac.Asset(
             href=str(source_cfg.location),
             media_type=pystac.MediaType.GEOJSON
@@ -79,4 +85,6 @@ class VectorPolygonGenerator(StacGenerator[VectorPolygonSourceConfig]):
         )
 
         item.add_asset("data", asset)
+
+        # Return the generated item
         return [item]
