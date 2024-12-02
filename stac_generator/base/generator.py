@@ -97,7 +97,9 @@ class CollectionGenerator:
             else:
                 raise ValueError(f"Unable to determine datetime for item: {item.id}")
         min_dt, max_dt = min([min_dt, max_dt]), max([max_dt, min_dt])
-        logger.debug(f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}")
+        logger.debug(
+            f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}"
+        )
         return pystac.TemporalExtent([[min_dt, max_dt]])
 
     def _create_collection_from_items(
@@ -111,12 +113,18 @@ class CollectionGenerator:
         collection = pystac.Collection(
             id=collection_cfg.id,
             description=(
-                collection_cfg.description if collection_cfg.description else f"Auto-generated collection {collection_cfg.id} with stac_generator"
+                collection_cfg.description
+                if collection_cfg.description
+                else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
             extent=Extent(self.spatial_extent(items), self.temporal_extent(items)),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
-            providers=[pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers] if collection_cfg.providers else None,
+            providers=[
+                pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers
+            ]
+            if collection_cfg.providers
+            else None,
         )
         collection.add_items(items)
         return collection

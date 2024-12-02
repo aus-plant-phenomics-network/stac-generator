@@ -31,7 +31,9 @@ class StacGeneratorFactory:
                 f"Handler for extension: {extension} already exists: {EXTENSION_MAP[extension]}. If this is intentional, use register_handler with force=True"
             )
         if not issubclass(handler, ItemGenerator):
-            raise ValueError("Registered handler must be an instance of a subclass of ItemGenerator")
+            raise ValueError(
+                "Registered handler must be an instance of a subclass of ItemGenerator"
+            )
         EXTENSION_MAP[extension] = handler
 
     @staticmethod
@@ -51,14 +53,18 @@ class StacGeneratorFactory:
         return EXTENSION_MAP[extension]
 
     @staticmethod
-    def get_stac_generator(source_configs: list[str], collection_cfg: StacCollectionConfig) -> CollectionGenerator:
+    def get_stac_generator(
+        source_configs: list[str], collection_cfg: StacCollectionConfig
+    ) -> CollectionGenerator:
         configs: list[dict[str, Any]] = []
         for source_config in source_configs:
             configs.extend(read_source_config(source_config))
         handler_map: dict[type[ItemGenerator], list[dict[str, Any]]] = {}
         for config in configs:
             base_config = SourceConfig(**config)
-            if (handler := StacGeneratorFactory.get_handler(base_config.source_extension)) in handler_map:
+            if (
+                handler := StacGeneratorFactory.get_handler(base_config.source_extension)
+            ) in handler_map:
                 handler_map[handler].append(config)
             else:
                 handler_map[handler] = [config]

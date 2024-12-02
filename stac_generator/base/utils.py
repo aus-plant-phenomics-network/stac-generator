@@ -72,7 +72,9 @@ def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
 def read_source_config(href: str) -> list[dict[str, Any]]:
     logger.debug(f"reading config file from {href}")
     if not href.endswith(("json", "yaml", "yml", "csv")):
-        raise ValueError("Unsupported extension. We currently allow json/yaml/csv files to be used as config")
+        raise ValueError(
+            "Unsupported extension. We currently allow json/yaml/csv files to be used as config"
+        )
     if href.endswith(".csv"):
         df = pd.read_csv(href)
         df.replace(np.nan, None, inplace=True)

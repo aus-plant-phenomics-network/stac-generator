@@ -38,12 +38,19 @@ PATHS = {
     "no_date_one": "tests/files/unit_tests/points/no_date_one.csv",
 }
 FRAMES = {
-    "with_date_multi": read_csv("tests/files/unit_tests/points/with_date_multi.csv", X, Y, EPSG, Z, T, DATE_FORMAT),
-    "with_date_one": read_csv("tests/files/unit_tests/points/with_date_one.csv", X, Y, EPSG, Z, T, DATE_FORMAT),
+    "with_date_multi": read_csv(
+        "tests/files/unit_tests/points/with_date_multi.csv", X, Y, EPSG, Z, T, DATE_FORMAT
+    ),
+    "with_date_one": read_csv(
+        "tests/files/unit_tests/points/with_date_one.csv", X, Y, EPSG, Z, T, DATE_FORMAT
+    ),
     "no_date_multi": read_csv("tests/files/unit_tests/points/no_date_multi.csv", X, Y, EPSG),
     "no_date_one": read_csv("tests/files/unit_tests/points/no_date_one.csv", X, Y, EPSG),
 }
-ASSETS = {key: pystac.Asset(href=value, roles=["data"], media_type=CsvMediaType) for key, value in PATHS.items()}
+ASSETS = {
+    key: pystac.Asset(href=value, roles=["data"], media_type=CsvMediaType)
+    for key, value in PATHS.items()
+}
 CONFIGS = {
     "with_date_multi": CsvConfig(
         X=X,
@@ -83,7 +90,12 @@ CONFIGS = {
 GEOMETRIES = {
     "with_date_multi": {
         "type": "MultiPoint",
-        "coordinates": [[138.5196, -34.9524], [138.5296, -34.9624], [138.5396, -34.9724], [138.5496, -34.9824]],
+        "coordinates": [
+            [138.5196, -34.9524],
+            [138.5296, -34.9624],
+            [138.5396, -34.9724],
+            [138.5496, -34.9824],
+        ],
     },
     "with_date_one": {"type": "Point", "coordinates": [138.5196, -34.9524]},
     "no_date_multi": {
@@ -133,7 +145,9 @@ def test_read_csv_given_selected_columns_read_selected_columns(
 
 
 @pytest.mark.parametrize(
-    "frame, asset, source_cfg, geometry", zip(FRAMES.values(), ASSETS.values(), CONFIGS.values(), GEOMETRIES.values()), ids=FRAMES.keys()
+    "frame, asset, source_cfg, geometry",
+    zip(FRAMES.values(), ASSETS.values(), CONFIGS.values(), GEOMETRIES.values()),
+    ids=FRAMES.keys(),
 )
 def test_df_to_item(
     frame: gpd.GeoDataFrame,

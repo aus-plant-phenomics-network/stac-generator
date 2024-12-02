@@ -347,7 +347,9 @@ GEOMETRY_TEST_SET = {
         ),
     ),
     "COMPOSITE": (
-        gpd.GeoDataFrame(crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}),
+        gpd.GeoDataFrame(
+            crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}
+        ),
         Polygon(((1, 2), (1, 6), (5, 6), (5, 2), (1, 2))),
     ),
     "MORE_THAN_10": (

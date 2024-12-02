@@ -68,7 +68,9 @@ class StacItemConfig(StacCollectionConfig):
     """Time in local timezone of when the data is collected"""
 
     def get_datetime(self, timezone: str) -> UtcDatetime:
-        local_dt = datetime.datetime.combine(self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone))
+        local_dt = datetime.datetime.combine(
+            self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
+        )
         return local_dt.astimezone(datetime.UTC)
 
 
