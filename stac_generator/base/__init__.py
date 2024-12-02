@@ -4,7 +4,7 @@ from stac_generator.base.schema import SourceConfig, StacCollectionConfig
 __all__ = (
     "CollectionGenerator",
     "ItemGenerator",
-    "StacSerialiser",
     "SourceConfig",
     "StacCollectionConfig",
+    "StacSerialiser",
 )

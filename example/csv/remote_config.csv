@@ -1,4 +1,0 @@
-prefix,location,X,Y,epsg,column_info
-Grandview,https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/Test_Data_Container/csv/Grandview.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}, {""name"": ""pH"", ""description"": ""soil pH""}]"
-Sunbury,https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/Test_Data_Container/csv/Sunbury.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"
-Adelaide_MonteCristo,https://object-store.rc.nectar.org.au/v1/AUTH_9f063fd4ed28439487e49cddfb56d02d/Test_Data_Container/csv/Adelaide_MonteCristo.csv,Longitude,Latitude,4326,"[{""name"": ""Ca_Soln"", ""description"": ""Ca concentration""}]"

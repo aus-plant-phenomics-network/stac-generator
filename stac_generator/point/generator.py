@@ -96,7 +96,11 @@ class PointGenerator(VectorGenerator[CsvConfig]):
             source_cfg.column_info,
         )
 
-        properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump()
+        properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump(
+            exclude={"collection_date", "collection_time", "location", "epsg", "id"},
+            exclude_unset=True,
+            exclude_none=True,
+        )
         return self.df_to_item(
             raw_df,
             assets,
