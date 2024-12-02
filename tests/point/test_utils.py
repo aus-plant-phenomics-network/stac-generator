@@ -1,5 +1,4 @@
 import datetime as pydatetime
-import urllib.parse
 
 import geopandas as gpd
 import pystac
@@ -10,7 +9,6 @@ from stac_generator._types import CsvMediaType
 from stac_generator.base.generator import VectorGenerator
 from stac_generator.point.generator import read_csv
 from stac_generator.point.schema import CsvConfig
-from tests import REMOTE_FIXTURE_URL
 
 ALL_COLUMNS = {
     "latitude",
@@ -24,97 +22,80 @@ ALL_COLUMNS = {
     "radiation",
     "mslp",
 }
-X = "latitude"
-Y = "longitude"
+X = "longitude"
+Y = "latitude"
 Z = "elevation"
 T = "YYYY-MM-DD"
 EPSG = 7843  # GDA2020
 DATE_FORMAT = "%Y-%M-%d"
-
-MULTIPOINT_NO_DATE = "unit_tests/point_test/multi_point_no_date.csv"
-MULTIPOINT_WITH_DATE = "unit_tests/point_test/multi_point_with_date.csv"
-SINGLE_POINT_WITH_DATE = "unit_tests/point_test/single_point_with_date.csv"
-SINGLE_POINT_NO_DATE = "unit_tests/point_test/single_point_no_date.csv"
-
-MULTIPOINT_NO_DATE_ASSET = pystac.Asset(
-    href=urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), MULTIPOINT_NO_DATE),
-    roles=["data"],
-    media_type=CsvMediaType,
-)
-MULTIPOINT_WITH_DATE_ASSET = pystac.Asset(
-    href=urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), MULTIPOINT_WITH_DATE),
-    roles=["data"],
-    media_type=CsvMediaType,
-)
-SINGLE_POINT_WITH_DATE_ASSET = pystac.Asset(
-    href=urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_WITH_DATE),
-    roles=["data"],
-    media_type=CsvMediaType,
-)
-SINGLE_POINT_NO_DATE_ASSET = pystac.Asset(
-    href=urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_NO_DATE),
-    roles=["data"],
-    media_type=CsvMediaType,
-)
-
-SINGLE_POINT_GEOMETRY = {"type": "Point", "coordinates": [138.5196, -34.9524]}
-MULTIPOINT_GEOMETRY = {
-    "type": "MultiPoint",
-    "coordinates": [
-        [138.5196, -34.9524],
-        [138.5296, -34.9624],
-        [138.5396, -34.9724],
-        [138.5496, -34.9824],
-    ],
-}
 COLLECTION_DATE = pydatetime.date(2011, 1, 1)
 COLLECTION_TIME = pydatetime.time(12, 4, 5)
-START_DATE_DUMMY = pydatetime.datetime(2011, 1, 1, 12, 4, 5, tzinfo=pydatetime.UTC)
-END_DATE_DUMMY = pydatetime.datetime(2011, 2, 1, 12, 4, 5, tzinfo=pydatetime.UTC)
 
-
-@pytest.fixture(scope="module")
-def multipoint_with_date_df() -> gpd.GeoDataFrame:
-    return read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), MULTIPOINT_WITH_DATE),
-        X,
-        Y,
-        T_coord=T,
-        epsg=EPSG,
-        date_format=DATE_FORMAT,
-    )
-
-
-@pytest.fixture(scope="module")
-def multipoint_no_date_df() -> gpd.GeoDataFrame:
-    return read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), MULTIPOINT_NO_DATE), X, Y, epsg=EPSG
-    )
-
-
-@pytest.fixture(scope="module")
-def single_point_with_date_df() -> gpd.GeoDataFrame:
-    return read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_WITH_DATE),
-        X,
-        Y,
-        epsg=EPSG,
-        T_coord=T,
-        date_format=DATE_FORMAT,
-    )
-
-
-@pytest.fixture(scope="module")
-def single_point_no_date_df() -> gpd.GeoDataFrame:
-    return read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_NO_DATE), X, Y, epsg=EPSG
-    )
+PATHS = {
+    "with_date_multi": "tests/files/unit_tests/points/with_date_multi.csv",
+    "with_date_one": "tests/files/unit_tests/points/with_date_one.csv",
+    "no_date_multi": "tests/files/unit_tests/points/no_date_multi.csv",
+    "no_date_one": "tests/files/unit_tests/points/no_date_one.csv",
+}
+FRAMES = {
+    "with_date_multi": read_csv("tests/files/unit_tests/points/with_date_multi.csv", X, Y, EPSG, Z, T, DATE_FORMAT),
+    "with_date_one": read_csv("tests/files/unit_tests/points/with_date_one.csv", X, Y, EPSG, Z, T, DATE_FORMAT),
+    "no_date_multi": read_csv("tests/files/unit_tests/points/no_date_multi.csv", X, Y, EPSG),
+    "no_date_one": read_csv("tests/files/unit_tests/points/no_date_one.csv", X, Y, EPSG),
+}
+ASSETS = {key: pystac.Asset(href=value, roles=["data"], media_type=CsvMediaType) for key, value in PATHS.items()}
+CONFIGS = {
+    "with_date_multi": CsvConfig(
+        X=X,
+        Y=Y,
+        T=T,
+        id="test_id",
+        location=PATHS["with_date_multi"],
+        collection_date=COLLECTION_DATE,
+        collection_time=COLLECTION_TIME,
+    ),
+    "with_date_one": CsvConfig(
+        X=X,
+        Y=Y,
+        T=T,
+        id="test_id",
+        location=PATHS["with_date_one"],
+        collection_date=COLLECTION_DATE,
+        collection_time=COLLECTION_TIME,
+    ),
+    "no_date_multi": CsvConfig(
+        X=X,
+        Y=Y,
+        id="test_id",
+        location=PATHS["no_date_multi"],
+        collection_date=COLLECTION_DATE,
+        collection_time=COLLECTION_TIME,
+    ),
+    "no_date_one": CsvConfig(
+        X=X,
+        Y=Y,
+        id="test_id",
+        location=PATHS["no_date_one"],
+        collection_date=COLLECTION_DATE,
+        collection_time=COLLECTION_TIME,
+    ),
+}
+GEOMETRIES = {
+    "with_date_multi": {
+        "type": "MultiPoint",
+        "coordinates": [[138.5196, -34.9524], [138.5296, -34.9624], [138.5396, -34.9724], [138.5496, -34.9824]],
+    },
+    "with_date_one": {"type": "Point", "coordinates": [138.5196, -34.9524]},
+    "no_date_multi": {
+        "type": "MultiPoint",
+        "coordinates": [[150.5505183, -24.34031206], [149.8055563, -29.04132741]],
+    },
+    "no_date_one": {"type": "Point", "coordinates": [150.3125397, -28.18249244]},
+}
 
 
 def test_read_csv_given_no_args_read_all_columns() -> None:
-    df = read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_WITH_DATE), X, Y, epsg=EPSG
-    )
+    df = read_csv(PATHS["with_date_one"], X, Y, epsg=EPSG)
     expected = set(ALL_COLUMNS) | {"geometry"}
     assert set(df.columns) == expected
 
@@ -134,7 +115,7 @@ def test_read_csv_given_selected_columns_read_selected_columns(
     columns: list[str],
 ) -> None:
     df = read_csv(
-        urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), SINGLE_POINT_WITH_DATE),
+        PATHS["with_date_one"],
         X,
         Y,
         epsg=EPSG,
@@ -152,110 +133,24 @@ def test_read_csv_given_selected_columns_read_selected_columns(
 
 
 @pytest.mark.parametrize(
-    "source_cfg, exp_geometry",
-    [
-        (
-            CsvConfig(
-                X=X,
-                Y=Y,
-                id="test_id",
-                location="",
-                collection_date=COLLECTION_DATE,
-                collection_time=COLLECTION_TIME,
-            ),
-            SINGLE_POINT_GEOMETRY,
-        ),
-    ],
+    "frame, asset, source_cfg, geometry", zip(FRAMES.values(), ASSETS.values(), CONFIGS.values(), GEOMETRIES.values()), ids=FRAMES.keys()
 )
-def test_df_to_item_single_point_no_date(
+def test_df_to_item(
+    frame: gpd.GeoDataFrame,
+    asset: pystac.Asset,
     source_cfg: CsvConfig,
-    exp_geometry: Geometry,
-    single_point_no_date_df: gpd.GeoDataFrame,
+    geometry: Geometry,
 ) -> None:
     item = VectorGenerator.df_to_item(
-        single_point_no_date_df,
-        assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
+        df=frame,
+        assets={"data": asset},
         source_cfg=source_cfg,
         properties={},
         epsg=source_cfg.epsg,
     )
     assert item.id == source_cfg.id
     assert item.datetime is not None
-    assert item.assets == {"data": SINGLE_POINT_WITH_DATE_ASSET}
-    assert item.geometry == exp_geometry
-
-
-# @pytest.mark.parametrize(
-#     "source_cfg",
-#     [
-#         CsvConfig(X=X, Y=Y, T=T, id="test_id", location="", datetime=END_DATE_DUMMY, gsd=None),
-#         CsvConfig(
-#             X=X,
-#             Y=Y,
-#             T=T,
-#             id="test_id",
-#             location="",
-#             datetime=None,
-#             start_datetime=START_DATE_DUMMY,
-#             end_datetime=END_DATE_DUMMY,
-#             gsd=None,
-#         ),
-#     ],
-# )
-# def test_df_to_item_single_point_given_config_with_date_column_expect_date_from_data(
-#     source_cfg: CsvConfig,
-#     single_point_with_date_df: gpd.GeoDataFrame,
-# ) -> None:
-#     item = VectorGenerator.df_to_item(
-#         single_point_with_date_df,
-#         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
-#         source_cfg=source_cfg,
-#         properties={},
-#         time_col=source_cfg.T,
-#         epsg=source_cfg.epsg,
-#     )
-#     min_date, max_date = VectorGenerator.temporal_extent(single_point_with_date_df, T)
-#     assert item.id == source_cfg.id
-#     assert item.datetime == max_date
-#     assert item.properties["start_datetime"] == datetime_to_str(cast(pydatetime.datetime, min_date))
-#     assert item.properties["end_datetime"] == datetime_to_str(cast(pydatetime.datetime, max_date))
-#     assert item.assets == {"data": SINGLE_POINT_WITH_DATE_ASSET}
-#     assert item.geometry == SINGLE_POINT_GEOMETRY
-
-
-# @pytest.mark.parametrize(
-#     "source_cfg",
-#     [
-#         CsvConfig(X=X, Y=Y, T=T, id="test_id", location="", datetime=END_DATE_DUMMY, gsd=None),
-#         CsvConfig(
-#             X=X,
-#             Y=Y,
-#             T=T,
-#             id="test_id",
-#             location="",
-#             datetime=None,
-#             start_datetime=START_DATE_DUMMY,
-#             end_datetime=END_DATE_DUMMY,
-#             gsd=None,
-#         ),
-#     ],
-# )
-# def test_df_to_item_multipoint_with_date_given_config_with_date_column_expect_date_from_data(
-#     source_cfg: CsvConfig,
-#     multipoint_with_date_df: gpd.GeoDataFrame,
-# ) -> None:
-#     item = VectorGenerator.df_to_item(
-#         multipoint_with_date_df,
-#         assets={"data": SINGLE_POINT_WITH_DATE_ASSET},
-#         source_cfg=source_cfg,
-#         properties={},
-#         time_col=source_cfg.T,
-#         epsg=source_cfg.epsg,
-#     )
-#     min_date, max_date = VectorGenerator.temporal_extent(multipoint_with_date_df, T)
-#     assert item.id == source_cfg.id
-#     assert item.datetime == max_date
-#     assert item.properties["start_datetime"] == datetime_to_str(cast(pydatetime.datetime, min_date))
-#     assert item.properties["end_datetime"] == datetime_to_str(cast(pydatetime.datetime, max_date))
-#     assert item.assets == {"data": SINGLE_POINT_WITH_DATE_ASSET}
-#     assert item.geometry == MULTIPOINT_GEOMETRY
+    assert item.assets == {"data": asset}
+    assert item.geometry == geometry
+    assert "proj:epsg" in item.properties
+    assert "proj:wkt2" in item.properties

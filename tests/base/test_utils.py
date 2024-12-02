@@ -19,17 +19,18 @@ from stac_generator.base.utils import (
 )
 from tests import REMOTE_FIXTURE_URL
 
-VALID_CSV_CONFIG_FILE = "tests/files/csv_config.csv"
+VALID_CSV_CONFIG_FILE = "tests/files/unit_tests/configs/csv_config.csv"
 
 VALID_CONFIG_FILES = [
-    "tests/files/valid_json_config.json",
-    "tests/files/valid_yaml_config.yaml",
-    "tests/files/valid_yml_config.yml",
+    "tests/files/unit_tests/configs/valid_json_config.json",
+    "tests/files/unit_tests/configs/valid_yaml_config.yaml",
+    "tests/files/unit_tests/configs/valid_yml_config.yml",
+    "tests/files/unit_tests/configs/valid_json_config_one_item.json",
 ]
 
 VALID_NETWORKED_CONFIG_FILES = [
-    "unit_tests/config_test/valid_yaml_config.yaml",
-    "unit_tests/config_test/valid_json_config.json",
+    "unit_tests/config_tests/valid_yaml_config.yaml",
+    "unit_tests/config_tests/valid_json_config.json",
 ]
 
 CONFIG_OUTPUT = [
@@ -43,19 +44,31 @@ CONFIG_OUTPUT = [
             {"name": "Ca_Soln", "description": "Ca concentration"},
             {"name": "pH", "description": "soil pH"},
         ],
+        "collection_date": "2017-01-01",
+        "collection_time": "00:00:00",
     }
 ]
 
 INVALID_CONFIG_FILES = [
     # Empty files
-    "tests/files/invalid_json_config.json",
-    "tests/files/invalid_yaml_config.yaml",
-    "tests/files/invalid_yml_config.yml",
+    "tests/files/unit_tests/configs/invalid_json_config.json",
+    "tests/files/unit_tests/configs/invalid_yaml_config.yaml",
+    "tests/files/unit_tests/configs/invalid_yml_config.yml",
     # Invalid file extensions
-    "tests/files/invalid_extension_config.ini",
-    "tests/files/invalid_extension_config.toml",
-    "tests/files/invalid_extension_config.cfg",
-    "tests/files/invalid_extension_config.txt",
+    "tests/files/unit_tests/configs/invalid_extension_config.ini",
+    "tests/files/unit_tests/configs/invalid_extension_config.toml",
+    "tests/files/unit_tests/configs/invalid_extension_config.cfg",
+    "tests/files/unit_tests/configs/invalid_extension_config.txt",
+]
+
+INVALID_CONFIG_FILES_IDS = [
+    "empty_json",
+    "empty_yaml",
+    "empty_yml",
+    "invalid_extension_ini",
+    "invalid_extension_toml",
+    "invalid_extension_cfg",
+    "invalid_extension_txt",
 ]
 
 
@@ -108,31 +121,25 @@ def test_href_is_stac_api_endpoint(url: str, is_local: bool) -> None:
 
 
 @pytest.mark.httpx_mock(assert_all_responses_were_requested=False)
-def test_force_write_to_stac_api_given_intial_response_ok_expects_no_resend(
+def test_force_write_to_stac_api_given_initial_response_ok_expects_no_resend(
     httpx_mock: pytest_httpx.HTTPXMock,
 ) -> None:
     httpx_mock.add_response(status_code=200, method="POST")
     # Error 500 should be raise if this test fails
     httpx_mock.add_response(status_code=500, method="PUT")
-    try:
-        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
-    except Exception:
-        raise
+    force_write_to_stac_api("http://localhost:8082", "test_collection", {})
 
 
-def test_force_write_to_stac_api_given_intial_response_409_expects_send_put_response_given_put_response_ok_expects_no_raise(
+def test_force_write_to_stac_api_given_initial_response_409_expects_send_put_response_given_put_response_ok_expects_no_raise(
     httpx_mock: pytest_httpx.HTTPXMock,
 ) -> None:
     httpx_mock.add_response(status_code=409, method="POST")
     httpx_mock.add_response(status_code=200, method="PUT")
-    try:
-        force_write_to_stac_api("http://localhost:8082", "test_collection", {})
-    except Exception:
-        raise
+    force_write_to_stac_api("http://localhost:8082", "test_collection", {})
 
 
 @pytest.mark.parametrize("code", [400, 401, 403, 404, 405, 500, 501])
-def test_force_write_to_stac_api_given_intial_response_4xx_or_5xx_expects_raises(
+def test_force_write_to_stac_api_given_initial_response_4xx_or_5xx_expects_raises(
     code: int,
     httpx_mock: pytest_httpx.HTTPXMock,
 ) -> None:
@@ -143,7 +150,7 @@ def test_force_write_to_stac_api_given_intial_response_4xx_or_5xx_expects_raises
 
 
 @pytest.mark.parametrize("code", [400, 401, 403, 404, 405, 500, 501])
-def test_force_write_to_stac_api_given_intial_response_409_final_response_expects_4xx_or_5xx_raises(
+def test_force_write_to_stac_api_given_initial_response_409_final_response_expects_4xx_or_5xx_raises(
     code: int,
     httpx_mock: pytest_httpx.HTTPXMock,
 ) -> None:
@@ -154,7 +161,7 @@ def test_force_write_to_stac_api_given_intial_response_409_final_response_expect
     assert exp_ctx.value.response.status_code == code
 
 
-@pytest.mark.parametrize("file_path", INVALID_CONFIG_FILES)
+@pytest.mark.parametrize("file_path", INVALID_CONFIG_FILES, ids=INVALID_CONFIG_FILES_IDS)
 def test_read_source_config_given_invalid_file_expects_raises(file_path: str) -> None:
     with pytest.raises(Exception):
         read_source_config(file_path)
@@ -186,8 +193,6 @@ SINGLE_POINT_ITEM = pystac.Item(
     id="point_item",
     geometry=shapely.Point(150.5471916, -24.33986861),
     bbox=[150.5471916, -24.34031206, 150.5505183, -24.33986861],
-    start_datetime=datetime.datetime(2016, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
-    end_datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
     datetime=datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
     properties={},
 )
@@ -202,8 +207,6 @@ MULTIPOINTS_ITEM = pystac.Item(
     id="points_item",
     geometry=shapely.MultiPoint([[150.5571916, -24.34986861], [150.5515183, -24.34131206]]),
     bbox=[150.5515183, -24.34986861, 150.5571916, -24.34131206],
-    start_datetime=datetime.datetime(2016, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
-    end_datetime=datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
     datetime=datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
     properties={},
 )
@@ -212,16 +215,8 @@ EXP_SPATIAL_EXTENT = pystac.SpatialExtent([150.5471916, -24.34986861, 150.557191
 EXP_TEMPORAL_EXTENT = pystac.TemporalExtent(
     [
         [
-            datetime.datetime(2016, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
+            datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
             datetime.datetime(2017, 1, 2, 0, 0, 0, tzinfo=datetime.UTC),
-        ]
-    ]
-)
-EXP_TEMPORAL_EXTENT_NO_START_END = pystac.TemporalExtent(
-    [
-        [
-            datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
-            datetime.datetime(2017, 1, 1, 0, 0, 0, tzinfo=datetime.UTC),
         ]
     ]
 )
@@ -232,14 +227,9 @@ def test_get_collection_spatial_extent() -> None:
     assert actual.bboxes == EXP_SPATIAL_EXTENT.bboxes
 
 
-def test_get_collection_temporal_extent_given_start_end_datetime_expect_datetime_range() -> None:
+def test_get_collection_temporal_extent() -> None:
     actual = CollectionGenerator.temporal_extent([SINGLE_POINT_ITEM, MULTIPOINTS_ITEM])
     assert actual.intervals == EXP_TEMPORAL_EXTENT.intervals
-
-
-def test_get_collection_temporal_extent_given_datetime_expect_range_to_be_datetime() -> None:
-    actual = CollectionGenerator.temporal_extent([SINGLE_POINT_ITEM_NO_START_END_DATETIME])
-    assert actual.intervals == EXP_TEMPORAL_EXTENT_NO_START_END.intervals
 
 
 #######################################################################
@@ -357,9 +347,7 @@ GEOMETRY_TEST_SET = {
         ),
     ),
     "COMPOSITE": (
-        gpd.GeoDataFrame(
-            crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}
-        ),
+        gpd.GeoDataFrame(crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}),
         Polygon(((1, 2), (1, 6), (5, 6), (5, 2), (1, 2))),
     ),
     "MORE_THAN_10": (
