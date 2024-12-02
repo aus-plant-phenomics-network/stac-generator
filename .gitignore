@@ -166,3 +166,4 @@ cython_debug/
 
 tests/stac/
 .pdm-python
+.vscode/

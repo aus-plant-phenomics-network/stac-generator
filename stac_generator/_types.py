@@ -42,3 +42,6 @@ RequestContent = str | bytes | Iterable[bytes]
 
 """STAC objects"""
 StacEntityT = Literal["Item", "ItemCollection", "Collection", "Catalogue"]
+
+"""STAC API HTTP Methods"""
+StacAPIMethod = Literal["POST", "PUT"]
