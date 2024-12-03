@@ -20,6 +20,7 @@ from shapely import (
     MultiPolygon,
     Point,
     Polygon,
+    box,
     to_geojson,
 )
 from shapely.geometry import shape
@@ -156,12 +157,6 @@ class ItemGenerator(abc.ABC, Generic[T]):
         kwargs = {"source_type": source_type}
         return type(f"ItemGenerator[{source_type.__name__}]", (ItemGenerator,), kwargs)
 
-    @staticmethod
-    def bounding_geometry(bbox: tuple[float, float, float, float]) -> Polygon:
-        min_x, min_y, max_x, max_y = bbox
-        coords = ((min_x, min_y), (min_x, max_y), (max_x, max_y), (max_x, min_y), (min_x, min_y))
-        return Polygon(coords)
-
     def __init__(
         self,
         configs: list[dict[str, Any]],
@@ -230,7 +225,7 @@ class VectorGenerator(ItemGenerator[T]):
                     case Polygon() | MultiPolygon():
                         curr_type = MultiPolygon
                     case _:
-                        return VectorGenerator.bounding_geometry(df.total_bounds)
+                        return box(*df.total_bounds)
             if isinstance(point, Point) and curr_type == MultiPoint:
                 curr_collection.append(point)
             elif isinstance(point, MultiPoint) and curr_type == MultiPoint:
@@ -244,9 +239,9 @@ class VectorGenerator(ItemGenerator[T]):
             elif isinstance(point, MultiPolygon) and curr_type == MultiPolygon:
                 curr_collection.extend(point.geoms)
             else:
-                return VectorGenerator.bounding_geometry(df.total_bounds)
+                return box(*df.total_bounds)
         if len(curr_collection) > 10:
-            return VectorGenerator.bounding_geometry(df.total_bounds)
+            return box(*df.total_bounds)
         return cast(Geometry, curr_type)(curr_collection)
 
     @staticmethod

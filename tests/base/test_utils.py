@@ -350,7 +350,7 @@ GEOMETRY_TEST_SET = {
         gpd.GeoDataFrame(
             crs="EPSG:4326", data={"geometry": [Point(1, 2), LineString(((3, 4), (5, 6)))]}
         ),
-        Polygon(((1, 2), (1, 6), (5, 6), (5, 2), (1, 2))),
+        Polygon(((5, 2), (5, 6), (1, 6), (1, 2), (5, 2))),
     ),
     "MORE_THAN_10": (
         gpd.GeoDataFrame(
@@ -371,7 +371,7 @@ GEOMETRY_TEST_SET = {
                 ]
             },
         ),
-        Polygon(((1, 2), (1, 22), (21, 22), (21, 2), (1, 2))),
+        Polygon(((21, 2), (21, 22), (1, 22), (1, 2), (21, 2))),
     ),
 }
 
