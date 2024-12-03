@@ -1,37 +1,60 @@
-import asyncio
-import datetime
+r"""
+  /$$$$$$ /$$$$$$$$/$$$$$$  /$$$$$$         /$$$$$$ /$$$$$$$$/$$   /$$
+ /$$__  $|__  $$__/$$__  $$/$$__  $$       /$$__  $| $$_____| $$$ | $$
+| $$  \__/  | $$ | $$  \ $| $$  \__/      | $$  \__| $$     | $$$$| $$
+|  $$$$$$   | $$ | $$$$$$$| $$            | $$ /$$$| $$$$$  | $$ $$ $$
+ \____  $$  | $$ | $$__  $| $$            | $$|_  $| $$__/  | $$  $$$$
+ /$$  \ $$  | $$ | $$  | $| $$    $$      | $$  \ $| $$     | $$\  $$$
+|  $$$$$$/  | $$ | $$  | $|  $$$$$$/      |  $$$$$$| $$$$$$$| $$ \  $$
+ \______/   |__/ |__/  |__/\______/        \______/|________|__/  \__/
+"""  # noqa: D212
+
 import json
-import sys
 from argparse import ArgumentParser
 from pathlib import Path
 
+from rich_argparse import RawDescriptionRichHelpFormatter
+
 from stac_generator.__version__ import __version__
-from stac_generator.base.schema import StacCatalogConfig, StacCollectionConfig
-from stac_generator.generator_factory import StacGeneratorFactory
+from stac_generator.base.generator import StacSerialiser
+from stac_generator.base.schema import StacCollectionConfig
+from stac_generator.factory import StacGeneratorFactory
 
 
 def run_cli() -> None:
     # Build the CLI argument parser
-    parser = ArgumentParser(prog="stac_generator", description="CLI tool to generator STAC records")
-    parser.add_argument("-v", "--version", action="version", version=__version__)
-    # Source commands
-    parser.add_argument("data_type", type=str, help="data type of the source data")
-    parser.add_argument("source_file", type=str, help="path to the source config csv")
-    parser.add_argument(
-        "--to_remote",
-        type=str,
-        required=False,
-        default=None,
-        help="catalog api endpoint for pushing generated stac records",
-    )
-    parser.add_argument(
-        "--to_local",
-        type=str,
-        required=False,
-        default=None,
-        help="local path to save generated stac records to",
+    parser = ArgumentParser(
+        prog="stac_generator",
+        description=__doc__,
+        formatter_class=RawDescriptionRichHelpFormatter,
     )
 
+    # Source commands
+    parser.add_argument(
+        "src",
+        type=str,
+        action="extend",
+        nargs="+",
+        help="""path to the source_config.
+                Path can be a local path or a url.
+                Path also accepts multiple values.
+                Source config contains metadata specifying how a raw file is read.
+                At the minimum, it must contain the file location.
+                To learn more about source config, please visit INSERT_DOC_URL.
+            """,
+    )
+    parser.add_argument(
+        "--dst",
+        type=str,
+        required=True,
+        help="""path to where the generated collection is stored.
+                Accepts a local path or a remote api endpoint.
+                If path is local, collection and item json files will be written to disk.
+                If path is an endpoint, the collection and item json files will be pushed using STAC api methods
+            """,
+    )
+    parser.add_argument("-V", "--version", action="version", version=__version__)
+    parser.add_argument("-v", action="store_true", help="increase verbosity for debugging")
     # Collection Information
     collection_metadata = parser.add_argument_group("STAC collection metadata")
     collection_metadata.add_argument("--id", type=str, help="id of collection")
@@ -46,54 +69,8 @@ def run_cli() -> None:
         default="Auto-generated",
     )
 
-    # Catalog Information
-    catalog_metadata = parser.add_argument_group(
-        "STAC catalog metadata- Derived from STAC Collection metadata if not provided"
-    )
-    catalog_metadata.add_argument(
-        "--catalog_id",
-        type=str,
-        required=False,
-        help="id of catalog. Use the value of id if not provided",
-    )
-    catalog_metadata.add_argument(
-        "--catalog_title",
-        type=str,
-        required=False,
-        help="title of catalog. Use the value of title if not provided",
-    )
-    catalog_metadata.add_argument(
-        "--catalog_description",
-        type=str,
-        required=False,
-        help="description of catalog. Use the value of description if not provided",
-    )
-
     # STAC Common Metadata
-    common_metadata = parser.add_argument_group(
-        "STAC common metadata. Providers information can only be provided from a metadata json file. CLI arguments take priority over json fields if overlapping occurs"
-    )
-    common_metadata.add_argument(
-        "--datetime",
-        type=datetime.datetime.fromisoformat,
-        help="STAC datetime",
-        required=False,
-        default=None,
-    )
-    common_metadata.add_argument(
-        "--start_datetime",
-        type=datetime.datetime.fromisoformat,
-        help="STAC start_datetime",
-        required=False,
-        default=None,
-    )
-    common_metadata.add_argument(
-        "--end_datetime",
-        type=datetime.datetime.fromisoformat,
-        help="STAC end_datetime",
-        required=False,
-        default=None,
-    )
+    common_metadata = parser.add_argument_group("STAC common metadata")
     common_metadata.add_argument(
         "--license", type=str, help="STAC license", required=False, default="proprietary"
     )
@@ -106,7 +83,6 @@ def run_cli() -> None:
     common_metadata.add_argument(
         "--mission", type=str, help="STAC mission", required=False, default=None
     )
-    common_metadata.add_argument("--gsd", type=float, help="STAC gsd", required=False, default=None)
     common_metadata.add_argument(
         "--instruments",
         action="extend",
@@ -125,8 +101,11 @@ def run_cli() -> None:
     )
     args = parser.parse_args()
 
-    if args.to_remote is None and args.to_local is None:
-        sys.exit("Error - either --to_remote or --to_local must be provided")
+    # Change logging level
+    if args.v:
+        import logging
+
+        logging.getLogger().setLevel(logging.DEBUG)
 
     # Build collection config and catalog config
     metadata_json = {}
@@ -139,41 +118,24 @@ def run_cli() -> None:
         id=args.id,
         title=args.title,
         description=args.description,
-        datetime=args.datetime if args.datetime else metadata_json.get("datetime"),
-        start_datetime=args.start_datetime
-        if args.start_datetime
-        else metadata_json.get("start_datetime"),
-        end_datetime=args.end_datetime if args.end_datetime else metadata_json.get("end_datetime"),
         license=args.license if args.license else metadata_json.get("license"),
         platform=args.platform if args.platform else metadata_json.get("platform"),
         constellation=args.constellation
         if args.constellation
         else metadata_json.get("constellation"),
         mission=args.mission if args.mission else metadata_json.get("mission"),
-        gsd=args.gsd if args.gsd else metadata_json.get("gsd"),
         instruments=args.instruments if args.instruments else metadata_json.get("instruments"),
         providers=metadata_json.get("providers"),
     )
-    # CLI catalog args take precendence over collection args
-    catalog_config = StacCatalogConfig(
-        id=args.catalog_id if args.catalog_id else args.id,
-        title=args.catalog_title if args.catalog_title else args.title,
-        description=args.catalog_description if args.catalog_description else args.description,
-    )
+
     # Generate
     generator = StacGeneratorFactory.get_stac_generator(
-        data_type=args.data_type,
-        source_file=args.source_file,
+        source_configs=args.src,
         collection_cfg=collection_config,
-        catalog_cfg=catalog_config,
     )
     # Save
-    if args.to_remote:
-        asyncio.run(generator.write_to_api(href=args.to_remote))
-        print(f"Catalog successfully pushed to {args.to_remote}")
-    if args.to_local:
-        generator.generate_catalog_and_save(href=args.to_local)
-        print(f"Catalog successfully save to {args.to_local}")
+    serialiser = StacSerialiser(generator, args.dst)
+    serialiser()
 
 
 if __name__ == "__main__":

@@ -1,117 +1,120 @@
-import datetime
+import json
+import logging
+import urllib.parse
+from pathlib import Path
 from typing import Any, cast
 
-import geopandas as gpd
-import pystac
-from shapely import (
-    Geometry,
-    GeometryCollection,
-    LineString,
-    MultiLineString,
-    MultiPoint,
-    MultiPolygon,
-    Point,
-    Polygon,
-)
+import httpx
+import numpy as np
+import pandas as pd
+import yaml
+from shapely import Geometry, centroid
+from timezonefinder import TimezoneFinder
 
-from stac_generator.base.schema import StacCollectionConfig
+SUPPORTED_URI_SCHEMES = ["http", "https"]
+logger = logging.getLogger(__name__)
+
+TZFinder = TimezoneFinder()
 
 
-def geometry_from_dict(item: dict[str, Any]) -> Geometry:
-    """Create a `shapely.Geometry` object from dictionary
+def parse_href(base_url: str, collection_id: str, item_id: str | None = None) -> str:
+    """Generate href for collection or item based on id
 
-    :param item: dictionary that must conform to geojson <a href="https://datatracker.ietf.org/doc/html/rfc7946">geometry object</a>
-    :type item: dict[str, Any]
-    :raises ValueError: if item is None
-    :raises ValueError: if no `type` key is found in item
-    :raises ValueError: if `type` is not `GeometryCollection` but no `coordinates` key is found in item
-    :raises ValueError: if `type` is `GeometryCollection` but no `geometries` key is found in item
-    :raises ValueError: if `type` is not a valid geojson geometry type from rfc7946
-    :return: geometry item as `shapely.Geometry` object
-    :rtype: Geometry
+    :param base_url: path to catalog.
+    :type base_url: str
+    :param collection_id: collection id
+    :type collection_id: str
+    :param item_id: item id, defaults to None
+    :type item_id: str | None, optional
+    :return: uri to collection or item
+    :rtype: str
     """
-    if not item:
-        raise ValueError("Expects non null geometry")
-    if "type" not in item:
-        raise ValueError("Invalid geojson geometry object: no type field")
-    if item["type"] != "GeometryCollection" and "coordinates" not in item:
-        raise ValueError(
-            "Invalid geojson geometry object: no coordinates field for non GeometryCollection"
-        )
-    geometry_type = item["type"]
-    coordinates = item.get("coordinates")
-    match geometry_type:
-        case "Point":
-            return Point(cast(list, coordinates))
-        case "MultiPoint":
-            return MultiPoint(cast(list, coordinates))
-        case "LineString":
-            return LineString(*cast(list, coordinates))
-        case "MultiLineString":
-            return MultiLineString(cast(list, coordinates))
-        case "Polygon":
-            return Polygon(*cast(list, coordinates))
-        case "MultiPolygon":
-            return MultiPolygon(cast(list, coordinates))
-        case "GeometryCollection":
-            if "geometries" not in item:
-                raise ValueError(
-                    "Invalid geojson geometry object: no geometries field for GeometryCollection type"
-                )
-            return GeometryCollection(cast(list, item["geometries"]))
-        case _:
-            raise ValueError(f"Invalid geojson geometry type: {geometry_type}")
+    if item_id:
+        return urllib.parse.urljoin(base_url, f"{collection_id}/{item_id}")
+    return urllib.parse.urljoin(base_url, f"{collection_id}")
 
 
-def extract_spatial_extent(items: list[pystac.Item]) -> pystac.SpatialExtent:
-    """Extract spatial extent for a collection from child items
+def href_is_stac_api_endpoint(href: str) -> bool:
+    """Check if href points to a resource behind a stac api
 
-    :param items: list of all `pystac.Item`
-    :type items: list[pystac.Item]
-    :return: spatial extent object
-    :rtype: pystac.SpatialExtent
+    :param href: path to resource
+    :type href: str
+    :return: local or non-local
+    :rtype: bool
     """
-    geometries: list[Geometry] = []
-    for item in items:
-        if (geo := item.geometry) is not None:
-            geometries.append(geometry_from_dict(geo))
-    geo_series = gpd.GeoSeries(data=geometries)
-    bbox = geo_series.total_bounds.tolist()
-    return pystac.SpatialExtent(bbox)
+    output = urllib.parse.urlsplit(href)
+    return output.scheme == ""
 
 
-def extract_temporal_extent(
-    items: list[pystac.Item], collection: StacCollectionConfig | None = None
-) -> pystac.TemporalExtent:
-    """Extract spatial extent for a collection from a list of items and collection config.
+def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
+    """Force write a json object to a stac api endpoint.
+    This function will try sending a POST request and if a 409 error is encountered,
+    try sending a PUT request. Other exceptions if occured will be raised
 
-    If temporal extent (`start_datetime`, `end_datetime` or `datetime`) is in `collection`, generate
-    `pystac.TemporalExtent` from those fields. Otherwise, extract the fields from the provided items.
-
-    :param items: list of Items
-    :type items: list[pystac.Item]
-    :param collection: collection config, defaults to None
-    :type collection: StacCollectionConfig | None, optional
-    :raises ValueError: if a pystac.Item has neither `datetime` nor both `start_datetime` and `end_datetime`
-    :return: extracted temporal extent
-    :rtype: pystac.TemporalExtent
+    :param url: path to stac resource for creation/update
+    :type url: str
+    :param json: json object
+    :type json: dict[str, Any]
     """
-    if collection:
-        if collection.start_datetime and collection.end_datetime:
-            return pystac.TemporalExtent([[collection.start_datetime, collection.end_datetime]])
-        return pystac.TemporalExtent([collection.datetime, collection.datetime])
-    min_dt = datetime.datetime.now(datetime.UTC)
-    max_dt = datetime.datetime(1, 1, 1)  # noqa: DTZ001
-    for item in items:
-        if "start_datetime" in item.properties and "end_datetime" in item.properties:
-            min_dt = min(min_dt, item.properties["start_datetime"])
-            max_dt = max(max_dt, item.properties["end_datetime"])
+    try:
+        logger.debug(f"sending POST request to {url}")
+        response = httpx.post(url=url, json=json)
+        response.raise_for_status()
+    except httpx.HTTPStatusError as err:
+        if err.response.status_code == 409:
+            logger.debug(f"sending PUT request to {url}")
+            response = httpx.put(url=f"{url}/{id}", json=json)
+            response.raise_for_status()
         else:
-            if item.datetime is None:
-                raise ValueError(
-                    "Invalid pystac item. Either datetime or start_datetime and end_datetime values must be provided"
-                )
-            min_dt = min(min_dt, item.datetime)
-            max_dt = max(max_dt, item.datetime)
-    max_dt = max(max_dt, min_dt)
-    return pystac.TemporalExtent([[min_dt, max_dt]])
+            raise err
+
+
+def read_source_config(href: str) -> list[dict[str, Any]]:
+    logger.debug(f"reading config file from {href}")
+    if not href.endswith(("json", "yaml", "yml", "csv")):
+        raise ValueError(
+            "Unsupported extension. We currently allow json/yaml/csv files to be used as config"
+        )
+    if href.endswith(".csv"):
+        df = pd.read_csv(href)
+        df.replace(np.nan, None, inplace=True)
+        return cast(list[dict[str, Any]], df.to_dict("records"))
+    if not href.startswith(("http", "https")):
+        with Path(href).open("r") as file:
+            if href.endswith(("yaml", "yml")):
+                result = yaml.safe_load(file)
+            if href.endswith("json"):
+                result = json.load(file)
+    else:
+        response = httpx.get(href, follow_redirects=True)
+        response.raise_for_status()
+        if href.endswith("json"):
+            result = response.json()
+        if href.endswith(("yaml", "yml")):
+            result = yaml.safe_load(response.content.decode("utf-8"))
+
+    if isinstance(result, dict):
+        return [result]
+    if isinstance(result, list):
+        return result
+    raise ValueError(f"Expects config to be read as a list of dictionary. Provided: {type(result)}")
+
+
+def calculate_timezone(geometry: Geometry) -> str:
+    """Calculate timezone from geometry
+
+    :param geometry: geometry object in EPSG:4326 crs
+    :type geometry: Geometry
+    :raises ValueError: very exceptional cases where tzfinder cannot determine timezone
+    :return: timezone string
+    :rtype: str
+    """
+    point = centroid(geometry)
+    # Use TimezoneFinder to get the timezone
+    timezone_str = TZFinder.timezone_at(lng=point.x, lat=point.y)
+
+    if not timezone_str:
+        raise ValueError(
+            f"Could not determine timezone for coordinates: lon={point.x}, lat={point.y}"
+        )
+    return timezone_str

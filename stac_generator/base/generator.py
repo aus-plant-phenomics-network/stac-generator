@@ -1,83 +1,114 @@
+from __future__ import annotations
+
 import abc
-from typing import Any, Generic, cast
+import datetime as pydatetime
+import json
+import logging
+from typing import TYPE_CHECKING, Any, Generic, cast
 
-import httpx
-import pandas as pd
+import geopandas as gpd
 import pystac
+from pyproj import CRS
 from pystac.collection import Extent
+from pystac.extensions.projection import ItemProjectionExtension
+from pystac.utils import datetime_to_str
+from shapely import (
+    Geometry,
+    LineString,
+    MultiLineString,
+    MultiPoint,
+    MultiPolygon,
+    Point,
+    Polygon,
+    box,
+    to_geojson,
+)
+from shapely.geometry import shape
 
-from stac_generator._types import StacEntityT
 from stac_generator.base.schema import (
-    LoadConfig,
-    StacCatalogConfig,
+    SourceConfig,
     StacCollectionConfig,
     T,
 )
-from stac_generator.base.utils import extract_spatial_extent, extract_temporal_extent
+from stac_generator.base.utils import (
+    calculate_timezone,
+    force_write_to_stac_api,
+    href_is_stac_api_endpoint,
+    parse_href,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import Sequence
 
 
-class StacGenerator(abc.ABC, Generic[T]):
-    source_type: type[T]
-    """SourceConfig subclass that contains information used for parsing the source file"""
+logger = logging.getLogger(__name__)
 
-    @classmethod
-    def __class_getitem__(cls, source_type: type) -> type:
-        kwargs = {"source_type": source_type}
-        return type(f"StacGenerator[{source_type.__name__}]", (StacGenerator,), kwargs)
+
+class CollectionGenerator:
+    """CollectionGenerator class. User should not need to subclass this class unless greater control over how collection is generated from items is needed."""
 
     def __init__(
         self,
-        source_df: pd.DataFrame,
         collection_cfg: StacCollectionConfig,
-        catalog_cfg: StacCatalogConfig | None = None,
-        href: str | None = None,
+        generators: Sequence[ItemGenerator],
     ) -> None:
-        """Base STACGenerator object. Users should extend this class for handling different file extensions.
-        Please see CsvStacGenerator source code.
+        """CollectionGenerator - generate collection from generators attribute
 
-        :param source_df: source data config
-        :type source_df: pd.DataFrame
-        :param collection_cfg: collection config for generating collection. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
+        :param collection_cfg: collection metadata
         :type collection_cfg: StacCollectionConfig
-        :param catalog_cfg: catalog config for generating catalog. Required if the intention is to save the catalog to disk or POST to an API, defaults to None
-        :type catalog_cfg: StacCatalogConfig | None, optional
-        :param href: catalog href for serialisation.
-        :type href: str | None, optional
-
+        :param generators: sequence of ItemGenerator subclasses.
+        :type generators: Sequence[ItemGenerator]
         """
         self.collection_cfg = collection_cfg
-        self.catalog_cfg = (
-            catalog_cfg
-            if catalog_cfg
-            else StacCatalogConfig(
-                id=collection_cfg.id,
-                title=collection_cfg.title,
-                description=collection_cfg.description,
-            )
-        )
-        self.source_df = source_df
-        self.configs = [
-            self.source_type(**cast(dict[str, Any], self.source_df.loc[i, :].to_dict()))
-            for i in range(len(self.source_df))
-        ]
-        self.href = href
-
-    @abc.abstractmethod
-    def create_item_from_config(self, source_cfg: T) -> list[pystac.Item]:
-        """Abstract method that handles `pystac.Item` generation from the appropriate config"""
-        raise NotImplementedError
+        self.generators = generators
 
     @staticmethod
-    def extract_extent(
-        items: list[pystac.Item], collection_cfg: StacCollectionConfig | None = None
-    ) -> Extent:
-        return Extent(extract_spatial_extent(items), extract_temporal_extent(items, collection_cfg))
+    def spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
+        """Extract a collection's spatial extent based on geometry information of its items
+
+        :param items: a list of children items in the collection
+        :type items: Sequence[pystac.Item]
+        :return: a bbox enveloping all items
+        :rtype: pystac.SpatialExtent
+        """
+        geometries: list[Geometry] = []
+        for item in items:
+            if (geo := item.geometry) is not None:
+                geometries.append(shape(geo))
+        geo_series = gpd.GeoSeries(data=geometries)
+        bbox = geo_series.total_bounds.tolist()
+        logger.debug(f"collection bbox: {bbox}")
+        return pystac.SpatialExtent(bbox)
+
+    @staticmethod
+    def temporal_extent(items: Sequence[pystac.Item]) -> pystac.TemporalExtent:
+        """Extract a collection's temporal extent based on time information of its items
+
+        :param items: a list of children items in the collection
+        :type items: Sequence[pystac.Item]
+        :return: [start_time, end_time] enveloping all items
+        :rtype: pystac.TemporalExtent
+        """
+        min_dt = pydatetime.datetime.now(pydatetime.UTC)
+        max_dt = pydatetime.datetime(1, 1, 1, tzinfo=pydatetime.UTC)
+        for item in items:
+            if item.datetime is not None:
+                min_dt = min(min_dt, item.datetime)
+                max_dt = max(max_dt, item.datetime)
+            else:
+                raise ValueError(f"Unable to determine datetime for item: {item.id}")
+        min_dt, max_dt = min([min_dt, max_dt]), max([max_dt, min_dt])
+        logger.debug(
+            f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}"
+        )
+        return pystac.TemporalExtent([[min_dt, max_dt]])
 
     def _create_collection_from_items(
         self,
         items: list[pystac.Item],
         collection_cfg: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
+        logger.debug("generating collection from items")
         if collection_cfg is None:
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
@@ -87,7 +118,7 @@ class StacGenerator(abc.ABC, Generic[T]):
                 if collection_cfg.description
                 else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
-            extent=self.extract_extent(items, collection_cfg),
+            extent=Extent(self.spatial_extent(items), self.temporal_extent(items)),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
             providers=[
@@ -99,156 +130,210 @@ class StacGenerator(abc.ABC, Generic[T]):
         collection.add_items(items)
         return collection
 
-    def _create_catalog_from_collection(
-        self, collection: pystac.Collection, catalog_cfg: StacCatalogConfig | None = None
-    ) -> pystac.Catalog:
-        if catalog_cfg is None:
-            raise ValueError("Generating catalog requires non null catalog config")
-        catalog = pystac.Catalog(
-            id=catalog_cfg.id,
-            description=catalog_cfg.description,
-            title=catalog_cfg.title,
-        )
-        catalog.add_child(collection)
-        return catalog
+    def create_collection(self) -> pystac.Collection:
+        """Generate collection from all gathered items
+
+        Spatial extent is the bounding box enclosing all items
+        Temporal extent is the time interval enclosing temporal extent of all items. Note that this value is automatically calculated
+        and provided temporal extent fields (start_datetime, end_datetime) at collection level will be ignored
+
+        :return: generated collection
+        :rtype: pystac.Collection
+        """
+        items = []
+        for generator in self.generators:
+            items.extend(generator.create_items())
+        return self._create_collection_from_items(items, self.collection_cfg)
+
+
+class ItemGenerator(abc.ABC, Generic[T]):
+    """Base ItemGenerator object. Users should extend this class for handling different file extensions."""
+
+    source_type: type[T]
+    """SourceConfig subclass that contains information used for parsing the source file"""
+
+    @classmethod
+    def __class_getitem__(cls, source_type: type) -> type:
+        kwargs = {"source_type": source_type}
+        return type(f"ItemGenerator[{source_type.__name__}]", (ItemGenerator,), kwargs)
+
+    def __init__(
+        self,
+        configs: list[dict[str, Any]],
+    ) -> None:
+        """Base ItemGenerator object. Users should extend this class for handling different file extensions.
+
+        :param configs: source data configs - either from csv config or yaml/json
+        :type configs: list[dict[str, Any]]
+        """
+        logger.debug("validating config")
+        self.configs = [self.source_type(**config) for config in configs]
+
+    @abc.abstractmethod
+    def create_item_from_config(self, source_cfg: T) -> pystac.Item:
+        """Abstract method that handles `pystac.Item` generation from the appropriate config"""
+        raise NotImplementedError
 
     def create_items(self) -> list[pystac.Item]:
-        """Generate STAC Items from source dataframe
+        """Generate STAC Items from `configs` metadata
 
         :return: list of generated STAC Item
         :rtype: list[pystac.Item]
         """
+        logger.debug(f"generating items using {self.__class__.__name__}")
         items = []
         for config in self.configs:
-            items.extend(self.create_item_from_config(config))
+            items.append(self.create_item_from_config(config))
         return items
 
-    def create_collection(self) -> pystac.Collection:
-        """Generate STAC Collection that includes all STAC Items from source dataframe
 
-        collection_cfg must be provided to constructor for this method to work
+class VectorGenerator(ItemGenerator[T]):
+    @classmethod
+    def __class_getitem__(cls, source_type: type) -> type:
+        kwargs = {"source_type": source_type}
+        return type(f"VectorGenerator[{source_type.__name__}]", (VectorGenerator,), kwargs)
 
-        :return: STAC Collection that includes all generated STAC Items
-        :rtype: pystac.Collection
+    @staticmethod
+    def geometry(  # noqa: C901
+        df: gpd.GeoDataFrame,
+    ) -> Geometry:
+        """Calculate the geometry from geopandas dataframe.
+
+        If geopandas dataframe has only one item, the geometry will be that of the item.
+        If geopandas dataframe has less than 10 items of the same type, the geometry will be the Multi version of the type.
+        Note that MultiPoint will be unpacked into points for the 10 items limit.
+        If there are more than 10 items of the same type or there are items of different types i.e. Point and LineString, the returned
+        geometry will be the Polygon of the bounding box. Note that Point and MultiPoint are treated as the same type (so are type and its Multi version).
+
+        :param df: input dataframe
+        :type df: gpd.GeoDataFrame
         """
-        items = self.create_items()
-        return self._create_collection_from_items(items, self.collection_cfg)
+        points: Sequence[Geometry] = df["geometry"].unique()
+        # One item
+        if len(points) == 1:
+            return points[0]
+        # Multiple Items of the same type
+        curr_type = None
+        curr_collection: list[Geometry] = []
+        for point in points:
+            if curr_type is None:
+                match point:
+                    case Point() | MultiPoint():
+                        curr_type = MultiPoint
+                    case LineString() | MultiLineString():
+                        curr_type = MultiLineString
+                    case Polygon() | MultiPolygon():
+                        curr_type = MultiPolygon
+                    case _:
+                        return box(*df.total_bounds)
+            if isinstance(point, Point) and curr_type == MultiPoint:
+                curr_collection.append(point)
+            elif isinstance(point, MultiPoint) and curr_type == MultiPoint:
+                curr_collection.extend(point.geoms)
+            elif isinstance(point, LineString) and curr_type == MultiLineString:
+                curr_collection.append(point)
+            elif isinstance(point, MultiLineString) and curr_type == MultiLineString:
+                curr_collection.extend(point.geoms)
+            elif isinstance(point, Polygon) and curr_type == MultiPolygon:
+                curr_collection.append(point)
+            elif isinstance(point, MultiPolygon) and curr_type == MultiPolygon:
+                curr_collection.extend(point.geoms)
+            else:
+                return box(*df.total_bounds)
+        if len(curr_collection) > 10:
+            return box(*df.total_bounds)
+        return cast(Geometry, curr_type)(curr_collection)
 
-    def create_catalog(self) -> pystac.Catalog:
-        """Generate STAC Catalog that includes a STAC Collection containing all STAC Item generated from
-        source dataframe
+    @staticmethod
+    def df_to_item(
+        df: gpd.GeoDataFrame,
+        assets: dict[str, pystac.Asset],
+        source_cfg: SourceConfig,
+        properties: dict[str, Any],
+        epsg: int = 4326,
+    ) -> pystac.Item:
+        """Convert geopandas dataframe to pystac.Item
 
-        Both collection_cfg and catalog_cfg must be provided for this method to work
-
-        :return: STAC Catalog
-        :rtype: pystac.Catalog
+        :param df: input dataframe
+        :type df: gpd.GeoDataFrame
+        :param assets: source data asset_
+        :type assets: dict[str, pystac.Asset]
+        :param source_cfg: config
+        :type source_cfg: SourceConfig
+        :param properties: pystac Item properties
+        :type properties: dict[str, Any]
+        :param time_col: time_col if there are time information in the input df, defaults to None
+        :type time_col: str | None, optional
+        :param epsg: epsg information, defaults to 4326
+        :type epsg: int, optional
+        :return: generated pystac Item
+        :rtype: pystac.Item
         """
-        collection = self.create_collection()
-        return self._create_catalog_from_collection(collection, self.catalog_cfg)
+        crs = cast(CRS, df.crs)
+        # Convert to WGS 84 for computing geometry and bbox
+        df.to_crs(epsg=4326, inplace=True)
+        item_tz = calculate_timezone(box(*df.total_bounds))
+        item_ts = source_cfg.get_datetime(item_tz)
+        geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
+        item = pystac.Item(
+            source_cfg.id,
+            bbox=df.total_bounds.tolist(),
+            geometry=geometry,
+            datetime=item_ts,
+            properties=properties,
+            assets=assets,
+        )
+        proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
+        proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt())
+        return item
 
-    def generate_collection_and_save(self, href: str) -> None:
-        """Generate STAC Collection and save to disk.
 
-        This is a convenient method
-        that combines `self.create_collection` and `collection.normalize_and_save(href)`
+class StacSerialiser:
+    def __init__(self, generator: CollectionGenerator, href: str) -> None:
+        self.generator = generator
+        self.collection = generator.create_collection()
+        self.href = href
+        StacSerialiser.pre_serialisation_hook(self.collection, self.href)
 
+    @staticmethod
+    def pre_serialisation_hook(collection: pystac.Collection, href: str) -> None:
+        """Hook that can be overwritten to provide pre-serialisation functionality.
+        By default, this normalises collection href and performs validation
 
-        :param href: disk location of the generated collection
+        :param collection: collection object
+        :type collection: pystac.Collection
+        :param href: serialisation href
         :type href: str
         """
-        collection = self.create_collection()
+        logger.debug("validating generated collection and items")
         collection.normalize_hrefs(href)
         collection.validate_all()
-        collection.save()
 
-    def generate_catalog_and_save(self, href: str | None) -> None:
-        """Write the catalog generated from source dataframe to local disk
+    def __call__(self) -> None:
+        if href_is_stac_api_endpoint(self.href):
+            return self.to_json()
+        return self.to_api()
 
-        If `href` is not provided, will attemp to use `href` under `StacCatalogConfig`
+    def to_json(self) -> None:
+        """Generate STAC Collection and save to disk as json files"""
+        logger.debug("saving collection as local json")
+        self.collection.save()
+        logger.info(f"successfully save collection to {self.href}")
 
-        :param href: disk location
-        :type href: str | None
-        :raises ValueError: if href parameter is not provided as method argument or config attribute
+    def to_api(self) -> None:
+        """_Generate STAC Collection and push to remote API.
+        The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
-        if not href and not (self.catalog_cfg and self.href):
-            raise ValueError("Href must be provided as argument or under catalog config")
-        catalog = self.create_catalog()
-        href = href if href is not None else cast(str, self.href)
-        catalog.normalize_hrefs(href)
-        catalog.validate_all()
-        catalog.save()
-
-    async def write_to_api(self, href: str | None = None) -> None:
-        """Write the catalog generated from source dataframe to an href
-
-        If href is not provided, will attempt to use the href under `StacCatalogConfig`
-
-        :param href: STAC api href, defaults to None
-        :type href: str | None, optional
-        :raises ValueError: if href parameter is not provided as method argument or config attribute
-        """
-        if not href and not (self.catalog_cfg and self.href):
-            raise ValueError("href must be provided as argument or to catalog config")
-        catalog = self.create_catalog()
-        href = href if href is not None else cast(str, self.href)
-        catalog.normalize_hrefs(href)
-        catalog.validate_all()
-        async with httpx.AsyncClient() as client:
-            for collection in catalog.get_collections():
-                await client.post(f"{href}/collections", json=collection.to_dict())
-                for item in collection.get_all_items():
-                    await client.post(
-                        f"{href}/collections/{item.collection_id}/items",
-                        json=item.to_dict(),
-                    )
-
-
-class StacLoader:
-    @staticmethod
-    def _load_from_file(
-        entity: StacEntityT, location: str
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        match entity:
-            case "Item":
-                return pystac.Item.from_file(location)
-            case "ItemCollection":
-                return pystac.ItemCollection.from_file(location)
-            case "Collection":
-                return pystac.Collection.from_file(location)
-            case "Catalogue":
-                return pystac.Catalog.from_file(location)
-            case _:
-                raise ValueError(f"Invalid Stac type: {entity}")
-
-    @staticmethod
-    def _load_from_api(
-        entity: StacEntityT, api_href: str
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        response = httpx.get(api_href)
-        json_data = response.json()
-        match entity:
-            case "Item":
-                return pystac.Item(**json_data)
-            case "ItemCollection":
-                return pystac.ItemCollection(**json_data)
-            case "Collection":
-                return pystac.Collection(**json_data)
-            case "Catalogue":
-                return pystac.Catalog(**json_data)
-            case _:
-                raise ValueError(f"Invalid Stac type: {entity}")
-
-    @staticmethod
-    def from_config(
-        load_cfg: LoadConfig,
-    ) -> pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection:
-        """Get a Stac entity using information from load_cfg
-
-        :param load_cfg: load information
-        :type load_cfg: LoadConfig
-        :return: pystac entity
-        :rtype: pystac.Catalog | pystac.Collection | pystac.Item | pystac.ItemCollection
-        """
-        if load_cfg.json_location:
-            return StacLoader._load_from_file(load_cfg.entity, load_cfg.json_location)
-        return StacLoader._load_from_api(load_cfg.entity, cast(str, load_cfg.stac_api_endpoint))
+        logger.debug("save collection to STAC API")
+        force_write_to_stac_api(
+            url=parse_href(self.href, "collections"),
+            id=self.collection.id,
+            json=self.collection.to_dict(),
+        )
+        for item in self.collection.get_all_items():
+            force_write_to_stac_api(
+                url=parse_href(self.href, f"collections/{self.collection.id}/items"),
+                id=item.id,
+                json=item.to_dict(),
+            )
+        logger.info(f"successfully save collection to {self.href}")
