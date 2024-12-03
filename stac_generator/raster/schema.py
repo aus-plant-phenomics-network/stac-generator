@@ -35,10 +35,10 @@ class RasterConfig(SourceConfig):
     """EPSG code for the raster's coordinate reference system"""
     collection_date: datetime.date
     collection_time: datetime.time
-    bands: list[BandInfo]
+    band_info: list[BandInfo]
     """List of band information"""
 
-    @field_validator("bands", mode="before")
+    @field_validator("band_info", mode="before")
     @classmethod
     def parse_bands(cls, v: str) -> list[BandInfo]:
         if isinstance(v, str):

@@ -79,7 +79,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             # Create EO and Raster bands
             eo_bands = []
             raster_bands = []
-            for band_info in source_cfg.bands:
+            for band_info in source_cfg.band_info:
                 eo_band = Band.create(
                     name=BAND_MAPPING[band_info.name.lower()],
                     common_name=BAND_MAPPING.get(band_info.name.lower(), None),
