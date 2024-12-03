@@ -5,9 +5,11 @@ from typing import cast
 import pystac
 import rasterio
 from pyproj import CRS
+from pyproj.transformer import Transformer
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.projection import ItemProjectionExtension, ProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
+from shapely import box
 from shapely.geometry import mapping
 
 from stac_generator.base.generator import ItemGenerator
@@ -30,22 +32,22 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
     def create_item_from_config(self, source_cfg: RasterConfig) -> pystac.Item:
         with rasterio.open(source_cfg.location) as src:
             bounds = src.bounds
-            bbox: tuple[float, float, float, float] = (
-                bounds.left,
-                bounds.bottom,
-                bounds.right,
-                bounds.top,
-            )
             transform = src.transform
             crs = cast(CRS, src.crs)
             shape = src.shape
 
+            # Convert to 4326 for bbox and geometry
+            transformer = Transformer.from_crs(crs, 4326, always_xy=True)
+            minx, miny = transformer.transform(bounds.left, bounds.bottom)
+            maxx, maxy = transformer.transform(bounds.right, bounds.top)
+            bbox: tuple[float, float, float, float] = (minx, miny, maxx, maxy)
+
             # Create geometry as Shapely Polygon
-            geometry = RasterGenerator.bounding_geometry(bbox)
+            geometry = box(*bbox)
             geometry_geojson = mapping(geometry)
 
             # Process datetime
-            item_tz = calculate_timezone(bbox, crs)
+            item_tz = calculate_timezone(geometry)
             item_ts = source_cfg.get_datetime(item_tz)
 
             # Validate EPSG
@@ -69,7 +71,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             affine_transform = [
                 rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)
             ]
-            proj_ext.apply(epsg=epsg, shape=shape, transform=affine_transform)
+            proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt(), shape=shape, transform=affine_transform)
 
             # Initialize extensions
             EOExtension.ext(item, add_if_missing=True)

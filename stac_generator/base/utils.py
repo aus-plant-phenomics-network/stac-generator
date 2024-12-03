@@ -8,7 +8,7 @@ import httpx
 import numpy as np
 import pandas as pd
 import yaml
-from pyproj import CRS, Transformer
+from shapely import Geometry, centroid
 from timezonefinder import TimezoneFinder
 
 SUPPORTED_URI_SCHEMES = ["http", "https"]
@@ -100,16 +100,21 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
     raise ValueError(f"Expects config to be read as a list of dictionary. Provided: {type(result)}")
 
 
-def calculate_timezone(bbox: tuple[float, float, float, float], crs: CRS) -> str:
-    x, y = (bbox[0] + bbox[2]) / 2, (bbox[1] + bbox[3]) / 2
+def calculate_timezone(geometry: Geometry) -> str:
+    """Calculate timezone from geometry
 
-    # Transform the centroid to EPSG:4326
-    transformer = Transformer.from_crs(crs, "EPSG:4326", always_xy=True)
-    lon, lat = transformer.transform(x, y)
-
+    :param geometry: geometry object in EPSG:4326 crs
+    :type geometry: Geometry
+    :raises ValueError: very exceptional cases where tzfinder cannot determine timezone
+    :return: timezone string
+    :rtype: str
+    """
+    point = centroid(geometry)
     # Use TimezoneFinder to get the timezone
-    timezone_str = TZFinder.timezone_at(lng=lon, lat=lat)
+    timezone_str = TZFinder.timezone_at(lng=point.x, lat=point.y)
 
     if not timezone_str:
-        raise ValueError(f"Could not determine timezone for coordinates: lon={lon}, lat={lat}")
+        raise ValueError(
+            f"Could not determine timezone for coordinates: lon={point.x}, lat={point.y}"
+        )
     return timezone_str

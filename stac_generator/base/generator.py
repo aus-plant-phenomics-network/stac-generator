@@ -270,10 +270,10 @@ class VectorGenerator(ItemGenerator[T]):
         :rtype: pystac.Item
         """
         crs = cast(CRS, df.crs)
-        item_tz = calculate_timezone(df.total_bounds, crs)
-        item_ts = source_cfg.get_datetime(item_tz)
         # Convert to WGS 84 for computing geometry and bbox
         df.to_crs(epsg=4326, inplace=True)
+        item_tz = calculate_timezone(box(*df.total_bounds))
+        item_ts = source_cfg.get_datetime(item_tz)
         geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
         item = pystac.Item(
             source_cfg.id,
