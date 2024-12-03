@@ -36,6 +36,9 @@ pdm install
 
 Run tests:
 
+Note that you may need to set the environment variable `REMOTE_FIXTURE_URL` either through commands or via a `.env` file. The value of this variable 
+can be found on the github [repository](https://github.com/aus-plant-phenomics-network/stac-generator/settings/environments/4607709709/edit) under Settings - Environments - Environment Variables.
+
 ```bash
 make test
 ```
