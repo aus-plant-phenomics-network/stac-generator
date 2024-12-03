@@ -157,8 +157,10 @@ class HasColumnInfo(BaseModel):
 
     @field_validator("column_info", mode="before")
     @classmethod
-    def coerce_to_object(cls, v: str | list[str]) -> list[str] | list[ColumnInfo]:
+    def coerce_to_object(cls, v: str | list[str] | None) -> list[str] | list[ColumnInfo] | None:
         """Convert json serialised string of column info into matched object"""
+        if v is None:
+            return None
         if isinstance(v, list):
             return v
         parsed = json.loads(v)
