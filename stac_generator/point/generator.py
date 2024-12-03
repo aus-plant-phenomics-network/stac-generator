@@ -6,7 +6,8 @@ import pystac
 
 from stac_generator._types import CsvMediaType
 from stac_generator.base.generator import VectorGenerator
-from stac_generator.point.schema import ColumnInfo, CsvConfig, CsvExtension
+from stac_generator.base.schema import ColumnInfo
+from stac_generator.point.schema import CsvConfig
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +97,8 @@ class PointGenerator(VectorGenerator[CsvConfig]):
             source_cfg.column_info,
         )
 
-        properties = CsvExtension.model_validate(source_cfg, from_attributes=True).model_dump(
-            exclude={"collection_date", "collection_time", "location", "epsg", "id"},
+        properties = source_cfg.model_dump(
+            include={"X", "Y", "Z", "T", "column_info", "date_format", "title", "description"},
             exclude_unset=True,
             exclude_none=True,
         )

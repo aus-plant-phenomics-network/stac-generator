@@ -1,12 +1,14 @@
 import datetime
-from typing import Any, TypeVar
+import json
+from typing import Any, Literal, NotRequired, Required, TypeVar
 
 import pytz
 from httpx._types import (
     RequestData,
 )
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from stac_pydantic.shared import Provider, UtcDatetime
+from typing_extensions import TypedDict
 
 from stac_generator._types import (
     CookieTypes,
@@ -32,9 +34,9 @@ class StacCollectionConfig(BaseModel):
     # Stac Information
     id: str
     """Item id"""
-    title: str = "Auto-generated Stac Item"
+    title: str | None = "Auto-generated Stac Item"
     """A human readable title describing the item entity."""
-    description: str = "Auto-generated Stac Item"
+    description: str | None = "Auto-generated Stac Item"
     """Detailed multi-line description to fully explain the STAC entity. """
     license: str | None = None
     """License(s) of the data as SPDX License identifier, SPDX License expression, or other"""
@@ -112,3 +114,56 @@ class SourceConfig(StacItemConfig):
         if self.extension:
             return self.extension
         return self.location.split(".")[-1]
+
+
+DTYPE = Literal[
+    "str",
+    "int",
+    "bool",
+    "float",
+    "int8",
+    "int16",
+    "int32",
+    "int64",
+    "uint8",
+    "uint16",
+    "uint32",
+    "uint64",
+    "float16",
+    "float32",
+    "float64",
+    "cint16",
+    "cint32",
+    "cfloat32",
+    "cfloat64",
+    "other",
+]
+
+
+class ColumnInfo(TypedDict):
+    """TypedDict description of GeoDataFrame columns. Used for describing vector/point attributes"""
+
+    name: Required[str]
+    """Column name"""
+    description: NotRequired[str]
+    """Column description"""
+    dtype: NotRequired[DTYPE]
+    """Column data type"""
+
+
+class HasColumnInfo(BaseModel):
+    column_info: list[ColumnInfo] | list[str] | None = None
+    """List of attributes associated with point/vector data"""
+
+    @field_validator("column_info", mode="before")
+    @classmethod
+    def coerce_to_object(cls, v: str | list[str]) -> list[str] | list[ColumnInfo]:
+        """Convert json serialised string of column info into matched object"""
+        if isinstance(v, list):
+            return v
+        parsed = json.loads(v)
+        if not isinstance(parsed, list):
+            raise ValueError(
+                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
+            )
+        return parsed

@@ -55,13 +55,26 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             )
         }
         logger.debug(f"Reading file from {source_cfg.location}")
-        raw_df = gpd.read_file(source_cfg.location)
 
+        # Only read relevant fields
+        if isinstance(source_cfg.column_info, list):
+            columns = [
+                col["name"] if isinstance(col, dict) else col for col in source_cfg.column_info
+            ]
+        else:
+            columns = None
+        raw_df = gpd.read_file(source_cfg.location, columns=columns)
+
+        # Validate EPSG user-input vs extracted
         if extract_epsg(raw_df.crs) != source_cfg.epsg:
             raise ValueError(
                 f"Source crs: {raw_df.crs} does not match config epsg: {source_cfg.epsg}"
             )
 
-        properties = {"epsg": source_cfg.epsg}
+        properties = source_cfg.model_dump(
+            include={"column_info", "title", "description"},
+            exclude_unset=True,
+            exclude_none=True,
+        )
 
         return self.df_to_item(raw_df, assets, source_cfg, properties, source_cfg.epsg)

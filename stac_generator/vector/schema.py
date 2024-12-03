@@ -1,7 +1,7 @@
-from stac_generator.base.schema import SourceConfig
+from stac_generator.base.schema import HasColumnInfo, SourceConfig
 
 
-class VectorConfig(SourceConfig):
+class VectorConfig(SourceConfig, HasColumnInfo):
     """Extended source config with EPSG code."""
 
     epsg: int = 4326

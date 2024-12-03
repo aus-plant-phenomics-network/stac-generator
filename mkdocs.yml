@@ -22,9 +22,9 @@ nav:
     - Utility: utils.md
     # - Typing: typing.md
     - Extension:
-      - CSV:
-        - Generator: extensions/csv/generator.md
-        - Schema: extensions/csv/schema.md
+      - Point:
+        - Generator: extensions/point/generator.md
+        - Schema: extensions/point/schema.md
       - Vector:
         - Generator: extensions/vector/generator.md
         - Schema: extensions/vector/schema.md
