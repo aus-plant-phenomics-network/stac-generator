@@ -1,24 +1,23 @@
-import urllib.parse
+import json
+from pathlib import Path
 
-import httpx
 import pytest
 
-from stac_generator.base import CollectionGenerator, StacCollectionConfig
+from stac_generator.base.generator import CollectionGenerator
+from stac_generator.base.schema import StacCollectionConfig
 from stac_generator.base.utils import read_source_config
-from stac_generator.vector import VectorConfig, VectorGenerator
-from tests import REMOTE_FIXTURE_URL
+from stac_generator.vector.generator import VectorGenerator
+from stac_generator.vector.schema import VectorConfig
 
-JSON_CONFIG_PATH = urllib.parse.urljoin(
-    str(REMOTE_FIXTURE_URL), "unit_tests/vector/config/vector_config.json"
-)
+CONFIG_JSON = Path("tests/files/integration_tests/vector/config/vector_config.json")
 
+CONFIG_CSV = Path("tests/files/integration_tests/vector/config/vector_config.csv")
 
-REMOTE_GENERATED_DIR = urllib.parse.urljoin(
-    str(REMOTE_FIXTURE_URL), "unit_tests/vector/generated_stac/"
-)
+GENERATED_DIR = Path("tests/files/integration_tests/vector/generated")
 
 
-JSON_CONFIGS = read_source_config(JSON_CONFIG_PATH)
+JSON_CONFIGS = read_source_config(str(CONFIG_JSON))
+CSV_CONFIGS = read_source_config(str(CONFIG_CSV))
 ITEM_IDS = [item["id"] for item in JSON_CONFIGS]
 
 
@@ -28,25 +27,42 @@ def json_vector_generator() -> VectorGenerator:
 
 
 @pytest.fixture(scope="module")
-def collection_generator(json_vector_generator: VectorGenerator) -> CollectionGenerator:
+def vector_generator() -> VectorGenerator:
+    return VectorGenerator(CSV_CONFIGS)
+
+
+@pytest.fixture(scope="module")
+def collection_generator(vector_generator: VectorGenerator) -> CollectionGenerator:
     return CollectionGenerator(
-        StacCollectionConfig(id="vector"), generators=[json_vector_generator]
+        StacCollectionConfig(id="vector_data"), generators=[vector_generator]
     )
 
 
-@pytest.mark.parametrize(
-    "item_idx",
-    range(len(JSON_CONFIGS)),
-    ids=ITEM_IDS,
-)
+@pytest.mark.parametrize("item_idx", range(len(JSON_CONFIGS)), ids=ITEM_IDS)
 def test_generator_given_item_expects_matched_generated_item(
     item_idx: int, json_vector_generator: VectorGenerator
 ) -> None:
     config = JSON_CONFIGS[item_idx]
-    expected_path = urllib.parse.urljoin(REMOTE_GENERATED_DIR, f"{config['id']}.json")
-    data = httpx.get(expected_path)
-    expected = data.json()
+    expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
     actual = json_vector_generator.create_item_from_config(VectorConfig(**config)).to_dict()
+    assert expected["id"] == actual["id"]
+    assert expected["bbox"] == actual["bbox"]
+    assert expected["properties"] == actual["properties"]
+    assert expected["assets"] == actual["assets"]
+    assert expected["geometry"] == actual["geometry"]
+
+
+@pytest.mark.parametrize("item_idx", range(len(CSV_CONFIGS)), ids=ITEM_IDS)
+def test_generator_given_item_expects_matched_generated_item_csv_config_version(
+    item_idx: int, vector_generator: VectorGenerator
+) -> None:
+    config = JSON_CONFIGS[item_idx]
+    expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
+    actual = vector_generator.create_item_from_config(VectorConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["properties"] == actual["properties"]
@@ -56,7 +72,7 @@ def test_generator_given_item_expects_matched_generated_item(
 
 def test_collection_generator(collection_generator: CollectionGenerator) -> None:
     actual = collection_generator.create_collection().to_dict()
-    expected_path = urllib.parse.urljoin(REMOTE_GENERATED_DIR, "collection.json")
-    data = httpx.get(expected_path)
-    expected = data.json()
+    expected_path = GENERATED_DIR / "collection.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
     assert actual["extent"] == expected["extent"]

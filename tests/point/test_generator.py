@@ -1,6 +1,6 @@
-import urllib.parse
+import json
+from pathlib import Path
 
-import httpx
 import pytest
 
 from stac_generator.base.generator import CollectionGenerator
@@ -8,23 +8,16 @@ from stac_generator.base.schema import StacCollectionConfig
 from stac_generator.base.utils import read_source_config
 from stac_generator.point.generator import PointGenerator
 from stac_generator.point.schema import CsvConfig
-from tests import REMOTE_FIXTURE_URL
 
-REMOTE_CONFIG_JSON = urllib.parse.urljoin(
-    str(REMOTE_FIXTURE_URL), "unit_tests/point/config/point_data_config.json"
-)
+CONFIG_JSON = Path("tests/files/integration_tests/point/config/point_config.json")
 
-REMOTE_CONFIG_CSV = urllib.parse.urljoin(
-    str(REMOTE_FIXTURE_URL), "unit_tests/point/config/point_data_config.csv"
-)
+CONFIG_CSV = Path("tests/files/integration_tests/point/config/point_config.csv")
 
-REMOTE_GENERATED_DIR = urllib.parse.urljoin(
-    str(REMOTE_FIXTURE_URL), "unit_tests/point/generated_stac/"
-)
+GENERATED_DIR = Path("tests/files/integration_tests/point/generated")
 
 
-JSON_CONFIGS = read_source_config(REMOTE_CONFIG_JSON)
-CSV_CONFIGS = read_source_config(REMOTE_CONFIG_CSV)
+JSON_CONFIGS = read_source_config(str(CONFIG_JSON))
+CSV_CONFIGS = read_source_config(str(CONFIG_CSV))
 ITEM_IDS = [item["id"] for item in JSON_CONFIGS]
 
 
@@ -48,9 +41,9 @@ def test_generator_given_item_expects_matched_generated_item(
     item_idx: int, json_csv_generator: PointGenerator
 ) -> None:
     config = JSON_CONFIGS[item_idx]
-    expected_path = urllib.parse.urljoin(REMOTE_GENERATED_DIR, f"{config['id']}.json")
-    data = httpx.get(expected_path, timeout=10)
-    expected = data.json()
+    expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
     actual = json_csv_generator.create_item_from_config(CsvConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
@@ -64,9 +57,9 @@ def test_generator_given_item_expects_matched_generated_item_csv_config_version(
     item_idx: int, csv_generator: PointGenerator
 ) -> None:
     config = JSON_CONFIGS[item_idx]
-    expected_path = urllib.parse.urljoin(REMOTE_GENERATED_DIR, f"{config['id']}.json")
-    data = httpx.get(expected_path, timeout=10)
-    expected = data.json()
+    expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
     actual = csv_generator.create_item_from_config(CsvConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
@@ -77,7 +70,7 @@ def test_generator_given_item_expects_matched_generated_item_csv_config_version(
 
 def test_collection_generator(collection_generator: CollectionGenerator) -> None:
     actual = collection_generator.create_collection().to_dict()
-    expected_path = urllib.parse.urljoin(REMOTE_GENERATED_DIR, "collection.json")
-    data = httpx.get(expected_path, timeout=10)
-    expected = data.json()
+    expected_path = GENERATED_DIR / "collection.json"
+    with expected_path.open() as file:
+        expected = json.load(file)
     assert actual["extent"] == expected["extent"]
