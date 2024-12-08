@@ -15,6 +15,7 @@ EXTENSION_MAP: dict[str, type[ItemGenerator]] = {
     "csv": PointGenerator,
     "geotiff": RasterGenerator,
     "tiff": RasterGenerator,
+    "tif": RasterGenerator,
     "zip": VectorGenerator,
     "geojson": VectorGenerator,
     "json": VectorGenerator,

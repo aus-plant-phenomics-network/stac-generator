@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from typing import cast
 
 import pystac
@@ -9,8 +10,7 @@ from pyproj.transformer import Transformer
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.projection import ItemProjectionExtension, ProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
-from shapely import box
-from shapely.geometry import mapping
+from shapely import box, to_geojson
 
 from stac_generator.base.generator import ItemGenerator
 from stac_generator.base.utils import calculate_timezone
@@ -34,7 +34,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             bounds = src.bounds
             transform = src.transform
             crs = cast(CRS, src.crs)
-            shape = src.shape
+            shape = list(src.shape)
 
             # Convert to 4326 for bbox and geometry
             transformer = Transformer.from_crs(crs, 4326, always_xy=True)
@@ -44,7 +44,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
             # Create geometry as Shapely Polygon
             geometry = box(*bbox)
-            geometry_geojson = mapping(geometry)
+            geometry_geojson = json.loads(to_geojson(geometry))
 
             # Process datetime
             item_tz = calculate_timezone(geometry)
@@ -61,7 +61,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             item = pystac.Item(
                 id=source_cfg.id,
                 geometry=geometry_geojson,
-                bbox=cast(list[float], bbox),
+                bbox=list(bbox),
                 datetime=item_ts,
                 properties={},
             )
@@ -83,10 +83,10 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             raster_bands = []
             for band_info in source_cfg.band_info:
                 eo_band = Band.create(
-                    name=BAND_MAPPING[band_info.name.lower()],
-                    common_name=BAND_MAPPING.get(band_info.name.lower(), None),
+                    name=band_info.name.lower(),
+                    common_name=BAND_MAPPING.get(band_info.common_name.lower(), None),
                     center_wavelength=band_info.wavelength,
-                    description=f"Common name: {BAND_MAPPING.get(band_info.name.lower(), 'unknown')}",
+                    description=f"Common name: {BAND_MAPPING.get(band_info.common_name.lower(), 'unknown')}",
                 )
                 eo_bands.append(eo_band)
 
