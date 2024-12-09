@@ -123,5 +123,9 @@ check-all: lint test-all coverage                   ## Run all linting, tests, a
 
 
 .PHONY: docs
-docs: 												## Serve mkdocs
+docs: 												## Serve mkdocs locally
 	@$(PDM) run mkdocs serve
+
+.PHONY: docs-deploy
+docs-deploy:										## Deploy to docs to github pages
+	@$(PDM) run mkdocs gh-deploy

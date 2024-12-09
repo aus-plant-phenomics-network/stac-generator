@@ -1,59 +1,30 @@
-from __future__ import annotations
-
 import datetime
-from typing import Any, Self, TypeVar
+import json
+from typing import Any, Literal, NotRequired, Required, TypeVar
 
+import pytz
 from httpx._types import (
-    RequestData,  # noqa: TCH002
+    RequestData,
 )
-from pydantic import BaseModel, model_validator
-from stac_pydantic.shared import StacCommonMetadata as _StacCommonMetaData
+from pydantic import BaseModel, field_validator
+from stac_pydantic.shared import Provider, UtcDatetime
+from typing_extensions import TypedDict
 
-from stac_generator._types import (  # noqa: TCH001
+from stac_generator._types import (
     CookieTypes,
     HeaderTypes,
     HTTPMethod,
     QueryParamTypes,
     RequestContent,
-    StacEntityT,
 )
 
 T = TypeVar("T", bound="SourceConfig")
 
 
-class StacCommonMetadata(_StacCommonMetaData):
-    """Stac Common Metadata. Automatically sets datetime values to
-    current datetime if neither datetime nor start_datetime and end_datetime are provided
-    """
+class StacCollectionConfig(BaseModel):
+    """Contains parameters to pass to Collection constructor. Also contains other metadata except for datetime related metadata.
 
-    @model_validator(mode="before")
-    @classmethod
-    def set_datetime(self, data: Any) -> Any:
-        if isinstance(data, dict) and (
-            ("datetime" not in data or data["datetime"] is None)
-            and ("start_datetime" not in data or data["start_datetime"] is None)
-            and ("end_datetime" not in data or data["end_datetime"] is None)
-        ):
-            now = datetime.datetime.now(datetime.UTC)
-            data["datetime"] = now
-            data["start_datetime"] = now
-            data["end_datetime"] = now
-        return data
-
-
-class StacCatalogConfig(BaseModel):
-    """Contains parameters to pass to Catalog constructor"""
-
-    id: str
-    """Catalog id"""
-    title: str
-    """Catalog title"""
-    description: str = "Auto-generated Stac Catalog"
-    """Catalog description"""
-
-
-class StacCollectionConfig(StacCommonMetadata):
-    """Contains parameters to pass to Collection constructor. Also contains other metadata
+    Collection's datetime, start_datetime and end_datetime will be derived from the time information of its children items
 
     This config provides additional information that can not be derived from source file, which includes
     <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
@@ -62,25 +33,47 @@ class StacCollectionConfig(StacCommonMetadata):
 
     # Stac Information
     id: str
-    """Collection id"""
-    title: str
-    """Collection title"""
-    description: str = "Auto-generated Stac Collection"
-    """Collection description"""
+    """Item id"""
+    title: str | None = "Auto-generated Stac Item"
+    """A human readable title describing the item entity."""
+    description: str | None = "Auto-generated Stac Item"
+    """Detailed multi-line description to fully explain the STAC entity. """
+    license: str | None = None
+    """License(s) of the data as SPDX License identifier, SPDX License expression, or other"""
+    providers: list[Provider] | None = None
+    """A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list."""
+    platform: str | None = None
+    """Unique name of the specific platform to which the instrument is attached."""
+    instruments: list[str] | None = None
+    """Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1)."""
+    constellation: str | None = None
+    """Name of the constellation to which the platform belongs."""
+    mission: str | None = None
+    """Name of the mission for which data is collected."""
 
 
-class StacItemConfig(StacCommonMetadata):
-    """Contains parameters to pass to Item constructor.
+class StacItemConfig(StacCollectionConfig):
+    """Contains parameters to pass to Item constructor. Also contains other metadata except for datetime related metadata.
+
+    Item's datetime will be superseded by `collection_date` and `collection_time` recorded in local timezone. The STAC `datetime`
+    metadata is obtained from the method `get_datetime` by providing the local timezone, which will be automatically derived from
+    the crs information.
 
     This config provides additional information that can not be derived from source file, which includes
     <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
     and other descriptive information such as the id of the new entity
     """
 
-    prefix: str
-    """Item prefix - doubles as ID if there is only one item extracted from the source file"""
-    description: str = "Auto-generated Stac Item"
-    """Item description"""
+    collection_date: datetime.date
+    """Date in local timezone of when the data is collected"""
+    collection_time: datetime.time
+    """Time in local timezone of when the data is collected"""
+
+    def get_datetime(self, timezone: str) -> UtcDatetime:
+        local_dt = datetime.datetime.combine(
+            self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
+        )
+        return local_dt.astimezone(datetime.UTC)
 
 
 class SourceConfig(StacItemConfig):
@@ -97,8 +90,7 @@ class SourceConfig(StacItemConfig):
     """
 
     location: str
-    """Asset's href.
-    """
+    """Asset's href"""
     extension: str | None = None
     """Explicit file extension specification. If the file is stored behind an api endpoint, the field `extension` must be provided"""
     # HTTP Parameters
@@ -124,16 +116,56 @@ class SourceConfig(StacItemConfig):
         return self.location.split(".")[-1]
 
 
-class LoadConfig(BaseModel):
-    entity: StacEntityT
-    """Stac Entity type - Item, ItemCollection, Collection, Catalog"""
-    json_location: str | None = None
-    """Stac Json file on disk"""
-    stac_api_endpoint: str | None = None
-    """Stac API Endpoint"""
+DTYPE = Literal[
+    "str",
+    "int",
+    "bool",
+    "float",
+    "int8",
+    "int16",
+    "int32",
+    "int64",
+    "uint8",
+    "uint16",
+    "uint32",
+    "uint64",
+    "float16",
+    "float32",
+    "float64",
+    "cint16",
+    "cint32",
+    "cfloat32",
+    "cfloat64",
+    "other",
+]
 
-    @model_validator(mode="after")
-    def validate_field(self) -> Self:
-        if self.json_location is None and self.stac_api_endpoint is None:
-            raise ValueError("One of json_location or stac_api_endpoint field must be not None")
-        return self
+
+class ColumnInfo(TypedDict):
+    """TypedDict description of GeoDataFrame columns. Used for describing vector/point attributes"""
+
+    name: Required[str]
+    """Column name"""
+    description: NotRequired[str]
+    """Column description"""
+    dtype: NotRequired[DTYPE]
+    """Column data type"""
+
+
+class HasColumnInfo(BaseModel):
+    column_info: list[ColumnInfo] | list[str] | None = None
+    """List of attributes associated with point/vector data"""
+
+    @field_validator("column_info", mode="before")
+    @classmethod
+    def coerce_to_object(cls, v: str | list[str] | None) -> list[str] | list[ColumnInfo] | None:
+        """Convert json serialised string of column info into matched object"""
+        if v is None:
+            return None
+        if isinstance(v, list):
+            return v
+        parsed = json.loads(v)
+        if not isinstance(parsed, list):
+            raise ValueError(
+                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
+            )
+        return parsed
