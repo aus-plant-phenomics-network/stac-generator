@@ -6,6 +6,8 @@ __all__ = ("StacGeneratorFactory",)
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+# Attempt to disable logging from other modules - does not work yet
 disable_logging = ["httpcore", "httpx"]
 
 for name in logging.root.manager.loggerDict:
