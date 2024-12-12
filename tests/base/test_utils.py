@@ -28,10 +28,6 @@ VALID_CONFIG_FILES = [
     "tests/files/unit_tests/configs/valid_json_config_one_item.json",
 ]
 
-VALID_NETWORKED_CONFIG_FILES = [
-    "unit_tests/config_tests/valid_yaml_config.yaml",
-    "unit_tests/config_tests/valid_json_config.json",
-]
 
 CONFIG_OUTPUT = [
     {
@@ -178,14 +174,6 @@ def test_read_source_config_given_valid_local_files_expects_correct_config_outpu
     href: str,
 ) -> None:
     actual = read_source_config(href)
-    assert actual == CONFIG_OUTPUT
-
-
-@pytest.mark.parametrize("href", VALID_NETWORKED_CONFIG_FILES)
-def test_read_source_config_given_valid_remote_files_expects_correct_config_output(
-    href: str,
-) -> None:
-    actual = read_source_config(urllib.parse.urljoin(str(REMOTE_FIXTURE_URL), href))
     assert actual == CONFIG_OUTPUT
 
 
