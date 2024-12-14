@@ -330,7 +330,7 @@ class StacSerialiser:
             id=self.collection.id,
             json=self.collection.to_dict(),
         )
-        for item in self.collection.get_all_items():
+        for item in self.collection.get_items(recursive=True):
             force_write_to_stac_api(
                 url=parse_href(self.href, f"collections/{self.collection.id}/items"),
                 id=item.id,

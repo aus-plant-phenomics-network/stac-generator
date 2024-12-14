@@ -10,7 +10,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "max_temp",
         "description": "Observed daily maximum temperature in degree C"
@@ -23,7 +26,10 @@
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
       },
-      { "name": "mslp", "description": "Mean sea level pressure in hPa" }
+      {
+        "name": "mslp",
+        "description": "Mean sea level pressure in hPa"
+      }
     ]
   },
   {
@@ -37,7 +43,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
@@ -55,7 +64,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "max_temp",
         "description": "Observed daily maximum temperature in degree C"
@@ -77,7 +89,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" }
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      }
     ]
   },
   {
@@ -91,7 +106,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "max_temp",
         "description": "Observed daily maximum temperature in degree C"
@@ -104,7 +122,10 @@
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
       },
-      { "name": "mslp", "description": "Mean sea level pressure in hPa" }
+      {
+        "name": "mslp",
+        "description": "Mean sea level pressure in hPa"
+      }
     ]
   },
   {
@@ -118,7 +139,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
@@ -136,7 +160,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" }
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      }
     ]
   },
   {
@@ -150,7 +177,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
@@ -168,7 +198,10 @@
     "T": "YYYY-MM-DD",
     "epsg": 7843,
     "column_info": [
-      { "name": "daily_rain", "description": "Observed daily rain fall in mm" },
+      {
+        "name": "daily_rain",
+        "description": "Observed daily rain fall in mm"
+      },
       {
         "name": "radiation",
         "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
@@ -185,6 +218,11 @@
     "Z": "mid_depth",
     "T": null,
     "epsg": 4326,
-    "column_info": [{ "name": "Ca_Soln", "description": "Ca concentration" }]
+    "column_info": [
+      {
+        "name": "Ca_Soln",
+        "description": "Ca concentration"
+      }
+    ]
   }
 ]
