@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.40">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.47">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -1098,7 +1098,7 @@
                 <code>collection_cfg</code>
             </td>
             <td>
-                  <code>StacCollectionConfig</code>
+                  <code><a class="autorefs autorefs-internal" title="stac_generator.base.schema.StacCollectionConfig" href="../schema/#stac_generator.base.schema.StacCollectionConfig">StacCollectionConfig</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1114,7 +1114,7 @@
                 <code>generators</code>
             </td>
             <td>
-                  <code>Sequence[ItemGenerator]</code>
+                  <code><span title="collections.abc.Sequence">Sequence</span>[<a class="autorefs autorefs-internal" title="stac_generator.base.generator.ItemGenerator" href="#stac_generator.base.generator.ItemGenerator">ItemGenerator</a>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1166,7 +1166,7 @@
                 <code>items</code>
             </td>
             <td>
-                  <code>Sequence[pystac.Item]</code>
+                  <code><span title="collections.abc.Sequence">Sequence</span>[pystac.<span title="pystac.Item">Item</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1241,7 +1241,7 @@
                 <code>items</code>
             </td>
             <td>
-                  <code>Sequence[pystac.Item]</code>
+                  <code><span title="collections.abc.Sequence">Sequence</span>[pystac.<span title="pystac.Item">Item</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1346,7 +1346,7 @@ and provided temporal extent fields (start_datetime, end_datetime) at collection
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code>abc.ABC</code>, <code>Generic[T]</code></p>
+              Bases: <code>abc.<span title="abc.ABC">ABC</span></code>, <code><span title="typing.Generic">Generic</span>[<span title="stac_generator.base.schema.T">T</span>]</code></p>
 
 
         <p>Base ItemGenerator object. Users should extend this class for handling different file extensions.</p>
@@ -1420,7 +1420,7 @@ and provided temporal extent fields (start_datetime, end_datetime) at collection
                 <code>configs</code>
             </td>
             <td>
-                  <code>list[dict[str, Any]]</code>
+                  <code>list[dict[str, <span title="typing.Any">Any</span>]]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1520,7 +1520,7 @@ and provided temporal extent fields (start_datetime, end_datetime) at collection
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code>ItemGenerator[T]</code></p>
+              Bases: <code><a class="autorefs autorefs-internal" title="stac_generator.base.generator.ItemGenerator" href="#stac_generator.base.generator.ItemGenerator">ItemGenerator</a>[<span title="stac_generator.base.schema.T">T</span>]</code></p>
 
 
 
@@ -1580,7 +1580,7 @@ geometry will be the Polygon of the bounding box. Note that Point and MultiPoint
                 <code>df</code>
             </td>
             <td>
-                  <code>gpd.GeoDataFrame</code>
+                  <code><span title="geopandas">gpd</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1632,7 +1632,7 @@ geometry will be the Polygon of the bounding box. Note that Point and MultiPoint
                 <code>df</code>
             </td>
             <td>
-                  <code>gpd.GeoDataFrame</code>
+                  <code><span title="geopandas">gpd</span>.<span title="geopandas.GeoDataFrame">GeoDataFrame</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1648,7 +1648,7 @@ geometry will be the Polygon of the bounding box. Note that Point and MultiPoint
                 <code>assets</code>
             </td>
             <td>
-                  <code>dict[str, pystac.Asset]</code>
+                  <code>dict[str, pystac.<span title="pystac.Asset">Asset</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1664,7 +1664,7 @@ geometry will be the Polygon of the bounding box. Note that Point and MultiPoint
                 <code>source_cfg</code>
             </td>
             <td>
-                  <code>SourceConfig</code>
+                  <code><a class="autorefs autorefs-internal" title="stac_generator.base.schema.SourceConfig" href="../schema/#stac_generator.base.schema.SourceConfig">SourceConfig</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1680,7 +1680,7 @@ geometry will be the Polygon of the bounding box. Note that Point and MultiPoint
                 <code>properties</code>
             </td>
             <td>
-                  <code>dict[str, Any]</code>
+                  <code>dict[str, <span title="typing.Any">Any</span>]</code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1828,7 +1828,7 @@ By default, this normalises collection href and performs validation</p>
                 <code>collection</code>
             </td>
             <td>
-                  <code>pystac.Collection</code>
+                  <code>pystac.<span title="pystac.Collection">Collection</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -1962,7 +1962,7 @@ The API will first attempt to send a POST request which will be replaced with a 
     <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
       
     
   </body>
