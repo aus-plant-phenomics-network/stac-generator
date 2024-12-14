@@ -1,6 +1,5 @@
 import datetime
 import json
-import urllib.parse
 
 import geopandas as gpd
 import httpx
@@ -17,7 +16,6 @@ from stac_generator.base.utils import (
     parse_href,
     read_source_config,
 )
-from tests import REMOTE_FIXTURE_URL
 
 VALID_CSV_CONFIG_FILE = "tests/files/unit_tests/configs/csv_config.csv"
 
