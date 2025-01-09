@@ -162,34 +162,6 @@
     ]
   },
   {
-    "id": "OZBarley1_241010_DSM",
-    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley1_241010_DSM.tif",
-    "collection_date": "2024-10-10",
-    "collection_time": "10:00:00",
-    "epsg": 7855,
-    "band_info": [
-      {
-        "name": "DSM",
-        "common_name": "DSM",
-        "description": "Digital Surface Model - Single Band Grayscale"
-      }
-    ]
-  },
-  {
-    "id": "OZBarley2_241010_DSM",
-    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley2_241010_DSM.tif",
-    "collection_date": "2024-10-10",
-    "collection_time": "10:00:00",
-    "epsg": 7855,
-    "band_info": [
-      {
-        "name": "DSM",
-        "common_name": "DSM",
-        "description": "Digital Surface Model - Single Band Grayscale"
-      }
-    ]
-  },
-  {
     "id": "OZBarley1_layout",
     "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley1_layout_240906.geojson",
     "collection_date": "2024-09-06",
