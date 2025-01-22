@@ -63,7 +63,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             ]
         else:
             columns = None
-        raw_df = gpd.read_file(source_cfg.location, columns=columns)
+        raw_df = gpd.read_file(source_cfg.location, columns=columns, layer=source_cfg.layer)
 
         # Validate EPSG user-input vs extracted
         if extract_epsg(raw_df.crs) != source_cfg.epsg:
@@ -72,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             )
 
         properties = source_cfg.model_dump(
-            include={"column_info", "title", "description"},
+            include={"column_info", "title", "description", "layer"},
             exclude_unset=True,
             exclude_none=True,
         )

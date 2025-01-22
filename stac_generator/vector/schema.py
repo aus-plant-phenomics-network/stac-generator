@@ -6,3 +6,6 @@ class VectorConfig(SourceConfig, HasColumnInfo):
 
     epsg: int = 4326
     """EPSG code for checking against EPSG code of the vector data"""
+
+    layer: str | None = None
+    """Vector layer for multi-layer shapefile"""

@@ -13,6 +13,7 @@ from stac_generator.vector import VectorGenerator
 
 EXTENSION_MAP: dict[str, type[ItemGenerator]] = {
     "csv": PointGenerator,
+    "txt": PointGenerator,
     "geotiff": RasterGenerator,
     "tiff": RasterGenerator,
     "tif": RasterGenerator,
