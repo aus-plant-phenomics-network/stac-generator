@@ -72,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             )
 
         properties = source_cfg.model_dump(
-            include={"column_info", "title", "description"},
+            include={"column_info", "title", "description", "layer"},
             exclude_unset=True,
             exclude_none=True,
         )
