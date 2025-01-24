@@ -1,0 +1,8 @@
+## OZBarley Vector Data
+
+OZBarley contains 2 vector assets - `OZBarley1_layout` and `OZBarley2_layout`. The overall config can be downloaded [here](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/remote_config.json). The vector assets can be downloaded by following the `location` field under `OZBarley1_layout` and `OZBarley2_layout` items in the config. The links for [OZBarley1](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley1_layout_240906.geojson) and [OZBarley2](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley2_layout_240906.geojson) are reproduced for convenience. 
+
+
+## LlaraCampey Vector Data 
+
+The simplified test case for Llara Campey contains the boundary shapes of different Llara and Campey plots stored as shp file in a compressed zip. To specify a particular boundary, a layer field must be provided. For more information, please refer to the [config](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/LlaraCampey/LlaraCampey_config_simplified.json). Note how C1, C2, ... layout files all reference the same [zip](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/LlaraCampey/boundary_wgs84.zip), with `layer` being the differentiator. Also note that while OZBarley vector files have associated attributes that are described with `column_info`, the vector files for LlaraCampey are simple shape files with no attribute (and thus do not contain `column_info`). 

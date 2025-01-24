@@ -16,11 +16,16 @@ theme:
 
 nav:
   - Home: index.md
+  - Metadata: metadata.md
+  - Case Studies: case_studies.md
+  - Metadata Examples:
+    - Point: metadata_examples/point.md
+    - Vector: metadata_examples/vector.md
+    - Raster: metadata_examples/raster.md
   - API Reference:
     - Generator: generator.md
     - Schema: schema.md
     - Utility: utils.md
-    # - Typing: typing.md
     - Extension:
       - Point:
         - Generator: extensions/point/generator.md
@@ -28,6 +33,9 @@ nav:
       - Vector:
         - Generator: extensions/vector/generator.md
         - Schema: extensions/vector/schema.md
+      - Raster: 
+        - Generator: extensions/raster/generator.md 
+        - Schema: extensions/raster/schema.md
 
 plugins:
   - search
