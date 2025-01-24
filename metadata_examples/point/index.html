@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../schema/">
+        <link rel="prev" href="../../case_studies/">
       
       
-        <link rel="next" href="../extensions/point/generator/">
+        <link rel="next" href="../vector/">
       
       
-      <link rel="icon" href="../assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.40">
     
     
       
-        <title>Utility - STAC Generator</title>
+        <title>Point - STAC Generator</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8c3ca2c6.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -46,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#stac_generator.base.utils" class="md-skip">
+        <a href="#bom-raw-data-time-series-measurements" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +90,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="STAC Generator" class="md-header__button md-logo" aria-label="STAC Generator" data-md-component="logo">
+    <a href="../.." title="STAC Generator" class="md-header__button md-logo" aria-label="STAC Generator" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Utility
+              Point
             
           </span>
         </div>
@@ -211,7 +211,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="STAC Generator" class="md-nav__button md-logo" aria-label="STAC Generator" data-md-component="logo">
+    <a href="../.." title="STAC Generator" class="md-nav__button md-logo" aria-label="STAC Generator" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -229,7 +229,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -249,7 +249,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../metadata/" class="md-nav__link">
+      <a href="../../metadata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -269,7 +269,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../case_studies/" class="md-nav__link">
+      <a href="../../case_studies/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -286,17 +286,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
         
           
           <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
@@ -310,7 +312,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
             Metadata Examples
@@ -321,10 +323,28 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../metadata_examples/point/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Point
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -333,6 +353,90 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bom-raw-data-time-series-measurements" class="md-nav__link">
+    <span class="md-ellipsis">
+      BOM raw data (Time Series measurements)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BOM raw data (Time Series measurements)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bom-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      BOM Metadata to provide to the STAC Generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#soil-raw-data-no-depth-no-timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Soil raw data (No depth, No Timestamp)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Soil raw data (No depth, No Timestamp)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soil-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Soil Metadata to provide to the STAC Generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ozbarley-point-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      OZBarley Point Data
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llaracampey-point-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      LlaraCampey Point Data
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -345,7 +449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../metadata_examples/vector/" class="md-nav__link">
+      <a href="../vector/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -366,7 +470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../metadata_examples/raster/" class="md-nav__link">
+      <a href="../raster/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -391,19 +495,17 @@
       
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -417,7 +519,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -431,7 +533,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../generator/" class="md-nav__link">
+      <a href="../../generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -452,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../schema/" class="md-nav__link">
+      <a href="../../schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -470,28 +572,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Utility
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -500,69 +584,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils" class="md-nav__link">
-    <span class="md-ellipsis">
-      utils
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.parse_href" class="md-nav__link">
-    <span class="md-ellipsis">
-      parse_href
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
-    <span class="md-ellipsis">
-      href_is_stac_api_endpoint
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.force_write_to_stac_api" class="md-nav__link">
-    <span class="md-ellipsis">
-      force_write_to_stac_api
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.calculate_timezone" class="md-nav__link">
-    <span class="md-ellipsis">
-      calculate_timezone
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -645,7 +666,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/point/generator/" class="md-nav__link">
+      <a href="../../extensions/point/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -666,7 +687,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/point/schema/" class="md-nav__link">
+      <a href="../../extensions/point/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -730,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/vector/generator/" class="md-nav__link">
+      <a href="../../extensions/vector/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -751,7 +772,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/vector/schema/" class="md-nav__link">
+      <a href="../../extensions/vector/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -815,7 +836,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/raster/generator/" class="md-nav__link">
+      <a href="../../extensions/raster/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -836,7 +857,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/raster/schema/" class="md-nav__link">
+      <a href="../../extensions/raster/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -898,45 +919,66 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stac_generator.base.utils" class="md-nav__link">
+  <a href="#bom-raw-data-time-series-measurements" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
+      BOM raw data (Time Series measurements)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BOM raw data (Time Series measurements)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bom-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      BOM Metadata to provide to the STAC Generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#soil-raw-data-no-depth-no-timestamp" class="md-nav__link">
+    <span class="md-ellipsis">
+      Soil raw data (No depth, No Timestamp)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Soil raw data (No depth, No Timestamp)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#soil-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      Soil Metadata to provide to the STAC Generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ozbarley-point-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      OZBarley Point Data
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.parse_href" class="md-nav__link">
+  <a href="#llaracampey-point-data" class="md-nav__link">
     <span class="md-ellipsis">
-      parse_href
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
-    <span class="md-ellipsis">
-      href_is_stac_api_endpoint
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.force_write_to_stac_api" class="md-nav__link">
-    <span class="md-ellipsis">
-      force_write_to_stac_api
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.calculate_timezone" class="md-nav__link">
-    <span class="md-ellipsis">
-      calculate_timezone
+      LlaraCampey Point Data
     </span>
   </a>
   
@@ -957,373 +999,107 @@
                   
 
 
-  <h1>Utility</h1>
-
-<div class="doc doc-object doc-module">
-
-
-
-<a id="stac_generator.base.utils"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.parse_href" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">parse_href</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Generate href for collection or item based on id</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>base_url</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to catalog.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>collection_id</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>collection id</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>item_id</code>
-            </td>
-            <td>
-                  <code>str | None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>item id, defaults to None</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>uri to collection or item</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.href_is_stac_api_endpoint" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">href_is_stac_api_endpoint</span><span class="p">(</span><span class="n">href</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Check if href points to a resource behind a stac api</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>href</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to resource</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>bool</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>local or non-local</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.force_write_to_stac_api" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">force_write_to_stac_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">json</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Force write a json object to a stac api endpoint.
-This function will try sending a POST request and if a 409 error is encountered,
-try sending a PUT request. Other exceptions if occured will be raised</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>url</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to stac resource for creation/update</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>json</code>
-            </td>
-            <td>
-                  <code>dict[str, Any]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>json object</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.calculate_timezone" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">calculate_timezone</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Calculate timezone from geometry</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>geometry</code>
-            </td>
-            <td>
-                  <code>Geometry</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>geometry object in EPSG:4326 crs</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>timezone string</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>ValueError</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>very exceptional cases where tzfinder cannot determine timezone</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+  <h1>Point</h1>
+
+<h2 id="bom-raw-data-time-series-measurements">BOM raw data (Time Series measurements)</h2>
+<table>
+<thead>
+<tr>
+<th>longitude</th>
+<th>latitude</th>
+<th>elevation</th>
+<th>station</th>
+<th>YYYY-MM-DD</th>
+<th>daily_rain</th>
+<th>max_temp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>138.519</td>
+<td>-34.952</td>
+<td>2</td>
+<td>23304</td>
+<td>2020-01-01</td>
+<td>0</td>
+<td>32.2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bom-metadata-to-provide-to-the-stac-generator">BOM Metadata to provide to the STAC Generator</h3>
+<pre><code>{
+  &quot;id&quot;: &quot;BOM_Data&quot;,
+  &quot;location&quot;: &quot;path/to/bom.csv&quot;,
+  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+  &quot;collection_time&quot;: &quot;10:00:00&quot;,
+  &quot;X&quot;: &quot;longitude&quot;,
+  &quot;Y&quot;: &quot;latitude&quot;,
+  &quot;Z&quot;: &quot;elevation&quot;,
+  &quot;T&quot;: &quot;YYYY-MM-DD&quot;,
+  &quot;epsg&quot;: 4326,
+  &quot;column_info&quot;: [
+    {
+      &quot;name&quot;: &quot;daily_rain&quot;,
+      &quot;description&quot;: &quot;daily rain fall in mm&quot;
+    },
+    {
+      &quot;name&quot;: &quot;max_temp&quot;,
+      &quot;description&quot;: &quot;daily maximum temperature in C&quot;
+    }
+  ]
+}
+</code></pre>
+<p>The values for id, location, collection_date, collection_time (required common metadata) are made-up. The values for X, Y, Z, T are obtained from the raw csv - i.e. longitude, latitude, elevation and YYYY-MM-DD respectively. epsg value cannot be derived from the csv and must be known by the user - i.e. reading dataset metadata on BOM/SILO website. The field column_info contains useful columns that the user want to read into the datacube.</p>
+<h2 id="soil-raw-data-no-depth-no-timestamp">Soil raw data (No depth, No Timestamp)</h2>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>field</th>
+<th>profile</th>
+<th>easting</th>
+<th>northing</th>
+<th>Ca_Soln</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sunbury</td>
+<td>Jordie</td>
+<td>3</td>
+<td>773215.36<br></td>
+<td>678187.36</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h3 id="soil-metadata-to-provide-to-the-stac-generator">Soil Metadata to provide to the STAC Generator</h3>
+<pre><code>{
+  &quot;id&quot;: &quot;soil_data&quot;,
+  &quot;location&quot;: &quot;path/to/soil.csv&quot;,
+  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+  &quot;collection_time&quot;: &quot;10:00:00&quot;,
+  &quot;X&quot;: &quot;easting&quot;,
+  &quot;Y&quot;: &quot;northing&quot;,
+  &quot;epsg&quot;: 28355,
+  &quot;column_info&quot;: [
+    {
+      &quot;name&quot;: &quot;Ca_Soln&quot;,
+      &quot;description&quot;: &quot;Calcium solution in ppm&quot;
+    },
+    {
+      &quot;name&quot;: &quot;profiles&quot;,
+      &quot;description&quot;: &quot;Field profile&quot;
+    }
+  ]
+}
+
+</code></pre>
+<p>The values for id, location, collection_date, collection_time (required common metadata) are made-up. The values for X, Y are obtained from the raw csv - i.e. easting and northing respectively. There is no elevation and time column so they can be left blank. The value for epsg must be known before hand, in this example, we assume it to be GDA94/MGA55 with espg code 28355. Also assuming values for property and field are not important in this example, we don’t include them in column_info.</p>
+<h2 id="ozbarley-point-data">OZBarley Point Data</h2>
+<p>OZBarley contains 2 point assets - <code>OZBarley1_measurement</code> and <code>OZBarley2_measurement</code>. The point asset can be downloaded from the following link: <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley1_measurement.csv">OZBarley1</a>, <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley2_measurement.csv">OZBarley2</a>. The overall config can be downloaded <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/remote_config.json">here</a>. Note that the <code>epsg</code> code is known beforehand.</p>
+<h2 id="llaracampey-point-data">LlaraCampey Point Data</h2>
+<p>The simplified test case for Llara Campey contains <code>soil_data.csv</code> point data. The config can be downloaded <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/LlaraCampey/LlaraCampey_config_simplified.json">here</a>. The asset itself can be downloaded by visiting the <code>location</code> reference under <code>soil_measurement</code> entry. The link is reproduced <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/LlaraCampey/soil_data.csv">here</a> for convenience.</p>
 
 
 
@@ -1370,10 +1146,10 @@ try sending a PUT request. Other exceptions if occured will be raised</p>
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../assets/javascripts/bundle.525ec568.min.js"></script>
       
     
   </body>

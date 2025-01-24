@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../schema/">
+        <link rel="prev" href="..">
       
       
-        <link rel="next" href="../extensions/point/generator/">
+        <link rel="next" href="../case_studies/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Utility - STAC Generator</title>
+        <title>Metadata - STAC Generator</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#stac_generator.base.utils" class="md-skip">
+        <a href="#data-types" class="md-skip">
           Skip to content
         </a>
       
@@ -110,7 +110,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Utility
+              Metadata
             
           </span>
         </div>
@@ -246,10 +246,28 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../metadata/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Metadata
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -258,6 +276,108 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#data-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supported-formats-for-data-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Formats for data assets:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collection-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collection metadata
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#item-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Item metadata
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Item metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Point metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vector metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#raster-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Raster metadata
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#representing-item-metadata-in-a-separate-metadata-file" class="md-nav__link">
+    <span class="md-ellipsis">
+      Representing Item metadata in a separate metadata file
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -391,19 +511,17 @@
       
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -417,7 +535,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             API Reference
@@ -470,28 +588,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Utility
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -500,69 +600,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils" class="md-nav__link">
-    <span class="md-ellipsis">
-      utils
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.parse_href" class="md-nav__link">
-    <span class="md-ellipsis">
-      parse_href
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
-    <span class="md-ellipsis">
-      href_is_stac_api_endpoint
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.force_write_to_stac_api" class="md-nav__link">
-    <span class="md-ellipsis">
-      force_write_to_stac_api
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.calculate_timezone" class="md-nav__link">
-    <span class="md-ellipsis">
-      calculate_timezone
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -898,45 +935,84 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#stac_generator.base.utils" class="md-nav__link">
+  <a href="#data-types" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
+      Data Types
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Data Types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#supported-formats-for-data-assets" class="md-nav__link">
+    <span class="md-ellipsis">
+      Supported Formats for data assets:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collection-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collection metadata
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.parse_href" class="md-nav__link">
+  <a href="#item-metadata" class="md-nav__link">
     <span class="md-ellipsis">
-      parse_href
+      Item metadata
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Item metadata">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#point-metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      Point metadata
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#vector-metadata" class="md-nav__link">
     <span class="md-ellipsis">
-      href_is_stac_api_endpoint
+      Vector metadata
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.force_write_to_stac_api" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#raster-metadata" class="md-nav__link">
     <span class="md-ellipsis">
-      force_write_to_stac_api
+      Raster metadata
     </span>
   </a>
   
 </li>
+        
+      </ul>
+    </nav>
+  
+</li>
       
         <li class="md-nav__item">
-  <a href="#stac_generator.base.utils.calculate_timezone" class="md-nav__link">
+  <a href="#representing-item-metadata-in-a-separate-metadata-file" class="md-nav__link">
     <span class="md-ellipsis">
-      calculate_timezone
+      Representing Item metadata in a separate metadata file
     </span>
   </a>
   
@@ -957,373 +1033,53 @@
                   
 
 
-  <h1>Utility</h1>
-
-<div class="doc doc-object doc-module">
-
-
-
-<a id="stac_generator.base.utils"></a>
-    <div class="doc doc-contents first">
-
-
-
-
-
-
-
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.parse_href" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">parse_href</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Generate href for collection or item based on id</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>base_url</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to catalog.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>collection_id</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>collection id</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>item_id</code>
-            </td>
-            <td>
-                  <code>str | None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>item id, defaults to None</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>uri to collection or item</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.href_is_stac_api_endpoint" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">href_is_stac_api_endpoint</span><span class="p">(</span><span class="n">href</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Check if href points to a resource behind a stac api</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>href</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to resource</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>bool</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>local or non-local</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.force_write_to_stac_api" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">force_write_to_stac_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">json</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Force write a json object to a stac api endpoint.
-This function will try sending a POST request and if a 409 error is encountered,
-try sending a PUT request. Other exceptions if occured will be raised</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>url</code>
-            </td>
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>path to stac resource for creation/update</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>json</code>
-            </td>
-            <td>
-                  <code>dict[str, Any]</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>json object</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-<h2 id="stac_generator.base.utils.calculate_timezone" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">calculate_timezone</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span></code>
-
-</h2>
-
-
-    <div class="doc doc-contents ">
-
-        <p>Calculate timezone from geometry</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>geometry</code>
-            </td>
-            <td>
-                  <code>Geometry</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>geometry object in EPSG:4326 crs</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>str</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>timezone string</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>ValueError</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>very exceptional cases where tzfinder cannot determine timezone</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-    </div>
-
-</div>
-
-
-
-  </div>
-
-    </div>
-
-</div>
+  <h1>Metadata</h1>
+
+<h2 id="data-types">Data Types</h2>
+<p><code>stac_generator</code> classifies assets into <code>raster</code>, <code>vector</code>, and <code>point</code> data, using terminologies consistent with common <a href="https://gisgeography.com/spatial-data-types-vector-raster/#:~:text=Vector%20data%20expresses%20by%20point,2021%20at%208%3A14%20pm">GIS</a> softwares. In general:</p>
+<ul>
+<li>Point data contains one or more entries where each entry has the <code>X</code> and <code>Y</code> fields describing the location. Each entry usually contains other fields describing the attributes at the point location. For instance, this can be soil sample measurements or raw instrument readings at a particular coordinate. Point data can also have a field representing depth/elevation or time.</li>
+<li>Vector data contains a collection of points whose relationship is determined by the vector type - (point, multipoint, line, multiline, polygon, multipolygon, etc). Vector data are usually shape files describing a plot or a field boundary, but can also contain plot level attributes - i.e. mean elevation, mean temperature, cumulative rainfall, etc.</li>
+<li>Raster data contains several 2D layers (called bands) where each band represents the attribute value at each (x, y) coordinate in the 2D grid. For instance, an orthomosaic contains RGB bands, where each band is a 2D matrix with value between 0 and 255.</li>
+</ul>
+<h3 id="supported-formats-for-data-assets">Supported Formats for data assets:</h3>
+<ul>
+<li>Raster:<ul>
+<li>tif</li>
+<li>geotif</li>
+</ul>
+</li>
+<li>Vector:<ul>
+<li>shp</li>
+<li>geojson</li>
+<li>zip+shp</li>
+<li>geopkg</li>
+</ul>
+</li>
+<li>Point:<ul>
+<li>csv</li>
+<li>txt</li>
+</ul>
+</li>
+</ul>
+<p>Note that in some cases, plot or field level attributes are recorded in a csv that does not contain X and Y columns but a plot or field ID column referencing the same attribute in a separate vector file. In this particular example, the csv should be treated as a vector rather than a point data. We have also provided a <a href="">utility tool</a> (To be added) to denormalise the vector/csv combination into a single vector file.</p>
+<h2 id="collection-metadata">Collection metadata</h2>
+<p>Aside from <code>datetime</code>, <code>start_datetime</code>, <code>end_datetime</code>, collection metadata contains fields described in <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">STAC Common Metadata</a>. In general, the most important fields are <code>id</code> (required), <code>keywords</code> (optional - can be useful for catalog filtering feature in the future), <code>license</code> (optional - licensing information).</p>
+<p>For a more detailed list of all fields, their data types, and default values, please refer to <code>STACCollectionConfig</code> under <a href="../schema/">this</a> link.</p>
+<h2 id="item-metadata">Item metadata</h2>
+<p>Item metadata contains all fields in collection metadata and additional required <code>collection_date</code> and <code>collection_time</code> fields describing when the item was collected. Item metadata must also specify the <code>location</code> field, that points to where the data asset is stored.</p>
+<p>For a more detailed list of all fields, their data types, and default values, please refer to <code>STACItemConfig</code> and <code>SourceConfig</code> under <a href="../schema/">this</a> link.</p>
+<h3 id="point-metadata">Point metadata</h3>
+<p>Point metadata contains all fields in item metadata (inherits from <code>SourceConfig</code>) and contains additional fields specifying how to process the given csv/txt file. This includes the <code>X</code> and <code>Y</code> fields specifying the columns to be treated as the X and Y coordinates, the <code>epsg</code> code specifying the CRS of the XY coordinates, and if the csv contains columns to be treated as depth/elevation or time, the optional <code>Z</code>, <code>T</code> and <code>time_format</code> fields.</p>
+<p>Users should also specify useful columns under <code>column_info</code> (please see <code>ColumnInfo</code> and <code>HasColumnInfo</code> under <a href="../schema/">this</a> link). For a more detailed list of all fields, their data types, and default values, please refer to <code>CSVConfig</code> under <a href="../extensions/point/schema/">this</a> link.</p>
+<h3 id="vector-metadata">Vector metadata</h3>
+<p>Vector metadata contains all fields in item metadata (inherits from <code>SourceConfig</code>). Since vector data is often self-described, vector metadata only requires the <code>epsg</code> code for sanity checking - i.e. to ensure that users know whether they are providing the right asset. If the vector data is a compressed zip file with multiple shp files, a <code>layer</code> field is needed to specify which <code>shp</code> file in the zip package the metadata is describing. If the vector data contains plot or field level attributes, the <code>column_info</code> should also be used.</p>
+<p>Users should also specify useful columns under <code>column_info</code> (please see <code>ColumnInfo</code> and <code>HasColumnInfo</code> under <a href="../schema/">this</a> link). For a more detailed list of all fields, their data types, and default values, please refer to <code>VectorConfig</code> under <a href="../extensions/vector/schema/">this</a> link.</p>
+<h3 id="raster-metadata">Raster metadata</h3>
+<p>Raster metadata contains all fields in item metadata (inherits from <code>SourceConfig</code>). The only extra fields in raster metadata are <code>epsg</code> code and <code>band_info</code>.</p>
+<p>For a more detailed list of all fields, their data types, and default values, please refer to <code>RasterConfig</code> under <a href="../extensions/raster/schema/">this</a> link.</p>
+<h2 id="representing-item-metadata-in-a-separate-metadata-file">Representing Item metadata in a separate metadata file</h2>
+<p>Item metadata can be provided as entry/row in the metadata to be provided in the CLI. Please refer to <a href="../case_studies/">case studies</a> for more examples.</p>
 
 
 
