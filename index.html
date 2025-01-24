@@ -944,32 +944,24 @@
 </ul>
 <h2 id="workflow">Workflow</h2>
 <p>The process for generating STAC descriptions for a dataset is as follows:</p>
-<ul>
-<li>
 <p>Prepare assets:</p>
-</li>
+<ul>
 <li>
 <p>Determine what assets (tif images, vector boundaries, csv records) are important for the project. For instance, this can be all raw/processed data used in the project. Alternatively, this includes all data you want to load into the data cube.</p>
 </li>
 <li>
 <p>Host required assets somewhere with a semi-permanent URI. In general, if you want the data to be publicly accessible, the assets should be hosted on some cloud object storage - i.e S3, Nectar, etc. Otherwise, the asset only needs to be hosted somewhere accessible by the machine running the STAC Generator.</p>
 </li>
-<li>
-<p>Prepare Item level metadata:</p>
-</li>
-<li>
-<p>Depending on whether the data item is raster/vector/point, the corresponding documentations can be useful. At the very least, you should think about the item id, asset location - i.e the link to where the asset is hosted, and the date and time when the item was collected.</p>
-</li>
-<li>
-<p>Prepare Collection level metadata:</p>
-</li>
-<li>
-<p>The relevant documentation page (to be added) may be helpful. At the very least, collection id needs to be provided.</p>
-</li>
-<li>
-<p>Determine whether to save the STAC records locally or remotely.</p>
-</li>
 </ul>
+<p>Prepare Item level metadata:</p>
+<ul>
+<li>Depending on whether the data item is raster/vector/point, the corresponding documentations can be useful. At the very least, you should think about the item id, asset location - i.e the link to where the asset is hosted, and the date and time when the item was collected.</li>
+</ul>
+<p>Prepare Collection level metadata:</p>
+<ul>
+<li>The relevant documentation page (to be added) may be helpful. At the very least, collection id needs to be provided.</li>
+</ul>
+<p>Determine whether to save the STAC records locally or remotely.</p>
 <h2 id="installation">Installation</h2>
 <p>Requirements: python3.10+</p>
 <p>STAC Generator can be installed directly from Pypi:</p>
