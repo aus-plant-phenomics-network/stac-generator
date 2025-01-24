@@ -23,21 +23,21 @@ While most STAC information can be derived directly from the data, other informa
 
 The process for generating STAC descriptions for a dataset is as follows:
 
-- Prepare assets:
+Prepare assets:
 
   - Determine what assets (tif images, vector boundaries, csv records) are important for the project. For instance, this can be all raw/processed data used in the project. Alternatively, this includes all data you want to load into the data cube.
 
   - Host required assets somewhere with a semi-permanent URI. In general, if you want the data to be publicly accessible, the assets should be hosted on some cloud object storage - i.e S3, Nectar, etc. Otherwise, the asset only needs to be hosted somewhere accessible by the machine running the STAC Generator.
 
-- Prepare Item level metadata:
+Prepare Item level metadata:
 
   - Depending on whether the data item is raster/vector/point, the corresponding documentations can be useful. At the very least, you should think about the item id, asset location - i.e the link to where the asset is hosted, and the date and time when the item was collected.
 
-- Prepare Collection level metadata:
+Prepare Collection level metadata:
 
   - The relevant documentation page (to be added) may be helpful. At the very least, collection id needs to be provided.
 
-- Determine whether to save the STAC records locally or remotely.
+Determine whether to save the STAC records locally or remotely.
 
 
 

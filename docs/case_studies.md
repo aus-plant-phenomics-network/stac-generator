@@ -12,7 +12,7 @@ For our example, we will use the following [vector_config.json](https://object-s
 [
   {
     "id": "lga",
-    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/unit_tests/vector/data/lga.gpkg",
+    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/lga.gpkg",
     "collection_date": "2023-04-01",
     "collection_time": "09:00:00",
     "epsg": 3857
@@ -20,7 +20,7 @@ For our example, we will use the following [vector_config.json](https://object-s
   {
     "id": "soil_exposure",
     "title": "soil exposure data - DEWNR Soil and Land Program",
-    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/unit_tests/vector/data/soil_exposure.geojson",
+    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/soil_exposure.geojson",
     "collection_date": "2016-06-09",
     "collection_time": "09:00:00",
     "epsg": 7844
@@ -28,7 +28,7 @@ For our example, we will use the following [vector_config.json](https://object-s
   {
     "id": "soil_subgroup",
     "title": "soil subgroup data - DEWNR Soil and Land Program",
-    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/unit_tests/vector/data/soil_subgroup.zip",
+    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/soil_subgroup.zip",
     "collection_date": "2016-06-09",
     "collection_time": "09:00:00",
     "epsg": 1168
