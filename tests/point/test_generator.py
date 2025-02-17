@@ -3,11 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from stac_generator.base.generator import CollectionGenerator
-from stac_generator.base.schema import StacCollectionConfig
-from stac_generator.base.utils import read_source_config
-from stac_generator.point.generator import PointGenerator
-from stac_generator.point.schema import CsvConfig
+from stac_generator.core.base.generator import CollectionGenerator
+from stac_generator.core.base.schema import StacCollectionConfig
+from stac_generator.core.base.utils import read_source_config
+from stac_generator.core.point.generator import PointGenerator
+from stac_generator.core.point.schema import CsvConfig
 
 CONFIG_JSON = Path("tests/files/integration_tests/point/config/point_config.json")
 

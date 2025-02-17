@@ -12,8 +12,8 @@ from pystac.extensions.projection import ItemProjectionExtension, ProjectionExte
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely import box, to_geojson
 
-from stac_generator.base.generator import ItemGenerator
-from stac_generator.base.utils import calculate_timezone
+from stac_generator.core.base.generator import ItemGenerator
+from stac_generator.core.base.utils import calculate_timezone
 
 from .schema import RasterConfig
 
@@ -52,7 +52,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
             # Validate EPSG
             epsg = crs.to_epsg()
-            if source_cfg.epsg != epsg:
+            if source_cfg.epsg is not None and source_cfg.epsg != epsg:
                 raise ValueError(
                     f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match EPSG ({epsg})."
                 )
