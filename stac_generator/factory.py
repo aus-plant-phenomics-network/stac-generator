@@ -1,15 +1,15 @@
 from typing import Any
 
-from stac_generator.base import (
+from stac_generator.core.base import (
     CollectionGenerator,
     ItemGenerator,
     SourceConfig,
     StacCollectionConfig,
 )
-from stac_generator.base.utils import read_source_config
-from stac_generator.point import PointGenerator
-from stac_generator.raster import RasterGenerator
-from stac_generator.vector import VectorGenerator
+from stac_generator.core.base.utils import read_source_config
+from stac_generator.core.point import PointGenerator
+from stac_generator.core.raster import RasterGenerator
+from stac_generator.core.vector import VectorGenerator
 
 EXTENSION_MAP: dict[str, type[ItemGenerator]] = {
     "csv": PointGenerator,

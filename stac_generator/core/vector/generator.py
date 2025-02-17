@@ -5,13 +5,13 @@ import geopandas as gpd
 import pystac
 from pyproj.crs.crs import CRS
 
-from stac_generator.base.generator import VectorGenerator as BaseVectorGenerator
-from stac_generator.vector.schema import VectorConfig
+from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
+from stac_generator.core.vector.schema import VectorConfig
 
 logger = logging.getLogger(__name__)
 
 
-def extract_epsg(crs: CRS) -> int | None:
+def extract_epsg(crs: CRS) -> tuple[int, bool]:
     """Extract epsg information from crs object.
     If epsg info can be extracted directly from crs, return that value.
     Otherwise, try to convert the crs info to WKT2 and extract EPSG using regex
@@ -21,15 +21,20 @@ def extract_epsg(crs: CRS) -> int | None:
     :param crs: crs object
     :type crs: CRS
     :return: epsg information
-    :rtype: int | None
+    :rtype: tuple[int, bool] - epsg code and reliability flag
     """
     if (result := crs.to_epsg()) is not None:
-        return result
+        return (result, True)
+    # Handle WKT1 edge case
     wkt = crs.to_wkt()
     match = re.search(r'ID\["EPSG",(\d+)\]', wkt)
     if match:
-        return int(match.group(1))
-    return None
+        return (int(match.group(1)), True)
+    # No match - defaults to 4326
+    logger.warning(
+        "Cannot determine epsg from vector file. Either provide it in the config or change the source file. Defaults to 4326 but can be incorrect."
+    )
+    return (4326, False)
 
 
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):
@@ -66,10 +71,13 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         raw_df = gpd.read_file(source_cfg.location, columns=columns, layer=source_cfg.layer)
 
         # Validate EPSG user-input vs extracted
-        if extract_epsg(raw_df.crs) != source_cfg.epsg:
-            raise ValueError(
-                f"Source crs: {raw_df.crs} does not match config epsg: {source_cfg.epsg}"
-            )
+        epsg, reliable = extract_epsg(raw_df.crs)
+        if source_cfg.epsg is not None:
+            if reliable and epsg != source_cfg.epsg:
+                raise ValueError(
+                    f"Source crs: {raw_df.crs} does not match config epsg: {source_cfg.epsg}"
+                )
+            epsg = source_cfg.epsg
 
         properties = source_cfg.model_dump(
             include={"column_info", "title", "description", "layer"},
@@ -77,4 +85,4 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             exclude_none=True,
         )
 
-        return self.df_to_item(raw_df, assets, source_cfg, properties, source_cfg.epsg)
+        return self.df_to_item(raw_df, assets, source_cfg, properties, epsg)

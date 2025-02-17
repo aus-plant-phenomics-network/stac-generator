@@ -5,9 +5,9 @@ import pandas as pd
 import pystac
 
 from stac_generator._types import CsvMediaType
-from stac_generator.base.generator import VectorGenerator
-from stac_generator.base.schema import ColumnInfo
-from stac_generator.point.schema import CsvConfig
+from stac_generator.core.base.generator import VectorGenerator
+from stac_generator.core.base.schema import ColumnInfo
+from stac_generator.core.point.schema import CsvConfig
 
 logger = logging.getLogger(__name__)
 

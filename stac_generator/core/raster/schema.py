@@ -3,7 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from stac_generator.base.schema import SourceConfig
+from stac_generator.core.base.schema import SourceConfig
 
 
 class BandInfo(BaseModel):
@@ -40,10 +40,10 @@ class BandInfo(BaseModel):
 class RasterConfig(SourceConfig):
     """Configuration for raster data sources"""
 
-    epsg: int
-    """EPSG code for the raster's coordinate reference system"""
     band_info: list[BandInfo]
     """List of band information - REQUIRED"""
+    epsg: int | None = None
+    """EPSG code for the raster's coordinate reference system"""
 
     @field_validator("band_info", mode="before")
     @classmethod

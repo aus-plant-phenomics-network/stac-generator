@@ -3,11 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from stac_generator.base.generator import CollectionGenerator
-from stac_generator.base.schema import StacCollectionConfig
-from stac_generator.base.utils import read_source_config
-from stac_generator.raster.generator import RasterGenerator
-from stac_generator.raster.schema import RasterConfig
+from stac_generator.core.base.generator import CollectionGenerator
+from stac_generator.core.base.schema import StacCollectionConfig
+from stac_generator.core.base.utils import read_source_config
+from stac_generator.core.raster.generator import RasterGenerator
+from stac_generator.core.raster.schema import RasterConfig
 
 CONFIG_JSON = Path("tests/files/integration_tests/raster/config/raster_config.json")
 

@@ -1,4 +1,4 @@
-from stac_generator.base.schema import HasColumnInfo, SourceConfig
+from stac_generator.core.base.schema import HasColumnInfo, SourceConfig
 
 
 class CsvConfig(SourceConfig, HasColumnInfo):

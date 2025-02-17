@@ -3,11 +3,11 @@ from pathlib import Path
 
 import pytest
 
-from stac_generator.base.generator import CollectionGenerator
-from stac_generator.base.schema import StacCollectionConfig
-from stac_generator.base.utils import read_source_config
-from stac_generator.vector.generator import VectorGenerator
-from stac_generator.vector.schema import VectorConfig
+from stac_generator.core.base.generator import CollectionGenerator
+from stac_generator.core.base.schema import StacCollectionConfig
+from stac_generator.core.base.utils import read_source_config
+from stac_generator.core.vector.generator import VectorGenerator
+from stac_generator.core.vector.schema import VectorConfig
 
 CONFIG_JSON = Path("tests/files/integration_tests/vector/config/vector_config.json")
 

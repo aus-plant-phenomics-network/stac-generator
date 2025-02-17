@@ -25,12 +25,12 @@ from shapely import (
 )
 from shapely.geometry import shape
 
-from stac_generator.base.schema import (
+from stac_generator.core.base.schema import (
     SourceConfig,
     StacCollectionConfig,
     T,
 )
-from stac_generator.base.utils import (
+from stac_generator.core.base.utils import (
     calculate_timezone,
     force_write_to_stac_api,
     href_is_stac_api_endpoint,

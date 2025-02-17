@@ -16,8 +16,8 @@ from pathlib import Path
 from rich_argparse import RawDescriptionRichHelpFormatter
 
 from stac_generator.__version__ import __version__
-from stac_generator.base.generator import StacSerialiser
-from stac_generator.base.schema import StacCollectionConfig
+from stac_generator.core.base.generator import StacSerialiser
+from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.factory import StacGeneratorFactory
 
 

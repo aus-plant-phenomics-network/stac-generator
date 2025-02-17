@@ -9,8 +9,8 @@ import pytest_httpx
 import shapely
 from shapely import Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon
 
-from stac_generator.base.generator import CollectionGenerator, VectorGenerator
-from stac_generator.base.utils import (
+from stac_generator.core.base.generator import CollectionGenerator, VectorGenerator
+from stac_generator.core.base.utils import (
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
     parse_href,

@@ -6,9 +6,9 @@ import pytest
 from shapely import Geometry
 
 from stac_generator._types import CsvMediaType
-from stac_generator.base.generator import VectorGenerator
-from stac_generator.point.generator import read_csv
-from stac_generator.point.schema import CsvConfig
+from stac_generator.core.base.generator import VectorGenerator
+from stac_generator.core.point.generator import read_csv
+from stac_generator.core.point.schema import CsvConfig
 
 ALL_COLUMNS = {
     "latitude",
