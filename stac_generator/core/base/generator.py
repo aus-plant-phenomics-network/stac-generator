@@ -169,6 +169,10 @@ class ItemGenerator(abc.ABC, Generic[T]):
         logger.debug("validating config")
         self.configs = [self.source_type(**config) for config in configs]
 
+    @staticmethod
+    def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
+        raise NotImplementedError
+
     @abc.abstractmethod
     def create_item_from_config(self, source_cfg: T) -> pystac.Item:
         """Abstract method that handles `pystac.Item` generation from the appropriate config"""

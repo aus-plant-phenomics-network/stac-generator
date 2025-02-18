@@ -10,7 +10,8 @@ r"""
 """  # noqa: D212
 
 import json
-from argparse import ArgumentParser
+import logging
+from argparse import ArgumentParser, Namespace, _SubParsersAction
 from pathlib import Path
 
 from rich_argparse import RawDescriptionRichHelpFormatter
@@ -20,15 +21,75 @@ from stac_generator.core.base.generator import StacSerialiser
 from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.factory import StacGeneratorFactory
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
-def run_cli() -> None:
-    # Build the CLI argument parser
-    parser = ArgumentParser(
-        prog="stac_generator",
-        description=__doc__,
-        formatter_class=RawDescriptionRichHelpFormatter,
+
+def template_handler(args: Namespace) -> None:
+    StacGeneratorFactory.generate_config_template(args.src, args.dst)
+
+
+def serialise_handler(args: Namespace) -> None:
+    if args.v:
+        import logging
+
+        logging.getLogger().setLevel(logging.DEBUG)
+    # Build collection config and catalog config
+    metadata_json = {}
+    if args.metadata_json:
+        with Path(args.metadata_json).open("r") as file:
+            metadata_json = json.load(file)
+
+    # CLI args take precedence over metadata fields
+    collection_config = StacCollectionConfig(
+        id=args.id,
+        title=args.title,
+        description=args.description,
+        license=args.license if args.license else metadata_json.get("license"),
+        platform=args.platform if args.platform else metadata_json.get("platform"),
+        constellation=args.constellation
+        if args.constellation
+        else metadata_json.get("constellation"),
+        mission=args.mission if args.mission else metadata_json.get("mission"),
+        instruments=args.instruments if args.instruments else metadata_json.get("instruments"),
+        providers=metadata_json.get("providers"),
     )
 
+    # Generate
+    generator = StacGeneratorFactory.get_stac_generator(
+        source_configs=args.src,
+        collection_cfg=collection_config,
+    )
+    # Save
+    serialiser = StacSerialiser(generator, args.dst)
+    serialiser()
+
+
+def add_template_sub_command(sub_parser: _SubParsersAction) -> None:
+    template_parser = sub_parser.add_parser(
+        "template", help="Generate config template with prefilled information"
+    )
+    template_parser.add_argument(
+        "src",
+        type=str,
+        action="extend",
+        nargs="+",
+        help="""path to the source_config.
+                Path can be a local path or a url.
+                Path also accepts multiple values.
+                Source config contains metadata specifying how a raw file is read.
+                At the minimum, it must contain the file location.
+                To learn more about source config, please visit INSERT_DOC_URL.
+            """,
+    )
+    template_parser.add_argument(
+        "--dst", type=str, help="path to dst conflig template. Only csv and json are supported"
+    )
+    template_parser.set_defaults(func=template_handler)
+
+
+def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
+    parser = sub_parser.add_parser("serialise", help="Generate STAC record")
     # Source commands
     parser.add_argument(
         "src",
@@ -53,7 +114,7 @@ def run_cli() -> None:
                 If path is an endpoint, the collection and item json files will be pushed using STAC api methods
             """,
     )
-    parser.add_argument("-V", "--version", action="version", version=__version__)
+
     parser.add_argument("-v", action="store_true", help="increase verbosity for debugging")
     # Collection Information
     collection_metadata = parser.add_argument_group("STAC collection metadata")
@@ -99,43 +160,22 @@ def run_cli() -> None:
         default=None,
         help="path to json file describing the metadata",
     )
+    parser.set_defaults(func=serialise_handler)
+
+
+def run_cli() -> None:
+    # Build the CLI argument parser
+    parser = ArgumentParser(
+        prog="stac_generator",
+        description=__doc__,
+        formatter_class=RawDescriptionRichHelpFormatter,
+    )
+    parser.add_argument("-V", "--version", action="version", version=__version__)
+    sub_parser = parser.add_subparsers(help="Sub commands")
+    add_template_sub_command(sub_parser)
+    add_serialise_sub_command(sub_parser)
     args = parser.parse_args()
-
-    # Change logging level
-    if args.v:
-        import logging
-
-        logging.getLogger().setLevel(logging.DEBUG)
-
-    # Build collection config and catalog config
-    metadata_json = {}
-    if args.metadata_json:
-        with Path(args.metadata_json).open("r") as file:
-            metadata_json = json.load(file)
-
-    # CLI args take precedence over metadata fields
-    collection_config = StacCollectionConfig(
-        id=args.id,
-        title=args.title,
-        description=args.description,
-        license=args.license if args.license else metadata_json.get("license"),
-        platform=args.platform if args.platform else metadata_json.get("platform"),
-        constellation=args.constellation
-        if args.constellation
-        else metadata_json.get("constellation"),
-        mission=args.mission if args.mission else metadata_json.get("mission"),
-        instruments=args.instruments if args.instruments else metadata_json.get("instruments"),
-        providers=metadata_json.get("providers"),
-    )
-
-    # Generate
-    generator = StacGeneratorFactory.get_stac_generator(
-        source_configs=args.src,
-        collection_cfg=collection_config,
-    )
-    # Save
-    serialiser = StacSerialiser(generator, args.dst)
-    serialiser()
+    args.func(args)
 
 
 if __name__ == "__main__":
