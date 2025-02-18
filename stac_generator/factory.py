@@ -1,4 +1,10 @@
-from typing import Any
+import collections
+import json
+from collections.abc import Iterable
+from pathlib import Path
+from typing import Any, cast
+
+import pandas as pd
 
 from stac_generator.core.base import (
     CollectionGenerator,
@@ -58,17 +64,52 @@ class StacGeneratorFactory:
     def get_stac_generator(
         source_configs: list[str], collection_cfg: StacCollectionConfig
     ) -> CollectionGenerator:
+        handler_map = StacGeneratorFactory.match_handler(source_configs)
+        handlers = [k(v) for k, v in handler_map.items()]
+        return CollectionGenerator(collection_cfg, handlers)
+
+    @staticmethod
+    def generate_config_template(
+        source_configs: list[str],
+        dst: str,
+    ) -> None:
+        # Determine config type based on file extension
+        if dst.endswith(".json"):
+            config_type = "json"
+        elif dst.endswith(".csv"):
+            config_type = "csv"
+        else:
+            raise ValueError("Expects csv or json template")
+        # Match config type with corresponding handler
+        handler_map = StacGeneratorFactory.match_handler(source_configs)
+        result: list[Any] = []
+        for k, v in handler_map.items():
+            for item in v:
+                if config_type == "json":
+                    result.append(k.create_config(item))
+                else:
+                    result.append(pd.DataFrame([k.create_config(item)]))
+        # Generate config template with pre-filled band/column info
+        match config_type:
+            case "json":
+                with Path(dst).open("w") as file:
+                    json.dump(result, file)
+            case "csv":
+                df = pd.concat(cast(Iterable[pd.DataFrame], result))
+                if "column_info" in df.columns:
+                    df["column_info"] = df["column_info"].apply(lambda item: json.dumps(item))
+                if "band_info" in df.columns:
+                    df["band_info"] = df["band_info"].apply(lambda item: json.dumps(item))
+                df.to_csv(dst, index=False)
+
+    @staticmethod
+    def match_handler(source_configs: list[str]) -> dict[type[ItemGenerator], list[dict[str, Any]]]:
         configs: list[dict[str, Any]] = []
         for source_config in source_configs:
             configs.extend(read_source_config(source_config))
-        handler_map: dict[type[ItemGenerator], list[dict[str, Any]]] = {}
+        handler_map: dict[type[ItemGenerator], list[dict[str, Any]]] = collections.defaultdict(list)
         for config in configs:
             base_config = SourceConfig(**config)
-            if (
-                handler := StacGeneratorFactory.get_handler(base_config.source_extension)
-            ) in handler_map:
-                handler_map[handler].append(config)
-            else:
-                handler_map[handler] = [config]
-        handlers = [k(v) for k, v in handler_map.items()]
-        return CollectionGenerator(collection_cfg, handlers)
+            handler = StacGeneratorFactory.get_handler(base_config.source_extension)
+            handler_map[handler].append(config)
+        return handler_map

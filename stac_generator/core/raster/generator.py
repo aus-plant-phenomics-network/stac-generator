@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import cast
+from typing import Any, cast
 
 import pystac
 import rasterio
@@ -15,7 +15,7 @@ from shapely import box, to_geojson
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.utils import calculate_timezone
 
-from .schema import RasterConfig
+from .schema import BandInfo, RasterConfig
 
 BAND_MAPPING: dict[str, str] = {
     "red": "red",
@@ -29,6 +29,17 @@ BAND_MAPPING: dict[str, str] = {
 
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
+    @staticmethod
+    def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
+        with rasterio.open(source_cfg["location"]) as src:
+            band_count = src.count
+            bands = []
+            for i in range(band_count):
+                bands.append(BandInfo(name=f"Band{i}", common_name=f"Band{i}"))
+        return RasterConfig(**source_cfg, band_info=bands).model_dump(
+            mode="json", exclude_none=True
+        )
+
     def create_item_from_config(self, source_cfg: RasterConfig) -> pystac.Item:
         with rasterio.open(source_cfg.location) as src:
             bounds = src.bounds
