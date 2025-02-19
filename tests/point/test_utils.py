@@ -166,5 +166,5 @@ def test_df_to_item(
     assert item.datetime is not None
     assert item.assets == {"data": asset}
     assert item.geometry == geometry
-    assert "proj:epsg" in item.properties
+    assert "proj:code" in item.properties
     assert "proj:wkt2" in item.properties

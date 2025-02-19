@@ -41,7 +41,7 @@
     37.947537561322136
   ],
   "properties": {
-    "proj:epsg": 32633,
+    "proj:code": "EPSG:32633",
     "proj:shape": [
       343,
       343
