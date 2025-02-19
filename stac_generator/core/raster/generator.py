@@ -22,6 +22,9 @@ BAND_MAPPING: dict[str, str] = {
     "green": "green",
     "blue": "blue",
     "nir": "nir",
+    "ms_red": "ms_red",
+    "ms_green": "ms_green",
+    "red_edge": "rededge",
     "rededge": "rededge",
     "ndvi": "ndvi",
     "ndvi2": "ndvi2",
@@ -96,7 +99,9 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                 eo_band = Band.create(
                     name=band_info.name.lower(),
                     common_name=BAND_MAPPING.get(band_info.common_name.lower(), None),
-                    center_wavelength=band_info.wavelength,
+                    center_wavelength=float(band_info.wavelength)
+                    if band_info.wavelength is not None
+                    else None,
                     description=f"Common name: {BAND_MAPPING.get(band_info.common_name.lower(), 'unknown')}",
                 )
                 eo_bands.append(eo_band)
