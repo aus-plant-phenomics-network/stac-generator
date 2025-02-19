@@ -7,7 +7,7 @@ import pystac
 from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
-from stac_generator.core.base.schema import ColumnInfo, SourceConfig
+from stac_generator.core.base.schema import ColumnInfo
 from stac_generator.core.vector.schema import VectorConfig
 
 logger = logging.getLogger(__name__)
