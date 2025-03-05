@@ -1,0 +1,147 @@
+{
+  "type": "Feature",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v2.0.0/schema.json"
+  ],
+  "id": "join_vector",
+  "geometry": {
+    "type": "MultiPolygon",
+    "coordinates": [
+      [
+        [
+          [
+            138.58819611291224,
+            -34.930849916970274
+          ],
+          [
+            138.60612908054455,
+            -34.92991409126934
+          ],
+          [
+            138.6064895422055,
+            -34.93530725602303
+          ],
+          [
+            138.58861665151673,
+            -34.9361445192102
+          ],
+          [
+            138.58819611291224,
+            -34.930849916970274
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            138.60626400243171,
+            -34.929891286546855
+          ],
+          [
+            138.61202393956384,
+            -34.92967663611508
+          ],
+          [
+            138.61238096046043,
+            -34.935003703564284
+          ],
+          [
+            138.6066329240249,
+            -34.935228096248366
+          ],
+          [
+            138.60626400243171,
+            -34.929891286546855
+          ]
+        ]
+      ],
+      [
+        [
+          [
+            138.5876762726587,
+            -34.92240344169331
+          ],
+          [
+            138.59934123857778,
+            -34.92164835138006
+          ],
+          [
+            138.59993157086112,
+            -34.92846327384738
+          ],
+          [
+            138.588124925194,
+            -34.92896662635456
+          ],
+          [
+            138.5876762726587,
+            -34.92240344169331
+          ]
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    138.5876762726587,
+    -34.9361445192102,
+    138.61238096046043,
+    -34.92164835138006
+  ],
+  "properties": {
+    "column_info": [
+      {
+        "name": "field_id",
+        "description": "field id"
+      }
+    ],
+    "join_file": "tests/files/integration_tests/vector/data/join_text.csv",
+    "join_attribute_vector": "field_id",
+    "join_field": "id",
+    "join_column_info": [
+      {
+        "name": "field_size",
+        "description": "field area"
+      }
+    ],
+    "proj:code": "EPSG:4326",
+    "proj:wkt2": "GEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"Horizontal component of 3D system.\"],AREA[\"World.\"],BBOX[-90,-180,90,180]],ID[\"EPSG\",4326]]",
+    "datetime": "2023-03-31T23:46:00Z"
+  },
+  "links": [
+    {
+      "rel": "root",
+      "href": "/home/hoangson/Projects/stac-generator/generated/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "collection",
+      "href": "/home/hoangson/Projects/stac-generator/generated/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    },
+    {
+      "rel": "self",
+      "href": "/home/hoangson/Projects/stac-generator/generated/join_vector/join_vector.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "parent",
+      "href": "/home/hoangson/Projects/stac-generator/generated/collection.json",
+      "type": "application/json",
+      "title": "Auto-generated."
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "tests/files/integration_tests/vector/data/join_vector.geojson",
+      "type": "application/geo+json",
+      "description": "Raw vector data",
+      "roles": [
+        "data"
+      ]
+    }
+  },
+  "collection": "join_vector"
+}

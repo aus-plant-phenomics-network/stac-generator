@@ -1,6 +1,6 @@
 import logging
 import re
-from typing import Any
+from typing import Any, cast
 
 import geopandas as gpd
 import pystac
@@ -8,6 +8,7 @@ from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
 from stac_generator.core.base.schema import ColumnInfo
+from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.vector.schema import VectorConfig
 
 logger = logging.getLogger(__name__)
@@ -93,6 +94,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
 
         # Validate EPSG user-input vs extracted
         epsg, reliable = extract_epsg(raw_df.crs)
+        # Only compare if epsg is provided at config
         if source_cfg.epsg is not None:
             if reliable and epsg != source_cfg.epsg:
                 raise ValueError(
@@ -100,8 +102,35 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 )
             epsg = source_cfg.epsg
 
+        # Read join file
+        if source_cfg.join_file:
+            if source_cfg.join_attribute_vector not in raw_df:
+                raise ValueError(
+                    f"If a join file is provided, expects join attribute vector: {source_cfg.join_attribute_vector} to be a valid attribute of the vector file."
+                )
+            # Try reading join file and raise errors if columns not provided
+            _read_csv(
+                src_path=source_cfg.join_file,
+                required=[cast(str, source_cfg.join_field)],
+                date_format=source_cfg.date_format,
+                date_col=source_cfg.join_T_column,
+                columns=source_cfg.join_column_info,
+            )
+
+        # Make properties
         properties = source_cfg.model_dump(
-            include={"column_info", "title", "description", "layer"},
+            include={
+                "column_info",
+                "title",
+                "description",
+                "layer",
+                "join_file",
+                "join_attribute_vector",
+                "join_field",
+                "join_T_column",
+                "date_format",
+                "join_column_info",
+            },
             exclude_unset=True,
             exclude_none=True,
         )

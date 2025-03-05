@@ -2,12 +2,12 @@ import logging
 from typing import Any
 
 import geopandas as gpd
-import pandas as pd
 import pystac
 
 from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
 from stac_generator.core.base.schema import ColumnInfo
+from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.point.schema import CsvConfig
 
 logger = logging.getLogger(__name__)
@@ -48,23 +48,15 @@ def read_csv(
     :return: read dataframe
     :rtype: pd.DataFrame
     """
-    logger.debug(f"reading csv from path: {src_path}")
-    parse_dates: list[str] | bool = [T_coord] if isinstance(T_coord, str) else False
-    usecols: list[str] | None = None
-    # If band info is provided, only read in the required columns + the X and Y coordinates
-    if columns:
-        usecols = [item["name"] if isinstance(item, dict) else item for item in columns]
-        usecols.extend([X_coord, Y_coord])
-        if T_coord:
-            usecols.append(T_coord)
-        if Z_coord:
-            usecols.append(Z_coord)
-    df = pd.read_csv(
-        filepath_or_buffer=src_path,
-        usecols=usecols,
+    df = _read_csv(
+        src_path=src_path,
+        required=[X_coord, Y_coord],
+        optional=[Z_coord] if Z_coord else None,
+        date_col=T_coord,
         date_format=date_format,
-        parse_dates=parse_dates,
+        columns=columns,
     )
+
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
 
 

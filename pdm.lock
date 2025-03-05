@@ -5,7 +5,7 @@
 groups = ["default", "analysis", "cli", "dev", "docs", "test", "type-stubs"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:e7e4ffdb0e3a04e7dba3d23776fa21db73910ae71d7023fbf77e2172e5a173c8"
+content_hash = "sha256:24470a14c0320167c6282398bf5eab7b755c5cc9ba68aedba14655fe85eb67c2"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -2574,7 +2574,7 @@ name = "pyyaml"
 version = "6.0.2"
 requires_python = ">=3.8"
 summary = "YAML parser and emitter for Python"
-groups = ["analysis", "dev", "docs"]
+groups = ["default", "analysis", "dev", "docs"]
 files = [
     {file = "PyYAML-6.0.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:cc1c1159b3d456576af7a3e4d1ba7e6924cb39de8f67111c735f6fc832082774"},
     {file = "PyYAML-6.0.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:1e2120ef853f59c7419231f3bf4e7021f1b936f6ebd222406c3b60212205d2ee"},
