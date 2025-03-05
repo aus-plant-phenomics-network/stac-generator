@@ -11,6 +11,8 @@ import yaml
 from shapely import Geometry, centroid
 from timezonefinder import TimezoneFinder
 
+from stac_generator.core.base.schema import ColumnInfo
+
 SUPPORTED_URI_SCHEMES = ["http", "https"]
 logger = logging.getLogger(__name__)
 
@@ -118,3 +120,31 @@ def calculate_timezone(geometry: Geometry) -> str:
             f"Could not determine timezone for coordinates: lon={point.x}, lat={point.y}"
         )
     return timezone_str
+
+
+def _read_csv(
+    src_path: str,
+    required: list[str] | None = None,
+    optional: list[str] | None = None,
+    date_col: str | None = None,
+    date_format: str | None = "ISO8601",
+    columns: list[str] | list[ColumnInfo] | None = None,
+) -> pd.DataFrame:
+    logger.debug(f"reading csv from path: {src_path}")
+    parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False
+    usecols: list[str] | None = None
+    # If band info is provided, only read in the required columns + the X and Y coordinates
+    if columns:
+        usecols = [item["name"] if isinstance(item, dict) else item for item in columns]
+        if required:
+            usecols.extend(required)
+        if optional:
+            usecols.extend(optional)
+        if date_col:
+            usecols.append(date_col)
+    return pd.read_csv(
+        filepath_or_buffer=src_path,
+        usecols=usecols,
+        date_format=date_format,
+        parse_dates=parse_dates,
+    )
