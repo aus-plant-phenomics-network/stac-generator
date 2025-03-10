@@ -79,29 +79,31 @@
     ],
     "eo:cloud_cover": 0.0,
     "eo:snow_cover": 0.0,
-    "datetime": "2021-02-21T09:10:17Z"
+    "datetime": "2021-02-21T09:10:17Z",
+    "start_datetime": "2021-02-21T09:10:17Z",
+    "end_datetime": "2021-02-21T09:10:17Z"
   },
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -150,5 +152,5 @@
       ]
     }
   },
-  "collection": "composite_data"
+  "collection": "raster_data"
 }
