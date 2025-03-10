@@ -7,6 +7,7 @@ import logging
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
+import pandas as pd
 import pystac
 from pyproj import CRS
 from pystac.collection import Extent
@@ -98,7 +99,9 @@ class CollectionGenerator:
             else:
                 raise ValueError(f"Unable to determine datetime for item: {item.id}")
         min_dt, max_dt = min([min_dt, max_dt]), max([max_dt, min_dt])
-        logger.debug(f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}")
+        logger.debug(
+            f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}"
+        )
         return pystac.TemporalExtent([[min_dt, max_dt]])
 
     def _create_collection_from_items(
@@ -112,12 +115,18 @@ class CollectionGenerator:
         collection = pystac.Collection(
             id=collection_cfg.id,
             description=(
-                collection_cfg.description if collection_cfg.description else f"Auto-generated collection {collection_cfg.id} with stac_generator"
+                collection_cfg.description
+                if collection_cfg.description
+                else f"Auto-generated collection {collection_cfg.id} with stac_generator"
             ),
             extent=Extent(self.spatial_extent(items), self.temporal_extent(items)),
             title=collection_cfg.title,
             license=collection_cfg.license if collection_cfg.license else "proprietary",
-            providers=[pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers] if collection_cfg.providers else None,
+            providers=[
+                pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers
+            ]
+            if collection_cfg.providers
+            else None,
         )
         collection.add_items(items)
         return collection
@@ -247,8 +256,8 @@ class VectorGenerator(ItemGenerator[T]):
         source_cfg: SourceConfig,
         properties: dict[str, Any],
         epsg: int = 4326,
-        start_datetime: pydatetime.datetime | None = None,
-        end_datetime: pydatetime.datetime | None = None,
+        start_datetime: pd.Timestamp | None = None,
+        end_datetime: pd.Timestamp | None = None,
     ) -> pystac.Item:
         """Convert geopandas dataframe to pystac.Item
 
@@ -275,9 +284,18 @@ class VectorGenerator(ItemGenerator[T]):
 
         geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
 
-        # Set start datetime and end datetime based on given data if available
-        start_datetime = item_ts if start_datetime is None else start_datetime
-        end_datetime = item_ts if end_datetime is None else end_datetime
+        # Process start end datetime
+        if not start_datetime:
+            start_datetime = item_ts  # type: ignore[assignment]
+        else:
+            start_datetime = start_datetime.tz_localize(item_tz)
+            start_datetime = start_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
+        if not end_datetime:
+            end_datetime = item_ts  # type: ignore[assignment]
+        else:
+            end_datetime = end_datetime.tz_localize(item_tz)
+            end_datetime = end_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
+
         item = pystac.Item(
             source_cfg.id,
             bbox=df.total_bounds.tolist(),

@@ -317,7 +317,9 @@
     "description": "61 soils have been identified, representative of the range occurring across southern South Australia, based on an interpretation of Soil Landscape Map Units. These Soils (soil type) classes are also termed 'subgroup soils' in the reference text Hall et al. 2009, 'The Soils of Southern South Australia', where they are described in detail. Each of these soils has a two character alphanumeric code. The first character (letter) represents the relevant Soil GroupSELECT 1 FROM DUAL; the second character (number) represents a particular Soil within the Soil Group. Three additional miscellaneous classes (rock, water, not applicable) are also provided. Hence, 64 attribute (or 'analysis data') classes have been supplied, as percentage (areal extent) values of each possible soil type within each Soil Landscape Map Unit. Note: the sum of all percentage values for each map unit totals 100%. This analysis data is to be used for the creation of spatial data statistics. For map display purposes, the most commonly occurring Soil (SOIL_SUBGR legend category) is defined, however, it should be noted that this often accounts for less than 50% of a Soil Landscape Map Unit.",
     "proj:code": "EPSG:1168",
     "proj:wkt2": "GEOGCRS[\"GCS_GDA2020\",DATUM[\"Geocentric_Datum_of_Australia_2020\",ELLIPSOID[\"GRS 1980\",6378137,298.257222101,LENGTHUNIT[\"metre\",1]],ID[\"EPSG\",1168]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"Degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"longitude\",east,ORDER[1],ANGLEUNIT[\"Degree\",0.0174532925199433]],AXIS[\"latitude\",north,ORDER[2],ANGLEUNIT[\"Degree\",0.0174532925199433]]]",
-    "datetime": "2016-06-08T23:46:00Z"
+    "datetime": "2016-06-08T23:46:00Z",
+    "start_datetime": "2016-06-08T23:46:00Z",
+    "end_datetime": "2016-06-08T23:46:00Z"
   },
   "links": [
     {
