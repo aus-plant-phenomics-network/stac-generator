@@ -7,7 +7,6 @@ import logging
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
-import pandas as pd
 import pystac
 from pyproj import CRS
 from pystac.collection import Extent
@@ -40,6 +39,8 @@ from stac_generator.core.base.utils import (
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+
+    import pandas as pd
 
 
 logger = logging.getLogger(__name__)
