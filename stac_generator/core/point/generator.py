@@ -66,7 +66,9 @@ class PointGenerator(VectorGenerator[CsvConfig]):
     @staticmethod
     def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
         if "X" not in source_cfg or "Y" not in source_cfg or "epsg" not in source_cfg:
-            raise ValueError(f"Expects X and Y column to be described in source config for item: {source_cfg['id']}")
+            raise ValueError(
+                f"Expects X and Y column to be described in source config for item: {source_cfg['id']}"
+            )
         raw_df = read_csv(
             source_cfg["id"],
             source_cfg["X"],
@@ -86,7 +88,9 @@ class PointGenerator(VectorGenerator[CsvConfig]):
         column_info = []
         for col in columns:
             column_info.append(ColumnInfo(name=col, description=f"{col}_description"))
-        return CsvConfig(**source_cfg, column_info=column_info).model_dump(mode="json", exclude_none=True)
+        return CsvConfig(**source_cfg, column_info=column_info).model_dump(
+            mode="json", exclude_none=True
+        )
 
     def create_item_from_config(self, source_cfg: CsvConfig) -> pystac.Item:
         """Create item from source csv config
