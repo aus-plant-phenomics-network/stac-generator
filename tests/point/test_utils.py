@@ -27,7 +27,7 @@ Y = "latitude"
 Z = "elevation"
 T = "YYYY-MM-DD"
 EPSG = 7843  # GDA2020
-DATE_FORMAT = "%Y-%M-%d"
+DATE_FORMAT = "ISO8601"
 COLLECTION_DATE = pydatetime.date(2011, 1, 1)
 COLLECTION_TIME = pydatetime.time(12, 4, 5)
 

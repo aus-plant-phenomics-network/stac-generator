@@ -128,18 +128,6 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
 
         # Make properties
         properties = source_cfg.model_dump(
-            include={
-                "column_info",
-                "title",
-                "description",
-                "layer",
-                "join_file",
-                "join_attribute_vector",
-                "join_field",
-                "join_T_column",
-                "date_format",
-                "join_column_info",
-            },
             exclude_unset=True,
             exclude_none=True,
         )

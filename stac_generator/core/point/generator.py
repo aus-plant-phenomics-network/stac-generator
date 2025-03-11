@@ -125,7 +125,6 @@ class PointGenerator(VectorGenerator[CsvConfig]):
             start_datetime, end_datetime = None, None
 
         properties = source_cfg.model_dump(
-            include={"X", "Y", "Z", "T", "column_info", "date_format", "title", "description"},
             exclude_unset=True,
             exclude_none=True,
         )

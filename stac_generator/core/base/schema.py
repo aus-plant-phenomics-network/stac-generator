@@ -6,7 +6,7 @@ import pytz
 from httpx._types import (
     RequestData,
 )
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 from stac_pydantic.shared import Provider, UtcDatetime
 from typing_extensions import TypedDict
 
@@ -32,7 +32,7 @@ class StacCollectionConfig(BaseModel):
     """
 
     # Stac Information
-    id: str
+    id: str = Field(exclude=True)
     """Item id"""
     title: str | None = "Auto-generated Stac Item"
     """A human readable title describing the item entity."""
@@ -64,9 +64,9 @@ class StacItemConfig(StacCollectionConfig):
     and other descriptive information such as the id of the new entity
     """
 
-    collection_date: datetime.date
+    collection_date: datetime.date = Field(exclude=True)
     """Date in local timezone of when the data is collected"""
-    collection_time: datetime.time
+    collection_time: datetime.time = Field(exclude=True)
     """Time in local timezone of when the data is collected"""
 
     def get_datetime(self, timezone: str) -> UtcDatetime:
@@ -89,7 +89,7 @@ class SourceConfig(StacItemConfig):
     - Additional Stac Metadata from `StacConfig`
     """
 
-    location: str
+    location: str = Field(exclude=True)
     """Asset's href"""
     extension: str | None = None
     """Explicit file extension specification. If the file is stored behind an api endpoint, the field `extension` must be provided"""
