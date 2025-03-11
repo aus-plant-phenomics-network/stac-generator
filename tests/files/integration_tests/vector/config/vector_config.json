@@ -6,18 +6,38 @@
     "collection_time": "09:00:00",
     "epsg": 3857,
     "column_info": [
-      { "name": "fid", "description": "field id" },
-      { "name": "objectid", "description": "object id" },
-      { "name": "lga_code_2019", "description": "LGA code 2019 survey" },
-      { "name": "lga_name_2019", "description": "LGA name 2019 survey" },
-      { "name": "state_code_2016", "description": "State code 2016 survey" },
-      { "name": "state_name_2016", "description": "State name 2016 survey" },
+      {
+        "name": "objectid",
+        "description": "object id"
+      },
+      {
+        "name": "lga_code_2019",
+        "description": "LGA code 2019 survey"
+      },
+      {
+        "name": "lga_name_2019",
+        "description": "LGA name 2019 survey"
+      },
+      {
+        "name": "state_code_2016",
+        "description": "State code 2016 survey"
+      },
+      {
+        "name": "state_name_2016",
+        "description": "State name 2016 survey"
+      },
       {
         "name": "area_albers_sqkm",
         "description": "Feature area in Albers projection - sq km"
       },
-      { "name": "st_length(shape)", "description": "Shape length" },
-      { "name": "st_area(shape)", "description": "Shape area" }
+      {
+        "name": "st_length(shape)",
+        "description": "Shape length"
+      },
+      {
+        "name": "st_area(shape)",
+        "description": "Shape area"
+      }
     ]
   },
   {
@@ -33,7 +53,10 @@
         "name": "LANSLU",
         "description": "Soil Landscape Map Unit (LANSLU code): Concatenation of Land System (LANDSYSTEM code) and Soil Landscape Unit (SLU code). Link item to join spatial data with other tables."
       },
-      { "name": "OBJECTID", "description": "object id" },
+      {
+        "name": "OBJECTID",
+        "description": "object id"
+      },
       {
         "name": "EXPOSURE",
         "description": "Degree of exposure (Legend category. See layer file for descriptions)."
@@ -54,8 +77,14 @@
         "name": "YX",
         "description": "Percentage of map unit which is not applicable. Attribute Class: YX, Not Applicable"
       },
-      { "name": "SHAPE_Length", "description": "Shape length" },
-      { "name": "SHAPE_Area", "description": "Shape area" }
+      {
+        "name": "SHAPE_Length",
+        "description": "Shape length"
+      },
+      {
+        "name": "SHAPE_Area",
+        "description": "Shape area"
+      }
     ]
   },
   {
@@ -71,13 +100,18 @@
         "name": "LANSLU",
         "description": "Soil Landscape Map Unit (LANSLU code): Concatenation of Land System (LANDSYSTEM code) and Soil Landscape Unit (SLU code). Link item to join spatial data with other tables."
       },
-      { "name": "OBJECTID", "description": "object id" },
+      {
+        "name": "OBJECTID",
+        "description": "object id"
+      },
       {
         "name": "SOIL_SUBGR",
         "description": "MOST COMMON SOIL TYPE in map unit (Legend category. See layer file for descriptions)"
       },
-      { "name": "SHAPE_Length", "description": "Shape length" },
-      { "name": "SHAPE_Area", "description": "Shape area" },
+      {
+        "name": "SHAPE_Area",
+        "description": "Shape area"
+      },
       {
         "name": "A1",
         "description": "Percentage of A1 soil (Highly calcareous sandy loam) in map unit"
@@ -318,8 +352,14 @@
         "name": "O1",
         "description": "Percentage of O1 soil (Volcanic ash soil) in map unit"
       },
-      { "name": "RR", "description": "Percentage of RR (Rock) in map unit" },
-      { "name": "WW", "description": "Percentage of WW (Water) in map unit" },
+      {
+        "name": "RR",
+        "description": "Percentage of RR (Rock) in map unit"
+      },
+      {
+        "name": "WW",
+        "description": "Percentage of WW (Water) in map unit"
+      },
       {
         "name": "XX",
         "description": "Percentage of map unit which is not applicable"

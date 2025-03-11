@@ -260,10 +260,6 @@
         "epsg": 3857,
         "column_info": [
             {
-                "name": "fid",
-                "description": "field id"
-            },
-            {
                 "name": "objectid",
                 "description": "object id"
             },
@@ -364,10 +360,6 @@
             {
                 "name": "SOIL_SUBGR",
                 "description": "MOST COMMON SOIL TYPE in map unit (Legend category. See layer file for descriptions)"
-            },
-            {
-                "name": "SHAPE_Length",
-                "description": "Shape length"
             },
             {
                 "name": "SHAPE_Area",
