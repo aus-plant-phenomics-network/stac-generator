@@ -1,0 +1,14 @@
+[
+  {
+    "id": "with_date_no_tzinfo",
+    "location": "tests/files/unit_tests/points/with_date_multi.csv",
+    "X": "longitude",
+    "Y": "latitude",
+    "T": "YYYY-MM-DD",
+    "epsg": 7843,
+    "collection_date": "2017-01-01",
+    "collection_time": "00:00:00",
+    "description": "Non default description",
+    "license": "MIT"
+  }
+]

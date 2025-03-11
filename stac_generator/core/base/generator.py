@@ -289,12 +289,14 @@ class VectorGenerator(ItemGenerator[T]):
         if not start_datetime:
             start_datetime = item_ts  # type: ignore[assignment]
         else:
-            start_datetime = start_datetime.tz_localize(item_tz)
+            if start_datetime.tzinfo is None:
+                start_datetime = start_datetime.tz_localize(item_tz)
             start_datetime = start_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
         if not end_datetime:
             end_datetime = item_ts  # type: ignore[assignment]
         else:
-            end_datetime = end_datetime.tz_localize(item_tz)
+            if end_datetime.tzinfo is None:
+                end_datetime = end_datetime.tz_localize(item_tz)
             end_datetime = end_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
 
         item = pystac.Item(
