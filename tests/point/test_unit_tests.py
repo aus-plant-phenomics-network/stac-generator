@@ -7,7 +7,7 @@ import pytest
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
 
-CONFIG_PATH = Path("tests/files/unit_tests/configs")
+CONFIG_PATH = Path("tests/files/unit_tests/points/configs")
 
 
 def load_item(file: str) -> pystac.Item:
