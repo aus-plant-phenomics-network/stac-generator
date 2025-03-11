@@ -1,2 +1,0 @@
-id,location,collection_date,collection_time,column_info,join_file,join_attribute_vector,join_field,join_column_info
-join_vector,tests/files/integration_tests/vector/data/join_vector.geojson,2023-04-01,09:00:00,"[{""name"": ""field_id"", ""description"": ""field id""}]",tests/files/integration_tests/vector/data/join_text.csv,field_id,id,"[{""name"": ""field_size"", ""description"": ""field area""}]"
