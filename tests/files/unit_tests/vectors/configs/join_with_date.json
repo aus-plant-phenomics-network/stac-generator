@@ -1,0 +1,32 @@
+[
+    {
+        "id": "join_with_date",
+        "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+        "collection_date": "2025-01-01",
+        "collection_time": "00:00:00",
+        "column_info": [
+            {
+                "name": "SA2_NAME21",
+                "description": "SA2 code name in 2021"
+            }
+        ],
+        "join_file": "tests/files/unit_tests/vectors/price.csv",
+        "join_field": "Area",
+        "join_attribute_vector": "SA2_NAME21",
+        "join_T_column": "Date",
+        "join_column_info": [
+            {
+                "name": "Sell_Price",
+                "description": "Median Sales Price in 2025"
+            },
+            {
+                "name": "Rent_Price",
+                "description": "Median Rental Price in 2025"
+            },
+            {
+                "name": "Sell/Rent",
+                "description": "Ratio of Sales Price (in $1000) over Rental Price (in $)"
+            }
+        ]
+    }
+]

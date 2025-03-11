@@ -53,10 +53,6 @@
         "description": "MOST COMMON SOIL TYPE in map unit (Legend category. See layer file for descriptions)"
       },
       {
-        "name": "SHAPE_Length",
-        "description": "Shape length"
-      },
-      {
         "name": "SHAPE_Area",
         "description": "Shape area"
       },

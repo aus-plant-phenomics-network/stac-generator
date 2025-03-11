@@ -90,7 +90,11 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             ]
         else:
             columns = None
-        raw_df = gpd.read_file(source_cfg.location, columns=columns, layer=source_cfg.layer)
+        # Throw exceptions if column_info contains invalid column
+        raw_df = gpd.read_file(source_cfg.location, layer=source_cfg.layer)
+
+        if columns and not set(columns).issubset(set(raw_df.columns)):
+            raise ValueError(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
 
         # Validate EPSG user-input vs extracted
         epsg, reliable = extract_epsg(raw_df.crs)
@@ -105,13 +109,13 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         start_datetime, end_datetime = None, None
         # Read join file
         if source_cfg.join_file:
-            if source_cfg.join_attribute_vector not in raw_df:
+            if source_cfg.join_attribute_vector not in raw_df.columns:
                 raise ValueError(
                     f"If a join file is provided, expects join attribute vector: {source_cfg.join_attribute_vector} to be a valid attribute of the vector file."
                 )
             # Try reading join file and raise errors if columns not provided
             try:
-                raw_df = _read_csv(
+                join_df = _read_csv(
                     src_path=source_cfg.join_file,
                     required=[cast(str, source_cfg.join_field)],
                     date_format=source_cfg.date_format,
@@ -123,8 +127,8 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                     f"Join file associated with vector file: {source_cfg.id} may not have the specified column"
                 ) from e
             if source_cfg.join_T_column:
-                start_datetime = raw_df[source_cfg.join_T_column].min()
-                end_datetime = raw_df[source_cfg.join_T_column].max()
+                start_datetime = join_df[source_cfg.join_T_column].min()
+                end_datetime = join_df[source_cfg.join_T_column].max()
 
         # Make properties
         properties = source_cfg.model_dump(
