@@ -1,16 +1,15 @@
 
 ## Overview
 
-[STAC](https://stacspec.org/en) is a metadata standard for describing spatio-temporal assets, particularly satellite imagery and other Earth observation data. The goal of STAC is to make it easier for users to search, discover and use geospatial assets by providing a consistent and standardised way to catalog and query them. 
+[STAC](https://stacspec.org/en) is a json-based metadata standard for describing spatial-temporal assets, particularly satellite and Earth observation data. STAC allows users to quickly search, discover and use geospatial assets by providing a consistent structure for query and storage.
 
-`stac_generator` is a Python package that allows users to generate STAC-compliant metadata from raw assets and store them either locally or behind a STAC API compliant [server](https://github.com/stac-utils/stac-fastapi-pgstac). 
-
-The `stac_generator` is developed as part of the Multiscalar Crop Characterisation Network (MCCN) project, serving as the frontend metadata building tool for generating spatial datacube. For more information on the MCCN project, please visit [here](#).
+`stac_generator` is a command line interface (CLI) program that combines automatically extracted geospatial information from raw assets and other user-provided metadata to build a STAC-compliant metadata record for further use. Generated STAC records can be saved locally or behind a STAC API-compliant server.
 
 The `stac_generator` was developed as part of the Multiscalar Crop Characterisation Project (MCCN). Using the STAC generator to describe an asset collection is the first step in building a datacube with the MCCN engine.
 
 ## Installation
 
+Requirements: python3.11+
 Requirements: python3.11+
 
 STAC Generator can be installed directly from Pypi:
