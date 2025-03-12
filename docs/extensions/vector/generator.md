@@ -1,1 +1,1 @@
-:::stac_generator.vector.generator
+:::core.vector.generator

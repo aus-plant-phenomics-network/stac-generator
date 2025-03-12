@@ -16,14 +16,14 @@ theme:
 
 nav:
   - Home: index.md
-  - Metadata: metadata.md
-  - Case Studies: case_studies.md
-  - Metadata Examples:
-    - Point: metadata_examples/point.md
-    - Vector: metadata_examples/vector.md
-    - Raster: metadata_examples/raster.md
+  - Quickstart: quick_start.md
+  - Introduction: introduction.md
+  # - Metadata Examples:
+  #   - Point: metadata_examples/point.md
+  #   - Vector: metadata_examples/vector.md
+  #   - Raster: metadata_examples/raster.md
   - API Reference:
-    - Generator: generator.md
+  #   - Generator: generator.md
     - Schema: schema.md
     - Utility: utils.md
     - Extension:
@@ -44,6 +44,7 @@ plugins:
       enable_inventory: true
       handlers:
         python:
+          paths: [stac_generator]
           options:
             docstring_style: sphinx
             show_source: false

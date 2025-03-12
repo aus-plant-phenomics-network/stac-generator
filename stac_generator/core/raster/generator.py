@@ -32,6 +32,8 @@ BAND_MAPPING: dict[str, str] = {
 
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
+    """Raster Generator"""
+
     @staticmethod
     def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
         with rasterio.open(source_cfg["location"]) as src:
@@ -44,6 +46,14 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         )
 
     def create_item_from_config(self, source_cfg: RasterConfig) -> pystac.Item:
+        """Generate Raster Item from config
+
+        :param source_cfg: raster config - must contain band info
+        :type source_cfg: RasterConfig
+        :raises ValueError: if epsg code is provided in config but does not match that extracted from the asset
+        :return: generated item
+        :rtype: pystac.Item
+        """
         with rasterio.open(source_cfg.location) as src:
             bounds = src.bounds
             transform = src.transform

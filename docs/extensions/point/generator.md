@@ -1,1 +1,1 @@
-:::stac_generator.point.generator
+:::core.point.generator

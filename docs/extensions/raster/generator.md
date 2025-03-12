@@ -1,1 +1,1 @@
-:::stac_generator.raster.generator
+:::core.raster.generator

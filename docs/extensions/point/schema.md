@@ -1,1 +1,1 @@
-:::stac_generator.point.schema
+:::core.point.schema
