@@ -6,12 +6,12 @@
 
 ![](images/process.png)
 
-A STAC item is a core component of the STAC specification, designed to describe a single geospatial asset or dataset. The key attributes of a STAC item includes:  
-- `id`: identifier 
+A STAC item is a core component of the STAC specification, designed to describe a single geospatial asset or dataset. The key attributes of a STAC item includes:
+- `id`: identifier
 - `datetime`: the timestamp when the item is collected
-- `asset`: information about the asset, primarily its location `href`. 
+- `asset`: information about the asset, primarily its location `href`.
 - `geometry`: item geometry type and coordinates
-- `bbox`: item bounding box 
+- `bbox`: item bounding box
 
 <details>
 <summary>Example STAC Item</summary>
@@ -177,10 +177,10 @@ A STAC item is a core component of the STAC specification, designed to describe 
 </details>
 
 
-Collection is a set of STAC Item. It is used to group related STAC Items that share common properties, metadata, or themes. A collection provides a higher-level metadata description for a dataset or group of assets: 
-- `id`: collection id 
-- `spatial_extent`: areal coverage 
-- `temporal_extent`: temporal coverage 
+Collection is a set of STAC Item. It is used to group related STAC Items that share common properties, metadata, or themes. A collection provides a higher-level metadata description for a dataset or group of assets:
+- `id`: collection id
+- `spatial_extent`: areal coverage
+- `temporal_extent`: temporal coverage
 - `links`: associated child items and assets
 
 <details>
@@ -238,7 +238,7 @@ Collection is a set of STAC Item. It is used to group related STAC Items that sh
 </details>
 
 
-To run the `stac_generator`, a config file must be provided. In essence, the config file contains the asset locations and additional user-supplied metadata, from which the STAC Item is generated. Refer to quick start to see how to build a simple config, or refer to the specication to see what fields are supported in the config. 
+To run the `stac_generator`, a config file must be provided. In essence, the config file contains the asset locations and additional user-supplied metadata, from which the STAC Item is generated. Refer to quick start to see how to build a simple config, or refer to the specication to see what fields are supported in the config.
 
 ## Data Types
 
@@ -262,7 +262,7 @@ To run the `stac_generator`, a config file must be provided. In essence, the con
     - csv
     - txt
 
-Note that in some cases, plot or field level attributes are recorded in a csv that does not contain X and Y columns but a plot or field ID column referencing the same attribute in a separate vector file. This additional information can be provided using the `join_` keywords in the vector config. Please see the documentation for more information. 
+Note that in some cases, plot or field level attributes are recorded in a csv that does not contain X and Y columns but a plot or field ID column referencing the same attribute in a separate vector file. This additional information can be provided using the `join_` keywords in the vector config. Please see the documentation for more information.
 
 ## Collection metadata
 
@@ -288,11 +288,10 @@ Vector metadata contains all fields in item metadata (inherits from `SourceConfi
 
 Users should also specify useful columns under `column_info` (please see `ColumnInfo` and `HasColumnInfo` under [this](schema.md) link). For a more detailed list of all fields, their data types, and default values, please refer to `VectorConfig` under [this](extensions/vector/schema.md) link.
 
-A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. We can specify `join_file` to be the path to the attribute csv file. `join_field` to be a column in `join_file` and `join_attribute_vector` to be an attribute in the vector file. The two files will be joined at each record where `join_file` = `join_attribute_vector`. `join_column_info` must also be provided to describe the columns in the `join_file`. 
+A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. We can specify `join_file` to be the path to the attribute csv file. `join_field` to be a column in `join_file` and `join_attribute_vector` to be an attribute in the vector file. The two files will be joined at each record where `join_file` = `join_attribute_vector`. `join_column_info` must also be provided to describe the columns in the `join_file`.
 
 ### Raster metadata
 
 Raster metadata contains all fields in item metadata (inherits from `SourceConfig`). `band_info` is the only required field in a raster config.
 
 For a more detailed list of all fields, their data types, and default values, please refer to `RasterConfig` under [this](extensions/raster/schema.md) link.
-
