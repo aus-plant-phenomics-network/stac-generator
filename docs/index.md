@@ -1,49 +1,16 @@
 
 ## Overview
 
-`stac_generator` is a command line interface (CLI) program to automatically generate [STAC](https://stacspec.org/en)-compliant metadata for geospatial datasets. `stac_generator` provides the following features:
+[STAC](https://stacspec.org/en) is a metadata standard for describing spatio-temporal assets, particularly satellite imagery and other Earth observation data. The goal of STAC is to make it easier for users to search, discover and use geospatial assets by providing a consistent and standardised way to catalog and query them. 
 
-- Generating STAC descriptions for raster (tif), vector (shp, geojson, zip+shp), and point data (csv, txt).
+`stac_generator` is a Python package that allows users to generate STAC-compliant metadata from raw assets and store them either locally or behind a STAC API compliant [server](https://github.com/stac-utils/stac-fastapi-pgstac). 
 
-- Saving generated STAC records locally as jsons or POST/PUT them to a STAC compliant API server.
-
-- Generating compliant metadata for datacube construction with the MCCN engine.
-
-Using the STAC generator to describe a dataset is the first step in building a datacube with the MCCN engine.
-
-While most STAC information can be derived directly from the data, other information such as licensing, instrumentation, and ids (collection id/item id) does not come with the data and must be provided along side. We make the distinction between the following types of metadata:
-
-- STAC Collection Metadata: metadata at the collection level. Collection level metadata is provided as input in the CLI.
-
-- STAC Item Metadata: metadata at the item level. Item level metadata is provided as row/entry in the metadata file.
-
-
-
-## Workflow
-
-The process for generating STAC descriptions for a dataset is as follows:
-
-Prepare assets:
-
-  - Determine what assets (tif images, vector boundaries, csv records) are important for the project. For instance, this can be all raw/processed data used in the project. Alternatively, this includes all data you want to load into the data cube.
-
-  - Host required assets somewhere with a semi-permanent URI. In general, if you want the data to be publicly accessible, the assets should be hosted on some cloud object storage - i.e S3, Nectar, etc. Otherwise, the asset only needs to be hosted somewhere accessible by the machine running the STAC Generator.
-
-Prepare Item level metadata:
-
-  - Depending on whether the data item is raster/vector/point, the corresponding documentations can be useful. At the very least, you should think about the item id, asset location - i.e the link to where the asset is hosted, and the date and time when the item was collected.
-
-Prepare Collection level metadata:
-
-  - The relevant documentation page (to be added) may be helpful. At the very least, collection id needs to be provided.
-
-Determine whether to save the STAC records locally or remotely.
-
+The `stac_generator` is developed as part of the Multiscalar Crop Characterisation Network (MCCN) project, serving as the frontend metadata building tool for generating spatial datacube. For more information on the MCCN project, please visit [here](#).
 
 
 ## Installation
 
-Requirements: python3.10+
+Requirements: python3.11+
 
 STAC Generator can be installed directly from Pypi:
 
