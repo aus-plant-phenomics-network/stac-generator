@@ -6,12 +6,12 @@
         "collection_time": "00:00:00",
         "column_info": [
             {
-                "name": "SA2_NAME21",
-                "description": "SA2 code name in 2021"
+                "name": "Suburb_Name",
+                "description": "Suburb_Name"
             }
         ],
         "join_file": "tests/files/unit_tests/vectors/distance.csv",
         "join_field": "Area",
-        "join_attribute_vector": "SA2_NAME21"
+        "join_attribute_vector": "Suburb_Name"
     }
 ]

@@ -1,1 +1,1 @@
-:::stac_generator.base.utils
+:::core.base.utils

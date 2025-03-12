@@ -1,1 +1,1 @@
-:::stac_generator.raster.schema
+:::core.raster.schema

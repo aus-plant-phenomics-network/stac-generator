@@ -1,1 +1,1 @@
-:::stac_generator.base.schema
+:::core.base.schema

@@ -105,9 +105,7 @@ def test_given_join_file_invalid_wrong_join_date_column_expects_throw() -> None:
 def test_given_join_with_date_expects_correct_start_end_datetime() -> None:
     item = load_item("join_with_date.json")
     assert "column_info" in item.properties
-    assert item.properties["column_info"] == [
-        {"name": "SA2_NAME21", "description": "SA2 code name in 2021"}
-    ]
+    assert item.properties["column_info"] == [{"name": "Suburb_Name", "description": "Suburb_Name"}]
     assert "join_column_info" in item.properties
     assert item.properties["join_column_info"] == [
         {"name": "Sell_Price", "description": "Median Sales Price in 2025"},
@@ -119,7 +117,7 @@ def test_given_join_with_date_expects_correct_start_end_datetime() -> None:
     ]
     assert item.properties["join_file"] == "tests/files/unit_tests/vectors/price.csv"
     assert item.properties["join_field"] == "Area"
-    assert item.properties["join_attribute_vector"] == "SA2_NAME21"
+    assert item.properties["join_attribute_vector"] == "Suburb_Name"
     assert item.properties["join_T_column"] == "Date"
     assert item.properties["start_datetime"] == "2020-01-01T00:00:00Z"
     assert item.properties["end_datetime"] == "2025-01-01T00:00:00Z"
@@ -127,9 +125,7 @@ def test_given_join_with_date_expects_correct_start_end_datetime() -> None:
 
 def test_given_join_with_no_date_expects_same_start_end_datetime() -> None:
     item = load_item("join_no_date.json")
-    assert item.properties["column_info"] == [
-        {"name": "SA2_NAME21", "description": "SA2 code name in 2021"}
-    ]
+    assert item.properties["column_info"] == [{"name": "Suburb_Name", "description": "Suburb_Name"}]
     assert item.properties["join_column_info"] == [
         {"name": "Distance", "description": "Driving Distance to CBD in km"},
         {
@@ -142,6 +138,6 @@ def test_given_join_with_no_date_expects_same_start_end_datetime() -> None:
     ]
     assert item.properties["join_file"] == "tests/files/unit_tests/vectors/distance.csv"
     assert item.properties["join_field"] == "Area"
-    assert item.properties["join_attribute_vector"] == "SA2_NAME21"
+    assert item.properties["join_attribute_vector"] == "Suburb_Name"
     assert item.properties["start_datetime"] == item.properties["end_datetime"]
     assert item.datetime == pd.Timestamp(item.properties["start_datetime"])
