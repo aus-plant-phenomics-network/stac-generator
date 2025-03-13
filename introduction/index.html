@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.47">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.6f8fc17f.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
@@ -234,7 +234,6 @@
   
   <span class="md-ellipsis">
     Home
-    
   </span>
   
 
@@ -255,7 +254,6 @@
   
   <span class="md-ellipsis">
     Quickstart
-    
   </span>
   
 
@@ -285,7 +283,6 @@
   
   <span class="md-ellipsis">
     Introduction
-    
   </span>
   
 
@@ -297,7 +294,6 @@
   
   <span class="md-ellipsis">
     Introduction
-    
   </span>
   
 
@@ -426,7 +422,6 @@
   
   <span class="md-ellipsis">
     API Reference
-    
   </span>
   
 
@@ -452,7 +447,6 @@
   
   <span class="md-ellipsis">
     Schema
-    
   </span>
   
 
@@ -474,7 +468,6 @@
   
   <span class="md-ellipsis">
     Utility
-    
   </span>
   
 
@@ -506,7 +499,6 @@
   
   <span class="md-ellipsis">
     Extension
-    
   </span>
   
 
@@ -542,7 +534,6 @@
   
   <span class="md-ellipsis">
     Point
-    
   </span>
   
 
@@ -568,7 +559,6 @@
   
   <span class="md-ellipsis">
     Generator
-    
   </span>
   
 
@@ -590,7 +580,6 @@
   
   <span class="md-ellipsis">
     Schema
-    
   </span>
   
 
@@ -630,7 +619,6 @@
   
   <span class="md-ellipsis">
     Vector
-    
   </span>
   
 
@@ -656,7 +644,6 @@
   
   <span class="md-ellipsis">
     Generator
-    
   </span>
   
 
@@ -678,7 +665,6 @@
   
   <span class="md-ellipsis">
     Schema
-    
   </span>
   
 
@@ -718,7 +704,6 @@
   
   <span class="md-ellipsis">
     Raster
-    
   </span>
   
 
@@ -744,7 +729,6 @@
   
   <span class="md-ellipsis">
     Generator
-    
   </span>
   
 
@@ -766,7 +750,6 @@
   
   <span class="md-ellipsis">
     Schema
-    
   </span>
   
 
@@ -918,17 +901,16 @@
                   
 
 
-
 <h1 id="introduction">Introduction</h1>
 <h2 id="terminologies">Terminologies</h2>
 <p><code>stac_generator</code> generates a STAC collection from information that can be extracted from the spatio-temporal asset and from data provided by users.</p>
 <p><img alt="" src="../images/process.png" /></p>
-<p>A STAC item is a core component of the STAC specification, designed to describe a single geospatial asset or dataset. The key attributes of a STAC item includes:<br />
-- <code>id</code>: identifier 
+<p>A STAC item is a core component of the STAC specification, designed to describe a single geospatial asset or dataset. The key attributes of a STAC item includes:
+- <code>id</code>: identifier
 - <code>datetime</code>: the timestamp when the item is collected
-- <code>asset</code>: information about the asset, primarily its location <code>href</code>. 
+- <code>asset</code>: information about the asset, primarily its location <code>href</code>.
 - <code>geometry</code>: item geometry type and coordinates
-- <code>bbox</code>: item bounding box </p>
+- <code>bbox</code>: item bounding box</p>
 <details>
 <summary>Example STAC Item</summary>
 
@@ -1093,10 +1075,10 @@
 
 </details>
 
-<p>Collection is a set of STAC Item. It is used to group related STAC Items that share common properties, metadata, or themes. A collection provides a higher-level metadata description for a dataset or group of assets: 
-- <code>id</code>: collection id 
-- <code>spatial_extent</code>: areal coverage 
-- <code>temporal_extent</code>: temporal coverage 
+<p>Collection is a set of STAC Item. It is used to group related STAC Items that share common properties, metadata, or themes. A collection provides a higher-level metadata description for a dataset or group of assets:
+- <code>id</code>: collection id
+- <code>spatial_extent</code>: areal coverage
+- <code>temporal_extent</code>: temporal coverage
 - <code>links</code>: associated child items and assets</p>
 <details>
 <summary>Example Collection JSON</summary>
@@ -1153,7 +1135,7 @@
 
 </details>
 
-<p>To run the <code>stac_generator</code>, a config file must be provided. In essence, the config file contains the asset locations and additional user-supplied metadata, from which the STAC Item is generated. Refer to quick start to see how to build a simple config, or refer to the specication to see what fields are supported in the config. </p>
+<p>To run the <code>stac_generator</code>, a config file must be provided. In essence, the config file contains the asset locations and additional user-supplied metadata, from which the STAC Item is generated. Refer to quick start to see how to build a simple config, or refer to the specication to see what fields are supported in the config.</p>
 <h2 id="data-types">Data Types</h2>
 <p><code>stac_generator</code> classifies assets into <code>raster</code>, <code>vector</code>, and <code>point</code> data, using terminologies consistent with common <a href="https://gisgeography.com/spatial-data-types-vector-raster/#:~:text=Vector%20data%20expresses%20by%20point,2021%20at%208%3A14%20pm">GIS</a> softwares. In general:</p>
 <ul>
@@ -1181,7 +1163,7 @@
 </ul>
 </li>
 </ul>
-<p>Note that in some cases, plot or field level attributes are recorded in a csv that does not contain X and Y columns but a plot or field ID column referencing the same attribute in a separate vector file. This additional information can be provided using the <code>join_</code> keywords in the vector config. Please see the documentation for more information. </p>
+<p>Note that in some cases, plot or field level attributes are recorded in a csv that does not contain X and Y columns but a plot or field ID column referencing the same attribute in a separate vector file. This additional information can be provided using the <code>join_</code> keywords in the vector config. Please see the documentation for more information.</p>
 <h2 id="collection-metadata">Collection metadata</h2>
 <p>Aside from <code>datetime</code>, <code>start_datetime</code>, <code>end_datetime</code>, collection metadata contains fields described in <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">STAC Common Metadata</a>. In general, the most important fields are <code>id</code> (required), <code>keywords</code> (optional - can be useful for catalog filtering feature in the future), <code>license</code> (optional - licensing information).</p>
 <p>For a more detailed list of all fields, their data types, and default values, please refer to <code>STACCollectionConfig</code> under <a href="../schema/">this</a> link.</p>
@@ -1194,7 +1176,7 @@
 <h3 id="vector-metadata">Vector metadata</h3>
 <p>Vector metadata contains all fields in item metadata (inherits from <code>SourceConfig</code>). Since vector data is often self-described, vector metadata only requires the <code>epsg</code> code for sanity checking - i.e. to ensure that users know whether they are providing the right asset. If the vector data is a compressed zip file with multiple shp files, a <code>layer</code> field is needed to specify which <code>shp</code> file in the zip package the metadata is describing. If the vector data contains plot or field level attributes, the <code>column_info</code> should also be used.</p>
 <p>Users should also specify useful columns under <code>column_info</code> (please see <code>ColumnInfo</code> and <code>HasColumnInfo</code> under <a href="../schema/">this</a> link). For a more detailed list of all fields, their data types, and default values, please refer to <code>VectorConfig</code> under <a href="../extensions/vector/schema/">this</a> link.</p>
-<p>A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. We can specify <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> must also be provided to describe the columns in the <code>join_file</code>. </p>
+<p>A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. We can specify <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> must also be provided to describe the columns in the <code>join_file</code>.</p>
 <h3 id="raster-metadata">Raster metadata</h3>
 <p>Raster metadata contains all fields in item metadata (inherits from <code>SourceConfig</code>). <code>band_info</code> is the only required field in a raster config.</p>
 <p>For a more detailed list of all fields, their data types, and default values, please refer to <code>RasterConfig</code> under <a href="../extensions/raster/schema/">this</a> link.</p>
@@ -1244,10 +1226,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
       
     
   </body>
