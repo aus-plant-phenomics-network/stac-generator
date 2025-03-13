@@ -9,17 +9,16 @@ The `stac_generator` was developed as part of the Multiscalar Crop Characterisat
 
 ## Installation
 
-Requirements: python3.11+
-Requirements: python3.11+
+Requirements: python3.11-3.12
 
 STAC Generator can be installed directly from Pypi:
 
 ```
-pip install stac_generator
+pip install pystac-generator
 ```
 
 Note that if you want STAC Generator to be accessible from everywhere (outside the environment where it is installed), you can install STAC Generator with pipx instead of pip. To install pipx, visit [this](https://pipx.pypa.io/stable/installation/).
 
 ```
-pipx install stac_generator
+pipx install pystac-generator
 ```
