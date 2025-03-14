@@ -115,7 +115,10 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                     center_wavelength=float(band_info.wavelength)
                     if band_info.wavelength is not None
                     else None,
-                    description=f"Common name: {BAND_MAPPING.get(band_info.common_name.lower(), 'unknown')}",
+                    description=band_info.description
+                    if band_info.description is not None
+                    else "Common name: "
+                    + BAND_MAPPING.get(band_info.common_name.lower(), "unknown"),
                 )
                 eo_bands.append(eo_band)
 

@@ -55,24 +55,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/adelaide_airport/adelaide_airport.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/adelaide_airport/adelaide_airport.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -87,5 +87,5 @@
       ]
     }
   },
-  "collection": "Composite_Data"
+  "collection": "composite_data"
 }

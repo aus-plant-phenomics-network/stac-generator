@@ -63,19 +63,19 @@
       {
         "name": "b04",
         "common_name": "red",
-        "description": "Common name: red",
+        "description": "Common name: red, Range: 0.6 to 0.7",
         "center_wavelength": 0.6645
       },
       {
         "name": "b03",
         "common_name": "green",
-        "description": "Common name: green",
+        "description": "Common name: green, Range: 0.5 to 0.6",
         "center_wavelength": 0.56
       },
       {
         "name": "b02",
         "common_name": "blue",
-        "description": "Common name: blue",
+        "description": "Common name: blue, Range: 0.45 to 0.5",
         "center_wavelength": 0.4966
       }
     ],
@@ -86,24 +86,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -131,19 +131,19 @@
         {
           "name": "b04",
           "common_name": "red",
-          "description": "Common name: red",
+          "description": "Common name: red, Range: 0.6 to 0.7",
           "center_wavelength": 0.6645
         },
         {
           "name": "b03",
           "common_name": "green",
-          "description": "Common name: green",
+          "description": "Common name: green, Range: 0.5 to 0.6",
           "center_wavelength": 0.56
         },
         {
           "name": "b02",
           "common_name": "blue",
-          "description": "Common name: blue",
+          "description": "Common name: blue, Range: 0.45 to 0.5",
           "center_wavelength": 0.4966
         }
       ],
@@ -152,5 +152,5 @@
       ]
     }
   },
-  "collection": "Composite_Data"
+  "collection": "composite_data"
 }

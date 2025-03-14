@@ -1,7 +1,7 @@
 {
   "type": "Collection",
   "id": "raster_data",
-  "stac_version": "1.0.0",
+  "stac_version": "1.1.0",
   "description": "Auto-generated",
   "links": [
     {
@@ -13,7 +13,7 @@
     {
       "rel": "item",
       "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
-      "type": "application/json"
+      "type": "application/geo+json"
     },
     {
       "rel": "self",

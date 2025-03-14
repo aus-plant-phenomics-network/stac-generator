@@ -14,6 +14,7 @@ class BandInfo(BaseModel):
     wavelength: str | int | float | None = Field(default=None)  # Can be float or None
     nodata: float | None = Field(default=0)  # Default nodata value
     data_type: str | None = Field(default="uint16")  # Default data type for raster band
+    description: str | None = Field(default=None)
 
     @model_validator(mode="before")
     @classmethod
