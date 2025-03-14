@@ -307,54 +307,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
+  <a href="#a-note-on-location-field" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-a-vector-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing a vector file
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-vector-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing vector attributes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-joined-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing joined attributes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-multi-layerd-shape-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing multi-layerd shape file
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-multiple-vector-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing multiple vector files
+      A note on location field
     </span>
   </a>
   
@@ -820,54 +775,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#setup" class="md-nav__link">
+  <a href="#a-note-on-location-field" class="md-nav__link">
     <span class="md-ellipsis">
-      Setup
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-a-vector-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing a vector file
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-vector-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing vector attributes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-joined-attributes" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing joined attributes
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-multi-layerd-shape-file" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing multi-layerd shape file
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#describing-multiple-vector-files" class="md-nav__link">
-    <span class="md-ellipsis">
-      Describing multiple vector files
+      A note on location field
     </span>
   </a>
   
@@ -898,13 +808,15 @@
 <pre><code>stac_generator --help
 </code></pre>
 <p>Note that  <code>STAC common metadata</code> fields can be ignored for now.</p>
-<h2 id="setup">Setup</h2>
-<p>In the following tutorial, we will use the <code>stac_generator</code> to describe a vector file. For starter, please download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/Werribee.geojson">file</a>, which contains some suburbs in Werribee Melbourne.</p>
+<h2 id="a-note-on-location-field">A note on <code>location</code> field</h2>
+<p>Throughout this tutorial, we use relative paths for our asset's location. In practice, we recommend using an absolute path to local asset (if you want to the data to be discovered only locally) or a URL to the hosted asset (if you want to share the metadata and asset with someone else).</p>
+<h1 id="vector-data">Vector Data</h1>
+<p>In the following tutorial, we will use the <code>stac_generator</code> to describe a vector file. For starters, please download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/Werribee.geojson">file</a>, which contains boundaries for some suburbs in Werribee Melbourne.</p>
 <p>If you have QGIS, you can visualise the layer:</p>
 <p><img alt="" src="../images/quick_start_Werribee.png" /></p>
 <p>Create a folder called <code>Example</code>, move the downloaded file to <code>Example</code>, then open a terminal in <code>Example</code>.</p>
 <h2 id="describing-a-vector-file">Describing a vector file</h2>
-<p>Before using the stac generator, we will write a config file to be passed to the <code>stac_generator</code>. A config file is a csv or json file that describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Our very first, very simple config will look like this:</p>
+<p>Before using the stac generator, we will write a config file to be passed to the <code>stac_generator</code>. A config file is a csv or json file that describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Our first, very simple config will look like this:</p>
 <details>
 <summary>JSON</summary>
 
@@ -931,15 +843,15 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 </details>
 
-<p>In this example, the item's id is <code>Werribee</code>. The asset location is <code>Werribee.geojson</code>, which means <code>Werribee.geojson</code> should be discovered in the current directory <code>Example</code>. We have also provided the <code>collection_date</code> and <code>collection_time</code> in the config. Save the config file (either the csv or json) in the current directory - i.e <code>simple_config.json</code>.</p>
+<p>In this example, the item's id is <code>Werribee</code>. The asset location is <code>Werribee.geojson</code>, which means <code>Werribee.geojson</code> should be discovered in the current directory <code>Example</code>. We have also provided the <code>collection_date</code> and <code>collection_time</code> in the config. Save the config file (either the csv or json) in the current directory - i.e <code>vector_simple_config.json</code> or <code>vector_simple_config.csv</code>. If you use the csv version, change the name accordingly in the example commands.</p>
 <p>Now run the stac generator serialise command from the terminal:</p>
-<pre><code class="language-bash">stac_generator serialise simple_config.json --id Werribee_Collection --dst generated
+<pre><code class="language-bash">stac_generator serialise vector_simple_config.json --id Werribee_Collection --dst generated
 </code></pre>
 <p>The first positional argument is the path to the config file. The first keyword argument <code>id</code> (required) is the id of the generated collection. The second keyword argument <code>dst</code> is the location the generated records should be saved.</p>
-<p>Once this command is run, we should see a generated folder in the current directory. Upon opening <code>generated</code>, you will see a <code>collection.json</code> which is the STAC Collection metadata, and a <code>Werribee</code> folder containing <code>Werribee.json</code>, which is the STAC item metadata.</p>
-<p>You can now verify that the <code>id</code> provided in the command line (<code>Werribee_Collection</code>) corresponds to the <code>id</code> in <code>collection.json</code>, the <code>id</code> in <code>Werribee.json</code> corresponds to the <code>id</code> provided in <code>simple_config.json</code>, and the asset's href in <code>Werribee.json</code> corresponds to the <code>location</code> provided in <code>simple_config.json</code>.</p>
+<p>Once this command is run, we should see a <code>generated</code> folder in the current directory. Upon opening <code>generated</code>, you will see a <code>collection.json</code> which is the STAC Collection metadata, and a <code>Werribee</code> folder containing <code>Werribee.json</code>, which is the STAC item metadata.</p>
+<p>You can now verify that the <code>id</code> provided in the command line (<code>Werribee_Collection</code>) corresponds to the <code>id</code> in <code>collection.json</code>, the <code>id</code> in <code>Werribee.json</code> corresponds to the <code>id</code> provided in <code>vector_simple_config.json</code>, and the asset's href in <code>Werribee.json</code> corresponds to the <code>location</code> provided in <code>vector_simple_config.json</code>.</p>
 <h2 id="describing-vector-attributes">Describing vector attributes</h2>
-<p>So far, we have learned to write a bare-minimum config to describe a vector asset and use the stac generator command to generate the metadata record. In this example, we will learn how to add additional metadata to better describe the asset. For instance, we now want to add a <code>title</code> and a <code>description</code> to our STAC record. We also want to describe some attributes contained in the vector file. For instance, we can see that <code>Werribee.geojson</code> has an attribute called <code>Suburb_Name</code>:</p>
+<p>So far, we have learned to write a bare-minimum config to describe a vector asset and use the stac generator command to generate the metadata record. In this example, we will learn how to add additional metadata to better describe the asset. For instance, we may now want to add a <code>title</code> and a <code>description</code> to our STAC record and also to describe some attributes contained in the vector file. We can see that <code>Werribee.geojson</code> has an attribute called <code>Suburb_Name</code>:</p>
 <p><img alt="" src="../images/quick_start_Werribee_Attribute.png" /></p>
 <details>
 <summary>JSON</summary>
@@ -960,8 +872,8 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 </details>
 
-<p>Save this config as <code>detailed_config.json</code> in the same folder. Now run the command</p>
-<pre><code class="language-bash">stac_generator serialise detailed_config.json --id Werribee_Collection --dst generated
+<p>Save this config as <code>vector_detailed_config.json</code> in the same folder. Now run the command:</p>
+<pre><code class="language-bash">stac_generator serialise vector_detailed_config.json --id Werribee_Collection --dst generated
 </code></pre>
 <p>Upon checking the generated STAC Item <code>Werribee.json</code>, we now see <code>column_info</code>, <code>title</code>, and <code>description</code> fields appearing under <code>properties</code>.</p>
 <h2 id="describing-joined-attributes">Describing joined attributes</h2>
@@ -1007,12 +919,12 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 ]
 </code></pre>
 </details>
-<p>We specified <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> describes the columns in the <code>join_file</code>. Save the new config as <code>join_config.json</code> and run the stac generator command:</p>
-<pre><code class="language-bash">stac_generator serialise join_config.json --id Werribee_Collection --dst generated
+<p>We specified <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> describes the columns in the <code>join_file</code>. Save the new config as <code>vector_join_config.json</code> and run the stac generator command:</p>
+<pre><code class="language-bash">stac_generator serialise vector_join_config.json --id Werribee_Collection --dst generated
 </code></pre>
 <p>You should see the corresponding fields appearing under <code>properties</code> in <code>Werribee.json</code>.</p>
 <h2 id="describing-multi-layerd-shape-file">Describing multi-layerd shape file</h2>
-<p>It is not uncommon to have a compressed zip containing multiple shape files. To get started, download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip">file</a> which contains some SA2 areas in Victoria:</p>
+<p>It is not uncommon to have a compressed zip containing multiple shape files. Such a zip file can be handled directly. To get started, download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip">file</a> which contains some SA2 areas in Victoria:</p>
 <p><img alt="" src="../images/quick_start_SA2.png" /></p>
 <p>Here we have two layers - Sunbury and Werribee. Each layer will be generated as a STAC item, and we will need to describe each layer independently as a record in the config. We may choose to describe all or a subset of the layers.</p>
 <details>
@@ -1039,12 +951,12 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 </details>
 
-<p>Save the new config as <code>layer_config.json</code> and run the command:</p>
-<pre><code>stac_generator serialise layer_config.json --id SA2_Collection --dst generated
+<p>Save the new config as <code>vector_layer_config.json</code> and run the command:</p>
+<pre><code>stac_generator serialise vector_layer_config.json --id SA2_Collection --dst generated
 </code></pre>
 <p>You will see two items generated, <code>WerribeSA2</code> and <code>SunburySA2</code>. Note that each config record has a <code>layer</code> keyword to identify the layer in the compressed zip. We use a simple config to describe each layer, but it is possible to add additional information like column info and join attributes as described in the previous sections.</p>
 <h2 id="describing-multiple-vector-files">Describing multiple vector files</h2>
-<p>To describe an indenpendent vector file, you can add another record in the config file. For instance, we want to describe both the <code>SA2.zip</code> and the <code>Werribee.geojson</code> files:</p>
+<p>To describe another independent vector file, you can add another record in the config file. For instance, we want to describe both the <code>SA2.zip</code> and the <code>Werribee.geojson</code> files:</p>
 <details>
 <summary>JSON</summary>
 
@@ -1106,9 +1018,212 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 </details>
 
-<p>Despite its size, this is a simple concatenation of the records in the previous two sections. This will generate a <code>WerribeeSA2</code> item and a <code>SunburySA2</code> item from the <code>SA2.zip</code> file, and a <code>Werribe</code> item with join-attribute from <code>drive.csv</code>. Save the new config as <code>combined_config.json</code> and run the stac generator:</p>
-<pre><code>stac_generator serialise combined_config.json --id Vector_Collection --dst generated
+<p>Despite its size, this is a simple concatenation of the records in the previous two sections. This will generate a <code>WerribeeSA2</code> item and a <code>SunburySA2</code> item from the <code>SA2.zip</code> file, and a <code>Werribee</code> item with join attribute from <code>distance.csv</code>. Save the new config as <code>vector_combined_config.json</code> and run the stac generator:</p>
+<pre><code class="language-bash">stac_generator serialise vector_combined_config.json --id Vector_Collection --dst generated
 </code></pre>
+<h1 id="raster-data">Raster Data</h1>
+<p>For raster assets, users are required to declare recorded bands under <code>band_info</code> field. In the next examples, we will describe a tif with common sensor bands, and a tif with custom bands.</p>
+<h2 id="describing-common-bands">Describing common bands</h2>
+<p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/L2A_PVI.tif">asset</a> (please download the asset an put in the <code>Example</code> folder) in this example is an RGB tif file (shown below):</p>
+<p><img alt="" src="../images/quick_start_L2A_PVI_raster_RGB.png" /></p>
+<p>We will prepare the following <code>raster_simple_config.json</code>:</p>
+<details>
+
+<summary>JSON</summary>
+
+
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: &quot;L2A_PVI&quot;,
+    &quot;location&quot;: &quot;L2A_PVI.tif&quot;,
+    &quot;collection_date&quot;: &quot;2021-02-21&quot;,
+    &quot;collection_time&quot;: &quot;10:00:17&quot;,
+    &quot;band_info&quot;: [
+      {
+        &quot;name&quot;: &quot;B04&quot;,
+        &quot;common_name&quot;: &quot;red&quot;,
+        &quot;description&quot;: &quot;Common name: red, Range: 0.6 to 0.7&quot;,
+        &quot;wavelength&quot;: 0.6645
+      },
+      {
+        &quot;name&quot;: &quot;B03&quot;,
+        &quot;common_name&quot;: &quot;green&quot;,
+        &quot;description&quot;: &quot;Common name: green, Range: 0.5 to 0.6&quot;,
+        &quot;wavelength&quot;: 0.56
+      },
+      {
+        &quot;name&quot;: &quot;B02&quot;,
+        &quot;common_name&quot;: &quot;blue&quot;,
+        &quot;description&quot;: &quot;Common name: blue, Range: 0.45 to 0.5&quot;,
+        &quot;wavelength&quot;: 0.4966
+      }
+    ]
+  }
+]
+</code></pre>
+
+</details>
+
+<p>Please note how the RGB bands are described under <code>band_info</code>. The wavelengths are read from device specifications. To serialise the metadata:</p>
+<pre><code class="language-bash">stac_generator serialise raster_simple_config.json --id simple_raster --dst generated
+</code></pre>
+<h2 id="describing-uncommonunknown-bands">Describing uncommon/unknown bands</h2>
+<p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/vegetation_cover.tif">asset</a>(please download the asset an put in the <code>Example</code> folder) in this example is a greyscale tif file (shown below):</p>
+<p><img alt="" src="../images/quick_start_vegetation_index_raster_custom.png" /></p>
+<p>We will prepare the following <code>raster_custom_config.json</code>:</p>
+<details>
+
+<summary>JSON</summary>
+
+
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: &quot;vegetation_cover&quot;,
+    &quot;location&quot;: &quot;vegetation_cover.tif&quot;,
+    &quot;collection_date&quot;: &quot;2021-02-21&quot;,
+    &quot;collection_time&quot;: &quot;10:00:17&quot;,
+    &quot;band_info&quot;: [
+      {
+        &quot;name&quot;: &quot;vegetation&quot;,
+        &quot;description&quot;: &quot;Vegetation cover level&quot;
+      }
+    ]
+  }
+]
+</code></pre>
+
+
+</details>
+
+<p>The band info is a lot simpler than the previous example given that the band is not raw sensor readings (no wavelength). To serialise the metadata:</p>
+<pre><code class="language-bash">stac_generator serialise raster_custom_config.json --id custom_raster --dst generated
+</code></pre>
+<h1 id="point-data">Point Data</h1>
+<p>The <code>stac_generator</code> uses the <code>csv</code> format to store point data. Given the flexibility of the csv format, we require point dataset to be structured in a particular way. Each row of the csv file describes a point, with columns being the attributes. At the minimum, there must be two columns describing the coordinates of the points. The required config fields include:</p>
+<ul>
+<li><code>X</code>: the column in the csv asset to describe the longitude.</li>
+<li><code>Y</code>: the column in the csv asset to describe the latitude.</li>
+<li><code>epsg</code>: the crs of the <code>X</code>, <code>Y</code> columns.</li>
+</ul>
+<p>There can also be optional columns:</p>
+<ul>
+<li><code>T</code>: the column in the csv asset that describes the date of collection of a point record.</li>
+<li><code>date_format</code>: how the date string is interpreted - by default, dates are assumed to be <code>ISO8640</code> compliant.</li>
+<li><code>Z</code>: the column in the csv asset that describes the altitude.</li>
+<li><code>column_info</code>: describe the relevant names and descriptions of relavant attributes.</li>
+</ul>
+<h2 id="describing-time-series-data">Describing time series data</h2>
+<p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/bom.csv">asset</a>(please download the asset an put in the <code>Example</code> folder) in this example is a time series dataset with a date column (<code>YYYY-MM-DD</code>) (shown below):</p>
+<table>
+<thead>
+<tr>
+<th>longitude</th>
+<th>latitude</th>
+<th>elevation</th>
+<th>station</th>
+<th>YYYY-MM-DD</th>
+<th>daily_rain</th>
+<th>max_temp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>138.519</td>
+<td>-34.952</td>
+<td>2</td>
+<td>23304</td>
+<td>2020-01-01</td>
+<td>0</td>
+<td>32.2</td>
+</tr>
+</tbody>
+</table>
+<p>We prepare the <code>point_time_series_config.json</code> as follows:</p>
+<pre><code>{
+  &quot;id&quot;: &quot;BOM_Data&quot;,
+  &quot;location&quot;: &quot;bom.csv&quot;,
+  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+  &quot;collection_time&quot;: &quot;10:00:00&quot;,
+  &quot;X&quot;: &quot;longitude&quot;,
+  &quot;Y&quot;: &quot;latitude&quot;,
+  &quot;Z&quot;: &quot;elevation&quot;,
+  &quot;T&quot;: &quot;YYYY-MM-DD&quot;,
+  &quot;epsg&quot;: 4326,
+  &quot;column_info&quot;: [
+    {
+      &quot;name&quot;: &quot;daily_rain&quot;,
+      &quot;description&quot;: &quot;daily rain fall in mm&quot;
+    },
+    {
+      &quot;name&quot;: &quot;max_temp&quot;,
+      &quot;description&quot;: &quot;daily maximum temperature in C&quot;
+    }
+  ]
+}
+</code></pre>
+<p>The values for <code>X</code>, <code>Y</code>, <code>Z</code>, <code>T</code> are obtained from the raw csv - i.e. longitude, latitude, elevation and YYYY-MM-DD respectively.</p>
+<p><code>epsg</code> value cannot be derived from the csv and must be known by the user - i.e. reading dataset metadata on BOM/SILO website.</p>
+<p>The field <code>column_info</code> contains useful columns that the user want to describe.</p>
+<p>To serialise the metadata:</p>
+<pre><code class="language-bash">stac_generator serialise point_time_series_config.json --id time_series --dst generated
+</code></pre>
+<h2 id="describing-generic-point-data">Describing generic point data</h2>
+<p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/soil.csv">asset</a>(please download the asset an put in the <code>Example</code> folder) in this example is a generic point dataset with no date column (shown below):</p>
+<table>
+<thead>
+<tr>
+<th>property</th>
+<th>field</th>
+<th>profile</th>
+<th>easting</th>
+<th>northing</th>
+<th>Ca_Soln</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sunbury</td>
+<td>Jordie</td>
+<td>3</td>
+<td>773215.36<br></td>
+<td>678187.36</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>The config - <code>point_simple_config.json</code> is described below:</p>
+<details>
+<summary>JSON</summary>
+
+
+<pre><code>{
+  &quot;id&quot;: &quot;soil_data&quot;,
+  &quot;location&quot;: &quot;soil.csv&quot;,
+  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+  &quot;collection_time&quot;: &quot;10:00:00&quot;,
+  &quot;X&quot;: &quot;easting&quot;,
+  &quot;Y&quot;: &quot;northing&quot;,
+  &quot;epsg&quot;: 28355,
+  &quot;column_info&quot;: [
+    {
+      &quot;name&quot;: &quot;Ca_Soln&quot;,
+      &quot;description&quot;: &quot;Calcium solution in ppm&quot;
+    },
+    {
+      &quot;name&quot;: &quot;profiles&quot;,
+      &quot;description&quot;: &quot;Field profile&quot;
+    }
+  ]
+}
+
+</code></pre>
+
+
+</details>
+
+<p>The values for <code>X</code>, <code>Y</code> are obtained from the raw csv - i.e. easting and northing respectively.</p>
+<p>There is no elevation and time column so they can be left blank.</p>
+<p>The value for <code>epsg</code> must be known before hand, in this example, we assume it to be GDA94/MGA55 with espg code 28355. Also assuming values for property and field are not important in this example, we don’t include them in <code>column_info</code>.</p>
 
 
 
