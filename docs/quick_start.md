@@ -183,7 +183,7 @@ Here we have two layers - Sunbury and Werribee. Each layer will be generated as 
         "collection_date": "2025-01-01",
         "collection_time": "00:00:00",
         "layer": "Sunbury"
-    },
+    }
 ]
 ```
 </details>
