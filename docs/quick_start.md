@@ -18,7 +18,7 @@ Note that  `STAC common metadata` fields can be ignored for now.
 
 ## Setup
 
-In the following tutorial, we will use the `stac_generator` to describe a vector file. For starter, please download this [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/Werribee.geojson), which contains some suburbs in Werribee Melbourne.
+In the following tutorial, we will use the `stac_generator` to describe a vector file. For starters, please download this [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/Werribee.geojson), which contains boundaries for some suburbs in Werribee Melbourne.
 
 If you have QGIS, you can visualise the layer:
 
@@ -28,7 +28,7 @@ Create a folder called `Example`, move the downloaded file to `Example`, then op
 
 ## Describing a vector file
 
-Before using the stac generator, we will write a config file to be passed to the `stac_generator`. A config file is a csv or json file that describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Our very first, very simple config will look like this:
+Before using the stac generator, we will write a config file to be passed to the `stac_generator`. A config file is a csv or json file that describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Our first, very simple config will look like this:
 
 <details>
 <summary>JSON</summary>
@@ -54,7 +54,7 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 ```
 </details>
 
-In this example, the item's id is `Werribee`. The asset location is `Werribee.geojson`, which means `Werribee.geojson` should be discovered in the current directory `Example`. We have also provided the `collection_date` and `collection_time` in the config. Save the config file (either the csv or json) in the current directory - i.e `simple_config.json`.
+In this example, the item's id is `Werribee`. The asset location is `Werribee.geojson`, which means `Werribee.geojson` should be discovered in the current directory `Example`. We have also provided the `collection_date` and `collection_time` in the config. Save the config file (either the csv or json) in the current directory - i.e `simple_config.json` or `simple_config.csv`. If you use the csv version, change the name accordingly in the example commands.
 
 Now run the stac generator serialise command from the terminal:
 
@@ -64,13 +64,13 @@ stac_generator serialise simple_config.json --id Werribee_Collection --dst gener
 
 The first positional argument is the path to the config file. The first keyword argument `id` (required) is the id of the generated collection. The second keyword argument `dst` is the location the generated records should be saved.
 
-Once this command is run, we should see a generated folder in the current directory. Upon opening `generated`, you will see a `collection.json` which is the STAC Collection metadata, and a `Werribee` folder containing `Werribee.json`, which is the STAC item metadata.
+Once this command is run, we should see a `generated` folder in the current directory. Upon opening `generated`, you will see a `collection.json` which is the STAC Collection metadata, and a `Werribee` folder containing `Werribee.json`, which is the STAC item metadata.
 
 You can now verify that the `id` provided in the command line (`Werribee_Collection`) corresponds to the `id` in `collection.json`, the `id` in `Werribee.json` corresponds to the `id` provided in `simple_config.json`, and the asset's href in `Werribee.json` corresponds to the `location` provided in `simple_config.json`.
 
 ## Describing vector attributes
 
-So far, we have learned to write a bare-minimum config to describe a vector asset and use the stac generator command to generate the metadata record. In this example, we will learn how to add additional metadata to better describe the asset. For instance, we now want to add a `title` and a `description` to our STAC record. We also want to describe some attributes contained in the vector file. For instance, we can see that `Werribee.geojson` has an attribute called `Suburb_Name`:
+So far, we have learned to write a bare-minimum config to describe a vector asset and use the stac generator command to generate the metadata record. In this example, we will learn how to add additional metadata to better describe the asset. For instance, we may now want to add a `title` and a `description` to our STAC record and also to describe some attributes contained in the vector file. We can see that `Werribee.geojson` has an attribute called `Suburb_Name`:
 
 ![](images/quick_start_Werribee_Attribute.png)
 
@@ -92,7 +92,7 @@ So far, we have learned to write a bare-minimum config to describe a vector asse
 ```
 </details>
 
-Save this config as `detailed_config.json` in the same folder. Now run the command
+Save this config as `detailed_config.json` in the same folder. Now run the command:
 
 ```bash
 stac_generator serialise detailed_config.json --id Werribee_Collection --dst generated
@@ -159,7 +159,7 @@ You should see the corresponding fields appearing under `properties` in `Werribe
 
 ## Describing multi-layerd shape file
 
-It is not uncommon to have a compressed zip containing multiple shape files. To get started, download this [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip) which contains some SA2 areas in Victoria:
+It is not uncommon to have a compressed zip containing multiple shape files. Such a zip file can be handled directly. To get started, download this [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip) which contains some SA2 areas in Victoria:
 
 ![](images/quick_start_SA2.png)
 
@@ -198,7 +198,7 @@ You will see two items generated, `WerribeSA2` and `SunburySA2`. Note that each 
 
 ## Describing multiple vector files
 
-To describe an indenpendent vector file, you can add another record in the config file. For instance, we want to describe both the `SA2.zip` and the `Werribee.geojson` files:
+To describe an independent vector file, you can add another record in the config file. For instance, we want to describe both the `SA2.zip` and the `Werribee.geojson` files:
 
 <details>
 <summary>JSON</summary>
@@ -260,7 +260,7 @@ To describe an indenpendent vector file, you can add another record in the confi
 ```
 </details>
 
-Despite its size, this is a simple concatenation of the records in the previous two sections. This will generate a `WerribeeSA2` item and a `SunburySA2` item from the `SA2.zip` file, and a `Werribe` item with join-attribute from `drive.csv`. Save the new config as `combined_config.json` and run the stac generator:
+Despite its size, this is a simple concatenation of the records in the previous two sections. This will generate a `WerribeeSA2` item and a `SunburySA2` item from the `SA2.zip` file, and a `Werribee` item with join attribute from `distance.csv`. Save the new config as `combined_config.json` and run the stac generator:
 
 ```
 stac_generator serialise combined_config.json --id Vector_Collection --dst generated
