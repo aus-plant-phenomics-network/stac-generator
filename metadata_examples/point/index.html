@@ -70,7 +70,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#bom-raw-data-time-series-measurements" class="md-skip">
+        <a href="#ozbarley-point-data" class="md-skip">
           Skip to content
         </a>
       
@@ -701,54 +701,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#bom-raw-data-time-series-measurements" class="md-nav__link">
-    <span class="md-ellipsis">
-      BOM raw data (Time Series measurements)
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="BOM raw data (Time Series measurements)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#bom-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
-    <span class="md-ellipsis">
-      BOM Metadata to provide to the STAC Generator
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#soil-raw-data-no-depth-no-timestamp" class="md-nav__link">
-    <span class="md-ellipsis">
-      Soil raw data (No depth, No Timestamp)
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Soil raw data (No depth, No Timestamp)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#soil-metadata-to-provide-to-the-stac-generator" class="md-nav__link">
-    <span class="md-ellipsis">
-      Soil Metadata to provide to the STAC Generator
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#ozbarley-point-data" class="md-nav__link">
     <span class="md-ellipsis">
       OZBarley Point Data
@@ -784,101 +736,6 @@
 
   <h1>Point</h1>
 
-<h2 id="bom-raw-data-time-series-measurements">BOM raw data (Time Series measurements)</h2>
-<table>
-<thead>
-<tr>
-<th>longitude</th>
-<th>latitude</th>
-<th>elevation</th>
-<th>station</th>
-<th>YYYY-MM-DD</th>
-<th>daily_rain</th>
-<th>max_temp</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>138.519</td>
-<td>-34.952</td>
-<td>2</td>
-<td>23304</td>
-<td>2020-01-01</td>
-<td>0</td>
-<td>32.2</td>
-</tr>
-</tbody>
-</table>
-<h3 id="bom-metadata-to-provide-to-the-stac-generator">BOM Metadata to provide to the STAC Generator</h3>
-<pre><code>{
-  &quot;id&quot;: &quot;BOM_Data&quot;,
-  &quot;location&quot;: &quot;path/to/bom.csv&quot;,
-  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-  &quot;collection_time&quot;: &quot;10:00:00&quot;,
-  &quot;X&quot;: &quot;longitude&quot;,
-  &quot;Y&quot;: &quot;latitude&quot;,
-  &quot;Z&quot;: &quot;elevation&quot;,
-  &quot;T&quot;: &quot;YYYY-MM-DD&quot;,
-  &quot;epsg&quot;: 4326,
-  &quot;column_info&quot;: [
-    {
-      &quot;name&quot;: &quot;daily_rain&quot;,
-      &quot;description&quot;: &quot;daily rain fall in mm&quot;
-    },
-    {
-      &quot;name&quot;: &quot;max_temp&quot;,
-      &quot;description&quot;: &quot;daily maximum temperature in C&quot;
-    }
-  ]
-}
-</code></pre>
-<p>The values for id, location, collection_date, collection_time (required common metadata) are made-up. The values for X, Y, Z, T are obtained from the raw csv - i.e. longitude, latitude, elevation and YYYY-MM-DD respectively. epsg value cannot be derived from the csv and must be known by the user - i.e. reading dataset metadata on BOM/SILO website. The field column_info contains useful columns that the user want to read into the datacube.</p>
-<h2 id="soil-raw-data-no-depth-no-timestamp">Soil raw data (No depth, No Timestamp)</h2>
-<table>
-<thead>
-<tr>
-<th>property</th>
-<th>field</th>
-<th>profile</th>
-<th>easting</th>
-<th>northing</th>
-<th>Ca_Soln</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Sunbury</td>
-<td>Jordie</td>
-<td>3</td>
-<td>773215.36<br></td>
-<td>678187.36</td>
-<td>3</td>
-</tr>
-</tbody>
-</table>
-<h3 id="soil-metadata-to-provide-to-the-stac-generator">Soil Metadata to provide to the STAC Generator</h3>
-<pre><code>{
-  &quot;id&quot;: &quot;soil_data&quot;,
-  &quot;location&quot;: &quot;path/to/soil.csv&quot;,
-  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-  &quot;collection_time&quot;: &quot;10:00:00&quot;,
-  &quot;X&quot;: &quot;easting&quot;,
-  &quot;Y&quot;: &quot;northing&quot;,
-  &quot;epsg&quot;: 28355,
-  &quot;column_info&quot;: [
-    {
-      &quot;name&quot;: &quot;Ca_Soln&quot;,
-      &quot;description&quot;: &quot;Calcium solution in ppm&quot;
-    },
-    {
-      &quot;name&quot;: &quot;profiles&quot;,
-      &quot;description&quot;: &quot;Field profile&quot;
-    }
-  ]
-}
-
-</code></pre>
-<p>The values for id, location, collection_date, collection_time (required common metadata) are made-up. The values for X, Y are obtained from the raw csv - i.e. easting and northing respectively. There is no elevation and time column so they can be left blank. The value for epsg must be known before hand, in this example, we assume it to be GDA94/MGA55 with espg code 28355. Also assuming values for property and field are not important in this example, we don’t include them in column_info.</p>
 <h2 id="ozbarley-point-data">OZBarley Point Data</h2>
 <p>OZBarley contains 2 point assets - <code>OZBarley1_measurement</code> and <code>OZBarley2_measurement</code>. The point asset can be downloaded from the following link: <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley1_measurement.csv">OZBarley1</a>, <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/OZBarley2_measurement.csv">OZBarley2</a>. The overall config can be downloaded <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/remote_config.json">here</a>. Note that the <code>epsg</code> code is known beforehand.</p>
 <h2 id="llaracampey-point-data">LlaraCampey Point Data</h2>
