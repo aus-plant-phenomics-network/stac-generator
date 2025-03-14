@@ -298,24 +298,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#help" class="md-nav__link">
-    <span class="md-ellipsis">
-      Help
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#a-note-on-location-field" class="md-nav__link">
-    <span class="md-ellipsis">
-      A note on location field
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#vector-data" class="md-nav__link">
     <span class="md-ellipsis">
       Vector Data
@@ -438,6 +420,66 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composite-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composite Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Composite Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-combined-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a combined config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using multiple configs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Help
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-location-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on location field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-using-csv-format-as-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on using csv format as configs
+    </span>
+  </a>
   
 </li>
       
@@ -892,24 +934,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#help" class="md-nav__link">
-    <span class="md-ellipsis">
-      Help
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#a-note-on-location-field" class="md-nav__link">
-    <span class="md-ellipsis">
-      A note on location field
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#vector-data" class="md-nav__link">
     <span class="md-ellipsis">
       Vector Data
@@ -1035,6 +1059,66 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#composite-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composite Data
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Composite Data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-a-combined-config" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using a combined config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-multiple-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using multiple configs
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Help
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-location-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on location field
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-note-on-using-csv-format-as-configs" class="md-nav__link">
+    <span class="md-ellipsis">
+      A note on using csv format as configs
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1052,16 +1136,6 @@
 
 
 <h1 id="quickstart">Quickstart</h1>
-<h2 id="help">Help</h2>
-<p>To view the supported parameters and keywords for the <code>serialise</code> command, run</p>
-<pre><code>stac_generator serialise --help
-</code></pre>
-<p>To view all supported commands, run</p>
-<pre><code>stac_generator --help
-</code></pre>
-<p>Note that  <code>STAC common metadata</code> fields can be ignored for now.</p>
-<h2 id="a-note-on-location-field">A note on <code>location</code> field</h2>
-<p>Throughout this tutorial, we use relative paths for our asset's location. In practice, we recommend using an absolute path to local asset (if you want to the data to be discovered only locally) or a URL to the hosted asset (if you want to share the metadata and asset with someone else).</p>
 <h2 id="vector-data">Vector Data</h2>
 <p>In the following tutorial, we will use the <code>stac_generator</code> to describe a vector file. For starters, please download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/Werribee.geojson">file</a>, which contains boundaries for some suburbs in Werribee Melbourne.</p>
 <p>If you have QGIS, you can visualise the layer:</p>
@@ -1391,7 +1465,11 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 </tbody>
 </table>
 <p>We prepare the <code>point_time_series_config.json</code> as follows:</p>
-<pre><code>{
+<details>
+<summary>JSON</summary>
+
+
+<pre><code class="language-json">{
   &quot;id&quot;: &quot;BOM_Data&quot;,
   &quot;location&quot;: &quot;bom.csv&quot;,
   &quot;collection_date&quot;: &quot;2020-01-01&quot;,
@@ -1413,6 +1491,10 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
   ]
 }
 </code></pre>
+
+
+</details>
+
 <p>The values for <code>X</code>, <code>Y</code>, <code>Z</code>, <code>T</code> are obtained from the raw csv - i.e. longitude, latitude, elevation and YYYY-MM-DD respectively.</p>
 <p><code>epsg</code> value cannot be derived from the csv and must be known by the user - i.e. reading dataset metadata on BOM/SILO website.</p>
 <p>The field <code>column_info</code> contains useful columns that the user want to describe.</p>
@@ -1448,25 +1530,27 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <summary>JSON</summary>
 
 
-<pre><code>{
-  &quot;id&quot;: &quot;soil_data&quot;,
-  &quot;location&quot;: &quot;soil.csv&quot;,
-  &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-  &quot;collection_time&quot;: &quot;10:00:00&quot;,
-  &quot;X&quot;: &quot;easting&quot;,
-  &quot;Y&quot;: &quot;northing&quot;,
-  &quot;epsg&quot;: 28355,
-  &quot;column_info&quot;: [
-    {
-      &quot;name&quot;: &quot;Ca_Soln&quot;,
-      &quot;description&quot;: &quot;Calcium solution in ppm&quot;
-    },
-    {
-      &quot;name&quot;: &quot;profiles&quot;,
-      &quot;description&quot;: &quot;Field profile&quot;
-    }
-  ]
-}
+<pre><code class="language-json">[
+  {
+    &quot;id&quot;: &quot;soil_data&quot;,
+    &quot;location&quot;: &quot;soil.csv&quot;,
+    &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+    &quot;collection_time&quot;: &quot;10:00:00&quot;,
+    &quot;X&quot;: &quot;eastings_utm&quot;,
+    &quot;Y&quot;: &quot;northing_utm&quot;,
+    &quot;epsg&quot;: 28355,
+    &quot;column_info&quot;: [
+      {
+        &quot;name&quot;: &quot;ca_soln&quot;,
+        &quot;description&quot;: &quot;Calcium solution in ppm&quot;
+      },
+      {
+        &quot;name&quot;: &quot;profile&quot;,
+        &quot;description&quot;: &quot;Field profile&quot;
+      }
+    ]
+  }
+]
 
 </code></pre>
 
@@ -1478,6 +1562,117 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <p>The value for <code>epsg</code> must be known before hand, in this example, we assume it to be GDA94/MGA55 with espg code 28355. Also assuming values for property and field are not important in this example, we don’t include them in <code>column_info</code>.</p>
 <p>To serialise the metadata:</p>
 <pre><code class="language-bash">stac_generator serialise point_simple_config.json --id soil --dst generated
+</code></pre>
+<h2 id="composite-data">Composite Data</h2>
+<p>It is not uncommon to have more than one data types in a project. To describe multiple items of different data types, we can use a combined config or we can pass all the configs to the CLI at once.</p>
+<h3 id="using-a-combined-config">Using a combined config</h3>
+<p>Let's say you want to describe items in <code>raster_simple_config.json</code>, <code>point_simple_config.json</code>, and <code>vector_simple_config.json</code>, an easy way is to make a <code>combined_config.json</code> with entries from all the sub configs:</p>
+<details>
+<summary>JSON</summary>
+
+
+<pre><code class="language-json">[
+    {
+        &quot;id&quot;: &quot;Werribee&quot;,
+        &quot;location&quot;: &quot;Werribee.geojson&quot;,
+        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
+        &quot;collection_time&quot;: &quot;00:00:00&quot;,
+    },
+    {
+        &quot;id&quot;: &quot;soil_data&quot;,
+        &quot;location&quot;: &quot;soil.csv&quot;,
+        &quot;collection_date&quot;: &quot;2020-01-01&quot;,
+        &quot;collection_time&quot;: &quot;10:00:00&quot;,
+        &quot;X&quot;: &quot;eastings_utm&quot;,
+        &quot;Y&quot;: &quot;northing_utm&quot;,
+        &quot;epsg&quot;: 28355,
+        &quot;column_info&quot;: [
+            {&quot;name&quot;: &quot;ca_Soln&quot;, &quot;description&quot;: &quot;Calcium solution in ppm&quot;},
+            {&quot;name&quot;: &quot;profile&quot;, &quot;description&quot;: &quot;Field profile&quot;},
+        ],
+    },
+    {
+        &quot;id&quot;: &quot;L2A_PVI&quot;,
+        &quot;location&quot;: &quot;L2A_PVI.tif&quot;,
+        &quot;collection_date&quot;: &quot;2021-02-21&quot;,
+        &quot;collection_time&quot;: &quot;10:00:17&quot;,
+        &quot;band_info&quot;: [
+            {
+                &quot;name&quot;: &quot;B04&quot;,
+                &quot;common_name&quot;: &quot;red&quot;,
+                &quot;description&quot;: &quot;Common name: red, Range: 0.6 to 0.7&quot;,
+                &quot;wavelength&quot;: 0.6645,
+            },
+            {
+                &quot;name&quot;: &quot;B03&quot;,
+                &quot;common_name&quot;: &quot;green&quot;,
+                &quot;description&quot;: &quot;Common name: green, Range: 0.5 to 0.6&quot;,
+                &quot;wavelength&quot;: 0.56,
+            },
+            {
+                &quot;name&quot;: &quot;B02&quot;,
+                &quot;common_name&quot;: &quot;blue&quot;,
+                &quot;description&quot;: &quot;Common name: blue, Range: 0.45 to 0.5&quot;,
+                &quot;wavelength&quot;: 0.4966,
+            },
+        ],
+    },
+]
+</code></pre>
+
+
+</details>
+
+<p>To serialise this collection, run:</p>
+<pre><code class="language-bash">stac_generator serialise combined_config.json --id combined --dst generated
+</code></pre>
+<h3 id="using-multiple-configs">Using multiple configs</h3>
+<p>We can pass multiple config files to the CLI. For instance, to describe all simple configs similar to the previous example, we can run:</p>
+<pre><code class="language-bash">stac_generator serialise point_simple_config.json raster_simple_config.json vector_simple_config.json --id combined --dst generated
+</code></pre>
+<h2 id="help">Help</h2>
+<p>To view the supported parameters and keywords for the <code>serialise</code> command, run</p>
+<pre><code>stac_generator serialise --help
+</code></pre>
+<p>To view all supported commands, run</p>
+<pre><code>stac_generator --help
+</code></pre>
+<p>Note that  <code>STAC common metadata</code> fields can be ignored for now.</p>
+<h2 id="a-note-on-location-field">A note on <code>location</code> field</h2>
+<p>Throughout this tutorial, we use relative paths for our asset's location. In practice, we recommend using an absolute path to local asset (if you want to the data to be discovered only locally) or a URL to the hosted asset (if you want to share the metadata and asset with someone else).</p>
+<h2 id="a-note-on-using-csv-format-as-configs">A note on using <code>csv</code> format as configs</h2>
+<p>We recommend using <code>json</code> for configs, as <code>csv</code> is not the most convenient format to represent nested fields like <code>column_info</code> or <code>band_info</code>. The only supported method to represent nested fields in <code>csv</code> is to represent them as <code>json</code> encoded string. For instance, the following configs are equivalent:</p>
+<details>
+<summary>JSON</summary>
+
+
+<pre><code class="language-json">[
+  {
+    &quot;location&quot;: &quot;data.geojson&quot;,
+    &quot;column_info&quot;: [
+      {&quot;name&quot;: &quot;ID&quot;, &quot;description&quot;: &quot;Item ID&quot;},
+      {&quot;name&quot;: &quot;Age&quot;, &quot;description&quot;: &quot;Age&quot;}
+    ]
+  }
+]
+</code></pre>
+
+</details>
+
+<p>We will prepare the csv as follows:</p>
+<details>
+<summary>CSV</summary>
+
+
+<pre><code class="language-csv">location, column_info
+data.geojson,&quot;[{&quot;&quot;name&quot;&quot;: &quot;&quot;ID&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Item ID&quot;&quot;}, {&quot;&quot;name&quot;&quot;: &quot;&quot;Age&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Age&quot;&quot;}]&quot;
+</code></pre>
+
+
+</details>
+
+<p>Note how we use <code>""</code> to represent an item in the csv format. Describing multiple items using a <code>csv</code> config can be done by representing each item as a row in the csv config. For describing multiple items of different data type, we recommend using the multiple config approach, preparing several configs of the same data type then passing them to the CLI. For instance:</p>
+<pre><code class="language-bash">stac_generator serialise vector.csv raster.csv point.csv --id collection --dst generated
 </code></pre>
 
 
