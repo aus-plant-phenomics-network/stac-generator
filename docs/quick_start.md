@@ -370,27 +370,29 @@ We prepare the `point_time_series_config.json` as follows:
 <summary>JSON</summary>
 
 ```json
-{
-  "id": "BOM_Data",
-  "location": "bom.csv",
-  "collection_date": "2020-01-01",
-  "collection_time": "10:00:00",
-  "X": "longitude",
-  "Y": "latitude",
-  "Z": "elevation",
-  "T": "YYYY-MM-DD",
-  "epsg": 4326,
-  "column_info": [
-    {
-      "name": "daily_rain",
-      "description": "daily rain fall in mm"
-    },
-    {
-      "name": "max_temp",
-      "description": "daily maximum temperature in C"
-    }
-  ]
-}
+[
+  {
+    "id": "BOM_Data",
+    "location": "bom.csv",
+    "collection_date": "2020-01-01",
+    "collection_time": "10:00:00",
+    "X": "longitude",
+    "Y": "latitude",
+    "Z": "elevation",
+    "T": "YYYY-MM-DD",
+    "epsg": 4326,
+    "column_info": [
+      {
+        "name": "daily_rain",
+        "description": "daily rain fall in mm"
+      },
+      {
+        "name": "max_temp",
+        "description": "daily maximum temperature in C"
+      }
+    ]
+  }
+]
 ```
 
 </details>
@@ -428,7 +430,7 @@ The config - `point_simple_config.json` is described below:
     "collection_date": "2020-01-01",
     "collection_time": "10:00:00",
     "X": "eastings_utm",
-    "Y": "northing_utm",
+    "Y": "northings_utm",
     "epsg": 28355,
     "column_info": [
       {
@@ -476,7 +478,7 @@ Let's say you want to describe items in `raster_simple_config.json`, `point_simp
         "id": "Werribee",
         "location": "Werribee.geojson",
         "collection_date": "2025-01-01",
-        "collection_time": "00:00:00",
+        "collection_time": "00:00:00"
     },
     {
         "id": "soil_data",
@@ -484,12 +486,18 @@ Let's say you want to describe items in `raster_simple_config.json`, `point_simp
         "collection_date": "2020-01-01",
         "collection_time": "10:00:00",
         "X": "eastings_utm",
-        "Y": "northing_utm",
+        "Y": "northings_utm",
         "epsg": 28355,
         "column_info": [
-            {"name": "ca_Soln", "description": "Calcium solution in ppm"},
-            {"name": "profile", "description": "Field profile"},
-        ],
+            {
+                "name": "ca_soln",
+                "description": "Calcium solution in ppm"
+            },
+            {
+                "name": "profile",
+                "description": "Field profile"
+            }
+        ]
     },
     {
         "id": "L2A_PVI",
@@ -501,22 +509,22 @@ Let's say you want to describe items in `raster_simple_config.json`, `point_simp
                 "name": "B04",
                 "common_name": "red",
                 "description": "Common name: red, Range: 0.6 to 0.7",
-                "wavelength": 0.6645,
+                "wavelength": 0.6645
             },
             {
                 "name": "B03",
                 "common_name": "green",
                 "description": "Common name: green, Range: 0.5 to 0.6",
-                "wavelength": 0.56,
+                "wavelength": 0.56
             },
             {
                 "name": "B02",
                 "common_name": "blue",
                 "description": "Common name: blue, Range: 0.45 to 0.5",
-                "wavelength": 0.4966,
-            },
-        ],
-    },
+                "wavelength": 0.4966
+            }
+        ]
+    }
 ]
 ```
 
