@@ -35,21 +35,21 @@ class StacCollectionConfig(BaseModel):
     id: str = Field(exclude=True)
     """Item id"""
     title: str | None = "Auto-generated Stac Item"
-    """A human readable title describing the item entity."""
+    """A human readable title describing the item entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics"""
     description: str | None = "Auto-generated Stac Item"
-    """Detailed multi-line description to fully explain the STAC entity. """
+    """Detailed multi-line description to fully explain the STAC entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics"""
     license: str | None = None
-    """License(s) of the data as SPDX License identifier, SPDX License expression, or other"""
+    """License(s) of the data as SPDX License identifier, SPDX License expression, or other - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#licensing"""
     providers: list[Provider] | None = None
-    """A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list."""
+    """A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list. - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#provider"""
     platform: str | None = None
-    """Unique name of the specific platform to which the instrument is attached."""
+    """Unique name of the specific platform to which the instrument is attached. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#platform"""
     instruments: list[str] | None = None
-    """Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1)."""
+    """Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1). https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument"""
     constellation: str | None = None
-    """Name of the constellation to which the platform belongs."""
+    """Name of the constellation to which the platform belongs. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#constellation"""
     mission: str | None = None
-    """Name of the mission for which data is collected."""
+    """Name of the mission for which data is collected. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#mission"""
 
 
 class StacItemConfig(StacCollectionConfig):
