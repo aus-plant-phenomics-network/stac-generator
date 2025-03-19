@@ -108,21 +108,22 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             raster_bands = []
             for band_info in source_config.band_info:
                 eo_band = Band.create(
-                    name=band_info.name.lower(),
-                    common_name=BAND_MAPPING.get(band_info.common_name.lower(), None),
-                    center_wavelength=float(band_info.wavelength)
-                    if band_info.wavelength is not None
-                    else None,
-                    description=band_info.description
-                    if band_info.description is not None
-                    else "Common name: "
-                    + BAND_MAPPING.get(band_info.common_name.lower(), "unknown"),
+                    name=band_info["name"].lower(),
+                    common_name=BAND_MAPPING.get(band_info.get("common_name", "").lower(), None),
+                    center_wavelength=band_info.get("wavelength", None),
+                    description=band_info.get(
+                        "description",
+                        "Common name: "
+                        + BAND_MAPPING.get(
+                            band_info.get("common_name", "unknown").lower(), "unknown"
+                        ),
+                    ),
                 )
                 eo_bands.append(eo_band)
 
                 raster_band = RasterBand.create(
-                    nodata=band_info.nodata or 0,
-                    data_type=DataType(band_info.data_type or "uint16"),
+                    nodata=band_info.get("nodata", 0),
+                    data_type=DataType(band_info.get("data_type", "uint16")),
                 )
                 raster_bands.append(raster_band)
 

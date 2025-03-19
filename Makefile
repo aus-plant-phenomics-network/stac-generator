@@ -129,3 +129,11 @@ docs: 												## Serve mkdocs locally
 .PHONY: docs-deploy
 docs-deploy:										## Deploy to docs to github pages
 	@$(PDM) run mkdocs gh-deploy
+
+.PHONY: test-cli
+test-cli:
+	@$(PDM) run stac_generator serialise tests/files/integration_tests/composite/config/composite_config.json --id collection --dst example/generated/cli -v
+
+.PHONE: test-module
+test-module:
+	@$(PDM) run python script/run_module_test.py

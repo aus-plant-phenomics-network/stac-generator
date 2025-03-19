@@ -161,7 +161,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
     def __init__(
         self,
-        configs: list[dict[str, Any] | T],
+        configs: list[dict[str, Any]] | list[T],
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 

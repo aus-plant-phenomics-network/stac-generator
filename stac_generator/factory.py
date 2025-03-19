@@ -1,11 +1,6 @@
 import collections
-import json
-from collections.abc import Iterable
-from pathlib import Path
-from typing import Any, Sequence, cast
-
-import pandas as pd
-from executing import Source
+from collections.abc import Sequence
+from typing import Any
 
 from stac_generator.core.base import (
     CollectionGenerator,
@@ -40,34 +35,68 @@ CONFIG_GENERATOR_MAP: dict[type[SourceConfig], type[ItemGenerator]] = {
     PointConfig: PointGenerator,
 }
 
+BaseConfig_T = (
+    str
+    | SourceConfig
+    | dict[str, Any]
+    | Sequence[str]
+    | Sequence[SourceConfig]
+    | Sequence[dict[str, Any]]
+)
+Config_T = BaseConfig_T | Sequence[BaseConfig_T]
+
 
 class StacGeneratorFactory:
     @staticmethod
-    def match_handler(
-        configs: Sequence[str | SourceConfig | dict[str, Any]],
+    def match_handler(  # noqa: C901
+        configs: Config_T,
     ) -> list[ItemGenerator]:
         # Read in configs
-        _configs: list[dict[str, Any] | SourceConfig] = []
-        for config in configs:
+        _configs: list[SourceConfig] = []
+
+        def handle_dict_config(config: dict[str, Any]) -> None:
+            if "id" not in config:
+                raise ValueError("Missing id in a config item.")
+            if "location" not in config:
+                raise ValueError(f"Missing location in a config item: {config['id']}")
+            ext = config["location"].split(".")[-1]
+            config_handler = StacGeneratorFactory.get_config_handler(ext)
+            _configs.append(config_handler(**config))
+
+        def handle_str_config(config: str) -> None:
+            config_dicts = read_source_config(config)
+            for item in config_dicts:
+                handle_dict_config(item)
+
+        def handle_source_config(config: SourceConfig) -> None:
+            _configs.append(config)
+
+        def handle_base_config(config: BaseConfig_T) -> None:
             if isinstance(config, str):
-                _configs.extend(read_source_config(config))
-            elif isinstance(config, dict | SourceConfig):
-                _configs.append(config)
+                handle_str_config(config)
+            elif isinstance(config, SourceConfig):
+                handle_source_config(config)
+            elif isinstance(config, dict):
+                handle_dict_config(config)
             else:
                 raise TypeError(f"Invalid config item type: {type(config)}")
-        handler_map: dict[type[ItemGenerator], dict[str, Any] | type[SourceConfig]] = (
-            collections.defaultdict(list)  # type:ignore[arg-type]
-        )
-        for config in configs:
-            if isinstance(config, dict):
-                if "location" not in config:
-                    raise ValueError("Missing location field in a config item.")
-                ext = config["location"].split(".")[-1]
-                ext_handler = StacGeneratorFactory.get_handler(ext)
-                handler_map[ext_handler].append(config)
+
+        def handle_config(config: Config_T) -> None:
+            if isinstance(config, str | dict | SourceConfig):
+                handle_base_config(config)
+            elif hasattr(config, "__len__"):
+                for item in config:
+                    handle_config(item)
             else:
-                ext_handler = CONFIG_GENERATOR_MAP[type(config)]
-                handler_map[ext_handler].append(config)
+                raise TypeError(f"Invalid config type: {type(config)}")
+
+        handle_config(configs)
+
+        handler_map: dict[type[ItemGenerator], list[SourceConfig]] = collections.defaultdict(list)
+        for config in _configs:
+            generator_handler = StacGeneratorFactory.get_generator_handler(config)
+            handler_map[generator_handler].append(config)
+
         generators = []
         for k, v in handler_map.items():
             generators.append(k(v))
@@ -126,42 +155,8 @@ class StacGeneratorFactory:
         return CONFIG_GENERATOR_MAP[config_type]
 
     @staticmethod
-    def get_stac_generator_from_files(
-        source_configs: list[str], collection_config: StacCollectionConfig
+    def get_stac_generator(
+        source_configs: Config_T, collection_config: StacCollectionConfig
     ) -> CollectionGenerator:
         handlers = StacGeneratorFactory.match_handler(source_configs)
         return CollectionGenerator(collection_config, handlers)
-
-    @staticmethod
-    def generate_config_template(
-        source_configs: list[str],
-        dst: str,
-    ) -> None:
-        # Determine config type based on file extension
-        if dst.endswith(".json"):
-            config_type = "json"
-        elif dst.endswith(".csv"):
-            config_type = "csv"
-        else:
-            raise ValueError("Expects csv or json template")
-        # Match config type with corresponding handler
-        handler_map = StacGeneratorFactory.match_handler(source_configs)
-        result: list[Any] = []
-        for k, v in handler_map.items():
-            for item in v:
-                if config_type == "json":
-                    result.append(k.create_config(item))
-                else:
-                    result.append(pd.DataFrame([k.create_config(item)]))
-        # Generate config template with pre-filled band/column info
-        match config_type:
-            case "json":
-                with Path(dst).open("w") as file:
-                    json.dump(result, file)
-            case "csv":
-                df = pd.concat(cast(Iterable[pd.DataFrame], result))
-                if "column_info" in df.columns:
-                    df["column_info"] = df["column_info"].apply(lambda item: json.dumps(item))
-                if "band_info" in df.columns:
-                    df["band_info"] = df["band_info"].apply(lambda item: json.dumps(item))
-                df.to_csv(dst, index=False)

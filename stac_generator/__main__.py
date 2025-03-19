@@ -26,7 +26,7 @@ logger.setLevel(logging.DEBUG)
 
 
 def template_handler(args: Namespace) -> None:
-    StacGeneratorFactory.generate_config_template(args.src, args.dst)
+    pass
 
 
 def serialise_handler(args: Namespace) -> None:
