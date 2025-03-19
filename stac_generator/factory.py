@@ -62,11 +62,11 @@ class StacGeneratorFactory:
 
     @staticmethod
     def get_stac_generator(
-        source_configs: list[str], collection_cfg: StacCollectionConfig
+        source_configs: list[str], collection_config: StacCollectionConfig
     ) -> CollectionGenerator:
         handler_map = StacGeneratorFactory.match_handler(source_configs)
         handlers = [k(v) for k, v in handler_map.items()]
-        return CollectionGenerator(collection_cfg, handlers)
+        return CollectionGenerator(collection_config, handlers)
 
     @staticmethod
     def generate_config_template(

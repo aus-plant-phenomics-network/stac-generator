@@ -8,7 +8,7 @@ from shapely import Geometry
 from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
 from stac_generator.core.point.generator import read_csv
-from stac_generator.core.point.schema import CsvConfig
+from stac_generator.core.point.schema import PointConfig
 
 ALL_COLUMNS = {
     "latitude",
@@ -52,7 +52,7 @@ ASSETS = {
     for key, value in PATHS.items()
 }
 CONFIGS = {
-    "with_date_multi": CsvConfig(
+    "with_date_multi": PointConfig(
         X=X,
         Y=Y,
         T=T,
@@ -61,7 +61,7 @@ CONFIGS = {
         collection_date=COLLECTION_DATE,
         collection_time=COLLECTION_TIME,
     ),
-    "with_date_one": CsvConfig(
+    "with_date_one": PointConfig(
         X=X,
         Y=Y,
         T=T,
@@ -70,7 +70,7 @@ CONFIGS = {
         collection_date=COLLECTION_DATE,
         collection_time=COLLECTION_TIME,
     ),
-    "no_date_multi": CsvConfig(
+    "no_date_multi": PointConfig(
         X=X,
         Y=Y,
         id="test_id",
@@ -78,7 +78,7 @@ CONFIGS = {
         collection_date=COLLECTION_DATE,
         collection_time=COLLECTION_TIME,
     ),
-    "no_date_one": CsvConfig(
+    "no_date_one": PointConfig(
         X=X,
         Y=Y,
         id="test_id",
@@ -145,24 +145,24 @@ def test_read_csv_given_selected_columns_read_selected_columns(
 
 
 @pytest.mark.parametrize(
-    "frame, asset, source_cfg, geometry",
+    "frame, asset, source_config, geometry",
     zip(FRAMES.values(), ASSETS.values(), CONFIGS.values(), GEOMETRIES.values()),
     ids=FRAMES.keys(),
 )
 def test_df_to_item(
     frame: gpd.GeoDataFrame,
     asset: pystac.Asset,
-    source_cfg: CsvConfig,
+    source_config: PointConfig,
     geometry: Geometry,
 ) -> None:
     item = VectorGenerator.df_to_item(
         df=frame,
         assets={"data": asset},
-        source_cfg=source_cfg,
+        source_config=source_config,
         properties={},
-        epsg=source_cfg.epsg,
+        epsg=source_config.epsg,
     )
-    assert item.id == source_cfg.id
+    assert item.id == source_config.id
     assert item.datetime is not None
     assert item.assets == {"data": asset}
     assert item.geometry == geometry

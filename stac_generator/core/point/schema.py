@@ -1,7 +1,7 @@
 from stac_generator.core.base.schema import HasColumnInfo, SourceConfig
 
 
-class CsvConfig(SourceConfig, HasColumnInfo):
+class PointConfig(SourceConfig, HasColumnInfo):
     """Source config for point(csv) data"""
 
     X: str
