@@ -335,9 +335,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#describing-multi-layerd-shape-file" class="md-nav__link">
+  <a href="#describing-multi-layered-shape-file" class="md-nav__link">
     <span class="md-ellipsis">
-      Describing multi-layerd shape file
+      Describing multi-layered shape file
     </span>
   </a>
   
@@ -446,15 +446,6 @@
   <a href="#using-multiple-configs" class="md-nav__link">
     <span class="md-ellipsis">
       Using multiple configs
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#advanced-using-stac_generator-as-a-python-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advanced - Using stac_generator as a python module
     </span>
   </a>
   
@@ -1001,9 +992,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#describing-multi-layerd-shape-file" class="md-nav__link">
+  <a href="#describing-multi-layered-shape-file" class="md-nav__link">
     <span class="md-ellipsis">
-      Describing multi-layerd shape file
+      Describing multi-layered shape file
     </span>
   </a>
   
@@ -1117,15 +1108,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#advanced-using-stac_generator-as-a-python-module" class="md-nav__link">
-    <span class="md-ellipsis">
-      Advanced - Using stac_generator as a python module
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1185,33 +1167,29 @@
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;Werribee&quot;,
-        &quot;location&quot;: &quot;Werribee.geojson&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;
-    }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">vector_simple_config.json</span><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">[</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <details>
 <summary>CSV</summary>
 
-
-<pre><code class="language-csv">id,location,collection_date,collection_time
-Werribee,Werribee.geojson,2025-01-01,00:00:00
-</code></pre>
-
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>id,location,collection_date,collection_time
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>Werribee,Werribee.geojson,2025-01-01,00:00:00
+</span></code></pre></div>
 </details>
 
 <p>In this example, the item's id is <code>Werribee</code>. The asset location is <code>Werribee.geojson</code>, which means <code>Werribee.geojson</code> should be discovered in the current directory <code>Example</code>. We have also provided the <code>collection_date</code> and <code>collection_time</code> in the config. Save the config file (either the csv or json) in the current directory - i.e <code>vector_simple_config.json</code> or <code>vector_simple_config.csv</code>. If you use the csv version, change the name accordingly in the example commands.</p>
 <p>Now run the stac generator serialise command from the terminal:</p>
-<pre><code class="language-bash">stac_generator serialise vector_simple_config.json --id Werribee_Collection --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector_simple_config.json<span class="w"> </span>--id<span class="w"> </span>Werribee_Collection<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <p>The first positional argument is the path to the config file. The first keyword argument <code>id</code> (required) is the id of the generated collection. The second keyword argument <code>dst</code> is the location the generated records should be saved.</p>
 <p>Once this command is run, we should see a <code>generated</code> folder in the current directory. Upon opening <code>generated</code>, you will see a <code>collection.json</code> which is the STAC Collection metadata, and a <code>Werribee</code> folder containing <code>Werribee.json</code>, which is the STAC item metadata.</p>
 <p>You can now verify that the <code>id</code> provided in the command line (<code>Werribee_Collection</code>) corresponds to the <code>id</code> in <code>collection.json</code>, the <code>id</code> in <code>Werribee.json</code> corresponds to the <code>id</code> provided in <code>vector_simple_config.json</code>, and the asset's href in <code>Werribee.json</code> corresponds to the <code>location</code> provided in <code>vector_simple_config.json</code>.</p>
@@ -1221,171 +1199,165 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;Werribee&quot;,
-        &quot;location&quot;: &quot;Werribee.geojson&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;title&quot;: &quot;Werribee Item&quot;,
-        &quot;description&quot;: &quot;Suburbs near Werribee Melbourne&quot;,
-        &quot;column_info&quot;: [{&quot;name&quot;: &quot;Suburb_Name&quot;, &quot;description&quot;: &quot;suburb name&quot;}]
-    }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">vector_detailed_config.json</span><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">[</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nt">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee Item&quot;</span><span class="p">,</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburbs near Werribee Melbourne&quot;</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;suburb name&quot;</span><span class="p">}]</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <p>Save this config as <code>vector_detailed_config.json</code> in the same folder. Now run the command:</p>
-<pre><code class="language-bash">stac_generator serialise vector_detailed_config.json --id Werribee_Collection --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector_detailed_config.json<span class="w"> </span>--id<span class="w"> </span>Werribee_Collection<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <p>Upon checking the generated STAC Item <code>Werribee.json</code>, we now see <code>column_info</code>, <code>title</code>, and <code>description</code> fields appearing under <code>properties</code>.</p>
 <h3 id="describing-joined-attributes">Describing joined attributes</h3>
 <p>A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. The stac generator can describe the join operation with a few extra keywords in the config. Before running the stac generator, download the join <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/distance.csv">file</a> and put it in the current directory <code>Example</code>. Our config now looks like this:</p>
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;Werribee&quot;,
-        &quot;location&quot;: &quot;Werribee.geojson&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;column_info&quot;: [
-            {
-                &quot;name&quot;: &quot;Suburb_Name&quot;,
-                &quot;description&quot;: &quot;Suburb_Name&quot;
-            }
-        ],
-        &quot;join_file&quot;: &quot;distance.csv&quot;,
-        &quot;join_field&quot;: &quot;Area&quot;,
-        &quot;join_attribute_vector&quot;: &quot;Suburb_Name&quot;,
-        &quot;join_column_info&quot;: [
-            {
-                &quot;name&quot;: &quot;Distance&quot;,
-                &quot;description&quot;: &quot;Driving Distance to CBD in km&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Public_Transport&quot;,
-                &quot;description&quot;: &quot;Time taken to reach CBD by public transport in minutes&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Drive&quot;,
-                &quot;description&quot;: &quot;Time taken to reach CBD by driving in minutes&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Growth&quot;,
-                &quot;description&quot;: &quot;Average 5 year growth in percentage in 2025&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Yield&quot;,
-                &quot;description&quot;: &quot;Average rental yield in 2025&quot;
-            }
-        ]
-    }
-]
-</code></pre>
-</details>
+<p><div class="language-json highlight"><span class="filename">vector_join_config.json</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">[</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="p">],</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="nt">&quot;join_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;distance.csv&quot;</span><span class="p">,</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="nt">&quot;join_field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">        </span><span class="nt">&quot;join_attribute_vector&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span><span class="p">,</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">        </span><span class="nt">&quot;join_column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Distance&quot;</span><span class="p">,</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Driving Distance to CBD in km&quot;</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Public_Transport&quot;</span><span class="p">,</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Time taken to reach CBD by public transport in minutes&quot;</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Drive&quot;</span><span class="p">,</span>
+</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Time taken to reach CBD by driving in minutes&quot;</span>
+</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-5-29"><a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-30"><a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Growth&quot;</span><span class="p">,</span>
+</span><span id="__span-5-31"><a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Average 5 year growth in percentage in 2025&quot;</span>
+</span><span id="__span-5-32"><a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-5-33"><a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-5-34"><a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Yield&quot;</span><span class="p">,</span>
+</span><span id="__span-5-35"><a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Average rental yield in 2025&quot;</span>
+</span><span id="__span-5-36"><a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-5-37"><a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">        </span><span class="p">]</span>
+</span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="p">]</span>
+</span></code></pre></div>
+</details></p>
 <p>We specified <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> describes the columns in the <code>join_file</code>. Save the new config as <code>vector_join_config.json</code> and run the stac generator command:</p>
-<pre><code class="language-bash">stac_generator serialise vector_join_config.json --id Werribee_Collection --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector_join_config.json<span class="w"> </span>--id<span class="w"> </span>Werribee_Collection<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <p>You should see the corresponding fields appearing under <code>properties</code> in <code>Werribee.json</code>.</p>
-<h3 id="describing-multi-layerd-shape-file">Describing multi-layerd shape file</h3>
+<h3 id="describing-multi-layered-shape-file">Describing multi-layered shape file</h3>
 <p>It is not uncommon to have a compressed zip containing multiple shape files. Such a zip file can be handled directly. To get started, download this <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip">file</a> which contains some SA2 areas in Victoria:</p>
 <p><img alt="" src="../images/quick_start_SA2.png" /></p>
 <p>Here we have two layers - Sunbury and Werribee. Each layer will be generated as a STAC item, and we will need to describe each layer independently as a record in the config. We may choose to describe all or a subset of the layers.</p>
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;WerribeeSA2&quot;,
-        &quot;location&quot;: &quot;SA2.zip&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;layer&quot;: &quot;Werribee&quot;
-    },
-    {
-        &quot;id&quot;: &quot;SunburySA2&quot;,
-        &quot;location&quot;: &quot;SA2.zip&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;layer&quot;: &quot;Sunbury&quot;
-    }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">vector_layer_config.json</span><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="p">[</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WerribeeSA2&quot;</span><span class="p">,</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SA2.zip&quot;</span><span class="p">,</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="nt">&quot;layer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SunburySA2&quot;</span><span class="p">,</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SA2.zip&quot;</span><span class="p">,</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="nt">&quot;layer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sunbury&quot;</span>
+</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <p>Save the new config as <code>vector_layer_config.json</code> and run the command:</p>
-<pre><code>stac_generator serialise vector_layer_config.json --id SA2_Collection --dst generated
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>stac_generator serialise vector_layer_config.json --id SA2_Collection --dst generated
+</span></code></pre></div>
 <p>You will see two items generated, <code>WerribeSA2</code> and <code>SunburySA2</code>. Note that each config record has a <code>layer</code> keyword to identify the layer in the compressed zip. We use a simple config to describe each layer, but it is possible to add additional information like column info and join attributes as described in the previous sections.</p>
 <h3 id="describing-multiple-vector-files">Describing multiple vector files</h3>
 <p>To describe another independent vector file, you can add another record in the config file. For instance, we want to describe both the <code>SA2.zip</code> and the <code>Werribee.geojson</code> files:</p>
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;WerribeeSA2&quot;,
-        &quot;location&quot;: &quot;SA2.zip&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;layer&quot;: &quot;Werribee&quot;
-    },
-    {
-        &quot;id&quot;: &quot;SunburySA2&quot;,
-        &quot;location&quot;: &quot;SA2.zip&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;layer&quot;: &quot;Sunbury&quot;
-    },
-        {
-        &quot;id&quot;: &quot;Werribee&quot;,
-        &quot;location&quot;: &quot;Werribee.geojson&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;,
-        &quot;column_info&quot;: [
-            {
-                &quot;name&quot;: &quot;Suburb_Name&quot;,
-                &quot;description&quot;: &quot;Suburb_Name&quot;
-            }
-        ],
-        &quot;join_file&quot;: &quot;distance.csv&quot;,
-        &quot;join_field&quot;: &quot;Area&quot;,
-        &quot;join_attribute_vector&quot;: &quot;Suburb_Name&quot;,
-        &quot;join_column_info&quot;: [
-            {
-                &quot;name&quot;: &quot;Distance&quot;,
-                &quot;description&quot;: &quot;Driving Distance to CBD in km&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Public_Transport&quot;,
-                &quot;description&quot;: &quot;Time taken to reach CBD by public transport in minutes&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Drive&quot;,
-                &quot;description&quot;: &quot;Time taken to reach CBD by driving in minutes&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Growth&quot;,
-                &quot;description&quot;: &quot;Average 5 year growth in percentage in 2025&quot;
-            },
-            {
-                &quot;name&quot;: &quot;Yield&quot;,
-                &quot;description&quot;: &quot;Average rental yield in 2025&quot;
-            }
-        ]
-    }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">vector_combined_config.json</span><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">[</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;WerribeeSA2&quot;</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SA2.zip&quot;</span><span class="p">,</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">        </span><span class="nt">&quot;layer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SunburySA2&quot;</span><span class="p">,</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;SA2.zip&quot;</span><span class="p">,</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="w">        </span><span class="nt">&quot;layer&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Sunbury&quot;</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="w">        </span><span class="p">{</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="w">        </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span><span class="p">,</span>
+</span><span id="__span-9-24"><a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span>
+</span><span id="__span-9-25"><a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-9-26"><a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a><span class="w">        </span><span class="p">],</span>
+</span><span id="__span-9-27"><a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a><span class="w">        </span><span class="nt">&quot;join_file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;distance.csv&quot;</span><span class="p">,</span>
+</span><span id="__span-9-28"><a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a><span class="w">        </span><span class="nt">&quot;join_field&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Area&quot;</span><span class="p">,</span>
+</span><span id="__span-9-29"><a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a><span class="w">        </span><span class="nt">&quot;join_attribute_vector&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Suburb_Name&quot;</span><span class="p">,</span>
+</span><span id="__span-9-30"><a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a><span class="w">        </span><span class="nt">&quot;join_column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-9-31"><a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-32"><a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Distance&quot;</span><span class="p">,</span>
+</span><span id="__span-9-33"><a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Driving Distance to CBD in km&quot;</span>
+</span><span id="__span-9-34"><a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-9-35"><a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-36"><a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Public_Transport&quot;</span><span class="p">,</span>
+</span><span id="__span-9-37"><a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Time taken to reach CBD by public transport in minutes&quot;</span>
+</span><span id="__span-9-38"><a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-9-39"><a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-40"><a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Drive&quot;</span><span class="p">,</span>
+</span><span id="__span-9-41"><a id="__codelineno-9-41" name="__codelineno-9-41" href="#__codelineno-9-41"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Time taken to reach CBD by driving in minutes&quot;</span>
+</span><span id="__span-9-42"><a id="__codelineno-9-42" name="__codelineno-9-42" href="#__codelineno-9-42"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-9-43"><a id="__codelineno-9-43" name="__codelineno-9-43" href="#__codelineno-9-43"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-44"><a id="__codelineno-9-44" name="__codelineno-9-44" href="#__codelineno-9-44"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Growth&quot;</span><span class="p">,</span>
+</span><span id="__span-9-45"><a id="__codelineno-9-45" name="__codelineno-9-45" href="#__codelineno-9-45"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Average 5 year growth in percentage in 2025&quot;</span>
+</span><span id="__span-9-46"><a id="__codelineno-9-46" name="__codelineno-9-46" href="#__codelineno-9-46"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-9-47"><a id="__codelineno-9-47" name="__codelineno-9-47" href="#__codelineno-9-47"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-9-48"><a id="__codelineno-9-48" name="__codelineno-9-48" href="#__codelineno-9-48"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Yield&quot;</span><span class="p">,</span>
+</span><span id="__span-9-49"><a id="__codelineno-9-49" name="__codelineno-9-49" href="#__codelineno-9-49"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Average rental yield in 2025&quot;</span>
+</span><span id="__span-9-50"><a id="__codelineno-9-50" name="__codelineno-9-50" href="#__codelineno-9-50"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-9-51"><a id="__codelineno-9-51" name="__codelineno-9-51" href="#__codelineno-9-51"></a><span class="w">        </span><span class="p">]</span>
+</span><span id="__span-9-52"><a id="__codelineno-9-52" name="__codelineno-9-52" href="#__codelineno-9-52"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-9-53"><a id="__codelineno-9-53" name="__codelineno-9-53" href="#__codelineno-9-53"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <p>Despite its size, this is a simple concatenation of the records in the previous two sections. This will generate a <code>WerribeeSA2</code> item and a <code>SunburySA2</code> item from the <code>SA2.zip</code> file, and a <code>Werribee</code> item with join attribute from <code>distance.csv</code>. Save the new config as <code>vector_combined_config.json</code> and run the stac generator:</p>
-<pre><code class="language-bash">stac_generator serialise vector_combined_config.json --id Vector_Collection --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector_combined_config.json<span class="w"> </span>--id<span class="w"> </span>Vector_Collection<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h2 id="raster-data">Raster Data</h2>
 <p>For raster assets, users are required to declare recorded bands under <code>band_info</code> field. In the next examples, we will describe a tif with common sensor bands, and a tif with custom bands.</p>
 <h3 id="describing-common-bands">Describing common bands</h3>
@@ -1396,42 +1368,40 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-  {
-    &quot;id&quot;: &quot;L2A_PVI&quot;,
-    &quot;location&quot;: &quot;L2A_PVI.tif&quot;,
-    &quot;collection_date&quot;: &quot;2021-02-21&quot;,
-    &quot;collection_time&quot;: &quot;10:00:17&quot;,
-    &quot;band_info&quot;: [
-      {
-        &quot;name&quot;: &quot;B04&quot;,
-        &quot;common_name&quot;: &quot;red&quot;,
-        &quot;description&quot;: &quot;Common name: red, Range: 0.6 to 0.7&quot;,
-        &quot;wavelength&quot;: 0.6645
-      },
-      {
-        &quot;name&quot;: &quot;B03&quot;,
-        &quot;common_name&quot;: &quot;green&quot;,
-        &quot;description&quot;: &quot;Common name: green, Range: 0.5 to 0.6&quot;,
-        &quot;wavelength&quot;: 0.56
-      },
-      {
-        &quot;name&quot;: &quot;B02&quot;,
-        &quot;common_name&quot;: &quot;blue&quot;,
-        &quot;description&quot;: &quot;Common name: blue, Range: 0.45 to 0.5&quot;,
-        &quot;wavelength&quot;: 0.4966
-      }
-    ]
-  }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">raster_simple_config.json</span><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">[</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;L2A_PVI&quot;</span><span class="p">,</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;L2A_PVI.tif&quot;</span><span class="p">,</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-02-21&quot;</span><span class="p">,</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:17&quot;</span><span class="p">,</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nt">&quot;band_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B04&quot;</span><span class="p">,</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">        </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: red, Range: 0.6 to 0.7&quot;</span><span class="p">,</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">        </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6645</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B03&quot;</span><span class="p">,</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="w">        </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: green, Range: 0.5 to 0.6&quot;</span><span class="p">,</span>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">        </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.56</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B02&quot;</span><span class="p">,</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">        </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: blue, Range: 0.45 to 0.5&quot;</span><span class="p">,</span>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a><span class="w">        </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4966</span>
+</span><span id="__span-11-25"><a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-11-26"><a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-11-27"><a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-11-28"><a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <p>Please note how the RGB bands are described under <code>band_info</code>. The wavelengths are read from device specifications. To serialise the metadata:</p>
-<pre><code class="language-bash">stac_generator serialise raster_simple_config.json --id simple_raster --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>raster_simple_config.json<span class="w"> </span>--id<span class="w"> </span>simple_raster<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h3 id="describing-uncommonunknown-bands">Describing uncommon/unknown bands</h3>
 <p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/vegetation_cover.tif">asset</a>(please download the asset an put in the <code>Example</code> folder) in this example is a greyscale tif file (shown below):</p>
 <p><img alt="" src="../images/quick_start_vegetation_index_raster_custom.png" /></p>
@@ -1440,29 +1410,27 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-  {
-    &quot;id&quot;: &quot;vegetation_cover&quot;,
-    &quot;location&quot;: &quot;vegetation_cover.tif&quot;,
-    &quot;collection_date&quot;: &quot;2021-02-21&quot;,
-    &quot;collection_time&quot;: &quot;10:00:17&quot;,
-    &quot;band_info&quot;: [
-      {
-        &quot;name&quot;: &quot;vegetation&quot;,
-        &quot;description&quot;: &quot;Vegetation cover level&quot;
-      }
-    ]
-  }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">raster_custom_config.json</span><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">[</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vegetation_cover&quot;</span><span class="p">,</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vegetation_cover.tif&quot;</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">    </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-02-21&quot;</span><span class="p">,</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:17&quot;</span><span class="p">,</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">&quot;band_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vegetation&quot;</span><span class="p">,</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Vegetation cover level&quot;</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">]</span>
+</span></code></pre></div>
 
 </details>
 
 <p>The band info is a lot simpler than the previous example given that the band is not raw sensor readings (no wavelength). To serialise the metadata:</p>
-<pre><code class="language-bash">stac_generator serialise raster_custom_config.json --id custom_raster --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>raster_custom_config.json<span class="w"> </span>--id<span class="w"> </span>custom_raster<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h2 id="point-data">Point Data</h2>
 <p>The <code>stac_generator</code> uses the <code>csv</code> format to store point data. Given the flexibility of the csv format, we require point dataset to be structured in a particular way. Each row of the csv file describes a point, with columns being the attributes. At the minimum, there must be two columns describing the coordinates of the points. The required config fields include:</p>
 <ul>
@@ -1507,32 +1475,30 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-  {
-    &quot;id&quot;: &quot;BOM_Data&quot;,
-    &quot;location&quot;: &quot;bom.csv&quot;,
-    &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-    &quot;collection_time&quot;: &quot;10:00:00&quot;,
-    &quot;X&quot;: &quot;longitude&quot;,
-    &quot;Y&quot;: &quot;latitude&quot;,
-    &quot;Z&quot;: &quot;elevation&quot;,
-    &quot;T&quot;: &quot;YYYY-MM-DD&quot;,
-    &quot;epsg&quot;: 4326,
-    &quot;column_info&quot;: [
-      {
-        &quot;name&quot;: &quot;daily_rain&quot;,
-        &quot;description&quot;: &quot;daily rain fall in mm&quot;
-      },
-      {
-        &quot;name&quot;: &quot;max_temp&quot;,
-        &quot;description&quot;: &quot;daily maximum temperature in C&quot;
-      }
-    ]
-  }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">point_time_series_config.json</span><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">[</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BOM_Data&quot;</span><span class="p">,</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bom.csv&quot;</span><span class="p">,</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">    </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="nt">&quot;X&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="nt">&quot;Y&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">    </span><span class="nt">&quot;Z&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;elevation&quot;</span><span class="p">,</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="w">    </span><span class="nt">&quot;T&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YYYY-MM-DD&quot;</span><span class="p">,</span>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">    </span><span class="nt">&quot;epsg&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4326</span><span class="p">,</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a><span class="w">    </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;daily_rain&quot;</span><span class="p">,</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;daily rain fall in mm&quot;</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;max_temp&quot;</span><span class="p">,</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;daily maximum temperature in C&quot;</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-15-22"><a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-15-23"><a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="p">]</span>
+</span></code></pre></div>
 
 </details>
 
@@ -1540,8 +1506,8 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <p><code>epsg</code> value cannot be derived from the csv and must be known by the user - i.e. reading dataset metadata on BOM/SILO website.</p>
 <p>The field <code>column_info</code> contains useful columns that the user want to describe.</p>
 <p>To serialise the metadata:</p>
-<pre><code class="language-bash">stac_generator serialise point_time_series_config.json --id time_series --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>point_time_series_config.json<span class="w"> </span>--id<span class="w"> </span>time_series<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h3 id="describing-generic-point-data">Describing generic point data</h3>
 <p>The <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/soil.csv">asset</a>(please download the asset an put in the <code>Example</code> folder) in this example is a generic point dataset with no date column (shown below):</p>
 <table>
@@ -1570,31 +1536,28 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-  {
-    &quot;id&quot;: &quot;soil_data&quot;,
-    &quot;location&quot;: &quot;soil.csv&quot;,
-    &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-    &quot;collection_time&quot;: &quot;10:00:00&quot;,
-    &quot;X&quot;: &quot;eastings_utm&quot;,
-    &quot;Y&quot;: &quot;northings_utm&quot;,
-    &quot;epsg&quot;: 28355,
-    &quot;column_info&quot;: [
-      {
-        &quot;name&quot;: &quot;ca_soln&quot;,
-        &quot;description&quot;: &quot;Calcium solution in ppm&quot;
-      },
-      {
-        &quot;name&quot;: &quot;profile&quot;,
-        &quot;description&quot;: &quot;Field profile&quot;
-      }
-    ]
-  }
-]
-
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">point_simple_config.json</span><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="p">[</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;soil_data&quot;</span><span class="p">,</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;soil.csv&quot;</span><span class="p">,</span>
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="w">    </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="w">    </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="w">    </span><span class="nt">&quot;X&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eastings_utm&quot;</span><span class="p">,</span>
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="w">    </span><span class="nt">&quot;Y&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;northings_utm&quot;</span><span class="p">,</span>
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a><span class="w">    </span><span class="nt">&quot;epsg&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">28355</span><span class="p">,</span>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="w">    </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ca_soln&quot;</span><span class="p">,</span>
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Calcium solution in ppm&quot;</span>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="w">        </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;profile&quot;</span><span class="p">,</span>
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="w">        </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Field profile&quot;</span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="p">]</span>
+</span></code></pre></div>
 
 </details>
 
@@ -1602,8 +1565,8 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <p>There is no elevation and time column so they can be left blank.</p>
 <p>The value for <code>epsg</code> must be known before hand, in this example, we assume it to be GDA94/MGA55 with espg code 28355. Also assuming values for property and field are not important in this example, we don’t include them in <code>column_info</code>.</p>
 <p>To serialise the metadata:</p>
-<pre><code class="language-bash">stac_generator serialise point_simple_config.json --id soil --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>point_simple_config.json<span class="w"> </span>--id<span class="w"> </span>soil<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h2 id="composite-data">Composite Data</h2>
 <p>It is not uncommon to have more than one data types in a project. To describe multiple items of different data types, we can use a combined config or we can pass all the configs to the CLI at once.</p>
 <h3 id="using-a-combined-config">Using a combined config</h3>
@@ -1611,87 +1574,77 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-    {
-        &quot;id&quot;: &quot;Werribee&quot;,
-        &quot;location&quot;: &quot;Werribee.geojson&quot;,
-        &quot;collection_date&quot;: &quot;2025-01-01&quot;,
-        &quot;collection_time&quot;: &quot;00:00:00&quot;
-    },
-    {
-        &quot;id&quot;: &quot;soil_data&quot;,
-        &quot;location&quot;: &quot;soil.csv&quot;,
-        &quot;collection_date&quot;: &quot;2020-01-01&quot;,
-        &quot;collection_time&quot;: &quot;10:00:00&quot;,
-        &quot;X&quot;: &quot;eastings_utm&quot;,
-        &quot;Y&quot;: &quot;northings_utm&quot;,
-        &quot;epsg&quot;: 28355,
-        &quot;column_info&quot;: [
-            {
-                &quot;name&quot;: &quot;ca_soln&quot;,
-                &quot;description&quot;: &quot;Calcium solution in ppm&quot;
-            },
-            {
-                &quot;name&quot;: &quot;profile&quot;,
-                &quot;description&quot;: &quot;Field profile&quot;
-            }
-        ]
-    },
-    {
-        &quot;id&quot;: &quot;L2A_PVI&quot;,
-        &quot;location&quot;: &quot;L2A_PVI.tif&quot;,
-        &quot;collection_date&quot;: &quot;2021-02-21&quot;,
-        &quot;collection_time&quot;: &quot;10:00:17&quot;,
-        &quot;band_info&quot;: [
-            {
-                &quot;name&quot;: &quot;B04&quot;,
-                &quot;common_name&quot;: &quot;red&quot;,
-                &quot;description&quot;: &quot;Common name: red, Range: 0.6 to 0.7&quot;,
-                &quot;wavelength&quot;: 0.6645
-            },
-            {
-                &quot;name&quot;: &quot;B03&quot;,
-                &quot;common_name&quot;: &quot;green&quot;,
-                &quot;description&quot;: &quot;Common name: green, Range: 0.5 to 0.6&quot;,
-                &quot;wavelength&quot;: 0.56
-            },
-            {
-                &quot;name&quot;: &quot;B02&quot;,
-                &quot;common_name&quot;: &quot;blue&quot;,
-                &quot;description&quot;: &quot;Common name: blue, Range: 0.45 to 0.5&quot;,
-                &quot;wavelength&quot;: 0.4966
-            }
-        ]
-    }
-]
-</code></pre>
-
+<div class="language-json highlight"><span class="filename">combined_config.json</span><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="p">[</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-19-5"><a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2025-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-19-6"><a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;00:00:00&quot;</span>
+</span><span id="__span-19-7"><a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-19-8"><a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-19-9"><a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;soil_data&quot;</span><span class="p">,</span>
+</span><span id="__span-19-10"><a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;soil.csv&quot;</span><span class="p">,</span>
+</span><span id="__span-19-11"><a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2020-01-01&quot;</span><span class="p">,</span>
+</span><span id="__span-19-12"><a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:00&quot;</span><span class="p">,</span>
+</span><span id="__span-19-13"><a id="__codelineno-19-13" name="__codelineno-19-13" href="#__codelineno-19-13"></a><span class="w">        </span><span class="nt">&quot;X&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;eastings_utm&quot;</span><span class="p">,</span>
+</span><span id="__span-19-14"><a id="__codelineno-19-14" name="__codelineno-19-14" href="#__codelineno-19-14"></a><span class="w">        </span><span class="nt">&quot;Y&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;northings_utm&quot;</span><span class="p">,</span>
+</span><span id="__span-19-15"><a id="__codelineno-19-15" name="__codelineno-19-15" href="#__codelineno-19-15"></a><span class="w">        </span><span class="nt">&quot;epsg&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">28355</span><span class="p">,</span>
+</span><span id="__span-19-16"><a id="__codelineno-19-16" name="__codelineno-19-16" href="#__codelineno-19-16"></a><span class="w">        </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-19-17"><a id="__codelineno-19-17" name="__codelineno-19-17" href="#__codelineno-19-17"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-19-18"><a id="__codelineno-19-18" name="__codelineno-19-18" href="#__codelineno-19-18"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ca_soln&quot;</span><span class="p">,</span>
+</span><span id="__span-19-19"><a id="__codelineno-19-19" name="__codelineno-19-19" href="#__codelineno-19-19"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Calcium solution in ppm&quot;</span>
+</span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-19-21"><a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-19-22"><a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;profile&quot;</span><span class="p">,</span>
+</span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Field profile&quot;</span>
+</span><span id="__span-19-24"><a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-19-25"><a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a><span class="w">        </span><span class="p">]</span>
+</span><span id="__span-19-26"><a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-19-27"><a id="__codelineno-19-27" name="__codelineno-19-27" href="#__codelineno-19-27"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-19-28"><a id="__codelineno-19-28" name="__codelineno-19-28" href="#__codelineno-19-28"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;L2A_PVI&quot;</span><span class="p">,</span>
+</span><span id="__span-19-29"><a id="__codelineno-19-29" name="__codelineno-19-29" href="#__codelineno-19-29"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;L2A_PVI.tif&quot;</span><span class="p">,</span>
+</span><span id="__span-19-30"><a id="__codelineno-19-30" name="__codelineno-19-30" href="#__codelineno-19-30"></a><span class="w">        </span><span class="nt">&quot;collection_date&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2021-02-21&quot;</span><span class="p">,</span>
+</span><span id="__span-19-31"><a id="__codelineno-19-31" name="__codelineno-19-31" href="#__codelineno-19-31"></a><span class="w">        </span><span class="nt">&quot;collection_time&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10:00:17&quot;</span><span class="p">,</span>
+</span><span id="__span-19-32"><a id="__codelineno-19-32" name="__codelineno-19-32" href="#__codelineno-19-32"></a><span class="w">        </span><span class="nt">&quot;band_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-19-33"><a id="__codelineno-19-33" name="__codelineno-19-33" href="#__codelineno-19-33"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-19-34"><a id="__codelineno-19-34" name="__codelineno-19-34" href="#__codelineno-19-34"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B04&quot;</span><span class="p">,</span>
+</span><span id="__span-19-35"><a id="__codelineno-19-35" name="__codelineno-19-35" href="#__codelineno-19-35"></a><span class="w">                </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+</span><span id="__span-19-36"><a id="__codelineno-19-36" name="__codelineno-19-36" href="#__codelineno-19-36"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: red, Range: 0.6 to 0.7&quot;</span><span class="p">,</span>
+</span><span id="__span-19-37"><a id="__codelineno-19-37" name="__codelineno-19-37" href="#__codelineno-19-37"></a><span class="w">                </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.6645</span>
+</span><span id="__span-19-38"><a id="__codelineno-19-38" name="__codelineno-19-38" href="#__codelineno-19-38"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-19-39"><a id="__codelineno-19-39" name="__codelineno-19-39" href="#__codelineno-19-39"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-19-40"><a id="__codelineno-19-40" name="__codelineno-19-40" href="#__codelineno-19-40"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B03&quot;</span><span class="p">,</span>
+</span><span id="__span-19-41"><a id="__codelineno-19-41" name="__codelineno-19-41" href="#__codelineno-19-41"></a><span class="w">                </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+</span><span id="__span-19-42"><a id="__codelineno-19-42" name="__codelineno-19-42" href="#__codelineno-19-42"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: green, Range: 0.5 to 0.6&quot;</span><span class="p">,</span>
+</span><span id="__span-19-43"><a id="__codelineno-19-43" name="__codelineno-19-43" href="#__codelineno-19-43"></a><span class="w">                </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.56</span>
+</span><span id="__span-19-44"><a id="__codelineno-19-44" name="__codelineno-19-44" href="#__codelineno-19-44"></a><span class="w">            </span><span class="p">},</span>
+</span><span id="__span-19-45"><a id="__codelineno-19-45" name="__codelineno-19-45" href="#__codelineno-19-45"></a><span class="w">            </span><span class="p">{</span>
+</span><span id="__span-19-46"><a id="__codelineno-19-46" name="__codelineno-19-46" href="#__codelineno-19-46"></a><span class="w">                </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;B02&quot;</span><span class="p">,</span>
+</span><span id="__span-19-47"><a id="__codelineno-19-47" name="__codelineno-19-47" href="#__codelineno-19-47"></a><span class="w">                </span><span class="nt">&quot;common_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+</span><span id="__span-19-48"><a id="__codelineno-19-48" name="__codelineno-19-48" href="#__codelineno-19-48"></a><span class="w">                </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Common name: blue, Range: 0.45 to 0.5&quot;</span><span class="p">,</span>
+</span><span id="__span-19-49"><a id="__codelineno-19-49" name="__codelineno-19-49" href="#__codelineno-19-49"></a><span class="w">                </span><span class="nt">&quot;wavelength&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.4966</span>
+</span><span id="__span-19-50"><a id="__codelineno-19-50" name="__codelineno-19-50" href="#__codelineno-19-50"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-19-51"><a id="__codelineno-19-51" name="__codelineno-19-51" href="#__codelineno-19-51"></a><span class="w">        </span><span class="p">]</span>
+</span><span id="__span-19-52"><a id="__codelineno-19-52" name="__codelineno-19-52" href="#__codelineno-19-52"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-19-53"><a id="__codelineno-19-53" name="__codelineno-19-53" href="#__codelineno-19-53"></a><span class="p">]</span>
+</span></code></pre></div>
 
 </details>
 
 <p>To serialise this collection, run:</p>
-<pre><code class="language-bash">stac_generator serialise combined_config.json --id combined --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>combined_config.json<span class="w"> </span>--id<span class="w"> </span>combined<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h3 id="using-multiple-configs">Using multiple configs</h3>
 <p>We can pass multiple config files to the CLI. For instance, to describe all simple configs similar to the previous example, we can run:</p>
-<pre><code class="language-bash">stac_generator serialise point_simple_config.json raster_simple_config.json vector_simple_config.json --id combined --dst generated
-</code></pre>
-<h3 id="advanced-using-stac_generator-as-a-python-module">Advanced - Using <code>stac_generator</code> as a python module</h3>
-<p>So far, we have seen how <code>stac_generator</code> can be used as a command line tool to generate STAC metadata. In this section, we will see how to use <code>stac_generator</code> as a module. This means we can now write python scripts that import the <code>stac_generator</code> module and perform the previous tasks:</p>
-<details>
-
-<summary>PYTHON</summary>
-
-</details>
-
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>point_simple_config.json<span class="w"> </span>raster_simple_config.json<span class="w"> </span>vector_simple_config.json<span class="w"> </span>--id<span class="w"> </span>combined<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 <h2 id="help">Help</h2>
 <p>To view the supported parameters and keywords for the <code>serialise</code> command, run</p>
-<pre><code>stac_generator serialise --help
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>stac_generator serialise --help
+</span></code></pre></div>
 <p>To view all supported commands, run</p>
-<pre><code>stac_generator --help
-</code></pre>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>stac_generator --help
+</span></code></pre></div>
 <p>Note that  <code>STAC common metadata</code> fields can be ignored for now.</p>
 <h2 id="a-note-on-location-field">A note on <code>location</code> field</h2>
 <p>Throughout this tutorial, we use relative paths for our asset's location. In practice, we recommend using an absolute path to local asset (if you want to the data to be discovered only locally) or a URL to the hosted asset (if you want to share the metadata and asset with someone else).</p>
@@ -1700,35 +1653,31 @@ Werribee,Werribee.geojson,2025-01-01,00:00:00
 <details>
 <summary>JSON</summary>
 
-
-<pre><code class="language-json">[
-  {
-    &quot;location&quot;: &quot;data.geojson&quot;,
-    &quot;column_info&quot;: [
-      {&quot;name&quot;: &quot;ID&quot;, &quot;description&quot;: &quot;Item ID&quot;},
-      {&quot;name&quot;: &quot;Age&quot;, &quot;description&quot;: &quot;Age&quot;}
-    ]
-  }
-]
-</code></pre>
-
+<div class="language-json highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="p">[</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data.geojson&quot;</span><span class="p">,</span>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">    </span><span class="nt">&quot;column_info&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ID&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Item ID&quot;</span><span class="p">},</span>
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a><span class="w">      </span><span class="p">{</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Age&quot;</span><span class="p">,</span><span class="w"> </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Age&quot;</span><span class="p">}</span>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a><span class="p">]</span>
+</span></code></pre></div>
 </details>
 
 <p>We will prepare the csv as follows:</p>
 <details>
 <summary>CSV</summary>
 
-
-<pre><code class="language-csv">location, column_info
-data.geojson,&quot;[{&quot;&quot;name&quot;&quot;: &quot;&quot;ID&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Item ID&quot;&quot;}, {&quot;&quot;name&quot;&quot;: &quot;&quot;Age&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Age&quot;&quot;}]&quot;
-</code></pre>
-
+<div class="language-text highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>location, column_info
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a>data.geojson,&quot;[{&quot;&quot;name&quot;&quot;: &quot;&quot;ID&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Item ID&quot;&quot;}, {&quot;&quot;name&quot;&quot;: &quot;&quot;Age&quot;&quot;, &quot;&quot;description&quot;&quot;: &quot;&quot;Age&quot;&quot;}]&quot;
+</span></code></pre></div>
 
 </details>
 
 <p>Note how we use <code>""</code> to represent an item in the csv format. Describing multiple items using a <code>csv</code> config can be done by representing each item as a row in the csv config. For describing multiple items of different data type, we recommend using the multiple config approach, preparing several configs of the same data type then passing them to the CLI. For instance:</p>
-<pre><code class="language-bash">stac_generator serialise vector.csv raster.csv point.csv --id collection --dst generated
-</code></pre>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector.csv<span class="w"> </span>raster.csv<span class="w"> </span>point.csv<span class="w"> </span>--id<span class="w"> </span>collection<span class="w"> </span>--dst<span class="w"> </span>generated
+</span></code></pre></div>
 
 
 
@@ -1775,7 +1724,7 @@ data.geojson,&quot;[{&quot;&quot;name&quot;&quot;: &quot;&quot;ID&quot;&quot;, &
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.select"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
