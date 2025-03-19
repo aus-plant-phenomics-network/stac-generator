@@ -544,6 +544,16 @@ We can pass multiple config files to the CLI. For instance, to describe all simp
 stac_generator serialise point_simple_config.json raster_simple_config.json vector_simple_config.json --id combined --dst generated
 ```
 
+### Advanced - Using `stac_generator` as a python module
+
+So far, we have seen how `stac_generator` can be used as a command line tool to generate STAC metadata. In this section, we will see how to use `stac_generator` as a module. This means we can now write python scripts that import the `stac_generator` module and perform the previous tasks: 
+
+<details>
+
+<summary>PYTHON</summary>
+
+</details>
+
 ## Help
 
 To view the supported parameters and keywords for the `serialise` command, run
