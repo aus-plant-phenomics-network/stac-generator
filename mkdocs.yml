@@ -17,6 +17,7 @@ theme:
 nav:
   - Home: index.md
   - Quickstart: quick_start.md
+  - Advanced Quickstart: advanced_quick_start.md
   - Introduction: introduction.md
   # - Metadata Examples:
   #   - Point: metadata_examples/point.md
