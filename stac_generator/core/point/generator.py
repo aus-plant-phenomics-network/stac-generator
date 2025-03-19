@@ -8,7 +8,7 @@ from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
 from stac_generator.core.base.schema import ColumnInfo
 from stac_generator.core.base.utils import _read_csv
-from stac_generator.core.point.schema import CsvConfig
+from stac_generator.core.point.schema import PointConfig
 
 logger = logging.getLogger(__name__)
 
@@ -60,80 +60,75 @@ def read_csv(
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
 
 
-class PointGenerator(VectorGenerator[CsvConfig]):
+class PointGenerator(VectorGenerator[PointConfig]):
     """ItemGenerator class that handles point data in csv format"""
 
     @staticmethod
-    def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
-        if "X" not in source_cfg or "Y" not in source_cfg or "epsg" not in source_cfg:
+    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
+        if "X" not in source_config or "Y" not in source_config or "epsg" not in source_config:
             raise ValueError(
-                f"Expects X and Y column to be described in source config for item: {source_cfg['id']}"
+                f"Expects X and Y column to be described in source config for item: {source_config['id']}"
             )
         raw_df = read_csv(
-            source_cfg["id"],
-            source_cfg["X"],
-            source_cfg["Y"],
-            source_cfg["epsg"],
-            source_cfg.get("Z"),
-            source_cfg.get("T"),
-            source_cfg.get("date_format", "ISO8601"),
+            source_config["id"],
+            source_config["X"],
+            source_config["Y"],
+            source_config["epsg"],
+            source_config.get("Z"),
+            source_config.get("T"),
+            source_config.get("date_format", "ISO8601"),
         )
         columns = set(raw_df.columns) - {
-            source_cfg["id"],
-            source_cfg["X"],
-            source_cfg["Y"],
-            source_cfg.get("Z"),
-            source_cfg.get("T"),
+            source_config["id"],
+            source_config["X"],
+            source_config["Y"],
+            source_config.get("Z"),
+            source_config.get("T"),
         }
         column_info = []
         for col in columns:
             column_info.append(ColumnInfo(name=col, description=f"{col}_description"))
-        return CsvConfig(**source_cfg, column_info=column_info).model_dump(
-            mode="json", exclude_none=True
-        )
+        return PointConfig(**source_config, column_info=column_info).to_properties()
 
-    def create_item_from_config(self, source_cfg: CsvConfig) -> pystac.Item:
+    def create_item_from_config(self, source_config: PointConfig) -> pystac.Item:
         """Create item from source csv config
 
-        :param source_cfg: config which contains csv metadata
-        :type source_cfg: CsvConfig
-        :return: stac metadata of the item described in source_cfg
+        :param source_config: config which contains csv metadata
+        :type source_config: PointConfig
+        :return: stac metadata of the item described in source_config
         :rtype: pystac.Item
         """
         assets = {
             "data": pystac.Asset(
-                href=source_cfg.location,
+                href=source_config.location,
                 description="Raw csv data",
                 roles=["data"],
                 media_type=CsvMediaType,
             )
         }
         raw_df = read_csv(
-            source_cfg.location,
-            source_cfg.X,
-            source_cfg.Y,
-            source_cfg.epsg,
-            source_cfg.Z,
-            source_cfg.T,
-            source_cfg.date_format,
-            source_cfg.column_info,
+            source_config.location,
+            source_config.X,
+            source_config.Y,
+            source_config.epsg,
+            source_config.Z,
+            source_config.T,
+            source_config.date_format,
+            source_config.column_info,
         )
-        if source_cfg.T is not None:
-            start_datetime = raw_df[source_cfg.T].min()
-            end_datetime = raw_df[source_cfg.T].max()
+        if source_config.T is not None:
+            start_datetime = raw_df[source_config.T].min()
+            end_datetime = raw_df[source_config.T].max()
         else:
             start_datetime, end_datetime = None, None
 
-        properties = source_cfg.model_dump(
-            exclude_unset=True,
-            exclude_none=True,
-        )
+        properties = source_config.to_properties()
         return self.df_to_item(
             raw_df,
             assets,
-            source_cfg,
+            source_config,
             properties,
-            source_cfg.epsg,
+            source_config.epsg,
             start_datetime,
             end_datetime,
         )

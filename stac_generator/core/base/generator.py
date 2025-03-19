@@ -4,6 +4,7 @@ import abc
 import datetime as pydatetime
 import json
 import logging
+import pathlib
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
@@ -51,17 +52,17 @@ class CollectionGenerator:
 
     def __init__(
         self,
-        collection_cfg: StacCollectionConfig,
-        generators: Sequence[ItemGenerator],
+        collection_config: StacCollectionConfig,
+        generators: Sequence[ItemGenerator[T]],
     ) -> None:
         """CollectionGenerator - generate collection from generators attribute
 
-        :param collection_cfg: collection metadata
-        :type collection_cfg: StacCollectionConfig
+        :param collection_config: collection metadata
+        :type collection_config: StacCollectionConfig
         :param generators: sequence of ItemGenerator subclasses.
         :type generators: Sequence[ItemGenerator]
         """
-        self.collection_cfg = collection_cfg
+        self.collection_config = collection_config
         self.generators = generators
 
     @staticmethod
@@ -108,25 +109,25 @@ class CollectionGenerator:
     def _create_collection_from_items(
         self,
         items: list[pystac.Item],
-        collection_cfg: StacCollectionConfig | None = None,
+        collection_config: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
         logger.debug("generating collection from items")
-        if collection_cfg is None:
+        if collection_config is None:
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
-            id=collection_cfg.id,
+            id=collection_config.id,
             description=(
-                collection_cfg.description
-                if collection_cfg.description
-                else f"Auto-generated collection {collection_cfg.id} with stac_generator"
+                collection_config.description
+                if collection_config.description
+                else f"Auto-generated collection {collection_config.id} with stac_generator"
             ),
             extent=Extent(self.spatial_extent(items), self.temporal_extent(items)),
-            title=collection_cfg.title,
-            license=collection_cfg.license if collection_cfg.license else "proprietary",
+            title=collection_config.title,
+            license=collection_config.license if collection_config.license else "proprietary",
             providers=[
-                pystac.Provider.from_dict(item.model_dump()) for item in collection_cfg.providers
+                pystac.Provider.from_dict(item.model_dump()) for item in collection_config.providers
             ]
-            if collection_cfg.providers
+            if collection_config.providers
             else None,
         )
         collection.add_items(items)
@@ -145,7 +146,7 @@ class CollectionGenerator:
         items = []
         for generator in self.generators:
             items.extend(generator.create_items())
-        return self._create_collection_from_items(items, self.collection_cfg)
+        return self._create_collection_from_items(items, self.collection_config)
 
 
 class ItemGenerator(abc.ABC, Generic[T]):
@@ -161,7 +162,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
     def __init__(
         self,
-        configs: list[dict[str, Any]],
+        configs: list[dict[str, Any]] | list[T],
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
@@ -169,14 +170,23 @@ class ItemGenerator(abc.ABC, Generic[T]):
         :type configs: list[dict[str, Any]]
         """
         logger.debug("validating config")
-        self.configs = [self.source_type(**config) for config in configs]
+        self.configs: list[T] = []
+        for config in configs:
+            if isinstance(config, self.source_type):
+                self.configs.append(config)
+            elif isinstance(config, dict):
+                self.configs.append(self.source_type(**config))
+            else:
+                raise ValueError(
+                    f"Invalid type passed to ItemGenerator: {type(config)}. Expects either {self.source_type.__name__} or a dict."
+                )
 
     @staticmethod
-    def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
+    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def create_item_from_config(self, source_cfg: T) -> pystac.Item:
+    def create_item_from_config(self, source_config: T) -> pystac.Item:
         """Abstract method that handles `pystac.Item` generation from the appropriate config"""
         raise NotImplementedError
 
@@ -254,7 +264,7 @@ class VectorGenerator(ItemGenerator[T]):
     def df_to_item(
         df: gpd.GeoDataFrame,
         assets: dict[str, pystac.Asset],
-        source_cfg: SourceConfig,
+        source_config: SourceConfig,
         properties: dict[str, Any],
         epsg: int = 4326,
         start_datetime: pd.Timestamp | None = None,
@@ -266,8 +276,8 @@ class VectorGenerator(ItemGenerator[T]):
         :type df: gpd.GeoDataFrame
         :param assets: source data asset_
         :type assets: dict[str, pystac.Asset]
-        :param source_cfg: config
-        :type source_cfg: SourceConfig
+        :param source_config: config
+        :type source_config: SourceConfig
         :param properties: pystac Item properties
         :type properties: dict[str, Any]
         :param time_col: time_col if there are time information in the input df, defaults to None
@@ -281,7 +291,7 @@ class VectorGenerator(ItemGenerator[T]):
         # Convert to WGS 84 for computing geometry and bbox
         df.to_crs(epsg=4326, inplace=True)
         item_tz = calculate_timezone(box(*df.total_bounds))
-        item_ts = source_cfg.get_datetime(item_tz)
+        item_ts = source_config.get_datetime(item_tz)
 
         geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
 
@@ -300,7 +310,7 @@ class VectorGenerator(ItemGenerator[T]):
             end_datetime = end_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
 
         item = pystac.Item(
-            source_cfg.id,
+            source_config.id,
             bbox=df.total_bounds.tolist(),
             geometry=geometry,
             datetime=item_ts,
@@ -339,6 +349,37 @@ class StacSerialiser:
         if href_is_stac_api_endpoint(self.href):
             return self.to_json()
         return self.to_api()
+
+    @staticmethod
+    def prepare_collection_configs(
+        collection_generator: CollectionGenerator,
+    ) -> list[dict[str, Any]]:
+        items = collection_generator.generators
+        result = []
+        for item in items:
+            result.extend(StacSerialiser.prepare_configs(item.configs))
+        return result
+
+    @staticmethod
+    def prepare_configs(configs: Sequence[T]) -> list[dict[str, Any]]:
+        result = []
+        for config in configs:
+            config_dict = config.model_dump(
+                mode="json", exclude_none=True, exclude_defaults=True, exclude_unset=True
+            )
+            result.append(config_dict)
+        return result
+
+    def save_collection_config(self, dst: str | pathlib.Path) -> None:
+        config = self.prepare_collection_configs(self.generator)
+        with pathlib.Path(dst).open("w") as file:
+            json.dump(config, file)
+
+    @staticmethod
+    def save_configs(configs: Sequence[T], dst: str | pathlib.Path) -> None:
+        config = StacSerialiser.prepare_configs(configs)
+        with pathlib.Path(dst).open("w") as file:
+            json.dump(config, file)
 
     def to_json(self) -> None:
         """Generate STAC Collection and save to disk as json files"""

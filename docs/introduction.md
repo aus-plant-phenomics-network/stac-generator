@@ -280,7 +280,7 @@ For a more detailed list of all fields, their data types, and default values, pl
 
 Point metadata contains all fields in item metadata (inherits from `SourceConfig`) and contains additional fields specifying how to process the given csv/txt file. This includes the `X` and `Y` fields specifying the columns to be treated as the X and Y coordinates, the `epsg` code specifying the CRS of the XY coordinates, and if the csv contains columns to be treated as depth/elevation or time, the optional `Z`, `T` and `time_format` fields.
 
-Users should also specify useful columns under `column_info` (please see `ColumnInfo` and `HasColumnInfo` under [this](schema.md) link). For a more detailed list of all fields, their data types, and default values, please refer to `CSVConfig` under [this](extensions/point/schema.md) link.
+Users should also specify useful columns under `column_info` (please see `ColumnInfo` and `HasColumnInfo` under [this](schema.md) link). For a more detailed list of all fields, their data types, and default values, please refer to `PointConfig` under [this](extensions/point/schema.md) link.
 
 ### Vector metadata
 

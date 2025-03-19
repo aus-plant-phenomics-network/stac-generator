@@ -35,26 +35,24 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
 
     @staticmethod
-    def create_config(source_cfg: dict[str, Any]) -> dict[str, Any]:
-        with rasterio.open(source_cfg["location"]) as src:
+    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
+        with rasterio.open(source_config["location"]) as src:
             band_count = src.count
             bands = []
             for i in range(band_count):
                 bands.append(BandInfo(name=f"Band{i}", common_name=f"Band{i}"))
-        return RasterConfig(**source_cfg, band_info=bands).model_dump(
-            mode="json", exclude_none=True
-        )
+        return RasterConfig(**source_config, band_info=bands).to_properties()
 
-    def create_item_from_config(self, source_cfg: RasterConfig) -> pystac.Item:
+    def create_item_from_config(self, source_config: RasterConfig) -> pystac.Item:
         """Generate Raster Item from config
 
-        :param source_cfg: raster config - must contain band info
-        :type source_cfg: RasterConfig
+        :param source_config: raster config - must contain band info
+        :type source_config: RasterConfig
         :raises ValueError: if epsg code is provided in config but does not match that extracted from the asset
         :return: generated item
         :rtype: pystac.Item
         """
-        with rasterio.open(source_cfg.location) as src:
+        with rasterio.open(source_config.location) as src:
             bounds = src.bounds
             transform = src.transform
             crs = cast(CRS, src.crs)
@@ -72,19 +70,19 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
             # Process datetime
             item_tz = calculate_timezone(geometry)
-            item_ts = source_cfg.get_datetime(item_tz)
+            item_ts = source_config.get_datetime(item_tz)
 
             # Validate EPSG
             epsg = crs.to_epsg()
-            if source_cfg.epsg is not None and source_cfg.epsg != epsg:
+            if source_config.epsg is not None and source_config.epsg != epsg:
                 raise ValueError(
-                    f"EPSG mismatch: source_cfg.epsg ({source_cfg.epsg}) does not match EPSG ({epsg})."
+                    f"EPSG mismatch: source_config.epsg ({source_config.epsg}) does not match EPSG ({epsg})."
                 )
 
             # Create STAC Item
             # Start datetime and end_datetime are set to be collection datetime for Raster data
             item = pystac.Item(
-                id=source_cfg.id,
+                id=source_config.id,
                 geometry=geometry_geojson,
                 bbox=list(bbox),
                 datetime=item_ts,
@@ -108,23 +106,24 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             # Create EO and Raster bands
             eo_bands = []
             raster_bands = []
-            for band_info in source_cfg.band_info:
+            for band_info in source_config.band_info:
                 eo_band = Band.create(
-                    name=band_info.name.lower(),
-                    common_name=BAND_MAPPING.get(band_info.common_name.lower(), None),
-                    center_wavelength=float(band_info.wavelength)
-                    if band_info.wavelength is not None
-                    else None,
-                    description=band_info.description
-                    if band_info.description is not None
-                    else "Common name: "
-                    + BAND_MAPPING.get(band_info.common_name.lower(), "unknown"),
+                    name=band_info["name"].lower(),
+                    common_name=BAND_MAPPING.get(band_info.get("common_name", "").lower(), None),
+                    center_wavelength=band_info.get("wavelength", None),
+                    description=band_info.get(
+                        "description",
+                        "Common name: "
+                        + BAND_MAPPING.get(
+                            band_info.get("common_name", "unknown").lower(), "unknown"
+                        ),
+                    ),
                 )
                 eo_bands.append(eo_band)
 
                 raster_band = RasterBand.create(
-                    nodata=band_info.nodata or 0,
-                    data_type=DataType(band_info.data_type or "uint16"),
+                    nodata=band_info.get("nodata", 0),
+                    data_type=DataType(band_info.get("data_type", "uint16")),
                 )
                 raster_bands.append(raster_band)
 
@@ -133,7 +132,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
             # Create Asset and Add to Item
             asset = pystac.Asset(
-                href=source_cfg.location,
+                href=source_config.location,
                 media_type=pystac.MediaType.GEOTIFF,
                 roles=["data"],
                 title="Raster Data",

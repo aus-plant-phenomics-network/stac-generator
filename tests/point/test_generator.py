@@ -7,7 +7,7 @@ from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
-from stac_generator.core.point.schema import CsvConfig
+from stac_generator.core.point.schema import PointConfig
 
 CONFIG_JSON = Path("tests/files/integration_tests/point/config/point_config.json")
 
@@ -44,7 +44,7 @@ def test_generator_given_item_expects_matched_generated_item(
     expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
     with expected_path.open() as file:
         expected = json.load(file)
-    actual = json_csv_generator.create_item_from_config(CsvConfig(**config)).to_dict()
+    actual = json_csv_generator.create_item_from_config(PointConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["properties"] == actual["properties"]
@@ -60,7 +60,7 @@ def test_generator_given_item_expects_matched_generated_item_csv_config_version(
     expected_path = GENERATED_DIR / f"{config['id']}/{config['id']}.json"
     with expected_path.open() as file:
         expected = json.load(file)
-    actual = csv_generator.create_item_from_config(CsvConfig(**config)).to_dict()
+    actual = csv_generator.create_item_from_config(PointConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["properties"] == actual["properties"]

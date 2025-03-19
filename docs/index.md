@@ -13,12 +13,26 @@ Requirements: python3.11-3.12
 
 STAC Generator can be installed directly from Pypi:
 
-```
+``` { .sh }
 pip install pystac-generator
 ```
 
 Note that if you want STAC Generator to be accessible from everywhere (outside the environment where it is installed), you can install STAC Generator with pipx instead of pip. To install pipx, visit [this](https://pipx.pypa.io/stable/installation/).
 
-```
+``` { .sh }
 pipx install pystac-generator
+```
+
+## Upgrade
+
+Using pip:
+
+``` { .sh}
+pip install pystac-generator --upgrade
+```
+
+Using pipx:
+
+``` { .sh}
+pipx upgrade pystac-generator
 ```

@@ -51,7 +51,7 @@ INVALID_CONFIG_FILES = [
     # Invalid file extensions
     "tests/files/unit_tests/configs/invalid_extension_config.ini",
     "tests/files/unit_tests/configs/invalid_extension_config.toml",
-    "tests/files/unit_tests/configs/invalid_extension_config.cfg",
+    "tests/files/unit_tests/configs/invalid_extension_config.config",
     "tests/files/unit_tests/configs/invalid_extension_config.txt",
 ]
 
@@ -61,7 +61,7 @@ INVALID_CONFIG_FILES_IDS = [
     "empty_yml",
     "invalid_extension_ini",
     "invalid_extension_toml",
-    "invalid_extension_cfg",
+    "invalid_extension_config",
     "invalid_extension_txt",
 ]
 
