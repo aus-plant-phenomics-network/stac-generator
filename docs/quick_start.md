@@ -17,7 +17,7 @@ Before using the stac generator, we will write a config file to be passed to the
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="vector_simple_config.json"
 [
     {
         "id": "Werribee",
@@ -32,7 +32,7 @@ Before using the stac generator, we will write a config file to be passed to the
 <details>
 <summary>CSV</summary>
 
-```csv
+``` { .csv }
 id,location,collection_date,collection_time
 Werribee,Werribee.geojson,2025-01-01,00:00:00
 ```
@@ -61,7 +61,7 @@ So far, we have learned to write a bare-minimum config to describe a vector asse
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="vector_detailed_config.json"
 [
     {
         "id": "Werribee",
@@ -89,7 +89,7 @@ Upon checking the generated STAC Item `Werribee.json`, we now see `column_info`,
 A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. The stac generator can describe the join operation with a few extra keywords in the config. Before running the stac generator, download the join [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/distance.csv) and put it in the current directory `Example`. Our config now looks like this:
 
 
-```json
+```json title="vector_join_config.json"
 [
     {
         "id": "Werribee",
@@ -141,7 +141,7 @@ stac_generator serialise vector_join_config.json --id Werribee_Collection --dst 
 You should see the corresponding fields appearing under `properties` in `Werribee.json`.
 
 
-### Describing multi-layerd shape file
+### Describing multi-layered shape file
 
 It is not uncommon to have a compressed zip containing multiple shape files. Such a zip file can be handled directly. To get started, download this [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/SA2.zip) which contains some SA2 areas in Victoria:
 
@@ -152,7 +152,7 @@ Here we have two layers - Sunbury and Werribee. Each layer will be generated as 
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="vector_layer_config.json"
 [
     {
         "id": "WerribeeSA2",
@@ -187,7 +187,7 @@ To describe another independent vector file, you can add another record in the c
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="vector_combined_config.json"
 [
     {
         "id": "WerribeeSA2",
@@ -266,7 +266,7 @@ We will prepare the following `raster_simple_config.json`:
 
 <summary>JSON</summary>
 
-```json
+```json title="raster_simple_config.json"
 [
   {
     "id": "L2A_PVI",
@@ -317,7 +317,7 @@ We will prepare the following `raster_custom_config.json`:
 
 <summary>JSON</summary>
 
-```json
+```json title="raster_custom_config.json"
 [
   {
     "id": "vegetation_cover",
@@ -369,7 +369,7 @@ We prepare the `point_time_series_config.json` as follows:
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="point_time_series_config.json"
 [
   {
     "id": "BOM_Data",
@@ -422,7 +422,7 @@ The config - `point_simple_config.json` is described below:
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="point_simple_config.json"
 [
   {
     "id": "soil_data",
@@ -472,7 +472,7 @@ Let's say you want to describe items in `raster_simple_config.json`, `point_simp
 <details>
 <summary>JSON</summary>
 
-```json
+```json title="combined_config.json"
 [
     {
         "id": "Werribee",
@@ -543,16 +543,6 @@ We can pass multiple config files to the CLI. For instance, to describe all simp
 ```bash
 stac_generator serialise point_simple_config.json raster_simple_config.json vector_simple_config.json --id combined --dst generated
 ```
-
-### Advanced - Using `stac_generator` as a python module
-
-So far, we have seen how `stac_generator` can be used as a command line tool to generate STAC metadata. In this section, we will see how to use `stac_generator` as a module. This means we can now write python scripts that import the `stac_generator` module and perform the previous tasks:
-
-<details>
-
-<summary>PYTHON</summary>
-
-</details>
 
 ## Help
 

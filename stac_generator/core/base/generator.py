@@ -4,6 +4,7 @@ import abc
 import datetime as pydatetime
 import json
 import logging
+import pathlib
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
@@ -52,7 +53,7 @@ class CollectionGenerator:
     def __init__(
         self,
         collection_config: StacCollectionConfig,
-        generators: Sequence[ItemGenerator],
+        generators: Sequence[ItemGenerator[T]],
     ) -> None:
         """CollectionGenerator - generate collection from generators attribute
 
@@ -348,6 +349,37 @@ class StacSerialiser:
         if href_is_stac_api_endpoint(self.href):
             return self.to_json()
         return self.to_api()
+
+    @staticmethod
+    def prepare_collection_configs(
+        collection_generator: CollectionGenerator,
+    ) -> list[dict[str, Any]]:
+        items = collection_generator.generators
+        result = []
+        for item in items:
+            result.extend(StacSerialiser.prepare_configs(item.configs))
+        return result
+
+    @staticmethod
+    def prepare_configs(configs: Sequence[T]) -> list[dict[str, Any]]:
+        result = []
+        for config in configs:
+            config_dict = config.model_dump(
+                mode="json", exclude_none=True, exclude_defaults=True, exclude_unset=True
+            )
+            result.append(config_dict)
+        return result
+
+    def save_collection_config(self, dst: str | pathlib.Path) -> None:
+        config = self.prepare_collection_configs(self.generator)
+        with pathlib.Path(dst).open("w") as file:
+            json.dump(config, file)
+
+    @staticmethod
+    def save_configs(configs: Sequence[T], dst: str | pathlib.Path) -> None:
+        config = StacSerialiser.prepare_configs(configs)
+        with pathlib.Path(dst).open("w") as file:
+            json.dump(config, file)
 
     def to_json(self) -> None:
         """Generate STAC Collection and save to disk as json files"""
