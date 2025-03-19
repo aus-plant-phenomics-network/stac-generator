@@ -161,7 +161,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
     def __init__(
         self,
-        configs: list[dict[str, Any]],
+        configs: list[dict[str, Any] | T],
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
@@ -169,7 +169,16 @@ class ItemGenerator(abc.ABC, Generic[T]):
         :type configs: list[dict[str, Any]]
         """
         logger.debug("validating config")
-        self.configs = [self.source_type(**config) for config in configs]
+        self.configs: list[T] = []
+        for config in configs:
+            if isinstance(config, self.source_type):
+                self.configs.append(config)
+            elif isinstance(config, dict):
+                self.configs.append(self.source_type(**config))
+            else:
+                raise ValueError(
+                    f"Invalid type passed to ItemGenerator: {type(config)}. Expects either {self.source_type.__name__} or a dict."
+                )
 
     @staticmethod
     def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
