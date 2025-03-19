@@ -41,9 +41,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             bands = []
             for i in range(band_count):
                 bands.append(BandInfo(name=f"Band{i}", common_name=f"Band{i}"))
-        return RasterConfig(**source_config, band_info=bands).model_dump(
-            mode="json", exclude_none=True
-        )
+        return RasterConfig(**source_config, band_info=bands).to_properties()
 
     def create_item_from_config(self, source_config: RasterConfig) -> pystac.Item:
         """Generate Raster Item from config

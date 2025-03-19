@@ -60,9 +60,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         for name in raw_df.columns:
             if name != "geometry":
                 columns.append(ColumnInfo(name=name, description=f"{name}_description"))
-        return VectorConfig(**source_config, column_info=columns).model_dump(
-            mode="json", exclude_none=True
-        )
+        return VectorConfig(**source_config, column_info=columns).to_properties()
 
     def create_item_from_config(self, source_config: VectorConfig) -> pystac.Item:
         """Create item from vector config
@@ -133,10 +131,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 end_datetime = join_df[source_config.join_T_column].max()
 
         # Make properties
-        properties = source_config.model_dump(
-            exclude_unset=True,
-            exclude_none=True,
-        )
+        properties = source_config.to_properties()
 
         return self.df_to_item(
             raw_df,

@@ -88,9 +88,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
         column_info = []
         for col in columns:
             column_info.append(ColumnInfo(name=col, description=f"{col}_description"))
-        return PointConfig(**source_config, column_info=column_info).model_dump(
-            mode="json", exclude_none=True
-        )
+        return PointConfig(**source_config, column_info=column_info).to_properties()
 
     def create_item_from_config(self, source_config: PointConfig) -> pystac.Item:
         """Create item from source csv config
@@ -124,10 +122,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
         else:
             start_datetime, end_datetime = None, None
 
-        properties = source_config.model_dump(
-            exclude_unset=True,
-            exclude_none=True,
-        )
+        properties = source_config.to_properties()
         return self.df_to_item(
             raw_df,
             assets,

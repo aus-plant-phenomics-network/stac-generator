@@ -6,7 +6,8 @@ import pytz
 from httpx._types import (
     RequestData,
 )
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel as _BaseModel
+from pydantic import field_validator
 from stac_pydantic.shared import Provider, UtcDatetime
 from typing_extensions import TypedDict
 
@@ -21,6 +22,19 @@ from stac_generator._types import (
 T = TypeVar("T", bound="SourceConfig")
 
 
+class BaseModel(_BaseModel):
+    __excluded_fields__: set[str] = {"id", "collection_date", "collection_time", "location"}
+
+    def to_properties(self) -> dict[str, Any]:
+        return self.model_dump(
+            mode="json",
+            exclude=self.__excluded_fields__,
+            exclude_unset=True,
+            exclude_none=True,
+            exclude_defaults=False,
+        )
+
+
 class StacCollectionConfig(BaseModel):
     """Contains parameters to pass to Collection constructor. Also contains other metadata except for datetime related metadata.
 
@@ -32,7 +46,7 @@ class StacCollectionConfig(BaseModel):
     """
 
     # Stac Information
-    id: str = Field(exclude=True)
+    id: str
     """Item id"""
     title: str | None = "Auto-generated Stac Item"
     """A human readable title describing the item entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics"""
@@ -64,9 +78,9 @@ class StacItemConfig(StacCollectionConfig):
     and other descriptive information such as the id of the new entity
     """
 
-    collection_date: datetime.date = Field(exclude=True)
+    collection_date: datetime.date
     """Date in local timezone of when the data is collected"""
-    collection_time: datetime.time = Field(exclude=True)
+    collection_time: datetime.time
     """Time in local timezone of when the data is collected"""
 
     def get_datetime(self, timezone: str) -> UtcDatetime:
@@ -89,7 +103,7 @@ class SourceConfig(StacItemConfig):
     - Additional Stac Metadata from `StacConfig`
     """
 
-    location: str = Field(exclude=True)
+    location: str
     """Asset's href"""
     extension: str | None = None
     """Explicit file extension specification. If the file is stored behind an api endpoint, the field `extension` must be provided"""
