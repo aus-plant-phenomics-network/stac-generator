@@ -1257,7 +1257,10 @@
 <p>Upon checking the generated STAC Item <code>Werribee.json</code>, we now see <code>column_info</code>, <code>title</code>, and <code>description</code> fields appearing under <code>properties</code>.</p>
 <h3 id="describing-joined-attributes">Describing joined attributes</h3>
 <p>A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. The stac generator can describe the join operation with a few extra keywords in the config. Before running the stac generator, download the join <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/distance.csv">file</a> and put it in the current directory <code>Example</code>. Our config now looks like this:</p>
-<p><div class="language-json highlight"><span class="filename">vector_join_config.json</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">[</span>
+<details>
+<summary>JSON</summary>
+
+<div class="language-json highlight"><span class="filename">vector_join_config.json</span><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">[</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="p">{</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee&quot;</span><span class="p">,</span>
 </span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">        </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Werribee.geojson&quot;</span><span class="p">,</span>
@@ -1297,7 +1300,8 @@
 </span><span id="__span-5-38"><a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-5-39"><a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="p">]</span>
 </span></code></pre></div>
-</details></p>
+</details>
+
 <p>We specified <code>join_file</code> to be the path to the attribute csv file. <code>join_field</code> to be a column in <code>join_file</code> and <code>join_attribute_vector</code> to be an attribute in the vector file. The two files will be joined at each record where <code>join_file</code> = <code>join_attribute_vector</code>. <code>join_column_info</code> describes the columns in the <code>join_file</code>. Save the new config as <code>vector_join_config.json</code> and run the stac generator command:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>stac_generator<span class="w"> </span>serialise<span class="w"> </span>vector_join_config.json<span class="w"> </span>--id<span class="w"> </span>Werribee_Collection<span class="w"> </span>--dst<span class="w"> </span>generated
 </span></code></pre></div>
