@@ -1,5 +1,7 @@
 site_name: STAC Generator
 theme:
+    icon:
+      repo: fontawesome/brands/github
     name: 'material'
     palette:
       - scheme: 'default'
@@ -16,6 +18,15 @@ theme:
     features:
       - content.code.copy
       - content.code.select
+      - search.suggest
+      - search.highlight
+      - search.share
+
+repo_url: https://github.com/aus-plant-phenomics-network/stac-generator
+
+extra:
+  version:
+    provider: mike
 
 nav:
   - Home: index.md
