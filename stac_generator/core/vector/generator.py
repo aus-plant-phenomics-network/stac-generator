@@ -7,7 +7,7 @@ import pystac
 from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
-from stac_generator.core.base.schema import ColumnInfo
+from stac_generator.core.base.schema import ASSET_KEY, ColumnInfo
 from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.vector.schema import VectorConfig
 
@@ -72,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         :rtype: pystac.Item
         """
         assets = {
-            "data": pystac.Asset(
+            ASSET_KEY: pystac.Asset(
                 href=str(source_config.location),
                 media_type=pystac.MediaType.GEOJSON
                 if source_config.location.endswith(".geojson")

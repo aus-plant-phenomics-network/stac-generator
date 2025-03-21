@@ -6,7 +6,7 @@ import pystac
 
 from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
-from stac_generator.core.base.schema import ColumnInfo
+from stac_generator.core.base.schema import ASSET_KEY, ColumnInfo
 from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.point.schema import PointConfig
 
@@ -99,7 +99,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
         :rtype: pystac.Item
         """
         assets = {
-            "data": pystac.Asset(
+            ASSET_KEY: pystac.Asset(
                 href=source_config.location,
                 description="Raw csv data",
                 roles=["data"],

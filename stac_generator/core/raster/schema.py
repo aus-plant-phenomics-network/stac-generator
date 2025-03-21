@@ -1,10 +1,11 @@
 import json
-from typing import NotRequired
+from typing import Any, NotRequired
 
+import pystac
 from pydantic import field_validator
 from typing_extensions import TypedDict
 
-from stac_generator.core.base.schema import SourceConfig
+from stac_generator.core.base.schema import BaseModel, ParsedConfig, SourceConfig
 
 
 class BandInfo(TypedDict):
@@ -18,7 +19,7 @@ class BandInfo(TypedDict):
     description: NotRequired[str]
 
 
-class RasterConfig(SourceConfig):
+class _RasterConfig(BaseModel):
     """Configuration for raster data sources"""
 
     band_info: list[BandInfo]
@@ -37,3 +38,20 @@ class RasterConfig(SourceConfig):
                 raise ValueError("bands parameter expects a json serialisation of a lis of Band")
             return parsed
         raise ValueError(f"Invalid bands dtype: {type(v)}")
+
+
+class RasterConfig(SourceConfig, _RasterConfig): ...
+
+
+class ParsedRasterConfig(ParsedConfig, _RasterConfig):
+    @classmethod
+    def extract_item(cls, item: pystac.Item) -> dict[str, Any]:
+        result = super().extract_item(item)
+        if "band_info" not in item.properties["band_info"]:
+            raise ValueError(f"Missing band_info property for item: {item.id}")
+        result.update({"band_info": item.properties["band_info"]})
+        return result
+
+    @classmethod
+    def from_item(cls, item: pystac.Item) -> "ParsedRasterConfig":
+        return cls.model_validate(cls.extract_item(item))

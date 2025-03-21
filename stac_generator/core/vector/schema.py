@@ -1,12 +1,13 @@
 import json
-from typing import Self
+from typing import Any, Self
 
+import pystac
 from pydantic import field_validator, model_validator
 
-from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
+from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, ParsedConfig, SourceConfig
 
 
-class VectorConfig(SourceConfig, HasColumnInfo):
+class _VectorConfig(HasColumnInfo):
     """Extended source config with EPSG code."""
 
     epsg: int | None = None
@@ -62,3 +63,28 @@ class VectorConfig(SourceConfig, HasColumnInfo):
             if not self.join_column_info:
                 raise ValueError("join_column_info is expected when join_file is provided")
         return self
+
+
+class VectorConfig(SourceConfig, _VectorConfig): ...
+
+
+class ParsedVectorConfig(ParsedConfig, _VectorConfig):
+    @classmethod
+    def extract_item(cls, item: pystac.Item) -> dict[str, Any]:
+        result = super().extract_item(item)
+        result.update(
+            {
+                "layer": item.properties.get("layer", None),
+                "join_file": item.properties.get("join_file", None),
+                "join_attribute_vector": item.properties.get("join_attribute_vector", None),
+                "join_field": item.properties.get("join_field", None),
+                "date_format": item.properties.get("date_format", None),
+                "join_T_column": item.properties.get("join_T_column", None),
+                "join_column_info": item.properties.get("join_column_info", None),
+            }
+        )
+        return result
+
+    @classmethod
+    def from_item(cls, item: pystac.Item) -> "ParsedVectorConfig":
+        return cls.model_validate(cls.extract_item(item))

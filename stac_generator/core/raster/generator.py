@@ -13,6 +13,7 @@ from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
+from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import calculate_timezone
 
 from .schema import BandInfo, RasterConfig
@@ -137,7 +138,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                 roles=["data"],
                 title="Raster Data",
             )
-            item.add_asset("data", asset)
+            item.add_asset(ASSET_KEY, asset)
 
             # Apply Raster Extension to the Asset
             raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
