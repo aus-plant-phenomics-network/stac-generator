@@ -1,17 +1,14 @@
-import abc
 import datetime
 import json
 import logging
 from typing import Any, Literal, NotRequired, Required, TypeVar
 
-import pystac
 import pytz
 from httpx._types import (
     RequestData,
 )
 from pydantic import BaseModel as _BaseModel
 from pydantic import field_validator
-from pyproj.crs.crs import CRS
 from stac_pydantic.shared import Provider, UtcDatetime
 from typing_extensions import TypedDict
 
@@ -129,12 +126,6 @@ class SourceConfig(StacItemConfig):
     json_body: Any = None
     """HTTP query body content for getting file from `location`"""
 
-    @property
-    def source_extension(self) -> str:
-        if self.extension:
-            return self.extension
-        return self.location.split(".")[-1]
-
 
 DTYPE = Literal[
     "str",
@@ -189,62 +180,3 @@ class HasColumnInfo(BaseModel):
                 "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
             )
         return parsed
-
-
-class StacExtensionError(Exception): ...
-
-
-class ParsedConfig(abc.ABC, BaseModel, arbitrary_types_allowed=True):
-    id: str
-    location: str
-    crs: CRS
-
-    @classmethod
-    def extract_item(cls, item: pystac.Item) -> dict[str, Any]:
-        if ASSET_KEY not in item.assets:
-            raise ValueError(f"Missing asset key {ASSET_KEY} in item: {item.id}")
-        return {
-            "id": item.id,
-            "location": item.assets[ASSET_KEY].href,
-            "crs": ParsedConfig.get_item_crs(item),
-        }
-
-    @classmethod
-    @abc.abstractmethod
-    def from_item(cls, item: pystac.Item) -> "ParsedConfig":
-        raise NotImplementedError
-
-    @classmethod
-    def get_item_crs(cls, item: pystac.Item) -> CRS:
-        """Extract CRS information from item properties.
-
-        This will first look for CRS information encoded as proj extension, in the following order:
-        `proj:code, proj:wkt2, proj:projjson, proj:epsg`
-
-        Args:
-            item (pystac.Item): stac item
-
-        Raises:
-            StacExtensionError: Invalid format for proj:projjson
-            StacExtensionError: no crs description available
-
-        Returns:
-            CRS: crs of the current item
-        """
-        if "proj:code" in item.properties:
-            return CRS(item.properties.get("proj:code"))
-        if "proj:wkt2" in item.properties:
-            return CRS(item.properties.get("proj:wkt2"))
-        if "proj:projjson" in item.properties:
-            try:
-                return CRS(json.loads(item.properties.get("proj:projjson")))  # type: ignore[arg-type]
-            except json.JSONDecodeError as e:
-                raise StacExtensionError("Invalid projjson encoding in STAC config") from e
-        if "proj:epsg" in item.properties:
-            logger.warning(
-                "proj:epsg is deprecated in favor of proj:code. Please consider using proj:code, or if possible, the full wkt2 instead"
-            )
-            return CRS(int(item.properties.get("proj:epsg")))  # type: ignore[arg-type]
-        if "epsg" in item.properties:
-            return CRS(int(item.properties.get("epsg")))  # type: ignore[arg-type]
-        raise StacExtensionError("Missing CRS information in item properties")

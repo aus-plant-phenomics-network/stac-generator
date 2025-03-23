@@ -181,10 +181,6 @@ class ItemGenerator(abc.ABC, Generic[T]):
                     f"Invalid type passed to ItemGenerator: {type(config)}. Expects either {self.source_type.__name__} or a dict."
                 )
 
-    @staticmethod
-    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
-        raise NotImplementedError
-
     @abc.abstractmethod
     def create_item_from_config(self, source_config: T) -> pystac.Item:
         """Abstract method that handles `pystac.Item` generation from the appropriate config"""

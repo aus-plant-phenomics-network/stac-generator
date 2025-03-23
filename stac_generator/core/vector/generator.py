@@ -1,13 +1,13 @@
 import logging
 import re
-from typing import Any, cast
+from typing import cast
 
 import geopandas as gpd
 import pystac
 from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
-from stac_generator.core.base.schema import ASSET_KEY, ColumnInfo
+from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.vector.schema import VectorConfig
 
@@ -42,25 +42,6 @@ def extract_epsg(crs: CRS) -> tuple[int, bool]:
 
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):
     """ItemGenerator class that handles vector data with common vector formats - i.e (shp, zipped shp, gpkg, geojson)"""
-
-    @staticmethod
-    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
-        if not hasattr(source_config, "layers"):
-            try:
-                raw_df = gpd.read_file(source_config["location"])
-            except Exception as e:
-                raise ValueError(
-                    "Compressed zip contains multiple vector layers. Please specify a layer in the original config"
-                ) from e
-        else:
-            raw_df = gpd.read_file(
-                source_config["location"], layer=getattr(source_config, "layer", None)
-            )
-        columns = []
-        for name in raw_df.columns:
-            if name != "geometry":
-                columns.append(ColumnInfo(name=name, description=f"{name}_description"))
-        return VectorConfig(**source_config, column_info=columns).to_properties()
 
     def create_item_from_config(self, source_config: VectorConfig) -> pystac.Item:
         """Create item from vector config

@@ -1,10 +1,9 @@
 import json
-from typing import Any, Self
+from typing import Self
 
-import pystac
 from pydantic import field_validator, model_validator
 
-from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, ParsedConfig, SourceConfig
+from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
 
 
 class _VectorConfig(HasColumnInfo):
@@ -66,25 +65,3 @@ class _VectorConfig(HasColumnInfo):
 
 
 class VectorConfig(SourceConfig, _VectorConfig): ...
-
-
-class ParsedVectorConfig(ParsedConfig, _VectorConfig):
-    @classmethod
-    def extract_item(cls, item: pystac.Item) -> dict[str, Any]:
-        result = super().extract_item(item)
-        result.update(
-            {
-                "layer": item.properties.get("layer", None),
-                "join_file": item.properties.get("join_file", None),
-                "join_attribute_vector": item.properties.get("join_attribute_vector", None),
-                "join_field": item.properties.get("join_field", None),
-                "date_format": item.properties.get("date_format", None),
-                "join_T_column": item.properties.get("join_T_column", None),
-                "join_column_info": item.properties.get("join_column_info", None),
-            }
-        )
-        return result
-
-    @classmethod
-    def from_item(cls, item: pystac.Item) -> "ParsedVectorConfig":
-        return cls.model_validate(cls.extract_item(item))

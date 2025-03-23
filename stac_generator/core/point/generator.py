@@ -1,5 +1,4 @@
 import logging
-from typing import Any
 
 import geopandas as gpd
 import pystac
@@ -62,33 +61,6 @@ def read_csv(
 
 class PointGenerator(VectorGenerator[PointConfig]):
     """ItemGenerator class that handles point data in csv format"""
-
-    @staticmethod
-    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
-        if "X" not in source_config or "Y" not in source_config or "epsg" not in source_config:
-            raise ValueError(
-                f"Expects X and Y column to be described in source config for item: {source_config['id']}"
-            )
-        raw_df = read_csv(
-            source_config["id"],
-            source_config["X"],
-            source_config["Y"],
-            source_config["epsg"],
-            source_config.get("Z"),
-            source_config.get("T"),
-            source_config.get("date_format", "ISO8601"),
-        )
-        columns = set(raw_df.columns) - {
-            source_config["id"],
-            source_config["X"],
-            source_config["Y"],
-            source_config.get("Z"),
-            source_config.get("T"),
-        }
-        column_info = []
-        for col in columns:
-            column_info.append(ColumnInfo(name=col, description=f"{col}_description"))
-        return PointConfig(**source_config, column_info=column_info).to_properties()
 
     def create_item_from_config(self, source_config: PointConfig) -> pystac.Item:
         """Create item from source csv config

@@ -1,11 +1,10 @@
 import json
-from typing import Any, NotRequired
+from typing import NotRequired
 
-import pystac
 from pydantic import field_validator
 from typing_extensions import TypedDict
 
-from stac_generator.core.base.schema import BaseModel, ParsedConfig, SourceConfig
+from stac_generator.core.base.schema import BaseModel, SourceConfig
 
 
 class BandInfo(TypedDict):
@@ -41,17 +40,3 @@ class _RasterConfig(BaseModel):
 
 
 class RasterConfig(SourceConfig, _RasterConfig): ...
-
-
-class ParsedRasterConfig(ParsedConfig, _RasterConfig):
-    @classmethod
-    def extract_item(cls, item: pystac.Item) -> dict[str, Any]:
-        result = super().extract_item(item)
-        if "band_info" not in item.properties["band_info"]:
-            raise ValueError(f"Missing band_info property for item: {item.id}")
-        result.update({"band_info": item.properties["band_info"]})
-        return result
-
-    @classmethod
-    def from_item(cls, item: pystac.Item) -> "ParsedRasterConfig":
-        return cls.model_validate(cls.extract_item(item))

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from typing import Any, cast
+from typing import cast
 
 import pystac
 import rasterio
@@ -16,7 +16,7 @@ from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import calculate_timezone
 
-from .schema import BandInfo, RasterConfig
+from .schema import RasterConfig
 
 BAND_MAPPING: dict[str, str] = {
     "red": "red",
@@ -34,15 +34,6 @@ BAND_MAPPING: dict[str, str] = {
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
-
-    @staticmethod
-    def create_config(source_config: dict[str, Any]) -> dict[str, Any]:
-        with rasterio.open(source_config["location"]) as src:
-            band_count = src.count
-            bands = []
-            for i in range(band_count):
-                bands.append(BandInfo(name=f"Band{i}", common_name=f"Band{i}"))
-        return RasterConfig(**source_config, band_info=bands).to_properties()
 
     def create_item_from_config(self, source_config: RasterConfig) -> pystac.Item:
         """Generate Raster Item from config
