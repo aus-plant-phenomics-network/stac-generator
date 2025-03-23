@@ -1,7 +1,7 @@
 from stac_generator.core.base.schema import HasColumnInfo, SourceConfig
 
 
-class _PointConfig(HasColumnInfo):
+class PointConfig(SourceConfig, HasColumnInfo):
     """Source config for point(csv) data"""
 
     X: str
@@ -16,6 +16,3 @@ class _PointConfig(HasColumnInfo):
     """Format to parse dates - will be used if T column is provided"""
     epsg: int = 4326
     """EPSG code"""
-
-
-class PointConfig(SourceConfig, _PointConfig): ...

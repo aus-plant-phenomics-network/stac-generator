@@ -19,17 +19,23 @@
     -35.0591
   ],
   "properties": {
-    "column_info": [
-      {
-        "name": "daily_rain",
-        "description": "Observed daily rain fall in mm"
-      }
-    ],
-    "X": "longitude",
-    "Y": "latitude",
-    "Z": "elevation",
-    "T": "YYYY-MM-DD",
-    "epsg": 7843,
+    "stac_generator": {
+      "column_info": [
+        {
+          "name": "daily_rain",
+          "description": "Observed daily rain fall in mm"
+        }
+      ],
+      "id": "happy_valley_reservoir",
+      "collection_date": "2023-01-07",
+      "collection_time": "09:00:00",
+      "location": "tests/files/integration_tests/point/data/happy_valley_reservoir.csv",
+      "X": "longitude",
+      "Y": "latitude",
+      "Z": "elevation",
+      "T": "YYYY-MM-DD",
+      "epsg": 7843
+    },
     "start_datetime": "2022-12-31T13:30:00Z",
     "end_datetime": "2023-01-31T13:30:00Z",
     "proj:code": "EPSG:7843",
@@ -71,5 +77,5 @@
       ]
     }
   },
-  "collection": "composite_data"
+  "collection": "collection"
 }

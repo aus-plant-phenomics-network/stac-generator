@@ -64,12 +64,8 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             item_tz = calculate_timezone(geometry)
             item_ts = source_config.get_datetime(item_tz)
 
-            # Validate EPSG
+            # Get EPSG
             epsg = crs.to_epsg()
-            if source_config.epsg is not None and source_config.epsg != epsg:
-                raise ValueError(
-                    f"EPSG mismatch: source_config.epsg ({source_config.epsg}) does not match EPSG ({epsg})."
-                )
 
             # Create STAC Item
             # Start datetime and end_datetime are set to be collection datetime for Raster data
@@ -78,7 +74,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                 geometry=geometry_geojson,
                 bbox=list(bbox),
                 datetime=item_ts,
-                properties={},
+                properties={"stac_generator": source_config.to_properties()},
                 start_datetime=item_ts,
                 end_datetime=item_ts,
             )

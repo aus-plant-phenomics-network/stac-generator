@@ -6,11 +6,8 @@ from pydantic import field_validator, model_validator
 from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
 
 
-class _VectorConfig(HasColumnInfo):
+class VectorConfig(SourceConfig, HasColumnInfo):
     """Extended source config with EPSG code."""
-
-    epsg: int | None = None
-    """EPSG code for checking against EPSG code of the vector data"""
 
     layer: str | None = None
     """Vector layer for multi-layer shapefile"""
@@ -30,17 +27,15 @@ class _VectorConfig(HasColumnInfo):
     join_T_column: str | None = None
     """Time column of text file if any"""
 
-    join_column_info: list[ColumnInfo] | list[str] | None = None
+    join_column_info: list[ColumnInfo] | None = None
     """List of attributes associated with point/vector data"""
 
     @field_validator("join_column_info", mode="before")
     @classmethod
-    def coerce_to_object_text(
-        cls, v: str | list[str] | None
-    ) -> list[str] | list[ColumnInfo] | None:
+    def coerce_to_object_text(cls, v: str | list | None) -> list[ColumnInfo]:
         """Convert json serialised string of column info into matched object"""
         if v is None:
-            return None
+            return []
         if isinstance(v, list):
             return v
         parsed = json.loads(v)
@@ -62,6 +57,3 @@ class _VectorConfig(HasColumnInfo):
             if not self.join_column_info:
                 raise ValueError("join_column_info is expected when join_file is provided")
         return self
-
-
-class VectorConfig(SourceConfig, _VectorConfig): ...

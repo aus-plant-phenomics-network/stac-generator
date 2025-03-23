@@ -33,7 +33,7 @@ def csv_generator() -> PointGenerator:
 
 @pytest.fixture(scope="module")
 def collection_generator(csv_generator: PointGenerator) -> CollectionGenerator:
-    return CollectionGenerator(StacCollectionConfig(id="point_data"), generators=[csv_generator])
+    return CollectionGenerator(StacCollectionConfig(id="collection"), generators=[csv_generator])
 
 
 @pytest.mark.parametrize("item_idx", range(len(JSON_CONFIGS)), ids=ITEM_IDS)

@@ -2,6 +2,8 @@ import collections
 from collections.abc import Sequence
 from typing import Any
 
+import pystac
+
 from stac_generator.core.base import (
     CollectionGenerator,
     ItemGenerator,
@@ -47,6 +49,14 @@ Config_T = BaseConfig_T | Sequence[BaseConfig_T]
 
 
 class StacGeneratorFactory:
+    @staticmethod
+    def extract_item_config(item: pystac.Item) -> SourceConfig:
+        if "stac_generator" not in item.properties:
+            raise ValueError(f"Missing stac_generator properties for item: {item.id}")
+        ext = item.properties["stac_generator"]["location"].split(".")[-1]
+        handler = StacGeneratorFactory.get_config_handler(ext)
+        return handler.model_validate(item.properties["stac_generator"])
+
     @staticmethod
     def match_handler(  # noqa: C901
         configs: Config_T,

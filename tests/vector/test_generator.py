@@ -33,9 +33,7 @@ def vector_generator() -> VectorGenerator:
 
 @pytest.fixture(scope="module")
 def collection_generator(vector_generator: VectorGenerator) -> CollectionGenerator:
-    return CollectionGenerator(
-        StacCollectionConfig(id="vector_data"), generators=[vector_generator]
-    )
+    return CollectionGenerator(StacCollectionConfig(id="collection"), generators=[vector_generator])
 
 
 @pytest.mark.parametrize("item_idx", range(len(JSON_CONFIGS)), ids=ITEM_IDS)

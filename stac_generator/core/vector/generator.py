@@ -65,12 +65,9 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         logger.debug(f"Reading file from {source_config.location}")
 
         # Only read relevant fields
-        if isinstance(source_config.column_info, list):
-            columns = [
-                col["name"] if isinstance(col, dict) else col for col in source_config.column_info
-            ]
-        else:
-            columns = None
+        columns = [
+            col["name"] if isinstance(col, dict) else col for col in source_config.column_info
+        ]
         # Throw exceptions if column_info contains invalid column
         raw_df = gpd.read_file(source_config.location, layer=source_config.layer)
 
@@ -78,14 +75,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             raise ValueError(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
 
         # Validate EPSG user-input vs extracted
-        epsg, reliable = extract_epsg(raw_df.crs)
-        # Only compare if epsg is provided at config
-        if source_config.epsg is not None:
-            if reliable and epsg != source_config.epsg:
-                raise ValueError(
-                    f"Source crs: {raw_df.crs} does not match config epsg: {source_config.epsg}"
-                )
-            epsg = source_config.epsg
+        epsg, _ = extract_epsg(raw_df.crs)
 
         start_datetime, end_datetime = None, None
         # Read join file
@@ -118,8 +108,8 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             raw_df,
             assets,
             source_config,
-            properties,
-            epsg,
-            start_datetime,
-            end_datetime,
+            properties={"stac_generator": properties},
+            epsg=epsg,
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
         )

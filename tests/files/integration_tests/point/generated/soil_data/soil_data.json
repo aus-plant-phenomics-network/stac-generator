@@ -39,16 +39,22 @@
     -24.33600118
   ],
   "properties": {
-    "column_info": [
-      {
-        "name": "Ca_Soln",
-        "description": "Ca concentration"
-      }
-    ],
-    "X": "Longitude",
-    "Y": "Latitude",
-    "Z": "mid_depth",
-    "epsg": 4326,
+    "stac_generator": {
+      "column_info": [
+        {
+          "name": "Ca_Soln",
+          "description": "Ca concentration"
+        }
+      ],
+      "id": "soil_data",
+      "collection_date": "2023-01-01",
+      "collection_time": "09:00:00",
+      "location": "tests/files/integration_tests/point/data/soil_data.csv",
+      "X": "Longitude",
+      "Y": "Latitude",
+      "Z": "mid_depth",
+      "epsg": 4326
+    },
     "start_datetime": "2022-12-31T22:48:00Z",
     "end_datetime": "2022-12-31T22:48:00Z",
     "proj:code": "EPSG:4326",
@@ -58,24 +64,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/soil_data/soil_data.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/soil_data/soil_data.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -90,5 +96,5 @@
       ]
     }
   },
-  "collection": "Point_Data"
+  "collection": "collection"
 }

@@ -1,38 +1,38 @@
 {
   "type": "Collection",
-  "id": "Vector_Data",
+  "id": "collection",
   "stac_version": "1.1.0",
   "description": "Auto-generated",
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json"
     }
   ],

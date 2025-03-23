@@ -19,25 +19,31 @@
     -34.9423
   ],
   "properties": {
-    "column_info": [
-      {
-        "name": "daily_rain",
-        "description": "Observed daily rain fall in mm"
-      },
-      {
-        "name": "max_temp",
-        "description": "Observed daily maximum temperature in degree C"
-      },
-      {
-        "name": "min_temp",
-        "description": "Observed daily minimum temperature in degree C"
-      }
-    ],
-    "X": "longitude",
-    "Y": "latitude",
-    "Z": "elevation",
-    "T": "YYYY-MM-DD",
-    "epsg": 7843,
+    "stac_generator": {
+      "column_info": [
+        {
+          "name": "daily_rain",
+          "description": "Observed daily rain fall in mm"
+        },
+        {
+          "name": "max_temp",
+          "description": "Observed daily maximum temperature in degree C"
+        },
+        {
+          "name": "min_temp",
+          "description": "Observed daily minimum temperature in degree C"
+        }
+      ],
+      "id": "aston_coop",
+      "collection_date": "2023-01-03",
+      "collection_time": "09:00:00",
+      "location": "tests/files/integration_tests/point/data/aston_coop.csv",
+      "X": "longitude",
+      "Y": "latitude",
+      "Z": "elevation",
+      "T": "YYYY-MM-DD",
+      "epsg": 7843
+    },
     "start_datetime": "2022-12-31T13:30:00Z",
     "end_datetime": "2023-01-31T13:30:00Z",
     "proj:code": "EPSG:7843",
@@ -47,24 +53,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/aston_coop/aston_coop.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/aston_coop/aston_coop.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -79,5 +85,5 @@
       ]
     }
   },
-  "collection": "Point_Data"
+  "collection": "collection"
 }

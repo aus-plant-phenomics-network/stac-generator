@@ -128,7 +128,7 @@ def _read_csv(
     optional: list[str] | None = None,
     date_col: str | None = None,
     date_format: str | None = "ISO8601",
-    columns: list[str] | list[ColumnInfo] | None = None,
+    columns: list[ColumnInfo] | None = None,
 ) -> pd.DataFrame:
     logger.debug(f"reading csv from path: {src_path}")
     parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False

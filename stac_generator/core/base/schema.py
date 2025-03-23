@@ -7,8 +7,7 @@ import pytz
 from httpx._types import (
     RequestData,
 )
-from pydantic import BaseModel as _BaseModel
-from pydantic import field_validator
+from pydantic import BaseModel, Field, field_validator
 from stac_pydantic.shared import Provider, UtcDatetime
 from typing_extensions import TypedDict
 
@@ -23,19 +22,6 @@ from stac_generator._types import (
 T = TypeVar("T", bound="SourceConfig")
 ASSET_KEY = "data"
 logger = logging.getLogger(__name__)
-
-
-class BaseModel(_BaseModel):
-    __excluded_fields__: set[str] = {"id", "collection_date", "collection_time", "location"}
-
-    def to_properties(self) -> dict[str, Any]:
-        return self.model_dump(
-            mode="json",
-            exclude=self.__excluded_fields__,
-            exclude_unset=True,
-            exclude_none=True,
-            exclude_defaults=False,
-        )
 
 
 class StacCollectionConfig(BaseModel):
@@ -126,6 +112,9 @@ class SourceConfig(StacItemConfig):
     json_body: Any = None
     """HTTP query body content for getting file from `location`"""
 
+    def to_properties(self) -> dict[str, Any]:
+        return self.model_dump(mode="json", exclude_unset=True, exclude_none=True)
+
 
 DTYPE = Literal[
     "str",
@@ -163,15 +152,15 @@ class ColumnInfo(TypedDict):
 
 
 class HasColumnInfo(BaseModel):
-    column_info: list[ColumnInfo] | list[str] | None = None
+    column_info: list[ColumnInfo] = Field(default_factory=list)
     """List of attributes associated with point/vector data"""
 
     @field_validator("column_info", mode="before")
     @classmethod
-    def coerce_to_object(cls, v: str | list[str] | None) -> list[str] | list[ColumnInfo] | None:
+    def coerce_to_object(cls, v: str | list[ColumnInfo] | None) -> list[ColumnInfo]:
         """Convert json serialised string of column info into matched object"""
         if v is None:
-            return None
+            return []
         if isinstance(v, list):
             return v
         parsed = json.loads(v)

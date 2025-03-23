@@ -20,7 +20,7 @@ def read_csv(
     Z_coord: str | None = None,
     T_coord: str | None = None,
     date_format: str = "ISO8601",
-    columns: list[str] | list[ColumnInfo] | None = None,
+    columns: list[ColumnInfo] | None = None,
 ) -> gpd.GeoDataFrame:
     """Read in csv from local disk
 
@@ -53,7 +53,7 @@ def read_csv(
         optional=[Z_coord] if Z_coord else None,
         date_col=T_coord,
         date_format=date_format,
-        columns=columns,
+        columns=columns if columns else [],
     )
 
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
@@ -99,8 +99,8 @@ class PointGenerator(VectorGenerator[PointConfig]):
             raw_df,
             assets,
             source_config,
-            properties,
-            source_config.epsg,
-            start_datetime,
-            end_datetime,
+            properties={"stac_generator": properties},
+            epsg=source_config.epsg,
+            start_datetime=start_datetime,
+            end_datetime=end_datetime,
         )

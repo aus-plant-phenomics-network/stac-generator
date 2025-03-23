@@ -25,23 +25,23 @@ def test_no_date_expects_start_datetime_end_datetime_same_as_datetime() -> None:
 
 def test_non_default_fields_expects_same_properties() -> None:
     item = load_item("non_default_fields.json")
-    assert item.properties["description"] == "Non default description"
-    assert item.properties["license"] == "MIT"
+    assert item.properties["stac_generator"]["description"] == "Non default description"
+    assert item.properties["stac_generator"]["license"] == "MIT"
 
 
 def test_with_altitude_expects_Z_value_in_properties() -> None:
     item = load_item("with_altitude.json")
-    assert item.properties["Z"] == "elevation"
+    assert item.properties["stac_generator"]["Z"] == "elevation"
 
 
 def test_with_column_info_expects_column_info_in_properties() -> None:
     item = load_item("with_column_info.json")
-    assert "column_info" in item.properties
+    assert "column_info" in item.properties["stac_generator"]
 
 
 def test_no_column_info_expects_no_column_info_in_properties() -> None:
     item = load_item("no_column_info.json")
-    assert "column_info" not in item.properties
+    assert "column_info" not in item.properties["stac_generator"]
 
 
 def test_with_date_no_tzinfo_expects_utc_start_end_datetime() -> None:
