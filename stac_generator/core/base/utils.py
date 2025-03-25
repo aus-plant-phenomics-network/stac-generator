@@ -1,6 +1,7 @@
 import json
 import logging
 import urllib.parse
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Any, cast
 
@@ -124,11 +125,11 @@ def calculate_timezone(geometry: Geometry) -> str:
 
 def _read_csv(
     src_path: str,
-    required: list[str] | None = None,
-    optional: list[str] | None = None,
+    required: Sequence[str] | None = None,
+    optional: Sequence[str] | None = None,
     date_col: str | None = None,
     date_format: str | None = "ISO8601",
-    columns: list[ColumnInfo] | None = None,
+    columns: Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> pd.DataFrame:
     logger.debug(f"reading csv from path: {src_path}")
     parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False

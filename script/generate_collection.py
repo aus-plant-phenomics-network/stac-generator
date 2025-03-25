@@ -181,7 +181,6 @@ raster_config = RasterConfig(
     location="tests/files/integration_tests/raster/data/L2A_PVI.tif",
     collection_date=datetime.datetime.strptime("2021-02-21", "%Y-%m-%d").date(),  # noqa: DTZ007
     collection_time=datetime.datetime.strptime("10:00:17", "%H:%M:%S").time(),  # noqa: DTZ007
-    epsg=32633,
     band_info=[
         {
             "name": "B04",

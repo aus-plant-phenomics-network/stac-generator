@@ -1,4 +1,5 @@
 import logging
+from collections.abc import Sequence
 
 import geopandas as gpd
 import pystac
@@ -20,7 +21,7 @@ def read_csv(
     Z_coord: str | None = None,
     T_coord: str | None = None,
     date_format: str = "ISO8601",
-    columns: list[ColumnInfo] | None = None,
+    columns: Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> gpd.GeoDataFrame:
     """Read in csv from local disk
 
@@ -53,7 +54,7 @@ def read_csv(
         optional=[Z_coord] if Z_coord else None,
         date_col=T_coord,
         date_format=date_format,
-        columns=columns if columns else [],
+        columns=columns,
     )
 
     return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))

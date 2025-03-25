@@ -108,7 +108,7 @@ class CollectionGenerator:
 
     def _create_collection_from_items(
         self,
-        items: list[pystac.Item],
+        items: Sequence[pystac.Item],
         collection_config: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
         logger.debug("generating collection from items")
@@ -162,7 +162,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
     def __init__(
         self,
-        configs: list[dict[str, Any]] | list[T],
+        configs: Sequence[dict[str, Any]] | Sequence[T],
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
@@ -325,10 +325,8 @@ class StacSerialiser:
         self.generator = generator
         self.collection = generator.create_collection()
         self.href = href
-        StacSerialiser.pre_serialisation_hook(self.collection, self.href)
 
-    @staticmethod
-    def pre_serialisation_hook(collection: pystac.Collection, href: str) -> None:
+    def pre_serialisation_hook(self, collection: pystac.Collection, href: str) -> None:
         """Hook that can be overwritten to provide pre-serialisation functionality.
         By default, this normalises collection href and performs validation
 
@@ -342,6 +340,7 @@ class StacSerialiser:
         collection.validate_all()
 
     def __call__(self) -> None:
+        self.pre_serialisation_hook(self.collection, self.href)
         if href_is_stac_api_endpoint(self.href):
             return self.to_json()
         return self.to_api()
