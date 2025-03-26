@@ -18,19 +18,6 @@ from stac_generator.core.base.utils import calculate_timezone
 
 from .schema import RasterConfig
 
-BAND_MAPPING: dict[str, str] = {
-    "red": "red",
-    "green": "green",
-    "blue": "blue",
-    "nir": "nir",
-    "ms_red": "ms_red",
-    "ms_green": "ms_green",
-    "red_edge": "rededge",
-    "rededge": "rededge",
-    "ndvi": "ndvi",
-    "ndvi2": "ndvi2",
-}
-
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
@@ -97,26 +84,19 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             for band_info in source_config.band_info:
                 eo_band = Band.create(
                     name=band_info["name"].lower(),
-                    common_name=BAND_MAPPING.get(band_info.get("common_name", "").lower(), None),
+                    common_name=band_info.get("common_name", None),
                     center_wavelength=band_info.get("wavelength", None),
-                    description=band_info.get(
-                        "description",
-                        "Common name: "
-                        + BAND_MAPPING.get(
-                            band_info.get("common_name", "unknown").lower(), "unknown"
-                        ),
-                    ),
+                    description=band_info.get("description", None),
                 )
                 eo_bands.append(eo_band)
 
                 raster_band = RasterBand.create(
                     nodata=band_info.get("nodata", 0),
-                    data_type=DataType(band_info.get("data_type", "uint16")),
+                    data_type=DataType(band_info.get("data_type"))
+                    if band_info.get("data_type", None)
+                    else None,
                 )
                 raster_bands.append(raster_band)
-
-            eo_ext = EOExtension.ext(item, add_if_missing=True)
-            eo_ext.apply(bands=eo_bands, cloud_cover=0.0, snow_cover=0.0)
 
             # Create Asset and Add to Item
             asset = pystac.Asset(
@@ -128,8 +108,8 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             item.add_asset(ASSET_KEY, asset)
 
             # Apply Raster Extension to the Asset
-            raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
-            raster_ext.apply(bands=raster_bands)
+            asset_raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
+            asset_raster_ext.apply(bands=raster_bands)
 
             # Add eo:bands to Asset
             # Apply EO bands to the asset using AssetEOExtension
