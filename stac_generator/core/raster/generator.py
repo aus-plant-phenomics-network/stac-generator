@@ -18,6 +18,25 @@ from stac_generator.core.base.utils import calculate_timezone
 
 from .schema import RasterConfig
 
+VALID_COMMON_NAME = {
+    "coastal",
+    "blue",
+    "green",
+    "red",
+    "rededge",
+    "yellow",
+    "pan",
+    "nir",
+    "nir08",
+    "nir09",
+    "cirrus",
+    "swir16",
+    "swir22",
+    "lwir",
+    "lwir11",
+    "lwir12",
+}
+
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
@@ -81,10 +100,18 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             # Create EO and Raster bands
             eo_bands = []
             raster_bands = []
+
             for band_info in source_config.band_info:
+                common_name = band_info.get("common_name", None)
+                if common_name:
+                    common_name = common_name.lower()
+                    if common_name not in VALID_COMMON_NAME:
+                        raise ValueError(
+                            f"Invalid common name: {common_name} for item: {source_config.id}"
+                        )
                 eo_band = Band.create(
                     name=band_info["name"].lower(),
-                    common_name=band_info.get("common_name", None),
+                    common_name=common_name,
                     center_wavelength=band_info.get("wavelength", None),
                     description=band_info.get("description", None),
                 )

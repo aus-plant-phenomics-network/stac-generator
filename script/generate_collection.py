@@ -184,7 +184,7 @@ raster_config = RasterConfig(
     band_info=[
         {
             "name": "B04",
-            "common_name": "red",
+            "common_name": "RED",
             "description": "Common name: red, Range: 0.6 to 0.7",
             "wavelength": 0.6645,
         },
