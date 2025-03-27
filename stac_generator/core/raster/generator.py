@@ -8,7 +8,7 @@ import rasterio
 from pyproj import CRS
 from pyproj.transformer import Transformer
 from pystac.extensions.eo import Band, EOExtension
-from pystac.extensions.projection import ItemProjectionExtension, ProjectionExtension
+from pystac.extensions.projection import AssetProjectionExtension, ItemProjectionExtension
 from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
 from shapely import box, to_geojson
 
@@ -52,7 +52,6 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         """
         with rasterio.open(source_config.location) as src:
             bounds = src.bounds
-            transform = src.transform
             crs = cast(CRS, src.crs)
             shape = list(src.shape)
 
@@ -92,11 +91,6 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             ]
             proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt(), shape=shape, transform=affine_transform)
 
-            # Initialize extensions
-            EOExtension.ext(item, add_if_missing=True)
-            proj_ext = ProjectionExtension.ext(item, add_if_missing=True)
-            proj_ext.apply(epsg=crs.to_epsg(), shape=shape, transform=list(transform)[:9])
-
             # Create EO and Raster bands
             eo_bands = []
             raster_bands = []
@@ -133,6 +127,12 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                 title="Raster Data",
             )
             item.add_asset(ASSET_KEY, asset)
+
+            # Apply projection extension to asset
+            asset_proj_ext = AssetProjectionExtension.ext(asset, add_if_missing=True)
+            asset_proj_ext.apply(
+                epsg=crs.to_epsg(), wkt2=crs.to_wkt(), shape=shape, transform=affine_transform
+            )
 
             # Apply Raster Extension to the Asset
             asset_raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
