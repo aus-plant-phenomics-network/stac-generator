@@ -76,12 +76,12 @@
       343
     ],
     "proj:transform": [
-      0.0035984418101870823,
+      320.0,
       0.0,
-      13.876365195204773,
+      399960.0,
       0.0,
-      -0.002899743960826365,
-      37.947537561322136,
+      -320.0,
+      4200000.0,
       0.0,
       0.0,
       1.0
@@ -91,24 +91,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -125,12 +125,12 @@
         343
       ],
       "proj:transform": [
-        0.0035984418101870823,
+        320.0,
         0.0,
-        13.876365195204773,
+        399960.0,
         0.0,
-        -0.002899743960826365,
-        37.947537561322136,
+        -320.0,
+        4200000.0,
         0.0,
         0.0,
         1.0

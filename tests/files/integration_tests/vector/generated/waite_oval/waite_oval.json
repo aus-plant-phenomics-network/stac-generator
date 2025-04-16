@@ -56,24 +56,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

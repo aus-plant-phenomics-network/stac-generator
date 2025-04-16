@@ -6,33 +6,33 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/waite_oval/waite_oval.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json"
     }
   ],

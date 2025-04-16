@@ -6,88 +6,88 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/adelaide_airport/adelaide_airport.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/adelaide_airport/adelaide_airport.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/aston_coop/aston_coop.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/aston_coop/aston_coop.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/belair/belair.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/belair/belair.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/edinburg_raaf/edinburg_raaf.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/edinburg_raaf/edinburg_raaf.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/glen_osmond/glen_osmond.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/glen_osmond/glen_osmond.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/happy_valley_reservoir/happy_valley_reservoir.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/happy_valley_reservoir/happy_valley_reservoir.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/hope_valley_reservoir/hope_valley_reservoir.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/hope_valley_reservoir/hope_valley_reservoir.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/north_adelaide/north_adelaide.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/north_adelaide/north_adelaide.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/soil_data/soil_data.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/soil_data/soil_data.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/lga/lga.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/lga/lga.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/soil_exposure/soil_exposure.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/soil_exposure/soil_exposure.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/soil_subgroup/soil_subgroup.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/soil_subgroup/soil_subgroup.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/waite_oval/waite_oval.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/waite_oval/waite_oval.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json"
     }
   ],
