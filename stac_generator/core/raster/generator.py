@@ -87,7 +87,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
             # Projection extension
             proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
             affine_transform = [
-                rasterio.transform.from_bounds(*bbox, shape[1], shape[0])[i] for i in range(9)
+                rasterio.transform.from_bounds(*bounds, shape[1], shape[0])[i] for i in range(9)
             ]
             proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt(), shape=shape, transform=affine_transform)
 
