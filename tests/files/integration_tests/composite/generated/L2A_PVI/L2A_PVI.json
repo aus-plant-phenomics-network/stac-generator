@@ -48,19 +48,19 @@
       "location": "tests/files/integration_tests/raster/data/L2A_PVI.tif",
       "band_info": [
         {
-          "name": "B04",
+          "name": "b04",
           "common_name": "red",
           "wavelength": 0.6645,
           "description": "Common name: red, Range: 0.6 to 0.7"
         },
         {
-          "name": "B03",
+          "name": "b03",
           "common_name": "green",
           "wavelength": 0.56,
           "description": "Common name: green, Range: 0.5 to 0.6"
         },
         {
-          "name": "B02",
+          "name": "b02",
           "common_name": "blue",
           "wavelength": 0.4966,
           "description": "Common name: blue, Range: 0.45 to 0.5"

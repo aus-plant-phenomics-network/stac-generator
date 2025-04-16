@@ -97,14 +97,12 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
             for band_info in source_config.band_info:
                 common_name = band_info.get("common_name", None)
-                if common_name:
-                    common_name = common_name.lower()
-                    if common_name not in VALID_COMMON_NAME:
-                        raise ValueError(
-                            f"Invalid common name: {common_name} for item: {source_config.id}"
-                        )
+                if common_name and common_name not in VALID_COMMON_NAME:
+                    raise ValueError(
+                        f"Invalid common name: {common_name} for item: {source_config.id}"
+                    )
                 eo_band = Band.create(
-                    name=band_info["name"].lower(),
+                    name=band_info["name"],
                     common_name=common_name,
                     center_wavelength=band_info.get("wavelength", None),
                     description=band_info.get("description", None),
