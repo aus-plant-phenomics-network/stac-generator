@@ -1,5 +1,6 @@
 import collections
 from collections.abc import Sequence
+from pathlib import Path
 from typing import Any
 
 import pystac
@@ -39,6 +40,7 @@ CONFIG_GENERATOR_MAP: dict[type[SourceConfig], type[ItemGenerator]] = {
 
 BaseConfig_T = (
     str
+    | Path
     | SourceConfig
     | dict[str, Any]
     | Sequence[str]
@@ -84,6 +86,8 @@ class StacGeneratorFactory:
         def handle_base_config(config: BaseConfig_T) -> None:
             if isinstance(config, str):
                 handle_str_config(config)
+            elif isinstance(config, Path):
+                handle_str_config(str(config))
             elif isinstance(config, SourceConfig):
                 handle_source_config(config)
             elif isinstance(config, dict):
@@ -92,7 +96,7 @@ class StacGeneratorFactory:
                 raise TypeError(f"Invalid config item type: {type(config)}")
 
         def handle_config(config: Config_T) -> None:
-            if isinstance(config, str | dict | SourceConfig):
+            if isinstance(config, str | dict | SourceConfig | Path):
                 handle_base_config(config)
             elif hasattr(config, "__len__"):
                 for item in config:

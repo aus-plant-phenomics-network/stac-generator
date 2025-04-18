@@ -10,8 +10,10 @@
                 "description": "Suburb_Name"
             }
         ],
-        "join_file": "tests/files/unit_tests/vectors/distance.csv",
-        "join_field": "Area",
-        "join_attribute_vector": "Suburb_Name"
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/distance.csv",
+            "right_on": "Area",
+            "left_on": "Suburb_Name"
+        }
     }
 ]

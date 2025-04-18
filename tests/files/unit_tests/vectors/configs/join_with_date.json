@@ -10,23 +10,29 @@
                 "description": "Suburb_Name"
             }
         ],
-        "join_file": "tests/files/unit_tests/vectors/price.csv",
-        "join_field": "Area",
-        "join_attribute_vector": "Suburb_Name",
-        "join_T_column": "Date",
-        "join_column_info": [
-            {
-                "name": "Sell_Price",
-                "description": "Median Sales Price in 2025"
-            },
-            {
-                "name": "Rent_Price",
-                "description": "Median Rental Price in 2025"
-            },
-            {
-                "name": "Sell/Rent",
-                "description": "Ratio of Sales Price (in $1000) over Rental Price (in $)"
-            }
-        ]
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/price.csv",
+            "left_on": "Suburb_Name",
+            "right_on": "Area",
+            "date_column": "Date",
+            "column_info": [
+                {
+                    "name": "Area",
+                    "description": "Area Name"
+                },
+                {
+                    "name": "Sell_Price",
+                    "description": "Median Sales Price in 2025"
+                },
+                {
+                    "name": "Rent_Price",
+                    "description": "Median Rental Price in 2025"
+                },
+                {
+                    "name": "Sell/Rent",
+                    "description": "Ratio of Sales Price (in $1000) over Rental Price (in $)"
+                }
+            ]
+        }
     }
 ]

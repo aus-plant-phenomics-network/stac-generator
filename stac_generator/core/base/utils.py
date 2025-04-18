@@ -125,27 +125,27 @@ def calculate_timezone(geometry: Geometry) -> str:
 
 def _read_csv(
     src_path: str,
-    required: Sequence[str] | None = None,
-    optional: Sequence[str] | None = None,
+    required: set[str] | Sequence[str] | None = None,
+    optional: set[str] | Sequence[str] | None = None,
     date_col: str | None = None,
     date_format: str | None = "ISO8601",
-    columns: Sequence[str] | Sequence[ColumnInfo] | None = None,
+    columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> pd.DataFrame:
     logger.debug(f"reading csv from path: {src_path}")
     parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False
-    usecols: list[str] | None = None
+    usecols: set[str] | None = None
     # If band info is provided, only read in the required columns + the X and Y coordinates
     if columns:
-        usecols = [item["name"] if isinstance(item, dict) else item for item in columns]
+        usecols = {item["name"] if isinstance(item, dict) else item for item in columns}
         if required:
-            usecols.extend(required)
+            usecols.update(required)
         if optional:
-            usecols.extend(optional)
+            usecols.update(optional)
         if date_col:
-            usecols.append(date_col)
+            usecols.add(date_col)
     return pd.read_csv(
         filepath_or_buffer=src_path,
-        usecols=usecols,
+        usecols=list(usecols) if usecols else None,
         date_format=date_format,
         parse_dates=parse_dates,
     )

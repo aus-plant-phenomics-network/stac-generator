@@ -14,12 +14,7 @@
             "file": "tests/files/unit_tests/vectors/distance.csv",
             "left_on": "Suburb_Name",
             "right_on": "Area",
-            "date_column": "Date",
             "column_info": [
-                {
-                    "name": "Area",
-                    "description": "Area name"
-                },
                 {
                     "name": "Distance",
                     "description": "Driving Distance to CBD in km"

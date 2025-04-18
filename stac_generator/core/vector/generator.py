@@ -1,6 +1,5 @@
 import logging
 import re
-from typing import cast
 
 import geopandas as gpd
 import pystac
@@ -79,27 +78,24 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
 
         start_datetime, end_datetime = None, None
         # Read join file
-        if source_config.join_file:
-            if source_config.join_attribute_vector not in raw_df.columns:
-                raise ValueError(
-                    f"If a join file is provided, expects join attribute vector: {source_config.join_attribute_vector} to be a valid attribute of the vector file."
-                )
+        if source_config.join_config:
+            join_config = source_config.join_config
             # Try reading join file and raise errors if columns not provided
             try:
                 join_df = _read_csv(
-                    src_path=source_config.join_file,
-                    required=[cast(str, source_config.join_field)],
-                    date_format=source_config.date_format,
-                    date_col=source_config.join_T_column,
-                    columns=source_config.join_column_info,
+                    src_path=join_config.file,
+                    required=[join_config.right_on],
+                    date_format=join_config.date_format,
+                    date_col=join_config.date_column,
+                    columns=join_config.column_info,
                 )
             except ValueError as e:
                 raise ValueError(
                     f"Join file associated with vector file: {source_config.id} may not have the specified column"
                 ) from e
-            if source_config.join_T_column:
-                start_datetime = join_df[source_config.join_T_column].min()
-                end_datetime = join_df[source_config.join_T_column].max()
+            if join_config.date_column:
+                start_datetime = join_df[join_config.date_column].min()
+                end_datetime = join_df[join_config.date_column].max()
 
         # Make properties
         properties = source_config.to_properties()

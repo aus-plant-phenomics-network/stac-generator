@@ -21,7 +21,7 @@ def read_csv(
     Z_coord: str | None = None,
     T_coord: str | None = None,
     date_format: str = "ISO8601",
-    columns: Sequence[str] | Sequence[ColumnInfo] | None = None,
+    columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> gpd.GeoDataFrame:
     """Read in csv from local disk
 

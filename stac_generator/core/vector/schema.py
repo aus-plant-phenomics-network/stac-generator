@@ -1,9 +1,24 @@
-import json
 from typing import Self
 
-from pydantic import field_validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
+
+
+class JoinConfig(BaseModel):
+    file: str
+    left_on: str
+    right_on: str
+    date_column: str | None = None
+    date_format: str = "ISO8601"
+    column_info: list[ColumnInfo]
+
+    @field_validator("column_info", mode="after")
+    @classmethod
+    def check_non_empty_column_info(cls, value: list[ColumnInfo]) -> list[ColumnInfo]:
+        if not value:
+            raise ValueError("Join file must have non-empty column_info")
+        return value
 
 
 class VectorConfig(SourceConfig, HasColumnInfo):
@@ -12,48 +27,16 @@ class VectorConfig(SourceConfig, HasColumnInfo):
     layer: str | None = None
     """Vector layer for multi-layer shapefile"""
 
-    join_file: str | None = None
-    """Name of join csv file"""
-
-    join_attribute_vector: str | None = None
-    """Attribute of shapefile to join with text file"""
-
-    join_field: str | None = None
-    """Field from text file to join with vector file"""
-
-    date_format: str | None = "ISO8601"
-    """Date format of text file"""
-
-    join_T_column: str | None = None
-    """Time column of text file if any"""
-
-    join_column_info: list[ColumnInfo] | None = None
-    """List of attributes associated with point/vector data"""
-
-    @field_validator("join_column_info", mode="before")
-    @classmethod
-    def coerce_to_object_text(cls, v: str | list | None) -> list[ColumnInfo]:
-        """Convert json serialised string of column info into matched object"""
-        if v is None:
-            return []
-        if isinstance(v, list):
-            return v
-        parsed = json.loads(v)
-        if not isinstance(parsed, list):
-            raise ValueError(
-                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
-            )
-        return parsed
+    join_config: JoinConfig | None = None
+    """Config for join asset if valid"""
 
     @model_validator(mode="after")
-    def validate_join_data(self) -> Self:
-        if self.join_file:
-            if not self.join_attribute_vector:
-                raise ValueError(
-                    "join_attribute_vector field is expected when join_file is provided"
-                )
-            if not self.join_field:
-                raise ValueError("join_field is expected when join_file is provided")
-            if not self.join_column_info:
-                raise ValueError("join_column_info is expected when join_file is provided")
+    def check_join_fields_described(self) -> Self:
+        if self.join_config:
+            vector_columns = {col["name"] for col in self.column_info}
+            join_columns = {col["name"] for col in self.join_config.column_info}
+            if self.join_config.left_on not in vector_columns:
+                raise ValueError("Join field must be described using column_info")
+            if self.join_config.right_on not in join_columns:
+                raise ValueError("Join field must be described using join file column_info")
         return self
