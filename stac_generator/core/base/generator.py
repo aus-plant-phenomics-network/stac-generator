@@ -342,8 +342,10 @@ class StacSerialiser:
     def __call__(self) -> None:
         self.pre_serialisation_hook(self.collection, self.href)
         if href_is_stac_api_endpoint(self.href):
-            return self.to_json()
-        return self.to_api()
+            self.to_json()
+        else:
+            self.to_api()
+        logger.info(f"successfully save collection {self.collection.id} to {self.href}")
 
     @staticmethod
     def prepare_collection_configs(
@@ -398,4 +400,3 @@ class StacSerialiser:
                 id=item.id,
                 json=item.to_dict(),
             )
-        logger.info(f"successfully save collection to {self.href}")

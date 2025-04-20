@@ -71,7 +71,9 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         raw_df = read_vector_asset(source_config.location, layer=source_config.layer)
 
         if columns and not set(columns).issubset(set(raw_df.columns)):
-            raise StacConfigException(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
+            raise StacConfigException(
+                f"Invalid columns for asset - {source_config.location!s}: {set(columns) - set(raw_df.columns)}"
+            )
 
         # Validate EPSG user-input vs extracted
         epsg, _ = extract_epsg(raw_df.crs)
