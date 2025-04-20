@@ -1,13 +1,12 @@
 import logging
 import re
 
-import geopandas as gpd
 import pystac
 from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import _read_csv
+from stac_generator.core.base.utils import calculate_timezone, read_join_asset, read_vector_asset
 from stac_generator.core.vector.schema import VectorConfig
 from stac_generator.exceptions import StacConfigException
 
@@ -69,7 +68,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             col["name"] if isinstance(col, dict) else col for col in source_config.column_info
         ]
         # Throw exceptions if column_info contains invalid column
-        raw_df = gpd.read_file(source_config.location, layer=source_config.layer)
+        raw_df = read_vector_asset(source_config.location, layer=source_config.layer)
 
         if columns and not set(columns).issubset(set(raw_df.columns)):
             raise StacConfigException(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
@@ -81,14 +80,18 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         # Read join file
         if source_config.join_config:
             join_config = source_config.join_config
+            # Get timezone information
+            tzinfo = calculate_timezone(raw_df.geometry)
             # Try reading join file and raise errors if columns not provided
-            join_df = _read_csv(
-                src_path=join_config.file,
-                required=[join_config.right_on],
-                date_format=join_config.date_format,
-                date_col=join_config.date_column,
-                columns=join_config.column_info,
+            join_df = read_join_asset(
+                join_config.file,
+                join_config.right_on,
+                join_config.date_format,
+                join_config.date_column,
+                join_config.column_info,
+                tzinfo,
             )
+            # Set asset start and end datetime based on date information
             if join_config.date_column:
                 start_datetime = join_df[join_config.date_column].min()
                 end_datetime = join_df[join_config.date_column].max()

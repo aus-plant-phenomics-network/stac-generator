@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 import urllib.parse
@@ -12,7 +13,8 @@ import pandas as pd
 import rasterio
 import yaml
 from pyogrio.errors import DataLayerError, DataSourceError
-from shapely import Geometry, centroid
+from pytz import timezone
+from shapely import Geometry, GeometryCollection, centroid
 from timezonefinder import TimezoneFinder
 
 from stac_generator.core.base.schema import ColumnInfo
@@ -93,9 +95,13 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
     )
 
 
-def calculate_timezone(geometry: Geometry) -> str:
+def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
     """Calculate timezone from geometry"""
-    point = centroid(geometry)
+    point = (
+        centroid(geometry)
+        if isinstance(geometry, Geometry)
+        else centroid(GeometryCollection(list(geometry)))
+    )
     # Use TimezoneFinder to get the timezone
     timezone_str = TZFinder.timezone_at(lng=point.x, lat=point.y)
 
@@ -141,6 +147,20 @@ def _read_csv(
         ) from e
 
 
+def _localise_timezone(df: pd.DataFrame, date_column: str, tzinfo: str) -> pd.DataFrame:
+    tz = timezone(tzinfo)
+
+    def localize_tz(row: datetime.datetime) -> datetime.datetime:
+        if row.tzinfo is None:
+            row = tz.localize(row)
+        return row
+
+    df[date_column] = df[date_column].apply(localize_tz)
+    # Convert all timezone information to UTC
+    df[date_column] = df[date_column].dt.tz_convert("UTC")
+    return df
+
+
 def read_point_asset(
     src_path: str,
     X_coord: str,
@@ -165,7 +185,11 @@ def read_point_asset(
         columns=columns,
     )
 
-    return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
+    gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
+    if T_coord:
+        tzinfo = calculate_timezone(gdf.geometry)
+        gdf = _localise_timezone(gdf, T_coord, tzinfo)
+    return gdf
 
 
 def read_vector_asset(
@@ -186,6 +210,26 @@ def read_vector_asset(
         raise StacConfigException(f"Invalid layer. File: {src_path}, layer: {layer}") from None
     except DataSourceError as e:
         raise SourceAssetException(e) from None
+
+
+def read_join_asset(
+    src_path: str,
+    right_on: str,
+    date_format: str,
+    date_column: str | None,
+    columns: set[str] | Sequence[str] | set[ColumnInfo] | Sequence[ColumnInfo],
+    tzinfo: str,
+) -> pd.DataFrame:
+    df = _read_csv(
+        src_path=src_path,
+        required=[right_on],
+        date_format=date_format,
+        date_col=date_column,
+        columns=columns,
+    )
+    if date_column:
+        df = _localise_timezone(df, date_column, tzinfo)
+    return df
 
 
 def read_raster_asset(src_path: str) -> Generator[Any]:

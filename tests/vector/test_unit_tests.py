@@ -129,6 +129,33 @@ def test_given_join_with_date_expects_correct_start_end_datetime() -> None:
     assert item.properties["end_datetime"] == "2025-01-01T00:00:00Z"
 
 
+def test_given_join_with_date_no_tzexpects_correct_start_end_datetime() -> None:
+    item = load_item("join_with_date_no_tz.json")
+    assert "column_info" in item.properties["stac_generator"]
+    assert item.properties["stac_generator"]["column_info"] == [
+        {"name": "Suburb_Name", "description": "Suburb_Name"}
+    ]
+    assert "join_config" in item.properties["stac_generator"]
+    assert item.properties["stac_generator"]["join_config"]["column_info"] == [
+        {"name": "Area", "description": "Area Name"},
+        {"name": "Sell_Price", "description": "Median Sales Price in 2025"},
+        {"name": "Rent_Price", "description": "Median Rental Price in 2025"},
+        {
+            "name": "Sell/Rent",
+            "description": "Ratio of Sales Price (in $1000) over Rental Price (in $)",
+        },
+    ]
+    assert (
+        item.properties["stac_generator"]["join_config"]["file"]
+        == "tests/files/unit_tests/vectors/price_no_tz.csv"
+    )
+    assert item.properties["stac_generator"]["join_config"]["right_on"] == "Area"
+    assert item.properties["stac_generator"]["join_config"]["left_on"] == "Suburb_Name"
+    assert item.properties["stac_generator"]["join_config"]["date_column"] == "Date"
+    assert item.properties["start_datetime"] == "2020-01-01T00:00:00Z"
+    assert item.properties["end_datetime"] == "2025-01-01T00:00:00Z"
+
+
 def test_given_join_with_no_date_expects_same_start_end_datetime() -> None:
     item = load_item("join_no_date.json")
     assert item.properties["stac_generator"]["column_info"] == [
