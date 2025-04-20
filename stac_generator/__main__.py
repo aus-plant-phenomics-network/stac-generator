@@ -25,10 +25,6 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-def template_handler(args: Namespace) -> None:
-    pass
-
-
 def serialise_handler(args: Namespace) -> None:
     if args.v:
         import logging
@@ -65,29 +61,6 @@ def serialise_handler(args: Namespace) -> None:
     serialiser()
 
 
-def add_template_sub_command(sub_parser: _SubParsersAction) -> None:
-    template_parser = sub_parser.add_parser(
-        "template", help="Generate config template with prefilled information"
-    )
-    template_parser.add_argument(
-        "src",
-        type=str,
-        action="extend",
-        nargs="+",
-        help="""path to the source_config.
-                Path can be a local path or a url.
-                Path also accepts multiple values.
-                Source config contains metadata specifying how a raw file is read.
-                At the minimum, it must contain the file location.
-                To learn more about source config, please visit INSERT_DOC_URL.
-            """,
-    )
-    template_parser.add_argument(
-        "--dst", type=str, help="path to dst conflig template. Only csv and json are supported"
-    )
-    template_parser.set_defaults(func=template_handler)
-
-
 def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
     parser = sub_parser.add_parser("serialise", help="Generate STAC record")
     # Source commands
@@ -107,18 +80,21 @@ def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
     parser.add_argument(
         "--dst",
         type=str,
-        required=True,
+        default="generated",
         help="""path to where the generated collection is stored.
                 Accepts a local path or a remote api endpoint.
                 If path is local, collection and item json files will be written to disk.
-                If path is an endpoint, the collection and item json files will be pushed using STAC api methods
+                If path is an endpoint, the collection and item json files will be pushed using STAC api methods.
+                If not value is provided, the folder generated will be created in the current path to store generated records
             """,
     )
 
     parser.add_argument("-v", action="store_true", help="increase verbosity for debugging")
     # Collection Information
     collection_metadata = parser.add_argument_group("STAC collection metadata")
-    collection_metadata.add_argument("--id", type=str, help="id of collection")
+    collection_metadata.add_argument(
+        "--id", type=str, help="id of collection", default="Collection"
+    )
     collection_metadata.add_argument(
         "--title", type=str, help="title of collection", required=False, default="Auto-generated."
     )
@@ -171,11 +147,14 @@ def run_cli() -> None:
         formatter_class=RawDescriptionRichHelpFormatter,
     )
     parser.add_argument("-V", "--version", action="version", version=__version__)
-    sub_parser = parser.add_subparsers(help="Sub commands")
-    add_template_sub_command(sub_parser)
+    sub_parser = parser.add_subparsers(dest="command", help="Sub commands")
     add_serialise_sub_command(sub_parser)
     args = parser.parse_args()
-    args.func(args)
+
+    if args.command == "serialise":
+        args.func(args)
+    else:
+        parser.print_help()
 
 
 if __name__ == "__main__":
