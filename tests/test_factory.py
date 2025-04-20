@@ -3,17 +3,17 @@ from pathlib import Path
 
 import pytest
 
-from stac_generator import StacGeneratorFactory
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
+from stac_generator.factory import StacGeneratorFactory
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
-COLLECTION_ID = "composite_data"
+COLLECTION_ID = "collection"
 collection_config = StacCollectionConfig(id=COLLECTION_ID)
 CONFIGS_LIST = [
     str(FILE_PATH / "point/config/point_config.csv"),
-    str(FILE_PATH / "vector/config/vector_config.csv"),
+    str(FILE_PATH / "vector/config/vector_config.json"),
     str(FILE_PATH / "raster/config/raster_config.csv"),
 ]
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"

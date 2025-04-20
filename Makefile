@@ -103,7 +103,7 @@ lint: pre-commit type-check 						## Run all linting
 .PHONY: coverage
 coverage:  											## Run the tests and generate coverage report
 	@echo "=> Running tests with coverage"
-	@$(PDM) run pytest tests --cov appnlib --cov-report html
+	@$(PDM) run pytest tests --cov stac_generator --cov-report html
 
 .PHONY: test
 test:  												## Run the tests
@@ -111,12 +111,6 @@ test:  												## Run the tests
 	@$(PDM) run pytest tests
 	@echo "=> Tests complete"
 
-.PHONY: test-examples
-test-examples:            			              	## Run the examples tests
-	@$(PDM) run pytest docs/examples
-
-.PHONY: test-all
-test-all: test test-examples 						## Run all tests
 
 .PHONY: check-all
 check-all: lint test-all coverage                   ## Run all linting, tests, and coverage checks
@@ -130,9 +124,10 @@ docs: 												## Serve mkdocs locally
 docs-deploy:										## Deploy to docs to github pages
 	@$(PDM) run mkdocs gh-deploy
 
-.PHONY: test-cli
-test-cli:
+.PHONY: test-example
+test-example:
 	@$(PDM) run stac_generator serialise tests/files/integration_tests/composite/config/composite_config.json --id collection --dst example/generated/cli -v
+
 
 .PHONY: test-module-collection
 test-module-collection:
@@ -146,3 +141,10 @@ test-module-config:
 .PHONY: test-generated-config
 test-generated-config:
 	@$(PDM) run stac_generator serialise example/configs/composite_config.json --id collection --dst example/generated/config -v
+
+.PHONY: generate-test-fixtures
+generate-test-fixtures:
+	@$(PDM) run stac_generator serialise tests/files/integration_tests/composite/config/composite_config.json --id collection --dst tests/files/integration_tests/composite/generated
+	@$(PDM) run stac_generator serialise tests/files/integration_tests/point/config/point_config.json --id collection --dst tests/files/integration_tests/point/generated
+	@$(PDM) run stac_generator serialise tests/files/integration_tests/raster/config/raster_config.json --id collection --dst tests/files/integration_tests/raster/generated
+	@$(PDM) run stac_generator serialise tests/files/integration_tests/vector/config/vector_config.json --id collection --dst tests/files/integration_tests/vector/generated

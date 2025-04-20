@@ -7,7 +7,8 @@ from shapely import Geometry
 
 from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
-from stac_generator.core.point.generator import read_csv
+from stac_generator.core.base.schema import ASSET_KEY
+from stac_generator.core.base.utils import read_point_asset
 from stac_generator.core.point.schema import PointConfig
 
 ALL_COLUMNS = {
@@ -38,14 +39,16 @@ PATHS = {
     "no_date_one": "tests/files/unit_tests/points/no_date_one.csv",
 }
 FRAMES = {
-    "with_date_multi": read_csv(
+    "with_date_multi": read_point_asset(
         "tests/files/unit_tests/points/with_date_multi.csv", X, Y, EPSG, Z, T, DATE_FORMAT
     ),
-    "with_date_one": read_csv(
+    "with_date_one": read_point_asset(
         "tests/files/unit_tests/points/with_date_one.csv", X, Y, EPSG, Z, T, DATE_FORMAT
     ),
-    "no_date_multi": read_csv("tests/files/unit_tests/points/no_date_multi.csv", X, Y, EPSG),
-    "no_date_one": read_csv("tests/files/unit_tests/points/no_date_one.csv", X, Y, EPSG),
+    "no_date_multi": read_point_asset(
+        "tests/files/unit_tests/points/no_date_multi.csv", X, Y, EPSG
+    ),
+    "no_date_one": read_point_asset("tests/files/unit_tests/points/no_date_one.csv", X, Y, EPSG),
 }
 ASSETS = {
     key: pystac.Asset(href=value, roles=["data"], media_type=CsvMediaType)
@@ -106,8 +109,8 @@ GEOMETRIES = {
 }
 
 
-def test_read_csv_given_no_args_read_all_columns() -> None:
-    df = read_csv(PATHS["with_date_one"], X, Y, epsg=EPSG)
+def test_read_point_asset_given_no_args_read_all_columns() -> None:
+    df = read_point_asset(PATHS["with_date_one"], X, Y, epsg=EPSG)
     expected = set(ALL_COLUMNS) | {"geometry"}
     assert set(df.columns) == expected
 
@@ -121,12 +124,12 @@ def test_read_csv_given_no_args_read_all_columns() -> None:
         (None, None, ["max_temp"]),
     ],
 )
-def test_read_csv_given_selected_columns_read_selected_columns(
+def test_read_point_asset_given_selected_columns_read_selected_columns(
     z_col: str | None,
     t_col: str | None,
     columns: list[str],
 ) -> None:
-    df = read_csv(
+    df = read_point_asset(
         PATHS["with_date_one"],
         X,
         Y,
@@ -157,14 +160,14 @@ def test_df_to_item(
 ) -> None:
     item = VectorGenerator.df_to_item(
         df=frame,
-        assets={"data": asset},
+        assets={ASSET_KEY: asset},
         source_config=source_config,
         properties={},
         epsg=source_config.epsg,
     )
     assert item.id == source_config.id
     assert item.datetime is not None
-    assert item.assets == {"data": asset}
+    assert item.assets == {ASSET_KEY: asset}
     assert item.geometry == geometry
     assert "proj:code" in item.properties
     assert "proj:wkt2" in item.properties

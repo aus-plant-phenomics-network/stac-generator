@@ -1,23 +1,23 @@
 {
   "type": "Collection",
-  "id": "raster_data",
+  "id": "collection",
   "stac_version": "1.1.0",
   "description": "Auto-generated",
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json"
     }
   ],

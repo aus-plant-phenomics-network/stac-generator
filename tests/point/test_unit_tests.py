@@ -6,6 +6,7 @@ import pytest
 
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
+from stac_generator.exceptions import StacConfigException, TimezoneException
 
 CONFIG_PATH = Path("tests/files/unit_tests/points/configs")
 
@@ -25,29 +26,41 @@ def test_no_date_expects_start_datetime_end_datetime_same_as_datetime() -> None:
 
 def test_non_default_fields_expects_same_properties() -> None:
     item = load_item("non_default_fields.json")
-    assert item.properties["description"] == "Non default description"
-    assert item.properties["license"] == "MIT"
+    assert item.properties["stac_generator"]["description"] == "Non default description"
+    assert item.properties["stac_generator"]["license"] == "MIT"
 
 
 def test_with_altitude_expects_Z_value_in_properties() -> None:
     item = load_item("with_altitude.json")
-    assert item.properties["Z"] == "elevation"
+    assert item.properties["stac_generator"]["Z"] == "elevation"
 
 
 def test_with_column_info_expects_column_info_in_properties() -> None:
     item = load_item("with_column_info.json")
-    assert "column_info" in item.properties
+    assert "column_info" in item.properties["stac_generator"]
 
 
 def test_no_column_info_expects_no_column_info_in_properties() -> None:
     item = load_item("no_column_info.json")
-    assert "column_info" not in item.properties
+    assert "column_info" not in item.properties["stac_generator"]
 
 
 def test_with_date_no_tzinfo_expects_utc_start_end_datetime() -> None:
     item = load_item("with_date_no_tzinfo.json")
     assert item.properties["start_datetime"] == "2022-12-31T13:30:00Z"
     assert item.properties["end_datetime"] == "2023-01-02T13:30:00Z"
+
+
+def test_with_date_with_utc_tz_expects_utc_start_end_datetime() -> None:
+    item = load_item("with_date_with_utc_tz.json")
+    assert item.properties["start_datetime"] == "2023-01-01T00:00:00Z"
+    assert item.properties["end_datetime"] == "2023-01-03T00:00:00Z"
+
+
+def test_no_date_with_utc_tz_expects_utc_start_end_datetime() -> None:
+    item = load_item("no_date_with_utc_tz.json")
+    assert item.properties["start_datetime"] == "2017-01-01T00:00:00Z"
+    assert item.properties["end_datetime"] == "2017-01-01T00:00:00Z"
 
 
 def test_with_date_with_tzinfo_expects_start_end_datetime() -> None:
@@ -57,15 +70,20 @@ def test_with_date_with_tzinfo_expects_start_end_datetime() -> None:
 
 
 def test_invalid_altitude_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_altitude.json")
 
 
+def test_invalid_timezone_expects_raises() -> None:
+    with pytest.raises(TimezoneException):
+        load_item("invalid_tz.json")
+
+
 def test_invalid_date_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_date.json")
 
 
 def test_invalid_column_info_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_column_info.json")

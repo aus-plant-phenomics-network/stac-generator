@@ -88,6 +88,8 @@ Upon checking the generated STAC Item `Werribee.json`, we now see `column_info`,
 
 A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. The stac generator can describe the join operation with a few extra keywords in the config. Before running the stac generator, download the join [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/distance.csv) and put it in the current directory `Example`. Our config now looks like this:
 
+<details>
+<summary>JSON</summary>
 
 ```json title="vector_join_config.json"
 [

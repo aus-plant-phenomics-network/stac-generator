@@ -1,14 +1,15 @@
 import datetime
 import json
+import logging
+from collections.abc import Sequence
 from typing import Any, Literal, NotRequired, Required, TypeVar
 
+import pandas as pd
 import pytz
-from httpx._types import (
-    RequestData,
-)
-from pydantic import BaseModel as _BaseModel
-from pydantic import field_validator
-from stac_pydantic.shared import Provider, UtcDatetime
+from httpx._types import RequestData
+from pydantic import BaseModel, Field, field_validator
+from shapely import Geometry
+from stac_pydantic.shared import Provider
 from typing_extensions import TypedDict
 
 from stac_generator._types import (
@@ -18,21 +19,12 @@ from stac_generator._types import (
     QueryParamTypes,
     RequestContent,
 )
+from stac_generator.core.base.utils import get_timezone
+from stac_generator.exceptions import TimezoneException
 
 T = TypeVar("T", bound="SourceConfig")
-
-
-class BaseModel(_BaseModel):
-    __excluded_fields__: set[str] = {"id", "collection_date", "collection_time", "location"}
-
-    def to_properties(self) -> dict[str, Any]:
-        return self.model_dump(
-            mode="json",
-            exclude=self.__excluded_fields__,
-            exclude_unset=True,
-            exclude_none=True,
-            exclude_defaults=False,
-        )
+ASSET_KEY = "data"
+logger = logging.getLogger(__name__)
 
 
 class StacCollectionConfig(BaseModel):
@@ -79,15 +71,21 @@ class StacItemConfig(StacCollectionConfig):
     """
 
     collection_date: datetime.date
-    """Date in local timezone of when the data is collected"""
+    """Date when the data is collected"""
     collection_time: datetime.time
-    """Time in local timezone of when the data is collected"""
+    """Time when the data is collected"""
+    timezone: str | Literal["utc", "local"] = "local"
+    """Timezone"""
 
-    def get_datetime(self, timezone: str) -> UtcDatetime:
-        local_dt = datetime.datetime.combine(
-            self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
-        )
-        return local_dt.astimezone(datetime.UTC)
+    def get_datetime(self, geometry: Geometry | Sequence[Geometry]) -> pd.Timestamp:
+        timezone = get_timezone(self.timezone, geometry)
+        try:
+            local_dt = datetime.datetime.combine(
+                self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
+            )
+        except Exception as e:
+            raise TimezoneException("Invalid timezone config parameter") from e
+        return pd.Timestamp(local_dt.astimezone(datetime.UTC))
 
 
 class SourceConfig(StacItemConfig):
@@ -123,11 +121,8 @@ class SourceConfig(StacItemConfig):
     json_body: Any = None
     """HTTP query body content for getting file from `location`"""
 
-    @property
-    def source_extension(self) -> str:
-        if self.extension:
-            return self.extension
-        return self.location.split(".")[-1]
+    def to_properties(self) -> dict[str, Any]:
+        return self.model_dump(mode="json", exclude_unset=True, exclude_none=True)
 
 
 DTYPE = Literal[
@@ -166,15 +161,15 @@ class ColumnInfo(TypedDict):
 
 
 class HasColumnInfo(BaseModel):
-    column_info: list[ColumnInfo] | list[str] | None = None
+    column_info: list[ColumnInfo] = Field(default_factory=list)
     """List of attributes associated with point/vector data"""
 
     @field_validator("column_info", mode="before")
     @classmethod
-    def coerce_to_object(cls, v: str | list[str] | None) -> list[str] | list[ColumnInfo] | None:
+    def coerce_to_object(cls, v: str | list[ColumnInfo] | None) -> list[ColumnInfo]:
         """Convert json serialised string of column info into matched object"""
         if v is None:
-            return None
+            return []
         if isinstance(v, list):
             return v
         parsed = json.loads(v)

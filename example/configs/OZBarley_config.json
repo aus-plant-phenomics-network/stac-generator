@@ -170,7 +170,6 @@
     "band_info": [
       {
         "name": "DSM",
-        "common_name": "DSM",
         "description": "Digital Surface Model - Single Band Grayscale"
       }
     ]
@@ -184,7 +183,6 @@
     "band_info": [
       {
         "name": "DSM",
-        "common_name": "DSM",
         "description": "Digital Surface Model - Single Band Grayscale"
       }
     ]
@@ -199,10 +197,6 @@
       {
         "name": "AACENUM",
         "description": "AACENUM"
-      },
-      {
-        "name": "ACCNAME",
-        "description": "ACCNAME"
       },
       {
         "name": "OzB",
@@ -224,10 +218,6 @@
       {
         "name": "AACENUM",
         "description": "AACENUM"
-      },
-      {
-        "name": "ACCNAME",
-        "description": "ACCNAME"
       },
       {
         "name": "OzB",

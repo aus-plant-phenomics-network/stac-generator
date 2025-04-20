@@ -41,7 +41,7 @@ def csv_generator() -> RasterGenerator:
 
 @pytest.fixture(scope="module")
 def collection_generator(csv_generator: RasterGenerator) -> CollectionGenerator:
-    return CollectionGenerator(StacCollectionConfig(id="raster_data"), generators=[csv_generator])
+    return CollectionGenerator(StacCollectionConfig(id="collection"), generators=[csv_generator])
 
 
 @pytest.mark.parametrize("item_idx", range(len(JSON_CONFIGS)), ids=ITEM_IDS)
@@ -90,12 +90,6 @@ def test_generator_given_item_expects_matched_generated_item_json_config_no_epsg
     assert expected["geometry"] == actual["geometry"]
     assert expected["properties"] == actual["properties"]
     assert expected["assets"] == actual["assets"]
-
-
-def test_generator_given_wrong_epsg_expects_raises() -> None:
-    with pytest.raises(ValueError):
-        generator = RasterGenerator(INVALID_CONFIG)
-        generator.create_items()
 
 
 def test_collection_generator(collection_generator: CollectionGenerator) -> None:

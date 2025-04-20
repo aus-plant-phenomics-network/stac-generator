@@ -1,6 +1,11 @@
+from __future__ import annotations
+
 import collections
 from collections.abc import Sequence
-from typing import Any
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+import pystac
 
 from stac_generator.core.base import (
     CollectionGenerator,
@@ -15,6 +20,9 @@ from stac_generator.core.raster import RasterGenerator
 from stac_generator.core.raster.schema import RasterConfig
 from stac_generator.core.vector import VectorGenerator
 from stac_generator.core.vector.schema import VectorConfig
+
+if TYPE_CHECKING:
+    import pystac
 
 EXTENSION_MAP: dict[str, type[SourceConfig]] = {
     "csv": PointConfig,
@@ -37,6 +45,7 @@ CONFIG_GENERATOR_MAP: dict[type[SourceConfig], type[ItemGenerator]] = {
 
 BaseConfig_T = (
     str
+    | Path
     | SourceConfig
     | dict[str, Any]
     | Sequence[str]
@@ -47,6 +56,14 @@ Config_T = BaseConfig_T | Sequence[BaseConfig_T]
 
 
 class StacGeneratorFactory:
+    @staticmethod
+    def extract_item_config(item: pystac.Item) -> SourceConfig:
+        if "stac_generator" not in item.properties:
+            raise ValueError(f"Missing stac_generator properties for item: {item.id}")
+        ext = item.properties["stac_generator"]["location"].split(".")[-1]
+        handler = StacGeneratorFactory.get_config_handler(ext)
+        return handler.model_validate(item.properties["stac_generator"])
+
     @staticmethod
     def match_handler(  # noqa: C901
         configs: Config_T,
@@ -74,6 +91,8 @@ class StacGeneratorFactory:
         def handle_base_config(config: BaseConfig_T) -> None:
             if isinstance(config, str):
                 handle_str_config(config)
+            elif isinstance(config, Path):
+                handle_str_config(str(config))
             elif isinstance(config, SourceConfig):
                 handle_source_config(config)
             elif isinstance(config, dict):
@@ -82,7 +101,7 @@ class StacGeneratorFactory:
                 raise TypeError(f"Invalid config item type: {type(config)}")
 
         def handle_config(config: Config_T) -> None:
-            if isinstance(config, str | dict | SourceConfig):
+            if isinstance(config, str | dict | SourceConfig | Path):
                 handle_base_config(config)
             elif hasattr(config, "__len__"):
                 for item in config:

@@ -1,0 +1,44 @@
+[
+    {
+        "id": "join_no_date",
+        "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+        "collection_date": "2025-01-01",
+        "collection_time": "00:00:00",
+        "column_info": [
+            {
+                "name": "Suburb_Name",
+                "description": "Suburb_Name"
+            }
+        ],
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/distance.csv",
+            "right_on": "Area",
+            "column_info": [
+                {
+                    "name": "Area",
+                    "description": "Area name"
+                },
+                {
+                    "name": "Distance",
+                    "description": "Driving Distance to CBD in km"
+                },
+                {
+                    "name": "Public_Transport",
+                    "description": "Time taken to reach CBD by public transport in minutes"
+                },
+                {
+                    "name": "Drive",
+                    "description": "Time taken to reach CBD by driving in minutes"
+                },
+                {
+                    "name": "Growth",
+                    "description": "Average 5 year growth in percentage in 2025"
+                },
+                {
+                    "name": "Yield",
+                    "description": "Average rental yield in 2025"
+                }
+            ]
+        }
+    }
+]

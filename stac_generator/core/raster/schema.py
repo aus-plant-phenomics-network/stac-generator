@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import json
 from typing import NotRequired
 
@@ -23,8 +25,6 @@ class RasterConfig(SourceConfig):
 
     band_info: list[BandInfo]
     """List of band information - REQUIRED"""
-    epsg: int | None = None
-    """EPSG code for the raster's coordinate reference system"""
 
     @field_validator("band_info", mode="before")
     @classmethod
@@ -37,3 +37,12 @@ class RasterConfig(SourceConfig):
                 raise ValueError("bands parameter expects a json serialisation of a lis of Band")
             return parsed
         raise ValueError(f"Invalid bands dtype: {type(v)}")
+
+    @field_validator("band_info", mode="after")
+    @classmethod
+    def convert_lower(cls, v: list[BandInfo]) -> list[BandInfo]:
+        for i in range(len(v)):
+            v[i]["name"] = v[i]["name"].lower()
+            if "common_name" in v[i]:
+                v[i]["common_name"] = v[i]["common_name"].lower()
+        return v

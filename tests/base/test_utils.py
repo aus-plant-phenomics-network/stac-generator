@@ -11,11 +11,15 @@ from shapely import Geometry, LineString, MultiLineString, MultiPoint, MultiPoly
 
 from stac_generator.core.base.generator import CollectionGenerator, VectorGenerator
 from stac_generator.core.base.utils import (
+    _read_csv,
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
     parse_href,
+    read_raster_asset,
     read_source_config,
+    read_vector_asset,
 )
+from stac_generator.exceptions import SourceAssetException, StacConfigException
 
 VALID_CSV_CONFIG_FILE = "tests/files/unit_tests/configs/csv_config.csv"
 
@@ -366,3 +370,28 @@ GEOMETRY_TEST_SET = {
 def test_geometry(df: gpd.GeoDataFrame, geom: Geometry) -> None:
     actual = VectorGenerator.geometry(df)
     assert actual == geom
+
+
+def test_read_non_existent_vector_expects_throw() -> None:
+    with pytest.raises(SourceAssetException):
+        read_vector_asset("non_existent.geojson")
+
+
+def test_vector_non_existent_layer_expects_throw() -> None:
+    with pytest.raises(StacConfigException):
+        read_vector_asset("tests/files/unit_tests/vectors/SA2.zip", layer="NonExistentLayer")
+
+
+def test_vector_incorrectly_formatted_file_expects_throw() -> None:
+    with pytest.raises(SourceAssetException):
+        read_vector_asset("tests/files/unit_tests/vectors/invalid.geojson")
+
+
+def test_read_non_existent_csv_expects_throw() -> None:
+    with pytest.raises(SourceAssetException):
+        _read_csv("non_existent.csv")
+
+
+def test_read_non_existent_raster_expects_throw() -> None:
+    with pytest.raises(SourceAssetException):
+        next(read_raster_asset("non_existent.tif"))

@@ -10,30 +10,36 @@
                 "description": "Suburb_Name"
             }
         ],
-        "join_file": "tests/files/unit_tests/vectors/distance.csv",
-        "join_field": "Area",
-        "join_attribute_vector": "Suburb_Name",
-        "join_column_info": [
-            {
-                "name": "Distance",
-                "description": "Driving Distance to CBD in km"
-            },
-            {
-                "name": "Public_Transport",
-                "description": "Time taken to reach CBD by public transport in minutes"
-            },
-            {
-                "name": "Drive",
-                "description": "Time taken to reach CBD by driving in minutes"
-            },
-            {
-                "name": "Growth",
-                "description": "Average 5 year growth in percentage in 2025"
-            },
-            {
-                "name": "Yield",
-                "description": "Average rental yield in 2025"
-            }
-        ]
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/distance.csv",
+            "left_on": "Suburb_Name",
+            "right_on": "Area",
+            "column_info": [
+                {
+                    "name": "Area",
+                    "description": "Area name"
+                },
+                {
+                    "name": "Distance",
+                    "description": "Driving Distance to CBD in km"
+                },
+                {
+                    "name": "Public_Transport",
+                    "description": "Time taken to reach CBD by public transport in minutes"
+                },
+                {
+                    "name": "Drive",
+                    "description": "Time taken to reach CBD by driving in minutes"
+                },
+                {
+                    "name": "Growth",
+                    "description": "Average 5 year growth in percentage in 2025"
+                },
+                {
+                    "name": "Yield",
+                    "description": "Average rental yield in 2025"
+                }
+            ]
+        }
     }
 ]

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from stac_generator.core.base.schema import HasColumnInfo, SourceConfig
 
 

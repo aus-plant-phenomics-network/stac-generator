@@ -19,21 +19,27 @@
     -34.7674
   ],
   "properties": {
-    "column_info": [
-      {
-        "name": "daily_rain",
-        "description": "Observed daily rain fall in mm"
-      },
-      {
-        "name": "radiation",
-        "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
-      }
-    ],
-    "X": "longitude",
-    "Y": "latitude",
-    "Z": "elevation",
-    "T": "YYYY-MM-DD",
-    "epsg": 7843,
+    "stac_generator": {
+      "column_info": [
+        {
+          "name": "daily_rain",
+          "description": "Observed daily rain fall in mm"
+        },
+        {
+          "name": "radiation",
+          "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm"
+        }
+      ],
+      "id": "adelaide_salisbury_bowling_club",
+      "collection_date": "2023-01-02",
+      "collection_time": "09:00:00",
+      "location": "tests/files/integration_tests/point/data/adelaide_salisbury_bowling_club.csv",
+      "X": "longitude",
+      "Y": "latitude",
+      "Z": "elevation",
+      "T": "YYYY-MM-DD",
+      "epsg": 7843
+    },
     "start_datetime": "2022-12-31T13:30:00Z",
     "end_datetime": "2023-01-31T13:30:00Z",
     "proj:code": "EPSG:7843",
@@ -43,24 +49,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
@@ -75,5 +81,5 @@
       ]
     }
   },
-  "collection": "composite_data"
+  "collection": "collection"
 }
