@@ -83,7 +83,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         if source_config.join_config:
             join_config = source_config.join_config
             # Get timezone information
-            tzinfo = calculate_timezone(raw_df.geometry)
+            tzinfo = calculate_timezone(raw_df.to_crs(4326).geometry)
             # Try reading join file and raise errors if columns not provided
             join_df = read_join_asset(
                 join_config.file,
