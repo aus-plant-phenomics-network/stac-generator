@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pytest
 
-from stac_generator import StacGeneratorFactory
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
+from stac_generator.factory import StacGeneratorFactory
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
