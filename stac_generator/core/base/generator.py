@@ -32,9 +32,10 @@ from stac_generator.core.base.schema import (
     T,
 )
 from stac_generator.core.base.utils import (
-    calculate_timezone,
     force_write_to_stac_api,
+    get_timezone,
     href_is_stac_api_endpoint,
+    localise_timezone,
     parse_href,
 )
 
@@ -286,24 +287,19 @@ class VectorGenerator(ItemGenerator[T]):
         crs = cast(CRS, df.crs)
         # Convert to WGS 84 for computing geometry and bbox
         df.to_crs(epsg=4326, inplace=True)
-        item_tz = calculate_timezone(box(*df.total_bounds))
-        item_ts = source_config.get_datetime(item_tz)
+        geometry = box(*df.total_bounds)
+        item_tz = get_timezone(source_config.timezone, geometry)
+        item_ts = source_config.get_datetime(geometry)
 
         geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
 
         # Process start end datetime
-        if not start_datetime:
-            start_datetime = item_ts  # type: ignore[assignment]
-        else:
-            if start_datetime.tzinfo is None:
-                start_datetime = start_datetime.tz_localize(item_tz)
-            start_datetime = start_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
-        if not end_datetime:
-            end_datetime = item_ts  # type: ignore[assignment]
-        else:
-            if end_datetime.tzinfo is None:
-                end_datetime = end_datetime.tz_localize(item_tz)
-            end_datetime = end_datetime.astimezone(tz="UTC")  # type: ignore[arg-type]
+        start_datetime = (
+            localise_timezone(start_datetime, item_tz) if start_datetime is not None else item_ts
+        )
+        end_datetime = (
+            localise_timezone(end_datetime, item_tz) if end_datetime is not None else item_ts
+        )
 
         item = pystac.Item(
             source_config.id,

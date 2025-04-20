@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import collections
 from collections.abc import Sequence
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import pystac
 
@@ -18,6 +20,9 @@ from stac_generator.core.raster import RasterGenerator
 from stac_generator.core.raster.schema import RasterConfig
 from stac_generator.core.vector import VectorGenerator
 from stac_generator.core.vector.schema import VectorConfig
+
+if TYPE_CHECKING:
+    import pystac
 
 EXTENSION_MAP: dict[str, type[SourceConfig]] = {
     "csv": PointConfig,

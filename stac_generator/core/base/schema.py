@@ -1,14 +1,15 @@
 import datetime
 import json
 import logging
+from collections.abc import Sequence
 from typing import Any, Literal, NotRequired, Required, TypeVar
 
+import pandas as pd
 import pytz
-from httpx._types import (
-    RequestData,
-)
+from httpx._types import RequestData
 from pydantic import BaseModel, Field, field_validator
-from stac_pydantic.shared import Provider, UtcDatetime
+from shapely import Geometry
+from stac_pydantic.shared import Provider
 from typing_extensions import TypedDict
 
 from stac_generator._types import (
@@ -18,6 +19,8 @@ from stac_generator._types import (
     QueryParamTypes,
     RequestContent,
 )
+from stac_generator.core.base.utils import get_timezone
+from stac_generator.exceptions import TimezoneException
 
 T = TypeVar("T", bound="SourceConfig")
 ASSET_KEY = "data"
@@ -68,15 +71,21 @@ class StacItemConfig(StacCollectionConfig):
     """
 
     collection_date: datetime.date
-    """Date in local timezone of when the data is collected"""
+    """Date when the data is collected"""
     collection_time: datetime.time
-    """Time in local timezone of when the data is collected"""
+    """Time when the data is collected"""
+    timezone: str | Literal["utc", "local"] = "local"
+    """Timezone"""
 
-    def get_datetime(self, timezone: str) -> UtcDatetime:
-        local_dt = datetime.datetime.combine(
-            self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
-        )
-        return local_dt.astimezone(datetime.UTC)
+    def get_datetime(self, geometry: Geometry | Sequence[Geometry]) -> pd.Timestamp:
+        timezone = get_timezone(self.timezone, geometry)
+        try:
+            local_dt = datetime.datetime.combine(
+                self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
+            )
+        except Exception as e:
+            raise TimezoneException("Invalid timezone config parameter") from e
+        return pd.Timestamp(local_dt.astimezone(datetime.UTC))
 
 
 class SourceConfig(StacItemConfig):

@@ -14,7 +14,7 @@ from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import calculate_timezone, read_raster_asset
+from stac_generator.core.base.utils import read_raster_asset
 
 from .schema import RasterConfig
 
@@ -66,8 +66,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         geometry_geojson = json.loads(to_geojson(geometry))
 
         # Process datetime
-        item_tz = calculate_timezone(geometry)
-        item_ts = source_config.get_datetime(item_tz)
+        item_ts = source_config.get_datetime(geometry)
 
         # Get EPSG
         epsg = crs.to_epsg()

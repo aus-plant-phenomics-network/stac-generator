@@ -1,14 +1,23 @@
+from __future__ import annotations
+
 import logging
 import re
+from typing import TYPE_CHECKING
 
 import pystac
-from pyproj.crs.crs import CRS
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import calculate_timezone, read_join_asset, read_vector_asset
+from stac_generator.core.base.utils import (
+    get_timezone,
+    read_join_asset,
+    read_vector_asset,
+)
 from stac_generator.core.vector.schema import VectorConfig
 from stac_generator.exceptions import StacConfigException
+
+if TYPE_CHECKING:
+    from pyproj.crs.crs import CRS
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +92,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         if source_config.join_config:
             join_config = source_config.join_config
             # Get timezone information
-            tzinfo = calculate_timezone(raw_df.to_crs(4326).geometry)
+            tzinfo = get_timezone(source_config.timezone, raw_df.to_crs(4326).geometry)
             # Try reading join file and raise errors if columns not provided
             join_df = read_join_asset(
                 join_config.file,

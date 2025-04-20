@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 import pystac
@@ -39,6 +41,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
             source_config.T,
             source_config.date_format,
             source_config.column_info,
+            source_config.timezone,
         )
         if source_config.T is not None:
             start_datetime = raw_df[source_config.T].min()

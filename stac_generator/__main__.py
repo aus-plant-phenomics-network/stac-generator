@@ -9,6 +9,8 @@ r"""
  \______/   |__/ |__/  |__/\______/        \______/|________|__/  \__/
 """  # noqa: D212
 
+from __future__ import annotations
+
 import json
 import logging
 from argparse import ArgumentParser, Namespace, _SubParsersAction

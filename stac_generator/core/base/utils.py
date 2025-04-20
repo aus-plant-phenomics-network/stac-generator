@@ -1,10 +1,10 @@
-import datetime
+from __future__ import annotations
+
 import json
 import logging
 import urllib.parse
-from collections.abc import Generator, Sequence
 from pathlib import Path
-from typing import Any, cast
+from typing import TYPE_CHECKING, Any, Literal, cast, overload
 
 import geopandas as gpd
 import httpx
@@ -17,7 +17,6 @@ from pytz import timezone
 from shapely import Geometry, GeometryCollection, centroid
 from timezonefinder import TimezoneFinder
 
-from stac_generator.core.base.schema import ColumnInfo
 from stac_generator.exceptions import (
     ConfigFormatException,
     InvalidExtensionException,
@@ -26,6 +25,11 @@ from stac_generator.exceptions import (
     StacConfigException,
     TimezoneException,
 )
+
+if TYPE_CHECKING:
+    from collections.abc import Generator, Sequence
+
+    from stac_generator.core.base.schema import ColumnInfo
 
 SUPPORTED_URI_SCHEMES = ["http", "https"]
 logger = logging.getLogger(__name__)
@@ -112,6 +116,38 @@ def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
     return timezone_str
 
 
+def get_timezone(
+    timezone: str | Literal["local", "utc"], geometry: Geometry | Sequence[Geometry]
+) -> str:
+    if timezone == "local":
+        return calculate_timezone(geometry)
+    return timezone
+
+
+@overload
+def localise_timezone(data: pd.Timestamp, tzinfo: str) -> pd.Timestamp: ...
+@overload
+def localise_timezone(data: pd.Series[pd.Timestamp], tzinfo: str) -> pd.Series[pd.Timestamp]: ...
+
+
+def localise_timezone(
+    data: pd.Timestamp | pd.Series[pd.Timestamp], tzinfo: str
+) -> pd.Timestamp | pd.Series[pd.Timestamp]:
+    try:
+        tz = timezone(tzinfo)
+    except Exception as e:
+        raise TimezoneException("Invalid timezone localisation") from e
+
+    def localise(row: pd.Timestamp) -> pd.Timestamp:
+        if row.tzinfo is None:
+            row = row.tz_localize(tz)
+        return row.tz_convert("UTC")
+
+    if isinstance(data, pd.Timestamp):
+        return localise(data)
+    return data.apply(localise)
+
+
 def _read_csv(
     src_path: str,
     required: set[str] | Sequence[str] | None = None,
@@ -147,20 +183,6 @@ def _read_csv(
         ) from e
 
 
-def _localise_timezone(df: pd.DataFrame, date_column: str, tzinfo: str) -> pd.DataFrame:
-    tz = timezone(tzinfo)
-
-    def localize_tz(row: datetime.datetime) -> datetime.datetime:
-        if row.tzinfo is None:
-            row = tz.localize(row)
-        return row
-
-    df[date_column] = df[date_column].apply(localize_tz)
-    # Convert all timezone information to UTC
-    df[date_column] = df[date_column].dt.tz_convert("UTC")
-    return df
-
-
 def read_point_asset(
     src_path: str,
     X_coord: str,
@@ -170,6 +192,7 @@ def read_point_asset(
     T_coord: str | None = None,
     date_format: str = "ISO8601",
     columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
+    timezone: str | Literal["utc", "local"] = "local",
 ) -> gpd.GeoDataFrame:
     """Read in csv from local disk
     Users must provide at the bare minimum the location of the csv, and the names of the columns to be
@@ -187,8 +210,8 @@ def read_point_asset(
 
     gdf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
     if T_coord:
-        tzinfo = calculate_timezone(gdf.geometry)
-        gdf = _localise_timezone(gdf, T_coord, tzinfo)
+        tzinfo = get_timezone(timezone, gdf.geometry)
+        gdf[T_coord] = localise_timezone(gdf[T_coord], tzinfo)
     return gdf
 
 
@@ -228,7 +251,7 @@ def read_join_asset(
         columns=columns,
     )
     if date_column:
-        df = _localise_timezone(df, date_column, tzinfo)
+        df[date_column] = localise_timezone(df[date_column], tzinfo)
     return df
 
 
