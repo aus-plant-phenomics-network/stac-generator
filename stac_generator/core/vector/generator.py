@@ -9,6 +9,7 @@ from stac_generator.core.base.generator import VectorGenerator as BaseVectorGene
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import _read_csv
 from stac_generator.core.vector.schema import VectorConfig
+from stac_generator.exceptions import StacConfigException
 
 logger = logging.getLogger(__name__)
 
@@ -71,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         raw_df = gpd.read_file(source_config.location, layer=source_config.layer)
 
         if columns and not set(columns).issubset(set(raw_df.columns)):
-            raise ValueError(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
+            raise StacConfigException(f"Invalid columns: {set(columns) - set(raw_df.columns)}")
 
         # Validate EPSG user-input vs extracted
         epsg, _ = extract_epsg(raw_df.crs)
@@ -81,18 +82,13 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         if source_config.join_config:
             join_config = source_config.join_config
             # Try reading join file and raise errors if columns not provided
-            try:
-                join_df = _read_csv(
-                    src_path=join_config.file,
-                    required=[join_config.right_on],
-                    date_format=join_config.date_format,
-                    date_col=join_config.date_column,
-                    columns=join_config.column_info,
-                )
-            except ValueError as e:
-                raise ValueError(
-                    f"Join file associated with vector file: {source_config.id} may not have the specified column"
-                ) from e
+            join_df = _read_csv(
+                src_path=join_config.file,
+                required=[join_config.right_on],
+                date_format=join_config.date_format,
+                date_col=join_config.date_column,
+                columns=join_config.column_info,
+            )
             if join_config.date_column:
                 start_datetime = join_df[join_config.date_column].min()
                 end_datetime = join_df[join_config.date_column].max()

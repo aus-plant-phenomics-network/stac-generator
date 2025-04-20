@@ -7,6 +7,7 @@ import pytest
 
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.vector.generator import VectorGenerator
+from stac_generator.exceptions import StacConfigException
 
 CONFIG_PATH = Path("tests/files/unit_tests/vectors/configs")
 
@@ -28,7 +29,7 @@ def test_given_invalid_wrong_layer_expects_raises() -> None:
 
 
 def test_given_invalid_column_info_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_items("invalid_column_info.json")
 
 
@@ -82,12 +83,12 @@ def test_given_join_file_invalid_config_right_on_undescribed_expects_throw() -> 
 
 
 def test_given_join_file_invalid_wrong_join_column_info_expects_throw() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("join_invalid_config_wrong_join_column_info.json")
 
 
 def test_given_join_file_invalid_wrong_join_date_column_expects_throw() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("join_invalid_config_wrong_join_date_column.json")
 
 

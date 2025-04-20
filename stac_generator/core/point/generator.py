@@ -1,63 +1,14 @@
 import logging
-from collections.abc import Sequence
 
-import geopandas as gpd
 import pystac
 
 from stac_generator._types import CsvMediaType
 from stac_generator.core.base.generator import VectorGenerator
-from stac_generator.core.base.schema import ASSET_KEY, ColumnInfo
-from stac_generator.core.base.utils import _read_csv
+from stac_generator.core.base.schema import ASSET_KEY
+from stac_generator.core.base.utils import read_point_asset
 from stac_generator.core.point.schema import PointConfig
 
 logger = logging.getLogger(__name__)
-
-
-def read_csv(
-    src_path: str,
-    X_coord: str,
-    Y_coord: str,
-    epsg: int,
-    Z_coord: str | None = None,
-    T_coord: str | None = None,
-    date_format: str = "ISO8601",
-    columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
-) -> gpd.GeoDataFrame:
-    """Read in csv from local disk
-
-    Users must provide at the bare minimum the location of the csv, and the names of the columns to be
-    treated as the X and Y coordinates. By default, will read in all columns in the csv. If columns and groupby
-    columns are provided, will selectively read specified columns together with the coordinate columns (X, Y, T).
-
-    :param src_path: path to csv file
-    :type src_path: str
-    :param X_coord: name of X field
-    :type X_coord: str
-    :param Y_coord: name of Y field
-    :type Y_coord: str
-    :param epsg: epsg code
-    :type epsg: int
-    :param Z_coord: name of Z field
-    :type Z_coord: str
-    :param T_coord: name of time field, defaults to None
-    :type T_coord: str | None, optional
-    :param date_format: format to pass to pandas to parse datetime, defaults to "ISO8601"
-    :type date_format: str, optional
-    :param columns: band information, defaults to None
-    :type columns: list[str] | list[ColumnInfo] | None, optional
-    :return: read dataframe
-    :rtype: pd.DataFrame
-    """
-    df = _read_csv(
-        src_path=src_path,
-        required=[X_coord, Y_coord],
-        optional=[Z_coord] if Z_coord else None,
-        date_col=T_coord,
-        date_format=date_format,
-        columns=columns,
-    )
-
-    return gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df[X_coord], df[Y_coord], crs=epsg))
 
 
 class PointGenerator(VectorGenerator[PointConfig]):
@@ -79,7 +30,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
                 media_type=CsvMediaType,
             )
         }
-        raw_df = read_csv(
+        raw_df = read_point_asset(
             source_config.location,
             source_config.X,
             source_config.Y,

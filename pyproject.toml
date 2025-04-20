@@ -166,7 +166,7 @@ warn_unused_configs = true
 warn_unused_ignores = false
 
 [[tool.mypy.overrides]]
-module = "rasterio.*,requests.*,shapely.*,geopandas.*,fiona.*,yaml.*"
+module = "rasterio.*,requests.*,shapely.*,geopandas.*,fiona.*,yaml.*,pyogrio.*"
 ignore_missing_imports = true
 
 [tool.pdm]

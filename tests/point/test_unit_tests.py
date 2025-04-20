@@ -6,6 +6,7 @@ import pytest
 
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
+from stac_generator.exceptions import StacConfigException
 
 CONFIG_PATH = Path("tests/files/unit_tests/points/configs")
 
@@ -57,15 +58,15 @@ def test_with_date_with_tzinfo_expects_start_end_datetime() -> None:
 
 
 def test_invalid_altitude_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_altitude.json")
 
 
 def test_invalid_date_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_date.json")
 
 
 def test_invalid_column_info_expects_raises() -> None:
-    with pytest.raises(ValueError):
+    with pytest.raises(StacConfigException):
         load_item("invalid_column_info.json")

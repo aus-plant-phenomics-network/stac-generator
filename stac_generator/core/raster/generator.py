@@ -14,7 +14,7 @@ from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import calculate_timezone
+from stac_generator.core.base.utils import calculate_timezone, read_raster_asset
 
 from .schema import RasterConfig
 
@@ -50,95 +50,93 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         :return: generated item
         :rtype: pystac.Item
         """
-        with rasterio.open(source_config.location) as src:
-            bounds = src.bounds
-            crs = cast(CRS, src.crs)
-            shape = list(src.shape)
+        src = next(read_raster_asset(source_config.location))
+        bounds = src.bounds
+        crs = cast(CRS, src.crs)
+        shape = list(src.shape)
 
-            # Convert to 4326 for bbox and geometry
-            transformer = Transformer.from_crs(crs, 4326, always_xy=True)
-            minx, miny = transformer.transform(bounds.left, bounds.bottom)
-            maxx, maxy = transformer.transform(bounds.right, bounds.top)
-            bbox: tuple[float, float, float, float] = (minx, miny, maxx, maxy)
+        # Convert to 4326 for bbox and geometry
+        transformer = Transformer.from_crs(crs, 4326, always_xy=True)
+        minx, miny = transformer.transform(bounds.left, bounds.bottom)
+        maxx, maxy = transformer.transform(bounds.right, bounds.top)
+        bbox: tuple[float, float, float, float] = (minx, miny, maxx, maxy)
 
-            # Create geometry as Shapely Polygon
-            geometry = box(*bbox)
-            geometry_geojson = json.loads(to_geojson(geometry))
+        # Create geometry as Shapely Polygon
+        geometry = box(*bbox)
+        geometry_geojson = json.loads(to_geojson(geometry))
 
-            # Process datetime
-            item_tz = calculate_timezone(geometry)
-            item_ts = source_config.get_datetime(item_tz)
+        # Process datetime
+        item_tz = calculate_timezone(geometry)
+        item_ts = source_config.get_datetime(item_tz)
 
-            # Get EPSG
-            epsg = crs.to_epsg()
+        # Get EPSG
+        epsg = crs.to_epsg()
 
-            # Create STAC Item
-            # Start datetime and end_datetime are set to be collection datetime for Raster data
-            item = pystac.Item(
-                id=source_config.id,
-                geometry=geometry_geojson,
-                bbox=list(bbox),
-                datetime=item_ts,
-                properties={"stac_generator": source_config.to_properties()},
-                start_datetime=item_ts,
-                end_datetime=item_ts,
+        # Create STAC Item
+        # Start datetime and end_datetime are set to be collection datetime for Raster data
+        item = pystac.Item(
+            id=source_config.id,
+            geometry=geometry_geojson,
+            bbox=list(bbox),
+            datetime=item_ts,
+            properties={"stac_generator": source_config.to_properties()},
+            start_datetime=item_ts,
+            end_datetime=item_ts,
+        )
+
+        # Projection extension
+        proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
+        affine_transform = [
+            rasterio.transform.from_bounds(*bounds, shape[1], shape[0])[i] for i in range(9)
+        ]
+        proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt(), shape=shape, transform=affine_transform)
+
+        # Create EO and Raster bands
+        eo_bands = []
+        raster_bands = []
+
+        for band_info in source_config.band_info:
+            common_name = band_info.get("common_name", None)
+            if common_name and common_name not in VALID_COMMON_NAME:
+                raise ValueError(f"Invalid common name: {common_name} for item: {source_config.id}")
+            eo_band = Band.create(
+                name=band_info["name"],
+                common_name=common_name,
+                center_wavelength=band_info.get("wavelength", None),
+                description=band_info.get("description", None),
             )
+            eo_bands.append(eo_band)
 
-            # Projection extension
-            proj_ext = ItemProjectionExtension.ext(item, add_if_missing=True)
-            affine_transform = [
-                rasterio.transform.from_bounds(*bounds, shape[1], shape[0])[i] for i in range(9)
-            ]
-            proj_ext.apply(epsg=epsg, wkt2=crs.to_wkt(), shape=shape, transform=affine_transform)
-
-            # Create EO and Raster bands
-            eo_bands = []
-            raster_bands = []
-
-            for band_info in source_config.band_info:
-                common_name = band_info.get("common_name", None)
-                if common_name and common_name not in VALID_COMMON_NAME:
-                    raise ValueError(
-                        f"Invalid common name: {common_name} for item: {source_config.id}"
-                    )
-                eo_band = Band.create(
-                    name=band_info["name"],
-                    common_name=common_name,
-                    center_wavelength=band_info.get("wavelength", None),
-                    description=band_info.get("description", None),
-                )
-                eo_bands.append(eo_band)
-
-                raster_band = RasterBand.create(
-                    nodata=band_info.get("nodata", 0),
-                    data_type=DataType(band_info.get("data_type"))
-                    if band_info.get("data_type", None)
-                    else None,
-                )
-                raster_bands.append(raster_band)
-
-            # Create Asset and Add to Item
-            asset = pystac.Asset(
-                href=source_config.location,
-                media_type=pystac.MediaType.GEOTIFF,
-                roles=["data"],
-                title="Raster Data",
+            raster_band = RasterBand.create(
+                nodata=band_info.get("nodata", 0),
+                data_type=DataType(band_info.get("data_type"))
+                if band_info.get("data_type", None)
+                else None,
             )
-            item.add_asset(ASSET_KEY, asset)
+            raster_bands.append(raster_band)
 
-            # Apply projection extension to asset
-            asset_proj_ext = AssetProjectionExtension.ext(asset, add_if_missing=True)
-            asset_proj_ext.apply(
-                epsg=crs.to_epsg(), wkt2=crs.to_wkt(), shape=shape, transform=affine_transform
-            )
+        # Create Asset and Add to Item
+        asset = pystac.Asset(
+            href=source_config.location,
+            media_type=pystac.MediaType.GEOTIFF,
+            roles=["data"],
+            title="Raster Data",
+        )
+        item.add_asset(ASSET_KEY, asset)
 
-            # Apply Raster Extension to the Asset
-            asset_raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
-            asset_raster_ext.apply(bands=raster_bands)
+        # Apply projection extension to asset
+        asset_proj_ext = AssetProjectionExtension.ext(asset, add_if_missing=True)
+        asset_proj_ext.apply(
+            epsg=crs.to_epsg(), wkt2=crs.to_wkt(), shape=shape, transform=affine_transform
+        )
 
-            # Add eo:bands to Asset
-            # Apply EO bands to the asset using AssetEOExtension
-            asset_eo_ext = EOExtension.ext(asset, add_if_missing=True)
-            asset_eo_ext.apply(bands=eo_bands)
+        # Apply Raster Extension to the Asset
+        asset_raster_ext = AssetRasterExtension.ext(asset, add_if_missing=True)
+        asset_raster_ext.apply(bands=raster_bands)
 
-            return item
+        # Add eo:bands to Asset
+        # Apply EO bands to the asset using AssetEOExtension
+        asset_eo_ext = EOExtension.ext(asset, add_if_missing=True)
+        asset_eo_ext.apply(bands=eo_bands)
+
+        return item
