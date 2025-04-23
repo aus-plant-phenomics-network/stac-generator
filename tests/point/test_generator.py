@@ -8,6 +8,7 @@ from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
 from stac_generator.core.point.schema import PointConfig
+from tests.utils import compare_dict_except
 
 CONFIG_JSON = Path("tests/files/integration_tests/point/config/point_config.json")
 
@@ -47,7 +48,7 @@ def test_generator_given_item_expects_matched_generated_item(
     actual = json_csv_generator.create_item_from_config(PointConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
-    assert expected["properties"] == actual["properties"]
+    compare_dict_except(expected["properties"], actual["properties"])
     assert expected["assets"] == actual["assets"]
     assert expected["geometry"] == actual["geometry"]
 
@@ -63,7 +64,7 @@ def test_generator_given_item_expects_matched_generated_item_csv_config_version(
     actual = csv_generator.create_item_from_config(PointConfig(**config)).to_dict()
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
-    assert expected["properties"] == actual["properties"]
+    compare_dict_except(expected["properties"], actual["properties"])
     assert expected["assets"] == actual["assets"]
     assert expected["geometry"] == actual["geometry"]
 

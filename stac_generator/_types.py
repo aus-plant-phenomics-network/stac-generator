@@ -1,14 +1,10 @@
 from __future__ import annotations
 
-import datetime
 from collections.abc import Iterable, Mapping, Sequence
 from typing import Literal
 
+import pandas as pd
 from httpx._types import PrimitiveData
-
-TimeExtentT = tuple[
-    datetime.datetime | None, datetime.datetime | None
-]  # (start_datetime, end_datetime) format
 
 """<a href="https://www.rfc-editor.org/rfc/rfc7111">Csv MIME type</a>"""
 CsvMediaType = "text/csv"
@@ -47,3 +43,7 @@ StacEntityT = Literal["Item", "ItemCollection", "Collection", "Catalogue"]
 
 """STAC API HTTP Methods"""
 StacAPIMethod = Literal["POST", "PUT"]
+
+Timestamp = pd.Timestamp
+TimeSeries = pd.Series
+TimeSequence = Sequence[Timestamp] | TimeSeries

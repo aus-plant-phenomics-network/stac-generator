@@ -10,10 +10,10 @@ import geopandas as gpd
 import httpx
 import numpy as np
 import pandas as pd
+import pytz
 import rasterio
 import yaml
 from pyogrio.errors import DataLayerError, DataSourceError
-from pytz import timezone
 from shapely import Geometry, GeometryCollection, centroid
 from timezonefinder import TimezoneFinder
 
@@ -29,6 +29,7 @@ from stac_generator.exceptions import (
 if TYPE_CHECKING:
     from collections.abc import Generator, Sequence
 
+    from stac_generator._types import TimeSequence, TimeSeries, Timestamp
     from stac_generator.core.base.schema import ColumnInfo
 
 SUPPORTED_URI_SCHEMES = ["http", "https"]
@@ -125,23 +126,22 @@ def get_timezone(
 
 
 @overload
-def localise_timezone(data: pd.Timestamp, tzinfo: str) -> pd.Timestamp: ...
+def localise_timezone(data: Timestamp, tzinfo: str) -> Timestamp: ...
 @overload
-def localise_timezone(data: pd.Series[pd.Timestamp], tzinfo: str) -> pd.Series[pd.Timestamp]: ...
+def localise_timezone(data: TimeSeries, tzinfo: str) -> TimeSeries: ...
 
 
-def localise_timezone(
-    data: pd.Timestamp | pd.Series[pd.Timestamp], tzinfo: str
-) -> pd.Timestamp | pd.Series[pd.Timestamp]:
+def localise_timezone(data: Timestamp | TimeSeries, tzinfo: str) -> Timestamp | TimeSeries:
+    """Add timezone information to data then converts to UTC"""
     try:
-        tz = timezone(tzinfo)
+        tz = pytz.timezone(tzinfo)
     except Exception as e:
         raise TimezoneException("Invalid timezone localisation") from e
 
     def localise(row: pd.Timestamp) -> pd.Timestamp:
         if row.tzinfo is None:
             row = row.tz_localize(tz)
-        return row.tz_convert("UTC")
+        return row.tz_convert(pytz.timezone("UTC"))
 
     if isinstance(data, pd.Timestamp):
         return localise(data)
@@ -261,3 +261,8 @@ def read_raster_asset(src_path: str) -> Generator[Any]:
             yield src
     except Exception as e:  # noqa: BLE001
         raise SourceAssetException(e) from None
+
+
+def add_timestamps(properties: dict[Any, Any], timestamps: TimeSequence) -> None:
+    timestamps_str = [item.isoformat(sep="T") for item in timestamps]
+    properties["timestamps"] = timestamps_str

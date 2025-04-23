@@ -52,33 +52,67 @@
       "T": "YYYY-MM-DD",
       "epsg": 7843
     },
+    "timestamps": [
+      "2022-12-31T13:30:00+00:00",
+      "2023-01-01T13:30:00+00:00",
+      "2023-01-02T13:30:00+00:00",
+      "2023-01-03T13:30:00+00:00",
+      "2023-01-04T13:30:00+00:00",
+      "2023-01-05T13:30:00+00:00",
+      "2023-01-06T13:30:00+00:00",
+      "2023-01-07T13:30:00+00:00",
+      "2023-01-08T13:30:00+00:00",
+      "2023-01-09T13:30:00+00:00",
+      "2023-01-10T13:30:00+00:00",
+      "2023-01-11T13:30:00+00:00",
+      "2023-01-12T13:30:00+00:00",
+      "2023-01-13T13:30:00+00:00",
+      "2023-01-14T13:30:00+00:00",
+      "2023-01-15T13:30:00+00:00",
+      "2023-01-16T13:30:00+00:00",
+      "2023-01-17T13:30:00+00:00",
+      "2023-01-18T13:30:00+00:00",
+      "2023-01-19T13:30:00+00:00",
+      "2023-01-20T13:30:00+00:00",
+      "2023-01-21T13:30:00+00:00",
+      "2023-01-22T13:30:00+00:00",
+      "2023-01-23T13:30:00+00:00",
+      "2023-01-24T13:30:00+00:00",
+      "2023-01-25T13:30:00+00:00",
+      "2023-01-26T13:30:00+00:00",
+      "2023-01-27T13:30:00+00:00",
+      "2023-01-28T13:30:00+00:00",
+      "2023-01-29T13:30:00+00:00",
+      "2023-01-30T13:30:00+00:00",
+      "2023-01-31T13:30:00+00:00"
+    ],
     "start_datetime": "2022-12-31T13:30:00Z",
     "end_datetime": "2023-01-31T13:30:00Z",
     "proj:code": "EPSG:7843",
     "proj:wkt2": "GEOGCRS[\"GDA2020\",DATUM[\"Geocentric Datum of Australia 2020\",ELLIPSOID[\"GRS 1980\",6378137,298.257222101,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,3],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"ellipsoidal height (h)\",up,ORDER[3],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"Geodesy, cadastre, engineering survey, topographic mapping.\"],AREA[\"Australia including Lord Howe Island, Macquarie Island, Ashmore and Cartier Islands, Christmas Island, Cocos (Keeling) Islands, Norfolk Island. All onshore and offshore.\"],BBOX[-60.55,93.41,-8.47,173.34]],ID[\"EPSG\",7843]]",
-    "datetime": "2022-12-31T23:46:00Z"
+    "datetime": "2022-12-31T22:30:00Z"
   },
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/adelaide_airport/adelaide_airport.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/adelaide_airport/adelaide_airport.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

@@ -4,6 +4,7 @@ import logging
 import re
 from typing import TYPE_CHECKING
 
+import pandas as pd
 import pystac
 
 from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
@@ -71,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             )
         }
         logger.debug(f"Reading file from {source_config.location}")
-
+        time_column = None
         # Only read relevant fields
         columns = [
             col["name"] if isinstance(col, dict) else col for col in source_config.column_info
@@ -86,8 +87,6 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
 
         # Validate EPSG user-input vs extracted
         epsg, _ = extract_epsg(raw_df.crs)
-
-        start_datetime, end_datetime = None, None
         # Read join file
         if source_config.join_config:
             join_config = source_config.join_config
@@ -102,10 +101,16 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 join_config.column_info,
                 tzinfo,
             )
+            # Try joining the files to validate results:
+            raw_df = pd.merge(
+                raw_df,
+                join_df,
+                left_on=join_config.left_on,
+                right_on=join_config.right_on,
+            )
             # Set asset start and end datetime based on date information
             if join_config.date_column:
-                start_datetime = join_df[join_config.date_column].min()
-                end_datetime = join_df[join_config.date_column].max()
+                time_column = join_config.date_column
 
         # Make properties
         properties = source_config.to_properties()
@@ -116,6 +121,5 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             source_config,
             properties={"stac_generator": properties},
             epsg=epsg,
-            start_datetime=start_datetime,
-            end_datetime=end_datetime,
+            time_column=time_column,
         )

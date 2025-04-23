@@ -1,0 +1,39 @@
+[
+    {
+        "id": "join_with_date",
+        "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+        "collection_date": "2025-01-01",
+        "collection_time": "00:00:00",
+        "timezone": "Australia/Sydney",
+        "column_info": [
+            {
+                "name": "Suburb_Name",
+                "description": "Suburb_Name"
+            }
+        ],
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/price_multi_tz_multi_area.csv",
+            "left_on": "Suburb_Name",
+            "right_on": "Area",
+            "date_column": "Date",
+            "column_info": [
+                {
+                    "name": "Area",
+                    "description": "Area Name"
+                },
+                {
+                    "name": "Sell_Price",
+                    "description": "Median Sales Price in 2025"
+                },
+                {
+                    "name": "Rent_Price",
+                    "description": "Median Rental Price in 2025"
+                },
+                {
+                    "name": "Sell/Rent",
+                    "description": "Ratio of Sales Price (in $1000) over Rental Price (in $)"
+                }
+            ]
+        }
+    }
+]

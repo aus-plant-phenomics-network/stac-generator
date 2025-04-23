@@ -80,12 +80,13 @@ class StacItemConfig(StacCollectionConfig):
     def get_datetime(self, geometry: Geometry | Sequence[Geometry]) -> pd.Timestamp:
         timezone = get_timezone(self.timezone, geometry)
         try:
-            local_dt = datetime.datetime.combine(
-                self.collection_date, self.collection_time, tzinfo=pytz.timezone(timezone)
+            local_dt = pd.Timestamp(
+                f"{self.collection_date}T{self.collection_time}",
+                tzinfo=pytz.timezone(timezone),
             )
         except Exception as e:
             raise TimezoneException("Invalid timezone config parameter") from e
-        return pd.Timestamp(local_dt.astimezone(datetime.UTC))
+        return local_dt.tz_convert(pytz.timezone("UTC"))
 
 
 class SourceConfig(StacItemConfig):

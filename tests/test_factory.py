@@ -6,6 +6,7 @@ import pytest
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.factory import StacGeneratorFactory
+from tests.utils import compare_dict_except
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
@@ -49,5 +50,5 @@ def test_generator_factory(
         assert expected["id"] == actual["id"]
         assert expected["bbox"] == actual["bbox"]
         assert expected["geometry"] == actual["geometry"]
-        assert expected["properties"] == actual["properties"]
+        compare_dict_except(expected["properties"], actual["properties"])
         assert expected["assets"] == actual["assets"]

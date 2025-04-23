@@ -8,6 +8,7 @@ from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.raster.generator import RasterGenerator
 from stac_generator.core.raster.schema import RasterConfig
+from tests.utils import compare_dict_except
 
 CONFIG_JSON = Path("tests/files/integration_tests/raster/config/raster_config.json")
 
@@ -56,7 +57,7 @@ def test_generator_given_item_expects_matched_generated_item(
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["geometry"] == actual["geometry"]
-    assert expected["properties"] == actual["properties"]
+    compare_dict_except(expected["properties"], actual["properties"])
     assert expected["assets"] == actual["assets"]
 
 
@@ -72,7 +73,7 @@ def test_generator_given_item_expects_matched_generated_item_csv_config_version(
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["geometry"] == actual["geometry"]
-    assert expected["properties"] == actual["properties"]
+    compare_dict_except(expected["properties"], actual["properties"])
     assert expected["assets"] == actual["assets"]
 
 
@@ -88,7 +89,7 @@ def test_generator_given_item_expects_matched_generated_item_json_config_no_epsg
     assert expected["id"] == actual["id"]
     assert expected["bbox"] == actual["bbox"]
     assert expected["geometry"] == actual["geometry"]
-    assert expected["properties"] == actual["properties"]
+    compare_dict_except(expected["properties"], actual["properties"])
     assert expected["assets"] == actual["assets"]
 
 

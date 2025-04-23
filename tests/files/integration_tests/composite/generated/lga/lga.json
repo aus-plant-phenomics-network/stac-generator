@@ -79,33 +79,36 @@
       "collection_time": "09:00:00",
       "location": "tests/files/integration_tests/vector/data/lga.gpkg"
     },
-    "start_datetime": "2023-03-31T23:46:00Z",
-    "end_datetime": "2023-03-31T23:46:00Z",
+    "timestamps": [
+      "2023-03-31T22:30:00+00:00"
+    ],
+    "start_datetime": "2023-03-31T22:30:00Z",
+    "end_datetime": "2023-03-31T22:30:00Z",
     "proj:code": "EPSG:3857",
-    "proj:wkt2": "PROJCRS[\"WGS 84 / Pseudo-Mercator\",BASEGEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]],CONVERSION[\"Popular Visualisation Pseudo-Mercator\",METHOD[\"Popular Visualisation Pseudo Mercator\",ID[\"EPSG\",1024]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"False easting\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"easting (X)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"northing (Y)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"Web mapping and visualisation.\"],AREA[\"World between 85.06°S and 85.06°N.\"],BBOX[-85.06,-180,85.06,180]],ID[\"EPSG\",3857]]",
-    "datetime": "2023-03-31T23:46:00Z"
+    "proj:wkt2": "PROJCRS[\"WGS 84 / Pseudo-Mercator\",BASEGEOGCRS[\"WGS 84\",ENSEMBLE[\"World Geodetic System 1984 ensemble\",MEMBER[\"World Geodetic System 1984 (Transit)\"],MEMBER[\"World Geodetic System 1984 (G730)\"],MEMBER[\"World Geodetic System 1984 (G873)\"],MEMBER[\"World Geodetic System 1984 (G1150)\"],MEMBER[\"World Geodetic System 1984 (G1674)\"],MEMBER[\"World Geodetic System 1984 (G1762)\"],MEMBER[\"World Geodetic System 1984 (G2139)\"],MEMBER[\"World Geodetic System 1984 (G2296)\"],ELLIPSOID[\"WGS 84\",6378137,298.257223563,LENGTHUNIT[\"metre\",1]],ENSEMBLEACCURACY[2.0]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],ID[\"EPSG\",4326]],CONVERSION[\"Popular Visualisation Pseudo-Mercator\",METHOD[\"Popular Visualisation Pseudo Mercator\",ID[\"EPSG\",1024]],PARAMETER[\"Latitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8801]],PARAMETER[\"Longitude of natural origin\",0,ANGLEUNIT[\"degree\",0.0174532925199433],ID[\"EPSG\",8802]],PARAMETER[\"False easting\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8806]],PARAMETER[\"False northing\",0,LENGTHUNIT[\"metre\",1],ID[\"EPSG\",8807]]],CS[Cartesian,2],AXIS[\"easting (X)\",east,ORDER[1],LENGTHUNIT[\"metre\",1]],AXIS[\"northing (Y)\",north,ORDER[2],LENGTHUNIT[\"metre\",1]],USAGE[SCOPE[\"Web mapping and visualisation.\"],AREA[\"World between 85.06\u00b0S and 85.06\u00b0N.\"],BBOX[-85.06,-180,85.06,180]],ID[\"EPSG\",3857]]",
+    "datetime": "2023-03-31T22:30:00Z"
   },
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/lga/lga.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/lga/lga.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

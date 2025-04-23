@@ -85,33 +85,36 @@
       "collection_time": "09:00:00",
       "location": "tests/files/integration_tests/vector/data/soil_exposure.geojson"
     },
-    "start_datetime": "2016-06-08T23:46:00Z",
-    "end_datetime": "2016-06-08T23:46:00Z",
+    "timestamps": [
+      "2016-06-08T23:30:00+00:00"
+    ],
+    "start_datetime": "2016-06-08T23:30:00Z",
+    "end_datetime": "2016-06-08T23:30:00Z",
     "proj:code": "EPSG:7844",
     "proj:wkt2": "GEOGCRS[\"GDA2020\",DATUM[\"Geocentric Datum of Australia 2020\",ELLIPSOID[\"GRS 1980\",6378137,298.257222101,LENGTHUNIT[\"metre\",1]]],PRIMEM[\"Greenwich\",0,ANGLEUNIT[\"degree\",0.0174532925199433]],CS[ellipsoidal,2],AXIS[\"geodetic latitude (Lat)\",north,ORDER[1],ANGLEUNIT[\"degree\",0.0174532925199433]],AXIS[\"geodetic longitude (Lon)\",east,ORDER[2],ANGLEUNIT[\"degree\",0.0174532925199433]],USAGE[SCOPE[\"Geodesy, cadastre, engineering survey, topographic mapping.\"],AREA[\"Australia including Lord Howe Island, Macquarie Island, Ashmore and Cartier Islands, Christmas Island, Cocos (Keeling) Islands, Norfolk Island. All onshore and offshore.\"],BBOX[-60.55,93.41,-8.47,173.34]],ID[\"EPSG\",7844]]",
-    "datetime": "2016-06-08T23:46:00Z"
+    "datetime": "2016-06-08T23:30:00Z"
   },
   "links": [
     {
       "rel": "root",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/soil_exposure/soil_exposure.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/soil_exposure/soil_exposure.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/hoangson/Projects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

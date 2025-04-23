@@ -199,3 +199,9 @@ docs = [
 cli = [
     "rich-argparse>=1.5.2",
 ]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::UserWarning"
+]

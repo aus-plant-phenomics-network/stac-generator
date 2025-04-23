@@ -8,6 +8,8 @@ import pathlib
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
+import numpy as np
+import pandas as pd
 import pystac
 from pyproj import CRS
 from pystac.collection import Extent
@@ -32,6 +34,7 @@ from stac_generator.core.base.schema import (
     T,
 )
 from stac_generator.core.base.utils import (
+    add_timestamps,
     force_write_to_stac_api,
     get_timezone,
     href_is_stac_api_endpoint,
@@ -42,8 +45,7 @@ from stac_generator.core.base.utils import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    import pandas as pd
-
+    from stac_generator._types import TimeSequence
 
 logger = logging.getLogger(__name__)
 
@@ -264,8 +266,7 @@ class VectorGenerator(ItemGenerator[T]):
         source_config: SourceConfig,
         properties: dict[str, Any],
         epsg: int = 4326,
-        start_datetime: pd.Timestamp | None = None,
-        end_datetime: pd.Timestamp | None = None,
+        time_column: str | None = None,
     ) -> pystac.Item:
         """Convert geopandas dataframe to pystac.Item
 
@@ -293,13 +294,18 @@ class VectorGenerator(ItemGenerator[T]):
 
         geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
 
-        # Process start end datetime
-        start_datetime = (
-            localise_timezone(start_datetime, item_tz) if start_datetime is not None else item_ts
-        )
-        end_datetime = (
-            localise_timezone(end_datetime, item_tz) if end_datetime is not None else item_ts
-        )
+        # Process timestamps
+        if time_column is None:
+            # Item TS should be UTC by default
+            timestamps: TimeSequence = [item_ts]
+            start_datetime = item_ts
+            end_datetime = item_ts
+        else:
+            sorted_ts = pd.Series(np.sort(df[time_column].unique()))  # Sorted unique values
+            timestamps = localise_timezone(sorted_ts, item_tz)
+            start_datetime = timestamps.min()
+            end_datetime = timestamps.max()
+        add_timestamps(properties, timestamps)
 
         item = pystac.Item(
             source_config.id,
@@ -378,7 +384,6 @@ class StacSerialiser:
         """Generate STAC Collection and save to disk as json files"""
         logger.debug("saving collection as local json")
         self.collection.save()
-        logger.info(f"successfully save collection to {self.href}")
 
     def to_api(self) -> None:
         """_Generate STAC Collection and push to remote API.

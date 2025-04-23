@@ -3,6 +3,7 @@ import json
 
 import geopandas as gpd
 import httpx
+import pandas as pd
 import pystac
 import pytest
 import pytest_httpx
@@ -14,12 +15,13 @@ from stac_generator.core.base.utils import (
     _read_csv,
     force_write_to_stac_api,
     href_is_stac_api_endpoint,
+    localise_timezone,
     parse_href,
     read_raster_asset,
     read_source_config,
     read_vector_asset,
 )
-from stac_generator.exceptions import SourceAssetException, StacConfigException
+from stac_generator.exceptions import SourceAssetException, StacConfigException, TimezoneException
 
 VALID_CSV_CONFIG_FILE = "tests/files/unit_tests/configs/csv_config.csv"
 
@@ -395,3 +397,79 @@ def test_read_non_existent_csv_expects_throw() -> None:
 def test_read_non_existent_raster_expects_throw() -> None:
     with pytest.raises(SourceAssetException):
         next(read_raster_asset("non_existent.tif"))
+
+
+@pytest.mark.parametrize(
+    "data, tzinfo, expected",
+    [
+        # Single naive timestamp
+        (
+            pd.Timestamp("2023-04-01 12:00:00"),
+            "America/New_York",
+            pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+        ),
+        # Single tz-aware timestamp (no change)
+        (
+            pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+            "America/New_York",
+            pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+        ),
+        # Series of mixed timestamps
+        (
+            pd.Series(
+                [
+                    pd.Timestamp("2023-04-01 12:00:00"),
+                    pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+                ]
+            ),
+            "America/New_York",
+            pd.Series(
+                [
+                    pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+                ]
+            ),
+        ),
+        # Series of non timestamps
+        (
+            pd.Series(
+                [
+                    pd.Timestamp("2023-04-01 12:00:00"),
+                    pd.Timestamp("2023-04-01 13:00:00"),
+                    pd.Timestamp("2023-04-01 14:00:00"),
+                    pd.Timestamp("2023-04-01 15:00:00"),
+                    pd.Timestamp("2023-04-01 20:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 17:00:00"),
+                    pd.Timestamp("2023-04-01 22:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-02 09:00:00", tz="Australia/Sydney"),
+                ]
+            ),
+            "America/New_York",
+            pd.Series(
+                [
+                    pd.Timestamp("2023-04-01 16:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 17:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 18:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 19:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 20:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 21:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 22:00:00", tz="UTC"),
+                    pd.Timestamp("2023-04-01 23:00:00", tz="UTC"),
+                ]
+            ),
+        ),
+    ],
+)
+def test_localise_timezone_valid(
+    data: pd.Series, tzinfo: str, expected: pd.Series | pd.Timestamp
+) -> None:
+    result = localise_timezone(data, tzinfo)
+    if isinstance(result, pd.Series):  # type: ignore[unreachable]
+        pd.testing.assert_series_equal(result, expected)  # type: ignore[arg-type]
+    else:
+        assert result == expected  # type: ignore[unreachable]
+
+
+def test_localise_timezone_invalid() -> None:
+    with pytest.raises(TimezoneException):
+        localise_timezone(pd.Timestamp("2020-01-01"), "Invalid")

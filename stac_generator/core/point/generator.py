@@ -43,11 +43,6 @@ class PointGenerator(VectorGenerator[PointConfig]):
             source_config.column_info,
             source_config.timezone,
         )
-        if source_config.T is not None:
-            start_datetime = raw_df[source_config.T].min()
-            end_datetime = raw_df[source_config.T].max()
-        else:
-            start_datetime, end_datetime = None, None
 
         properties = source_config.to_properties()
         return self.df_to_item(
@@ -56,6 +51,5 @@ class PointGenerator(VectorGenerator[PointConfig]):
             source_config,
             properties={"stac_generator": properties},
             epsg=source_config.epsg,
-            start_datetime=start_datetime,
-            end_datetime=end_datetime,
+            time_column=source_config.T,
         )
