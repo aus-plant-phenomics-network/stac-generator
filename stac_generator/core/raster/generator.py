@@ -14,7 +14,8 @@ from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import add_timestamps, read_raster_asset
+from stac_generator.core.base.utils import add_timestamps
+from stac_generator.exceptions import SourceAssetException
 
 from .schema import RasterConfig
 
@@ -50,10 +51,13 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         :return: generated item
         :rtype: pystac.Item
         """
-        src = next(read_raster_asset(self.config.location))
-        bounds = src.bounds
-        crs = cast(CRS, src.crs)
-        shape = list(src.shape)
+        try:
+            with rasterio.open(self.config.location) as src:
+                bounds = src.bounds
+                crs = cast(CRS, src.crs)
+                shape = list(src.shape)
+        except rasterio.errors.RasterioIOError as e:
+            raise SourceAssetException("Unable to read raster asset") from e
 
         # Convert to 4326 for bbox and geometry
         transformer = Transformer.from_crs(crs, 4326, always_xy=True)

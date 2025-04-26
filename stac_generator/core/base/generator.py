@@ -44,8 +44,10 @@ from stac_generator.core.base.utils import (
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
+    from concurrent.futures import ThreadPoolExecutor
 
     from stac_generator._types import TimeSequence
+
 
 logger = logging.getLogger(__name__)
 
@@ -57,6 +59,7 @@ class CollectionGenerator:
         self,
         collection_config: StacCollectionConfig,
         generators: Sequence[ItemGenerator[T]],
+        threadpool: ThreadPoolExecutor | None = None,
     ) -> None:
         """CollectionGenerator - generate collection from generators attribute
 
@@ -67,6 +70,7 @@ class CollectionGenerator:
         """
         self.collection_config = collection_config
         self.generators = generators
+        self.threadpool = threadpool
 
     @staticmethod
     def spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
@@ -136,6 +140,12 @@ class CollectionGenerator:
         collection.add_items(items)
         return collection
 
+    def __call__(self) -> pystac.Collection:
+        if self.threadpool:
+            future = self.threadpool.submit(self.create_collection)
+            return future.result()
+        return self.create_collection()
+
     def create_collection(self) -> pystac.Collection:
         """Generate collection from all gathered items
 
@@ -166,6 +176,7 @@ class ItemGenerator(abc.ABC, Generic[T]):
     def __init__(
         self,
         config: dict[str, Any] | T,
+        threadpool: ThreadPoolExecutor | None = None,
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
@@ -179,6 +190,13 @@ class ItemGenerator(abc.ABC, Generic[T]):
             self.config = self.source_type(**config)
         else:
             raise TypeError(f"Invalid config type: {type(config)}")
+        self.threadpool = threadpool
+
+    def __call__(self) -> pystac.Item:
+        if self.threadpool:
+            future = self.threadpool.submit(self.generate)
+            return future.result()
+        return self.generate()
 
     @abc.abstractmethod
     def generate(self) -> pystac.Item:

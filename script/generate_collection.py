@@ -526,7 +526,7 @@ vector_config = [VectorConfig.model_validate(item) for item in vector_dict_confi
 
 collection_config = StacCollectionConfig(id="collection", description="Auto-generated Stac Item")
 
-generator = StacGeneratorFactory.get_stac_generator(
+generator = StacGeneratorFactory.get_collection_generator(
     (point_config, raster_config, vector_config), collection_config
 )
 

@@ -17,7 +17,6 @@ from stac_generator.core.base.utils import (
     href_is_stac_api_endpoint,
     localise_timezone,
     parse_href,
-    read_raster_asset,
     read_source_config,
     read_vector_asset,
 )
@@ -392,11 +391,6 @@ def test_vector_incorrectly_formatted_file_expects_throw() -> None:
 def test_read_non_existent_csv_expects_throw() -> None:
     with pytest.raises(SourceAssetException):
         _read_csv("non_existent.csv")
-
-
-def test_read_non_existent_raster_expects_throw() -> None:
-    with pytest.raises(SourceAssetException):
-        next(read_raster_asset("non_existent.tif"))
 
 
 @pytest.mark.parametrize(
