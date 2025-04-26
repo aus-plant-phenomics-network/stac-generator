@@ -8,7 +8,7 @@ import pytest
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.factory import StacGeneratorFactory
-from tests.utils import compare_items
+from tests.utils import compare_extent, compare_items
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
@@ -68,7 +68,7 @@ def test_generator_factory(
     with expected_collection_path.open() as file:
         expected_collection = json.load(file)
     actual_collection = collection.to_dict()
-    assert actual_collection["extent"] == expected_collection["extent"]
+    compare_extent(expected_collection, actual_collection)
     for item in collection.get_items(recursive=True):
         config_loc = GENERATED_PATH / f"{item.id}/{item.id}.json"
         with config_loc.open("r") as file:

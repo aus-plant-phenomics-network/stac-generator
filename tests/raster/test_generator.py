@@ -7,7 +7,7 @@ from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.raster.generator import RasterGenerator
-from tests.utils import compare_items
+from tests.utils import compare_extent, compare_items
 
 CONFIG_JSON = Path("tests/files/integration_tests/raster/config/raster_config.json")
 
@@ -46,4 +46,4 @@ def test_collection_generator(collection_generator: CollectionGenerator) -> None
     expected_path = GENERATED_DIR / "collection.json"
     with expected_path.open() as file:
         expected = json.load(file)
-    assert actual["extent"] == expected["extent"]
+    compare_extent(expected, actual)

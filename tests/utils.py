@@ -13,3 +13,10 @@ def compare_items(exp: dict[str, Any], ref: dict[str, Any]) -> None:
     )
     assert exp["properties"] == ref["properties"]
     assert exp["assets"] == ref["assets"]
+
+
+def compare_extent(exp: dict[str, Any], ref: dict[str, Any]) -> None:
+    assert exp["extent"]["temporal"] == ref["extent"]["temporal"]
+    np.testing.assert_array_almost_equal(
+        exp["extent"]["spatial"]["bbox"], ref["extent"]["spatial"]["bbox"]
+    )
