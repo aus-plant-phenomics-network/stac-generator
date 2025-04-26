@@ -8,7 +8,7 @@ import pytest
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.factory import StacGeneratorFactory
-from tests.utils import compare_dict_except
+from tests.utils import compare_items
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
@@ -74,8 +74,4 @@ def test_generator_factory(
         with config_loc.open("r") as file:
             expected = json.load(file)
         actual = item.to_dict()
-        assert expected["id"] == actual["id"]
-        assert expected["bbox"] == actual["bbox"]
-        assert expected["geometry"] == actual["geometry"]
-        compare_dict_except(expected["properties"], actual["properties"])
-        assert expected["assets"] == actual["assets"]
+        compare_items(expected, actual)

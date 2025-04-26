@@ -7,7 +7,7 @@ from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point.generator import PointGenerator
-from tests.utils import compare_dict_except
+from tests.utils import compare_items
 
 CONFIG_JSON = Path("tests/files/integration_tests/point/config/point_config.json")
 
@@ -38,11 +38,7 @@ def test_generator_given_item_expects_matched_generated_item(
     with expected_path.open() as file:
         expected = json.load(file)
     actual = point_generators[item_idx].generate().to_dict()
-    assert expected["id"] == actual["id"]
-    assert expected["bbox"] == actual["bbox"]
-    compare_dict_except(expected["properties"], actual["properties"])
-    assert expected["assets"] == actual["assets"]
-    assert expected["geometry"] == actual["geometry"]
+    compare_items(expected, actual)
 
 
 def test_collection_generator(collection_generator: CollectionGenerator) -> None:

@@ -1,18 +1,15 @@
 from typing import Any
 
-EXCEPT_KEYS = None
+import numpy as np
 
 
-def compare_dict_except(
-    first: dict[Any, Any],
-    second: dict[Any, Any],
-    keys: set[str] | None = EXCEPT_KEYS,
-) -> None:
-    if not keys:
-        assert first == second
-    else:
-        first_keys = set(first.keys()) - keys
-        second_keys = set(second.keys()) - keys
-        assert first_keys == second_keys
-        for k in first_keys:
-            assert first[k] == second[k]
+def compare_items(exp: dict[str, Any], ref: dict[str, Any]) -> None:
+    assert exp["id"] == ref["id"]
+    np.testing.assert_array_almost_equal(exp["bbox"], ref["bbox"])
+    assert exp["geometry"].keys() == ref["geometry"].keys()
+    assert exp["geometry"]["type"] == ref["geometry"]["type"]
+    np.testing.assert_array_almost_equal(
+        exp["geometry"]["coordinates"], ref["geometry"]["coordinates"]
+    )
+    assert exp["properties"] == ref["properties"]
+    assert exp["assets"] == ref["assets"]
