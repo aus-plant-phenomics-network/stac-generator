@@ -21,9 +21,6 @@ from rich_argparse import RawDescriptionRichHelpFormatter
 
 from stac_generator.__version__ import __version__
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
 
 def serialise_handler(args: Namespace) -> None:
     from stac_generator.core.base.generator import StacSerialiser
@@ -31,9 +28,7 @@ def serialise_handler(args: Namespace) -> None:
     from stac_generator.factory import StacGeneratorFactory
 
     if args.v:
-        import logging
-
-        logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger("stac_generator").setLevel(logging.DEBUG)
     # Build collection config and catalog config
     metadata_json = {}
     if args.metadata_json:

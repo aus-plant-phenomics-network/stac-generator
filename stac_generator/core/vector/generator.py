@@ -72,7 +72,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 description="Raw vector data",
             )
         }
-        logger.debug(f"Reading file from {self.config.location}")
+        logger.info(f"Reading vector asset: {self.config.id}")
         time_column = None
         # Only read relevant fields
         columns = [col["name"] if isinstance(col, dict) else col for col in self.config.column_info]
@@ -89,6 +89,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
         # Read join file
         if self.config.join_config:
             join_config = self.config.join_config
+            logger.info(f"Reading join asset for vector asset: {self.config.id}")
             # Get timezone information
             tzinfo = get_timezone(self.config.timezone, raw_df.to_crs(4326).geometry)
             # Try reading join file and raise errors if columns not provided

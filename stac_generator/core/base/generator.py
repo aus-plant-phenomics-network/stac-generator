@@ -122,7 +122,7 @@ class CollectionGenerator:
         items: Sequence[pystac.Item],
         collection_config: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
-        logger.debug("generating collection from items")
+        logger.debug("Generating collection from items")
         if collection_config is None:
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
@@ -172,7 +172,9 @@ class ItemGenerator(abc.ABC, Generic[T]):
         :param configs: source data configs - either from csv config or yaml/json
         :type configs: Mapping[str, Any]
         """
-        logger.debug("validating config")
+        logger.debug(
+            f"validating config: {config.get('id', 'invalid') if isinstance(config, dict) else getattr(config, 'id', 'invalid')}"
+        )
         if isinstance(config, self.source_type):
             self.config = config
         elif isinstance(config, dict):
@@ -321,7 +323,7 @@ class StacSerialiser:
         :param href: serialisation href
         :type href: str
         """
-        logger.debug("validating generated collection and items")
+        logger.debug("Validating generated collection and items")
         collection.normalize_hrefs(href)
         collection.validate_all()
 
@@ -365,14 +367,14 @@ class StacSerialiser:
 
     def to_json(self) -> None:
         """Generate STAC Collection and save to disk as json files"""
-        logger.debug("saving collection as local json")
+        logger.debug("Saving collection as local json")
         self.collection.save()
 
     def to_api(self) -> None:
         """_Generate STAC Collection and push to remote API.
         The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
-        logger.debug("save collection to STAC API")
+        logger.debug("Saving collection to STAC API")
         force_write_to_stac_api(
             url=parse_href(self.href, "collections"),
             id=self.collection.id,

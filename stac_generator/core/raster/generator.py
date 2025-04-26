@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import cast
 
 import pystac
@@ -18,6 +19,8 @@ from stac_generator.core.base.utils import add_timestamps
 from stac_generator.exceptions import SourceAssetException
 
 from .schema import RasterConfig
+
+logger = logging.getLogger(__name__)
 
 VALID_COMMON_NAME = {
     "coastal",
@@ -52,6 +55,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         :rtype: pystac.Item
         """
         try:
+            logger.info(f"Reading raster asset: {self.config.id}")
             with rasterio.open(self.config.location) as src:
                 bounds = src.bounds
                 crs = cast(CRS, src.crs)

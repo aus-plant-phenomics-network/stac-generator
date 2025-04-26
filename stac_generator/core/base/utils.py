@@ -53,12 +53,12 @@ def href_is_stac_api_endpoint(href: str) -> bool:
 def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
     """Force write a json object to a stac api endpoint."""
     try:
-        logger.debug(f"sending POST request to {url}")
+        logger.debug(f"Sending POST request to {url}")
         response = httpx.post(url=url, json=json)
         response.raise_for_status()
     except httpx.HTTPStatusError as err:
         if err.response.status_code == 409:
-            logger.debug(f"sending PUT request to {url}")
+            logger.debug(f"Sending PUT request to {url}")
             response = httpx.put(url=f"{url}/{id}", json=json)
             response.raise_for_status()
         else:
@@ -66,7 +66,7 @@ def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
 
 
 def read_source_config(href: str) -> list[dict[str, Any]]:
-    logger.debug(f"reading config file from {href}")
+    logger.debug(f"Reading config file from {href}")
     if not href.endswith(("json", "yaml", "yml", "csv")):
         raise InvalidExtensionException(f"Expects one of json, yaml, yml, csv. Received: {href}")
     try:
@@ -155,7 +155,7 @@ def _read_csv(
     date_format: str | None = "ISO8601",
     columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> pd.DataFrame:
-    logger.debug(f"reading csv from path: {src_path}")
+    logger.debug(f"Reading csv from path: {src_path}")
     parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False
     usecols: set[str] | None = None
     # If band info is provided, only read in the required columns + the X and Y coordinates
