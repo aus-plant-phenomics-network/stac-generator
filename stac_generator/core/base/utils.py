@@ -11,7 +11,6 @@ import httpx
 import numpy as np
 import pandas as pd
 import pytz
-import rasterio
 import yaml
 from pyogrio.errors import DataLayerError, DataSourceError
 from shapely import Geometry, GeometryCollection, centroid
@@ -27,7 +26,7 @@ from stac_generator.exceptions import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Generator, Sequence
+    from collections.abc import Sequence
 
     from stac_generator._types import TimeSequence, TimeSeries, Timestamp
     from stac_generator.core.base.schema import ColumnInfo
@@ -253,14 +252,6 @@ def read_join_asset(
     if date_column:
         df[date_column] = localise_timezone(df[date_column], tzinfo)
     return df
-
-
-def read_raster_asset(src_path: str) -> Generator[Any]:
-    try:
-        with rasterio.open(src_path) as src:
-            yield src
-    except Exception as e:  # noqa: BLE001
-        raise SourceAssetException(e) from None
 
 
 def add_timestamps(properties: dict[Any, Any], timestamps: TimeSequence) -> None:

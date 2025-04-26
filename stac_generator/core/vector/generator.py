@@ -52,46 +52,45 @@ def extract_epsg(crs: CRS) -> tuple[int, bool]:
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):
     """ItemGenerator class that handles vector data with common vector formats - i.e (shp, zipped shp, gpkg, geojson)"""
 
-    def create_item_from_config(self, source_config: VectorConfig) -> pystac.Item:
+    def generate(self) -> pystac.Item:
         """Create item from vector config
 
-        :param source_config: config information
-        :type source_config: VectorConfig
+        :param self.config: config information
+        :type self.config: VectorConfig
         :raises ValueError: if config epsg information is different from epsg information from vector file
-        :return: stac metadata of the file described by source_config
+        :return: stac metadata of the file described by self.config
         :rtype: pystac.Item
         """
+
         assets = {
             ASSET_KEY: pystac.Asset(
-                href=str(source_config.location),
+                href=str(self.config.location),
                 media_type=pystac.MediaType.GEOJSON
-                if source_config.location.endswith(".geojson")
+                if self.config.location.endswith(".geojson")
                 else "application/x-shapefile",
                 roles=["data"],
                 description="Raw vector data",
             )
         }
-        logger.debug(f"Reading file from {source_config.location}")
+        logger.debug(f"Reading file from {self.config.location}")
         time_column = None
         # Only read relevant fields
-        columns = [
-            col["name"] if isinstance(col, dict) else col for col in source_config.column_info
-        ]
+        columns = [col["name"] if isinstance(col, dict) else col for col in self.config.column_info]
         # Throw exceptions if column_info contains invalid column
-        raw_df = read_vector_asset(source_config.location, layer=source_config.layer)
+        raw_df = read_vector_asset(self.config.location, layer=self.config.layer)
 
         if columns and not set(columns).issubset(set(raw_df.columns)):
             raise StacConfigException(
-                f"Invalid columns for asset - {source_config.location!s}: {set(columns) - set(raw_df.columns)}"
+                f"Invalid columns for asset - {self.config.location!s}: {set(columns) - set(raw_df.columns)}"
             )
 
         # Validate EPSG user-input vs extracted
         epsg, _ = extract_epsg(raw_df.crs)
         # Read join file
-        if source_config.join_config:
-            join_config = source_config.join_config
+        if self.config.join_config:
+            join_config = self.config.join_config
             # Get timezone information
-            tzinfo = get_timezone(source_config.timezone, raw_df.to_crs(4326).geometry)
+            tzinfo = get_timezone(self.config.timezone, raw_df.to_crs(4326).geometry)
             # Try reading join file and raise errors if columns not provided
             join_df = read_join_asset(
                 join_config.file,
@@ -113,12 +112,12 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 time_column = join_config.date_column
 
         # Make properties
-        properties = source_config.to_properties()
+        properties = self.config.to_properties()
 
         return self.df_to_item(
             raw_df,
             assets,
-            source_config,
+            self.config,
             properties={"stac_generator": properties},
             epsg=epsg,
             time_column=time_column,

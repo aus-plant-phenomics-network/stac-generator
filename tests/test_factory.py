@@ -1,4 +1,6 @@
 import json
+from collections.abc import Generator
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 import pytest
@@ -20,23 +22,48 @@ CONFIGS_LIST = [
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"
 
 
-# One single config that is a composition of multiple configs
-composite_generator = StacGeneratorFactory.get_stac_generator(
-    [str(COMPOSITE_CONFIG)], collection_config
-)
-# Config provided as a list of configs
-list_generator = StacGeneratorFactory.get_stac_generator(CONFIGS_LIST, collection_config)
+@pytest.fixture(scope="module")
+def composite_generator() -> CollectionGenerator:
+    return StacGeneratorFactory.get_collection_generator(str(COMPOSITE_CONFIG), collection_config)
+
+
+@pytest.fixture(scope="module")
+def list_generator() -> CollectionGenerator:
+    return StacGeneratorFactory.get_collection_generator(CONFIGS_LIST, collection_config)
+
+
+@pytest.fixture(scope="module")
+def threadpool_generator() -> Generator[CollectionGenerator, None, None]:
+    executor = ThreadPoolExecutor(max_workers=4)
+    # Use the executor to create a thread pool for the generator
+    yield StacGeneratorFactory.get_collection_generator(
+        CONFIGS_LIST,
+        collection_config,
+        pool=executor,
+    )
+    # Cleanup
+    executor.shutdown(wait=True)
 
 
 @pytest.mark.parametrize(
-    "generator",
-    (composite_generator, list_generator),
-    ids=["Composite Config", "List Configs"],
+    "generator_fx",
+    (
+        "composite_generator",
+        "list_generator",
+        "threadpool_generator",
+    ),
+    ids=[
+        "Composite Config",
+        "List Configs",
+        "ThreadPool Config",
+    ],
 )
 def test_generator_factory(
-    generator: CollectionGenerator,
+    generator_fx: str,
+    request: pytest.FixtureRequest,
 ) -> None:
-    collection = generator.create_collection()
+    generator: CollectionGenerator = request.getfixturevalue(generator_fx)
+    collection = generator()
     expected_collection_path = GENERATED_PATH / "collection.json"
     with expected_collection_path.open() as file:
         expected_collection = json.load(file)

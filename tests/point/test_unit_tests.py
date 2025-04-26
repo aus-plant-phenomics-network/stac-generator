@@ -16,8 +16,8 @@ CONFIG_PATH = Path("tests/files/unit_tests/points/configs")
 def load_item(file: str) -> pystac.Item:
     config_path = CONFIG_PATH / file
     config = read_source_config(str(config_path))
-    generator = PointGenerator(config)
-    return generator.create_items()[0]
+    generator = PointGenerator(config[0])
+    return generator.generate()
 
 
 def test_no_date_expects_start_datetime_end_datetime_same_as_datetime() -> None:

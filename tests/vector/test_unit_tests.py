@@ -16,9 +16,9 @@ CONFIG_PATH = Path("tests/files/unit_tests/vectors/configs")
 @lru_cache
 def load_items(file: str) -> Sequence[pystac.Item]:
     config_path = CONFIG_PATH / file
-    config = read_source_config(str(config_path))
-    generator = VectorGenerator(config)
-    return generator.create_items()
+    configs = read_source_config(str(config_path))
+    generators = [VectorGenerator(config) for config in configs]
+    return [generator.generate() for generator in generators]
 
 
 @lru_cache
