@@ -79,24 +79,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/belair/belair.json",
+      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/belair/belair.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }
