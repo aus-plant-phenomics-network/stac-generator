@@ -19,13 +19,12 @@ CONFIGS_LIST = [
 ]
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"
 
-
 # One single config that is a composition of multiple configs
-composite_generator = StacGeneratorFactory.get_stac_generator(
-    [str(COMPOSITE_CONFIG)], collection_config
+composite_generator = StacGeneratorFactory.get_collection_generator(
+    str(COMPOSITE_CONFIG), collection_config
 )
 # Config provided as a list of configs
-list_generator = StacGeneratorFactory.get_stac_generator(CONFIGS_LIST, collection_config)
+list_generator = StacGeneratorFactory.get_collection_generator(CONFIGS_LIST, collection_config)
 
 
 @pytest.mark.parametrize(

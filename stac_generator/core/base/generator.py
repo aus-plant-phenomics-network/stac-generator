@@ -146,9 +146,9 @@ class CollectionGenerator:
         :return: generated collection
         :rtype: pystac.Collection
         """
-        items = []
+        items: list[pystac.Item] = []
         for generator in self.generators:
-            items.extend(generator.create_items())
+            items.append(generator.generate())
         return self._create_collection_from_items(items, self.collection_config)
 
 
@@ -165,41 +165,25 @@ class ItemGenerator(abc.ABC, Generic[T]):
 
     def __init__(
         self,
-        configs: Sequence[dict[str, Any]] | Sequence[T],
+        config: dict[str, Any] | T,
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
         :param configs: source data configs - either from csv config or yaml/json
-        :type configs: list[dict[str, Any]]
+        :type configs: Mapping[str, Any]
         """
         logger.debug("validating config")
-        self.configs: list[T] = []
-        for config in configs:
-            if isinstance(config, self.source_type):
-                self.configs.append(config)
-            elif isinstance(config, dict):
-                self.configs.append(self.source_type(**config))
-            else:
-                raise ValueError(
-                    f"Invalid type passed to ItemGenerator: {type(config)}. Expects either {self.source_type.__name__} or a dict."
-                )
+        if isinstance(config, self.source_type):
+            self.config = config
+        elif isinstance(config, dict):
+            self.config = self.source_type(**config)
+        else:
+            raise TypeError(f"Invalid config type: {type(config)}")
 
     @abc.abstractmethod
-    def create_item_from_config(self, source_config: T) -> pystac.Item:
+    def generate(self) -> pystac.Item:
         """Abstract method that handles `pystac.Item` generation from the appropriate config"""
         raise NotImplementedError
-
-    def create_items(self) -> list[pystac.Item]:
-        """Generate STAC Items from `configs` metadata
-
-        :return: list of generated STAC Item
-        :rtype: list[pystac.Item]
-        """
-        logger.debug(f"generating items using {self.__class__.__name__}")
-        items = []
-        for config in self.configs:
-            items.append(self.create_item_from_config(config))
-        return items
 
 
 class VectorGenerator(ItemGenerator[T]):
@@ -356,18 +340,17 @@ class StacSerialiser:
         items = collection_generator.generators
         result = []
         for item in items:
-            result.extend(StacSerialiser.prepare_configs(item.configs))
+            result.append(StacSerialiser.prepare_config(item.config))
         return result
 
     @staticmethod
-    def prepare_configs(configs: Sequence[T]) -> list[dict[str, Any]]:
-        result = []
-        for config in configs:
-            config_dict = config.model_dump(
-                mode="json", exclude_none=True, exclude_defaults=True, exclude_unset=True
-            )
-            result.append(config_dict)
-        return result
+    def prepare_config(config: T) -> dict[str, Any]:
+        return config.model_dump(
+            mode="json",
+            exclude_none=True,
+            exclude_defaults=True,
+            exclude_unset=True,
+        )
 
     def save_collection_config(self, dst: str | pathlib.Path) -> None:
         config = self.prepare_collection_configs(self.generator)
@@ -376,7 +359,7 @@ class StacSerialiser:
 
     @staticmethod
     def save_configs(configs: Sequence[T], dst: str | pathlib.Path) -> None:
-        config = StacSerialiser.prepare_configs(configs)
+        config = [StacSerialiser.prepare_config(con) for con in configs]
         with pathlib.Path(dst).open("w") as file:
             json.dump(config, file)
 

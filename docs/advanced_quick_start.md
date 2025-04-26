@@ -72,7 +72,7 @@ collection_config = StacCollectionConfig(
 )
 
 # Create generator
-generator = StacGeneratorFactory.get_stac_generator(
+generator = StacGeneratorFactory.get_collection_generator(
     source_configs=[raster_config, vector_config, point_config],
     collection_config=collection_config,
 )
@@ -87,7 +87,7 @@ The steps include:
 
 - Declaring item configs
 - Declaring collection config
-- Creating a generator object by passing the item configs and collection configs to `StacGeneratorFactor.get_stac_generator`.
+- Creating a generator object by passing the item configs and collection configs to `StacGeneratorFactor.get_collection_generator`.
 - Creating the serialiser object with `StacSerialiser` and call the object.
 
 ## Declaring item configs
@@ -116,7 +116,7 @@ For instance, if we want to create a composite config for the previous example:
 ``` { .py linenums="1"}
 # Declare item and collection configs
 # Create generator
-generator = StacGeneratorFactory.get_stac_generator(
+generator = StacGeneratorFactory.get_collection_generator(
     source_configs=[raster_config, vector_config, point_config],
     collection_config=collection_config,
 )
@@ -197,7 +197,7 @@ collection_config = StacCollectionConfig(
 )
 
 # Create generator
-generator = StacGeneratorFactory.get_stac_generator(
+generator = StacGeneratorFactory.get_collection_generator(
     source_configs=[raster_config, vector_config, point_config],
     collection_config=collection_config,
 )

@@ -16,40 +16,40 @@ logger = logging.getLogger(__name__)
 class PointGenerator(VectorGenerator[PointConfig]):
     """ItemGenerator class that handles point data in csv format"""
 
-    def create_item_from_config(self, source_config: PointConfig) -> pystac.Item:
+    def generate(self) -> pystac.Item:
         """Create item from source csv config
 
-        :param source_config: config which contains csv metadata
-        :type source_config: PointConfig
-        :return: stac metadata of the item described in source_config
+        :param self.config: config which contains csv metadata
+        :type self.config: PointConfig
+        :return: stac metadata of the item described in self.config
         :rtype: pystac.Item
         """
         assets = {
             ASSET_KEY: pystac.Asset(
-                href=source_config.location,
+                href=self.config.location,
                 description="Raw csv data",
                 roles=["data"],
                 media_type=CsvMediaType,
             )
         }
         raw_df = read_point_asset(
-            source_config.location,
-            source_config.X,
-            source_config.Y,
-            source_config.epsg,
-            source_config.Z,
-            source_config.T,
-            source_config.date_format,
-            source_config.column_info,
-            source_config.timezone,
+            self.config.location,
+            self.config.X,
+            self.config.Y,
+            self.config.epsg,
+            self.config.Z,
+            self.config.T,
+            self.config.date_format,
+            self.config.column_info,
+            self.config.timezone,
         )
 
-        properties = source_config.to_properties()
+        properties = self.config.to_properties()
         return self.df_to_item(
             raw_df,
             assets,
-            source_config,
+            self.config,
             properties={"stac_generator": properties},
-            epsg=source_config.epsg,
-            time_column=source_config.T,
+            epsg=self.config.epsg,
+            time_column=self.config.T,
         )

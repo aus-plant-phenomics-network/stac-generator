@@ -41,16 +41,16 @@ VALID_COMMON_NAME = {
 class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
 
-    def create_item_from_config(self, source_config: RasterConfig) -> pystac.Item:
+    def generate(self) -> pystac.Item:
         """Generate Raster Item from config
 
-        :param source_config: raster config - must contain band info
-        :type source_config: RasterConfig
+        :param self.config: raster config - must contain band info
+        :type self.config: RasterConfig
         :raises ValueError: if epsg code is provided in config but does not match that extracted from the asset
         :return: generated item
         :rtype: pystac.Item
         """
-        src = next(read_raster_asset(source_config.location))
+        src = next(read_raster_asset(self.config.location))
         bounds = src.bounds
         crs = cast(CRS, src.crs)
         shape = list(src.shape)
@@ -66,7 +66,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         geometry_geojson = json.loads(to_geojson(geometry))
 
         # Process datetime
-        item_ts = source_config.get_datetime(geometry)
+        item_ts = self.config.get_datetime(geometry)
 
         # Get EPSG
         epsg = crs.to_epsg()
@@ -74,11 +74,11 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         # Create STAC Item
         # Start datetime and end_datetime are set to be collection datetime for Raster data
         properties = {
-            "stac_generator": source_config.to_properties(),
+            "stac_generator": self.config.to_properties(),
         }
         add_timestamps(properties, [item_ts])
         item = pystac.Item(
-            id=source_config.id,
+            id=self.config.id,
             geometry=geometry_geojson,
             bbox=list(bbox),
             datetime=item_ts,
@@ -98,10 +98,10 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         eo_bands = []
         raster_bands = []
 
-        for band_info in source_config.band_info:
+        for band_info in self.config.band_info:
             common_name = band_info.get("common_name", None)
             if common_name and common_name not in VALID_COMMON_NAME:
-                raise ValueError(f"Invalid common name: {common_name} for item: {source_config.id}")
+                raise ValueError(f"Invalid common name: {common_name} for item: {self.config.id}")
             eo_band = Band.create(
                 name=band_info["name"],
                 common_name=common_name,
@@ -120,7 +120,7 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
         # Create Asset and Add to Item
         asset = pystac.Asset(
-            href=source_config.location,
+            href=self.config.location,
             media_type=pystac.MediaType.GEOTIFF,
             roles=["data"],
             title="Raster Data",

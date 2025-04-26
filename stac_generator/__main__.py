@@ -55,7 +55,7 @@ def serialise_handler(args: Namespace) -> None:
     )
 
     # Generate
-    generator = StacGeneratorFactory.get_stac_generator(
+    generator = StacGeneratorFactory.get_collection_generator(
         source_configs=args.src,
         collection_config=collection_config,
     )
