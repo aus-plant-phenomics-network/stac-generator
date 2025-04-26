@@ -46,7 +46,7 @@ def test_generator_given_item_expects_matched_generated_item(
 
 
 def test_collection_generator(collection_generator: CollectionGenerator) -> None:
-    actual = collection_generator.create_collection().to_dict()
+    actual = collection_generator().to_dict()
     expected_path = GENERATED_DIR / "collection.json"
     with expected_path.open() as file:
         expected = json.load(file)

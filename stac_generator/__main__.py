@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import logging
 from argparse import ArgumentParser, Namespace, _SubParsersAction
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 from rich_argparse import RawDescriptionRichHelpFormatter
@@ -55,13 +56,26 @@ def serialise_handler(args: Namespace) -> None:
     )
 
     # Generate
-    generator = StacGeneratorFactory.get_collection_generator(
-        source_configs=args.src,
-        collection_config=collection_config,
-    )
-    # Save
-    serialiser = StacSerialiser(generator, args.dst)
-    serialiser()
+    if args.num_workers == 1:
+        # Use a single thread
+        generator = StacGeneratorFactory.get_collection_generator(
+            source_configs=args.src,
+            collection_config=collection_config,
+        )
+        # Save
+        serialiser = StacSerialiser(generator, args.dst)
+        serialiser()
+    elif args.num_workers > 1:
+        with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
+            generator = StacGeneratorFactory.get_collection_generator(
+                source_configs=args.src,
+                collection_config=collection_config,
+                pool=executor,
+            )
+            serialiser = StacSerialiser(generator, args.dst)
+            serialiser()
+    else:
+        raise ValueError(f"Invalid number of threads: {args.num_workers}. Must be greater than 0.")
 
 
 def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
@@ -138,6 +152,16 @@ def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
         required=False,
         default=None,
         help="path to json file describing the metadata",
+    )
+
+    # Serialiser metadata
+    serialiser_metadata = parser.add_argument_group("Serialliser metadata")
+    serialiser_metadata.add_argument(
+        "--num_workers",
+        type=int,
+        required=False,
+        default=1,
+        help="Number of threads to use for serialisation. If 1, serialisation will be done in a single thread.",
     )
     parser.set_defaults(func=serialise_handler)
 

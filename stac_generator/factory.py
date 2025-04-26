@@ -21,7 +21,10 @@ from stac_generator.core.vector import VectorGenerator
 from stac_generator.core.vector.schema import VectorConfig
 
 if TYPE_CHECKING:
+    from concurrent.futures import Executor
+
     import pystac
+
 
 EXTENSION_MAP: dict[str, type[SourceConfig]] = {
     "csv": PointConfig,
@@ -169,6 +172,7 @@ class StacGeneratorFactory:
     def get_collection_generator(
         source_configs: Config_T,
         collection_config: StacCollectionConfig,
+        pool: Executor | None = None,
     ) -> CollectionGenerator:
         """Get a CollectionGenerator instance based on source configs and
         collection config
@@ -186,10 +190,11 @@ class StacGeneratorFactory:
             If dictionaries are given, they will be parsed into istances of SourceConfig using
             pydantic model_valiate.
             collection_config (StacCollectionConfig): collection metadata.
+            pool (Executor | None): optional threadpool/process pool for parallel processing.
 
         Returns:
             CollectionGenerator: a collection generator instance, in which all items are derived
             from source _configs and general metadata derived from collection_config.
         """
         handlers = StacGeneratorFactory.get_item_generators(source_configs)
-        return CollectionGenerator(collection_config, handlers)
+        return CollectionGenerator(collection_config, handlers, pool)

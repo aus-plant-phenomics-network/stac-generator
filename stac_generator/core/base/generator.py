@@ -44,12 +44,16 @@ from stac_generator.core.base.utils import (
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
-    from concurrent.futures import ThreadPoolExecutor
+    from concurrent.futures import Executor
 
     from stac_generator._types import TimeSequence
 
 
 logger = logging.getLogger(__name__)
+
+
+def run_generator(generator: ItemGenerator) -> pystac.Item:
+    return generator.generate()
 
 
 class CollectionGenerator:
@@ -59,7 +63,7 @@ class CollectionGenerator:
         self,
         collection_config: StacCollectionConfig,
         generators: Sequence[ItemGenerator[T]],
-        threadpool: ThreadPoolExecutor | None = None,
+        pool: Executor | None = None,
     ) -> None:
         """CollectionGenerator - generate collection from generators attribute
 
@@ -70,7 +74,7 @@ class CollectionGenerator:
         """
         self.collection_config = collection_config
         self.generators = generators
-        self.threadpool = threadpool
+        self.pool = pool
 
     @staticmethod
     def spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
@@ -141,25 +145,11 @@ class CollectionGenerator:
         return collection
 
     def __call__(self) -> pystac.Collection:
-        if self.threadpool:
-            future = self.threadpool.submit(self.create_collection)
-            return future.result()
-        return self.create_collection()
-
-    def create_collection(self) -> pystac.Collection:
-        """Generate collection from all gathered items
-
-        Spatial extent is the bounding box enclosing all items
-        Temporal extent is the time interval enclosing temporal extent of all items. Note that this value is automatically calculated
-        and provided temporal extent fields (start_datetime, end_datetime) at collection level will be ignored
-
-        :return: generated collection
-        :rtype: pystac.Collection
-        """
-        items: list[pystac.Item] = []
-        for generator in self.generators:
-            items.append(generator.generate())
-        return self._create_collection_from_items(items, self.collection_config)
+        if self.pool:
+            result = list(self.pool.map(run_generator, self.generators))
+        else:
+            result = [item.generate() for item in self.generators]
+        return self._create_collection_from_items(result, self.collection_config)
 
 
 class ItemGenerator(abc.ABC, Generic[T]):
@@ -176,7 +166,6 @@ class ItemGenerator(abc.ABC, Generic[T]):
     def __init__(
         self,
         config: dict[str, Any] | T,
-        threadpool: ThreadPoolExecutor | None = None,
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
@@ -190,13 +179,6 @@ class ItemGenerator(abc.ABC, Generic[T]):
             self.config = self.source_type(**config)
         else:
             raise TypeError(f"Invalid config type: {type(config)}")
-        self.threadpool = threadpool
-
-    def __call__(self) -> pystac.Item:
-        if self.threadpool:
-            future = self.threadpool.submit(self.generate)
-            return future.result()
-        return self.generate()
 
     @abc.abstractmethod
     def generate(self) -> pystac.Item:
@@ -327,7 +309,7 @@ class VectorGenerator(ItemGenerator[T]):
 class StacSerialiser:
     def __init__(self, generator: CollectionGenerator, href: str) -> None:
         self.generator = generator
-        self.collection = generator.create_collection()
+        self.collection = generator()
         self.href = href
 
     def pre_serialisation_hook(self, collection: pystac.Collection, href: str) -> None:
