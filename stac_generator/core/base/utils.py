@@ -47,7 +47,7 @@ def parse_href(base_url: str, collection_id: str, item_id: str | None = None) ->
 def href_is_stac_api_endpoint(href: str) -> bool:
     """Check if href points to a resource behind a stac api"""
     output = urllib.parse.urlsplit(href)
-    return output.scheme == ""
+    return output.scheme in ["http", "https"]
 
 
 def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:

@@ -330,9 +330,9 @@ class StacSerialiser:
     def __call__(self) -> None:
         self.pre_serialisation_hook(self.collection, self.href)
         if href_is_stac_api_endpoint(self.href):
-            self.to_json()
-        else:
             self.to_api()
+        else:
+            self.to_json()
         logger.info(f"successfully save collection {self.collection.id} to {self.href}")
 
     @staticmethod
