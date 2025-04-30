@@ -22,25 +22,6 @@ from .schema import RasterConfig
 
 logger = logging.getLogger(__name__)
 
-VALID_COMMON_NAME = {
-    "coastal",
-    "blue",
-    "green",
-    "red",
-    "rededge",
-    "yellow",
-    "pan",
-    "nir",
-    "nir08",
-    "nir09",
-    "cirrus",
-    "swir16",
-    "swir22",
-    "lwir",
-    "lwir11",
-    "lwir12",
-}
-
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
@@ -109,14 +90,11 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         raster_bands = []
 
         for idx, band_info in enumerate(self.config.band_info):
-            common_name = band_info.get("common_name", None)
-            if common_name and common_name not in VALID_COMMON_NAME:
-                raise ValueError(f"Invalid common name: {common_name} for item: {self.config.id}")
             eo_band = Band.create(
-                name=band_info["name"],
-                common_name=common_name,
-                center_wavelength=band_info.get("wavelength", None),
-                description=band_info.get("description", None),
+                name=band_info.name,
+                common_name=band_info.common_name,
+                center_wavelength=band_info.wavelength,
+                description=band_info.description,
             )
             eo_bands.append(eo_band)
 

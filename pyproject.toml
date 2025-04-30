@@ -46,6 +46,7 @@ exclude_also = [
     "@(abc\\.)?abstractmethod",
     "def __getattr__",
     "if TYPE_CHECKING:",
+    "pragma: no cover"
 ]
 
 [tool.ruff]

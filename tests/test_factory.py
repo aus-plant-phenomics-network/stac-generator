@@ -15,9 +15,9 @@ GENERATED_PATH = FILE_PATH / "composite/generated"
 COLLECTION_ID = "collection"
 collection_config = StacCollectionConfig(id=COLLECTION_ID)
 CONFIGS_LIST = [
-    str(FILE_PATH / "point/config/point_config.csv"),
+    str(FILE_PATH / "point/config/point_config.json"),
     str(FILE_PATH / "vector/config/vector_config.json"),
-    str(FILE_PATH / "raster/config/raster_config.csv"),
+    str(FILE_PATH / "raster/config/raster_config.json"),
 ]
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"
 

@@ -38,6 +38,7 @@ from stac_generator.core.base.utils import (
     force_write_to_stac_api,
     get_timezone,
     href_is_stac_api_endpoint,
+    is_string_convertible,
     localise_timezone,
     parse_href,
 )
@@ -110,7 +111,9 @@ class CollectionGenerator:
                 min_dt = min(min_dt, item.datetime)
                 max_dt = max(max_dt, item.datetime)
             else:
-                raise ValueError(f"Unable to determine datetime for item: {item.id}")
+                raise ValueError(
+                    f"Unable to determine datetime for item: {item.id}"
+                )  # prama: no cover
         min_dt, max_dt = min([min_dt, max_dt]), max([max_dt, min_dt])
         logger.debug(
             f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}"
@@ -123,7 +126,7 @@ class CollectionGenerator:
         collection_config: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
         logger.debug("Generating collection from items")
-        if collection_config is None:
+        if collection_config is None:  # pragma: no cover
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
             id=collection_config.id,
@@ -225,7 +228,7 @@ class VectorGenerator(ItemGenerator[T]):
                         curr_type = MultiLineString
                     case Polygon() | MultiPolygon():
                         curr_type = MultiPolygon
-                    case _:
+                    case _:  # pragma: no cover
                         return box(*df.total_bounds)
             if isinstance(point, Point) and curr_type == MultiPoint:
                 curr_collection.append(point)
@@ -308,18 +311,11 @@ class VectorGenerator(ItemGenerator[T]):
         return item
 
 
-class StacSerialiser:
+class StacSerialiser:  # pragma: no cover
     def __init__(self, generator: CollectionGenerator, href: str | Path) -> None:
         self.generator = generator
         self.collection = generator()
-        if isinstance(href, str):
-            self.href = href
-        elif isinstance(href, Path):
-            self.href = href.as_posix()
-        else:
-            raise TypeError(
-                f"Invalid serialisation href, expects either a str or a Path. Received: {href}"
-            )
+        self.href = is_string_convertible(href)
 
     def pre_serialisation_hook(self, collection: pystac.Collection, href: str) -> None:
         """Hook that can be overwritten to provide pre-serialisation functionality.

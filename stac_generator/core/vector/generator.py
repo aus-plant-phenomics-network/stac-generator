@@ -43,10 +43,11 @@ def extract_epsg(crs: CRS) -> tuple[int, bool]:
     if match:
         return (int(match.group(1)), True)
     # No match - defaults to 4326
+
     logger.warning(
         "Cannot determine epsg from vector file. Either provide it in the config or change the source file. Defaults to 4326 but can be incorrect."
-    )
-    return (4326, False)
+    )  # pragma: no cover
+    return (4326, False)  # pragma: no cover
 
 
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):

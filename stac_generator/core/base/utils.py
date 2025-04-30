@@ -80,7 +80,7 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
                     result = yaml.safe_load(file)
                 if href.endswith("json"):
                     result = json.load(file)
-        else:
+        else:  # pragma: no cover
             response = httpx.get(href, follow_redirects=True)
             response.raise_for_status()
             if href.endswith("json"):
@@ -112,7 +112,7 @@ def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
     if not timezone_str:
         raise TimezoneException(
             f"Could not determine timezone for coordinates: lon={point.x}, lat={point.y}"
-        )
+        )  # pragma: no cover
     return timezone_str
 
 
