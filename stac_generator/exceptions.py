@@ -1,4 +1,8 @@
-class SourceAssetException(Exception):
+class StacException(Exception):
+    """Exceptions handled by the stac_generator. Asset exceptions and Config exceptions"""
+
+
+class SourceAssetException(StacException):
     """Exception raised when the source data cannot be read by itself"""
 
 
@@ -6,11 +10,11 @@ class SourceAssetLocationException(SourceAssetException):
     """Exception raised when the source asset location cannot be accessed"""
 
 
-class TimezoneException(Exception):
+class TimezoneException(StacException):
     """Exception raised when timezone information cannot be determined from geometry"""
 
 
-class StacConfigException(Exception):
+class StacConfigException(StacException):
     """Exception raised when the config metadata is misspecified"""
 
 

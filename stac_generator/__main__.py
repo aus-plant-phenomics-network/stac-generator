@@ -21,14 +21,19 @@ from rich_argparse import RawDescriptionRichHelpFormatter
 
 from stac_generator.__version__ import __version__
 
+root_logger = logging.getLogger("stac_generator")
+logger = logging.getLogger(__name__)
+
 
 def serialise_handler(args: Namespace) -> None:
     from stac_generator.core.base.generator import StacSerialiser
     from stac_generator.core.base.schema import StacCollectionConfig
     from stac_generator.factory import StacGeneratorFactory
 
+    show_stack_trace = False
     if args.v:
-        logging.getLogger("stac_generator").setLevel(logging.DEBUG)
+        root_logger.setLevel(logging.DEBUG)
+        show_stack_trace = True
     # Build collection config and catalog config
     metadata_json = {}
     if args.metadata_json:
@@ -51,26 +56,33 @@ def serialise_handler(args: Namespace) -> None:
     )
 
     # Generate
-    if args.num_workers == 1:
-        # Use a single thread
-        generator = StacGeneratorFactory.get_collection_generator(
-            source_configs=args.src,
-            collection_config=collection_config,
-        )
-        # Save
-        serialiser = StacSerialiser(generator, args.dst)
-        serialiser()
-    elif args.num_workers > 1:
-        with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
+    try:
+        if args.num_workers == 1:
+            # Use a single thread
             generator = StacGeneratorFactory.get_collection_generator(
                 source_configs=args.src,
                 collection_config=collection_config,
-                pool=executor,
             )
+            # Save
             serialiser = StacSerialiser(generator, args.dst)
             serialiser()
-    else:
-        raise ValueError(f"Invalid number of threads: {args.num_workers}. Must be greater than 0.")
+        elif args.num_workers > 1:
+            with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
+                generator = StacGeneratorFactory.get_collection_generator(
+                    source_configs=args.src,
+                    collection_config=collection_config,
+                    pool=executor,
+                )
+                serialiser = StacSerialiser(generator, args.dst)
+                serialiser()
+        else:
+            raise ValueError(
+                f"Invalid number of threads: {args.num_workers}. Must be greater than 0."
+            )
+    except Exception as e:
+        logger.exception(e, exc_info=show_stack_trace)
+        if not show_stack_trace:
+            logger.info("Run the command with -v to show detailed error.")
 
 
 def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
