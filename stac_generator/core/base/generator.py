@@ -4,7 +4,7 @@ import abc
 import datetime as pydatetime
 import json
 import logging
-import pathlib
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
@@ -38,6 +38,7 @@ from stac_generator.core.base.utils import (
     force_write_to_stac_api,
     get_timezone,
     href_is_stac_api_endpoint,
+    is_string_convertible,
     localise_timezone,
     parse_href,
 )
@@ -110,7 +111,9 @@ class CollectionGenerator:
                 min_dt = min(min_dt, item.datetime)
                 max_dt = max(max_dt, item.datetime)
             else:
-                raise ValueError(f"Unable to determine datetime for item: {item.id}")
+                raise ValueError(
+                    f"Unable to determine datetime for item: {item.id}"
+                )  # prama: no cover
         min_dt, max_dt = min([min_dt, max_dt]), max([max_dt, min_dt])
         logger.debug(
             f"collection time extent: {[datetime_to_str(min_dt), datetime_to_str(max_dt)]}"
@@ -122,8 +125,8 @@ class CollectionGenerator:
         items: Sequence[pystac.Item],
         collection_config: StacCollectionConfig | None = None,
     ) -> pystac.Collection:
-        logger.debug("generating collection from items")
-        if collection_config is None:
+        logger.debug("Generating collection from items")
+        if collection_config is None:  # pragma: no cover
             raise ValueError("Generating collection requires non null collection config")
         collection = pystac.Collection(
             id=collection_config.id,
@@ -172,7 +175,9 @@ class ItemGenerator(abc.ABC, Generic[T]):
         :param configs: source data configs - either from csv config or yaml/json
         :type configs: Mapping[str, Any]
         """
-        logger.debug("validating config")
+        logger.debug(
+            f"validating config: {config.get('id', 'invalid') if isinstance(config, dict) else getattr(config, 'id', 'invalid')}"
+        )
         if isinstance(config, self.source_type):
             self.config = config
         elif isinstance(config, dict):
@@ -223,7 +228,7 @@ class VectorGenerator(ItemGenerator[T]):
                         curr_type = MultiLineString
                     case Polygon() | MultiPolygon():
                         curr_type = MultiPolygon
-                    case _:
+                    case _:  # pragma: no cover
                         return box(*df.total_bounds)
             if isinstance(point, Point) and curr_type == MultiPoint:
                 curr_collection.append(point)
@@ -306,11 +311,11 @@ class VectorGenerator(ItemGenerator[T]):
         return item
 
 
-class StacSerialiser:
-    def __init__(self, generator: CollectionGenerator, href: str) -> None:
+class StacSerialiser:  # pragma: no cover
+    def __init__(self, generator: CollectionGenerator, href: str | Path) -> None:
         self.generator = generator
         self.collection = generator()
-        self.href = href
+        self.href = is_string_convertible(href)
 
     def pre_serialisation_hook(self, collection: pystac.Collection, href: str) -> None:
         """Hook that can be overwritten to provide pre-serialisation functionality.
@@ -321,16 +326,16 @@ class StacSerialiser:
         :param href: serialisation href
         :type href: str
         """
-        logger.debug("validating generated collection and items")
+        logger.debug("Validating generated collection and items")
         collection.normalize_hrefs(href)
         collection.validate_all()
 
     def __call__(self) -> None:
         self.pre_serialisation_hook(self.collection, self.href)
         if href_is_stac_api_endpoint(self.href):
-            self.to_json()
-        else:
             self.to_api()
+        else:
+            self.to_json()
         logger.info(f"successfully save collection {self.collection.id} to {self.href}")
 
     @staticmethod
@@ -352,27 +357,27 @@ class StacSerialiser:
             exclude_unset=True,
         )
 
-    def save_collection_config(self, dst: str | pathlib.Path) -> None:
+    def save_collection_config(self, dst: str | Path) -> None:
         config = self.prepare_collection_configs(self.generator)
-        with pathlib.Path(dst).open("w") as file:
+        with Path(dst).open("w") as file:
             json.dump(config, file)
 
     @staticmethod
-    def save_configs(configs: Sequence[T], dst: str | pathlib.Path) -> None:
+    def save_configs(configs: Sequence[T], dst: str | Path) -> None:
         config = [StacSerialiser.prepare_config(con) for con in configs]
-        with pathlib.Path(dst).open("w") as file:
+        with Path(dst).open("w") as file:
             json.dump(config, file)
 
     def to_json(self) -> None:
         """Generate STAC Collection and save to disk as json files"""
-        logger.debug("saving collection as local json")
+        logger.debug("Saving collection as local json")
         self.collection.save()
 
     def to_api(self) -> None:
         """_Generate STAC Collection and push to remote API.
         The API will first attempt to send a POST request which will be replaced with a PUT request if a 409 error is encountered
         """
-        logger.debug("save collection to STAC API")
+        logger.debug("Saving collection to STAC API")
         force_write_to_stac_api(
             url=parse_href(self.href, "collections"),
             id=self.collection.id,

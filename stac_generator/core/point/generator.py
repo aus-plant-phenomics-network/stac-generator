@@ -32,6 +32,7 @@ class PointGenerator(VectorGenerator[PointConfig]):
                 media_type=CsvMediaType,
             )
         }
+        logger.info(f"Reading point asset: {self.config.id}")
         raw_df = read_point_asset(
             self.config.location,
             self.config.X,

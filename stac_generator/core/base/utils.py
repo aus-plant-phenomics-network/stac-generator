@@ -47,18 +47,18 @@ def parse_href(base_url: str, collection_id: str, item_id: str | None = None) ->
 def href_is_stac_api_endpoint(href: str) -> bool:
     """Check if href points to a resource behind a stac api"""
     output = urllib.parse.urlsplit(href)
-    return output.scheme == ""
+    return output.scheme in ["http", "https"]
 
 
 def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
     """Force write a json object to a stac api endpoint."""
     try:
-        logger.debug(f"sending POST request to {url}")
+        logger.debug(f"Sending POST request to {url}")
         response = httpx.post(url=url, json=json)
         response.raise_for_status()
     except httpx.HTTPStatusError as err:
         if err.response.status_code == 409:
-            logger.debug(f"sending PUT request to {url}")
+            logger.debug(f"Sending PUT request to {url}")
             response = httpx.put(url=f"{url}/{id}", json=json)
             response.raise_for_status()
         else:
@@ -66,7 +66,7 @@ def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
 
 
 def read_source_config(href: str) -> list[dict[str, Any]]:
-    logger.debug(f"reading config file from {href}")
+    logger.debug(f"Reading config file from {href}")
     if not href.endswith(("json", "yaml", "yml", "csv")):
         raise InvalidExtensionException(f"Expects one of json, yaml, yml, csv. Received: {href}")
     try:
@@ -80,7 +80,7 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
                     result = yaml.safe_load(file)
                 if href.endswith("json"):
                     result = json.load(file)
-        else:
+        else:  # pragma: no cover
             response = httpx.get(href, follow_redirects=True)
             response.raise_for_status()
             if href.endswith("json"):
@@ -112,7 +112,7 @@ def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
     if not timezone_str:
         raise TimezoneException(
             f"Could not determine timezone for coordinates: lon={point.x}, lat={point.y}"
-        )
+        )  # pragma: no cover
     return timezone_str
 
 
@@ -155,7 +155,7 @@ def _read_csv(
     date_format: str | None = "ISO8601",
     columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
 ) -> pd.DataFrame:
-    logger.debug(f"reading csv from path: {src_path}")
+    logger.debug(f"Reading csv from path: {src_path}")
     parse_dates: list[str] | bool = [date_col] if isinstance(date_col, str) else False
     usecols: set[str] | None = None
     # If band info is provided, only read in the required columns + the X and Y coordinates
@@ -180,6 +180,14 @@ def _read_csv(
         raise StacConfigException(
             f"Unable to read {src_path} using additional configuration parameters"
         ) from e
+
+
+def is_string_convertible(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, Path):
+        return value.as_posix()
+    raise ValueError(f"Invalid string: {value}")
 
 
 def read_point_asset(

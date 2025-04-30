@@ -112,11 +112,14 @@ def test_parse_href(base: str, collection_id: str, item_id: str | None, exp: str
         # Href points to a local file or directory
         ("./generated", True),
         ("generated/csv", True),
+        # Windows Paths
+        ("c:/user/folder", True),
+        ("c:\\user\\folder", True),
     ],
 )
 def test_href_is_stac_api_endpoint(url: str, is_local: bool) -> None:
     actual = href_is_stac_api_endpoint(url)
-    assert actual == is_local
+    assert actual != is_local
 
 
 @pytest.mark.httpx_mock(assert_all_responses_were_requested=False)

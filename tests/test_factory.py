@@ -8,16 +8,16 @@ import pytest
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.factory import StacGeneratorFactory
-from tests.utils import compare_dict_except
+from tests.utils import compare_extent, compare_items
 
 FILE_PATH = Path("tests/files/integration_tests")
 GENERATED_PATH = FILE_PATH / "composite/generated"
 COLLECTION_ID = "collection"
 collection_config = StacCollectionConfig(id=COLLECTION_ID)
 CONFIGS_LIST = [
-    str(FILE_PATH / "point/config/point_config.csv"),
+    str(FILE_PATH / "point/config/point_config.json"),
     str(FILE_PATH / "vector/config/vector_config.json"),
-    str(FILE_PATH / "raster/config/raster_config.csv"),
+    str(FILE_PATH / "raster/config/raster_config.json"),
 ]
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"
 
@@ -68,14 +68,10 @@ def test_generator_factory(
     with expected_collection_path.open() as file:
         expected_collection = json.load(file)
     actual_collection = collection.to_dict()
-    assert actual_collection["extent"] == expected_collection["extent"]
+    compare_extent(expected_collection, actual_collection)
     for item in collection.get_items(recursive=True):
         config_loc = GENERATED_PATH / f"{item.id}/{item.id}.json"
         with config_loc.open("r") as file:
             expected = json.load(file)
         actual = item.to_dict()
-        assert expected["id"] == actual["id"]
-        assert expected["bbox"] == actual["bbox"]
-        assert expected["geometry"] == actual["geometry"]
-        compare_dict_except(expected["properties"], actual["properties"])
-        assert expected["assets"] == actual["assets"]
+        compare_items(expected, actual)

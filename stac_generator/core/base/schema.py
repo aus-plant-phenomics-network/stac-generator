@@ -1,13 +1,12 @@
 import datetime
-import json
 import logging
 from collections.abc import Sequence
-from typing import Any, Literal, NotRequired, Required, TypeVar
+from typing import Annotated, Any, Literal, NotRequired, Required, TypeVar
 
 import pandas as pd
 import pytz
 from httpx._types import RequestData
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, BeforeValidator, Field
 from shapely import Geometry
 from stac_pydantic.shared import Provider
 from typing_extensions import TypedDict
@@ -19,7 +18,7 @@ from stac_generator._types import (
     QueryParamTypes,
     RequestContent,
 )
-from stac_generator.core.base.utils import get_timezone
+from stac_generator.core.base.utils import get_timezone, is_string_convertible
 from stac_generator.exceptions import TimezoneException
 
 T = TypeVar("T", bound="SourceConfig")
@@ -102,7 +101,7 @@ class SourceConfig(StacItemConfig):
     - Additional Stac Metadata from `StacConfig`
     """
 
-    location: str
+    location: Annotated[str, BeforeValidator(is_string_convertible)]
     """Asset's href"""
     extension: str | None = None
     """Explicit file extension specification. If the file is stored behind an api endpoint, the field `extension` must be provided"""
@@ -164,18 +163,3 @@ class ColumnInfo(TypedDict):
 class HasColumnInfo(BaseModel):
     column_info: list[ColumnInfo] = Field(default_factory=list)
     """List of attributes associated with point/vector data"""
-
-    @field_validator("column_info", mode="before")
-    @classmethod
-    def coerce_to_object(cls, v: str | list[ColumnInfo] | None) -> list[ColumnInfo]:
-        """Convert json serialised string of column info into matched object"""
-        if v is None:
-            return []
-        if isinstance(v, list):
-            return v
-        parsed = json.loads(v)
-        if not isinstance(parsed, list):
-            raise ValueError(
-                "column_info field expects a json serialisation of a list of ColumnInfo or a list of string"
-            )
-        return parsed

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import cast
 
 import pystac
@@ -9,7 +10,7 @@ from pyproj import CRS
 from pyproj.transformer import Transformer
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.projection import AssetProjectionExtension, ItemProjectionExtension
-from pystac.extensions.raster import AssetRasterExtension, DataType, RasterBand
+from pystac.extensions.raster import AssetRasterExtension, RasterBand
 from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
@@ -19,24 +20,7 @@ from stac_generator.exceptions import SourceAssetException
 
 from .schema import RasterConfig
 
-VALID_COMMON_NAME = {
-    "coastal",
-    "blue",
-    "green",
-    "red",
-    "rededge",
-    "yellow",
-    "pan",
-    "nir",
-    "nir08",
-    "nir09",
-    "cirrus",
-    "swir16",
-    "swir22",
-    "lwir",
-    "lwir11",
-    "lwir12",
-}
+logger = logging.getLogger(__name__)
 
 
 class RasterGenerator(ItemGenerator[RasterConfig]):
@@ -52,10 +36,13 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         :rtype: pystac.Item
         """
         try:
+            logger.info(f"Reading raster asset: {self.config.id}")
             with rasterio.open(self.config.location) as src:
                 bounds = src.bounds
                 crs = cast(CRS, src.crs)
                 shape = list(src.shape)
+                nodata = src.nodata
+                dtypes = src.dtypes
         except rasterio.errors.RasterioIOError as e:
             raise SourceAssetException("Unable to read raster asset") from e
 
@@ -102,24 +89,16 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         eo_bands = []
         raster_bands = []
 
-        for band_info in self.config.band_info:
-            common_name = band_info.get("common_name", None)
-            if common_name and common_name not in VALID_COMMON_NAME:
-                raise ValueError(f"Invalid common name: {common_name} for item: {self.config.id}")
+        for idx, band_info in enumerate(self.config.band_info):
             eo_band = Band.create(
-                name=band_info["name"],
-                common_name=common_name,
-                center_wavelength=band_info.get("wavelength", None),
-                description=band_info.get("description", None),
+                name=band_info.name,
+                common_name=band_info.common_name,
+                center_wavelength=band_info.wavelength,
+                description=band_info.description,
             )
             eo_bands.append(eo_band)
 
-            raster_band = RasterBand.create(
-                nodata=band_info.get("nodata", 0),
-                data_type=DataType(band_info.get("data_type"))
-                if band_info.get("data_type", None)
-                else None,
-            )
+            raster_band = RasterBand.create(nodata=nodata, data_type=dtypes[idx])
             raster_bands.append(raster_band)
 
         # Create Asset and Add to Item

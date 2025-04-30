@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-from typing import Self
+from typing import Annotated, Self
 
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, BeforeValidator, field_validator, model_validator
 
 from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
+from stac_generator.core.base.utils import is_string_convertible  # noqa: TCH001
 
 
 class JoinConfig(BaseModel):
-    file: str
+    file: Annotated[str, BeforeValidator(is_string_convertible)]
     left_on: str
     right_on: str
     date_column: str | None = None
