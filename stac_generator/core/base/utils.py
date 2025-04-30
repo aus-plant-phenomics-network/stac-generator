@@ -182,6 +182,14 @@ def _read_csv(
         ) from e
 
 
+def is_string_convertible(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, Path):
+        return value.as_posix()
+    raise ValueError(f"Invalid string: {value}")
+
+
 def read_point_asset(
     src_path: str,
     X_coord: str,

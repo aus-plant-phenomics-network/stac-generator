@@ -4,7 +4,7 @@ import abc
 import datetime as pydatetime
 import json
 import logging
-import pathlib
+from pathlib import Path
 from typing import TYPE_CHECKING, Any, Generic, cast
 
 import geopandas as gpd
@@ -309,10 +309,17 @@ class VectorGenerator(ItemGenerator[T]):
 
 
 class StacSerialiser:
-    def __init__(self, generator: CollectionGenerator, href: str) -> None:
+    def __init__(self, generator: CollectionGenerator, href: str | Path) -> None:
         self.generator = generator
         self.collection = generator()
-        self.href = href
+        if isinstance(href, str):
+            self.href = href
+        elif isinstance(href, Path):
+            self.href = href.as_posix()
+        else:
+            raise TypeError(
+                f"Invalid serialisation href, expects either a str or a Path. Received: {href}"
+            )
 
     def pre_serialisation_hook(self, collection: pystac.Collection, href: str) -> None:
         """Hook that can be overwritten to provide pre-serialisation functionality.
@@ -354,15 +361,15 @@ class StacSerialiser:
             exclude_unset=True,
         )
 
-    def save_collection_config(self, dst: str | pathlib.Path) -> None:
+    def save_collection_config(self, dst: str | Path) -> None:
         config = self.prepare_collection_configs(self.generator)
-        with pathlib.Path(dst).open("w") as file:
+        with Path(dst).open("w") as file:
             json.dump(config, file)
 
     @staticmethod
-    def save_configs(configs: Sequence[T], dst: str | pathlib.Path) -> None:
+    def save_configs(configs: Sequence[T], dst: str | Path) -> None:
         config = [StacSerialiser.prepare_config(con) for con in configs]
-        with pathlib.Path(dst).open("w") as file:
+        with Path(dst).open("w") as file:
             json.dump(config, file)
 
     def to_json(self) -> None:

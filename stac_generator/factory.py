@@ -141,7 +141,7 @@ class StacGeneratorFactory:
             if isinstance(config, str):
                 configs.extend(handle_str_config(config))
             elif isinstance(config, Path):
-                configs.extend(handle_str_config(str(config)))
+                configs.extend(handle_str_config(config.as_posix()))
             elif isinstance(config, SourceConfig):
                 configs.append(config)
             elif isinstance(config, dict):

@@ -5,7 +5,7 @@
 groups = ["default", "analysis", "cli", "dev", "docs", "test", "type-stubs"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:24470a14c0320167c6282398bf5eab7b755c5cc9ba68aedba14655fe85eb67c2"
+content_hash = "sha256:f85fa57102f81c2b3d211ba5bec8f31862342c2cde2a06b4b2179259f6a1fe9b"
 
 [[metadata.targets]]
 requires_python = ">=3.11"
@@ -2042,7 +2042,7 @@ files = [
 
 [[package]]
 name = "pandas-stubs"
-version = "2.2.3.241126"
+version = "2.2.3.250308"
 requires_python = ">=3.10"
 summary = "Type annotations for pandas"
 groups = ["type-stubs"]
@@ -2051,8 +2051,8 @@ dependencies = [
     "types-pytz>=2022.1.1",
 ]
 files = [
-    {file = "pandas_stubs-2.2.3.241126-py3-none-any.whl", hash = "sha256:74aa79c167af374fe97068acc90776c0ebec5266a6e5c69fe11e9c2cf51f2267"},
-    {file = "pandas_stubs-2.2.3.241126.tar.gz", hash = "sha256:cf819383c6d9ae7d4dabf34cd47e1e45525bb2f312e6ad2939c2c204cb708acd"},
+    {file = "pandas_stubs-2.2.3.250308-py3-none-any.whl", hash = "sha256:a377edff3b61f8b268c82499fdbe7c00fdeed13235b8b71d6a1dc347aeddc74d"},
+    {file = "pandas_stubs-2.2.3.250308.tar.gz", hash = "sha256:3a6e9daf161f00b85c83772ed3d5cff9522028f07a94817472c07b91f46710fd"},
 ]
 
 [[package]]
