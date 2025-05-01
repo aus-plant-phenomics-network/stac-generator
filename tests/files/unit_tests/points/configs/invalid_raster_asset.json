@@ -1,0 +1,13 @@
+[
+  {
+    "id": "invalid_asset_location",
+    "location": "tests/files/unit_tests/points/nonexistent.tiff",
+    "collection_date": "2017-01-01",
+    "collection_time": "00:00:00",
+    "band_info": [
+      {
+        "name": "band"
+      }
+    ]
+  }
+]

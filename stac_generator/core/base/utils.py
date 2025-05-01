@@ -175,11 +175,11 @@ def _read_csv(
             parse_dates=parse_dates,
         )
     except FileNotFoundError as e:
-        raise SourceAssetLocationException(e) from None
+        raise SourceAssetLocationException(str(e) + ". Asset: f{src_path}") from None
     except ValueError as e:
         raise StacConfigException(
-            f"Unable to read {src_path} using additional configuration parameters"
-        ) from e
+            f"Unable to read {src_path} using additional configuration parameters. " + str(e)
+        ) from None
 
 
 def is_string_convertible(value: Any) -> str:
