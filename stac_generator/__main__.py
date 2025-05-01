@@ -17,12 +17,19 @@ from argparse import ArgumentParser, Namespace, _SubParsersAction
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
+from pydantic import ValidationError
 from rich_argparse import RawDescriptionRichHelpFormatter
 
 from stac_generator.__version__ import __version__
 
 root_logger = logging.getLogger("stac_generator")
 logger = logging.getLogger(__name__)
+
+
+def log_exception(e: Exception, show_stack_trace: bool = False) -> None:
+    logger.exception(e, exc_info=show_stack_trace)
+    if not show_stack_trace:
+        logger.info("Run the command with -v to show detailed error.")
 
 
 def serialise_handler(args: Namespace) -> None:
@@ -79,10 +86,13 @@ def serialise_handler(args: Namespace) -> None:
             raise ValueError(
                 f"Invalid number of threads: {args.num_workers}. Must be greater than 0."
             )
-    except Exception as e:
-        logger.exception(e, exc_info=show_stack_trace)
-        if not show_stack_trace:
-            logger.info("Run the command with -v to show detailed error.")
+    except ValidationError as e:
+        logger.info(
+            "Error encountered while parsing config. Fix the error by addressing the following:"
+        )
+        log_exception(e, show_stack_trace)
+    except Exception as e:  # noqa: BLE001
+        log_exception(e, show_stack_trace)
 
 
 def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:

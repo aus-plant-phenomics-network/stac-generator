@@ -237,9 +237,11 @@ def read_vector_asset(
             engine="pyogrio",  # For predictability
         )
     except DataLayerError:
-        raise StacConfigException(f"Invalid layer. File: {src_path}, layer: {layer}") from None
+        raise StacConfigException(
+            f"Invalid layer. File: {src_path}, layer: {layer}. The config describes a non-existent layer in the vector asset. Fix this error by removing the layer field or changing it to a valid layer."
+        ) from None
     except DataSourceError as e:
-        raise SourceAssetException(e) from None
+        raise SourceAssetException(str(e) + f". Asset: {src_path}") from None
 
 
 def read_join_asset(

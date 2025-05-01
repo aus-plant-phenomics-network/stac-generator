@@ -121,6 +121,11 @@ def test_given_join_file_invalid_no_join_column_info_expects_throw() -> None:
         load_item("join_invalid_config_no_join_column_info.json")
 
 
+def test_given_join_file_empty_join_column_info_expects_throw() -> None:
+    with pytest.raises(ValueError):
+        load_item("join_invalid_config_empty_join_column_info.json")
+
+
 def test_given_join_file_invalid_config_no_left_on_expects_throw() -> None:
     with pytest.raises(ValueError):
         load_item("join_invalid_config_no_left_on.json")

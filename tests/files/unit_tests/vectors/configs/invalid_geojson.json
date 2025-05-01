@@ -1,0 +1,14 @@
+[
+    {
+        "id": "invalid_asset",
+        "location": "tests/files/unit_tests/vectors/invalid.geojson",
+        "collection_date": "2025-01-01",
+        "collection_time": "00:00:00",
+        "layer": "Sunbury",
+        "column_info": [
+            {
+                "name": "sell_price"
+            }
+        ]
+    }
+]

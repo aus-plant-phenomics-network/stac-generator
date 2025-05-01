@@ -82,7 +82,7 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
 
         if columns and not set(columns).issubset(set(raw_df.columns)):
             raise StacConfigException(
-                f"Invalid columns for asset - {self.config.location!s}: {set(columns) - set(raw_df.columns)}"
+                f"Invalid columns for asset - {self.config.location!s}: {set(columns) - set(raw_df.columns)}. The config describes a column that is not present in the raw asset. Fix this error by removing the column info entry or changing the entry to an existing column."
             )
 
         # Validate EPSG user-input vs extracted
