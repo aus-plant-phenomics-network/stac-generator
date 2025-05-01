@@ -17,9 +17,19 @@ from argparse import ArgumentParser, Namespace, _SubParsersAction
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
+from pydantic import ValidationError
 from rich_argparse import RawDescriptionRichHelpFormatter
 
 from stac_generator.__version__ import __version__
+
+root_logger = logging.getLogger("stac_generator")
+logger = logging.getLogger(__name__)
+
+
+def log_exception(e: Exception, show_stack_trace: bool = False) -> None:
+    logger.exception(e, exc_info=show_stack_trace)
+    if not show_stack_trace:
+        logger.info("Run the command with -v to show detailed error.")
 
 
 def serialise_handler(args: Namespace) -> None:
@@ -27,8 +37,10 @@ def serialise_handler(args: Namespace) -> None:
     from stac_generator.core.base.schema import StacCollectionConfig
     from stac_generator.factory import StacGeneratorFactory
 
+    show_stack_trace = False
     if args.v:
-        logging.getLogger("stac_generator").setLevel(logging.DEBUG)
+        root_logger.setLevel(logging.DEBUG)
+        show_stack_trace = True
     # Build collection config and catalog config
     metadata_json = {}
     if args.metadata_json:
@@ -51,26 +63,36 @@ def serialise_handler(args: Namespace) -> None:
     )
 
     # Generate
-    if args.num_workers == 1:
-        # Use a single thread
-        generator = StacGeneratorFactory.get_collection_generator(
-            source_configs=args.src,
-            collection_config=collection_config,
-        )
-        # Save
-        serialiser = StacSerialiser(generator, args.dst)
-        serialiser()
-    elif args.num_workers > 1:
-        with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
+    try:
+        if args.num_workers == 1:
+            # Use a single thread
             generator = StacGeneratorFactory.get_collection_generator(
                 source_configs=args.src,
                 collection_config=collection_config,
-                pool=executor,
             )
+            # Save
             serialiser = StacSerialiser(generator, args.dst)
             serialiser()
-    else:
-        raise ValueError(f"Invalid number of threads: {args.num_workers}. Must be greater than 0.")
+        elif args.num_workers > 1:
+            with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
+                generator = StacGeneratorFactory.get_collection_generator(
+                    source_configs=args.src,
+                    collection_config=collection_config,
+                    pool=executor,
+                )
+                serialiser = StacSerialiser(generator, args.dst)
+                serialiser()
+        else:
+            raise ValueError(
+                f"Invalid number of threads: {args.num_workers}. Must be greater than 0."
+            )
+    except ValidationError as e:
+        logger.info(
+            "Error encountered while parsing config. Fix the error by addressing the following:"
+        )
+        log_exception(e, show_stack_trace)
+    except Exception as e:  # noqa: BLE001
+        log_exception(e, show_stack_trace)
 
 
 def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:

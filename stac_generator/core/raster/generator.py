@@ -44,7 +44,9 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
                 nodata = src.nodata
                 dtypes = src.dtypes
         except rasterio.errors.RasterioIOError as e:
-            raise SourceAssetException("Unable to read raster asset") from e
+            raise SourceAssetException(
+                f"Unable to read raster asset: {self.config.location}. " + str(e)
+            ) from None
 
         # Convert to 4326 for bbox and geometry
         transformer = Transformer.from_crs(crs, 4326, always_xy=True)

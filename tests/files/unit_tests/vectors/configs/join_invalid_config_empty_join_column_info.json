@@ -1,0 +1,20 @@
+[
+    {
+        "id": "no_join_column_info",
+        "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+        "collection_date": "2025-01-01",
+        "collection_time": "00:00:00",
+        "column_info": [
+            {
+                "name": "Suburb_Name",
+                "description": "Suburb_Name"
+            }
+        ],
+        "join_config": {
+            "file": "tests/files/unit_tests/vectors/distance.csv",
+            "right_on": "Area",
+            "left_on": "Suburb_Name",
+            "column_info": []
+        }
+    }
+]

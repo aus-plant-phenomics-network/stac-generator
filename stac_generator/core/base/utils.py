@@ -175,11 +175,11 @@ def _read_csv(
             parse_dates=parse_dates,
         )
     except FileNotFoundError as e:
-        raise SourceAssetLocationException(e) from None
+        raise SourceAssetLocationException(str(e) + ". Asset: f{src_path}") from None
     except ValueError as e:
         raise StacConfigException(
-            f"Unable to read {src_path} using additional configuration parameters"
-        ) from e
+            f"Unable to read {src_path} using additional configuration parameters. " + str(e)
+        ) from None
 
 
 def is_string_convertible(value: Any) -> str:
@@ -237,9 +237,11 @@ def read_vector_asset(
             engine="pyogrio",  # For predictability
         )
     except DataLayerError:
-        raise StacConfigException(f"Invalid layer. File: {src_path}, layer: {layer}") from None
+        raise StacConfigException(
+            f"Invalid layer. File: {src_path}, layer: {layer}. The config describes a non-existent layer in the vector asset. Fix this error by removing the layer field or changing it to a valid layer."
+        ) from None
     except DataSourceError as e:
-        raise SourceAssetException(e) from None
+        raise SourceAssetException(str(e) + f". Asset: {src_path}") from None
 
 
 def read_join_asset(

@@ -9,7 +9,7 @@ from stac_generator.core.base.schema import StacCollectionConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.vector.generator import VectorGenerator
 from stac_generator.core.vector.schema import JoinConfig, VectorConfig
-from stac_generator.exceptions import SourceAssetException
+from stac_generator.exceptions import SourceAssetException, StacConfigException
 from tests.utils import compare_extent, compare_items
 
 CONFIG_JSON = Path("tests/files/integration_tests/vector/config/vector_config.json")
@@ -104,3 +104,25 @@ def test_given_empty_join_column_info_expects_raises() -> None:
                 "column_info": [],
             }
         )
+
+
+def test_given_duplicated_id_expects_raises() -> None:
+    config = [
+        {
+            "id": "valid_vector",
+            "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+            "collection_date": "2025-01-01",
+            "collection_time": "00:00:00",
+            "column_info": [{"name": "Suburb_Name", "description": "Suburb_Name"}],
+        },
+        {
+            "id": "valid_vector",
+            "location": "tests/files/unit_tests/vectors/Werribee.geojson",
+            "collection_date": "2025-01-01",
+            "collection_time": "00:00:00",
+            "column_info": [{"name": "Suburb_Name", "description": "Suburb_Name"}],
+        },
+    ]
+    with pytest.raises(StacConfigException):
+        generators = [VectorGenerator(cfg) for cfg in config]
+        CollectionGenerator(StacCollectionConfig(id="Collecton"), generators)

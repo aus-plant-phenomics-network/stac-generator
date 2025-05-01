@@ -42,6 +42,7 @@ from stac_generator.core.base.utils import (
     localise_timezone,
     parse_href,
 )
+from stac_generator.exceptions import StacConfigException
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
@@ -76,6 +77,17 @@ class CollectionGenerator:
         self.collection_config = collection_config
         self.generators = generators
         self.pool = pool
+        self.check_duplicated_id()
+
+    def check_duplicated_id(self) -> None:
+        id_set: set[str] = set()
+        for item in self.generators:
+            item_id = item.config.id
+            if item_id in id_set:
+                raise StacConfigException(
+                    f"Duplicated item id: {item_id}. Note that each item must have a unique id in the collection. Fix this error by renaming the duplicated id or remove the duplicated item."
+                )
+            id_set.add(item_id)
 
     @staticmethod
     def spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:

@@ -83,8 +83,10 @@ class StacItemConfig(StacCollectionConfig):
                 f"{self.collection_date}T{self.collection_time}",
                 tzinfo=pytz.timezone(timezone),
             )
-        except Exception as e:
-            raise TimezoneException("Invalid timezone config parameter") from e
+        except Exception as e:  # noqa: BLE001
+            raise TimezoneException(
+                f"Invalid timezone config parameter for asset with id: {self.id}. " + str(e)
+            ) from None
         return local_dt.tz_convert(pytz.timezone("UTC"))
 
 
