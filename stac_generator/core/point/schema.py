@@ -26,4 +26,4 @@ class PointConfig(SourceConfig, PointOwnConfig):
     def to_asset_config(self) -> dict[str, Any]:
         return PointOwnConfig.model_construct(
             **self.model_dump(mode="json", exclude_none=True, exclude_unset=True)
-        ).model_dump(mode="json", exclude_none=True, exclude_unset=True)
+        ).model_dump(mode="json", exclude_none=True, exclude_unset=True, warnings=False)

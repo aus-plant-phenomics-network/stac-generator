@@ -26,9 +26,7 @@ def load_item(file: str) -> pystac.Item:
     return load_items(file)[0]
 
 
-def run_join_nodate_test(
-    item: pystac.Item, location: str, start: str, end: str, timestamps: list[str]
-) -> None:
+def run_join_nodate_test(item: pystac.Item, location: str, start: str, end: str) -> None:
     assert item.properties["stac_generator"]["column_info"] == [
         {"name": "Suburb_Name", "description": "Suburb_Name"}
     ]
@@ -48,12 +46,9 @@ def run_join_nodate_test(
     assert item.properties["stac_generator"]["join_config"]["left_on"] == "Suburb_Name"
     assert item.properties["start_datetime"] == start
     assert item.properties["end_datetime"] == end
-    assert item.properties["timestamps"] == timestamps
 
 
-def run_join_with_date_test(
-    item: pystac.Item, location: str, start: str, end: str, timestamps: list[str]
-) -> None:
+def run_join_with_date_test(item: pystac.Item, location: str, start: str, end: str) -> None:
     assert "column_info" in item.properties["stac_generator"]
     assert item.properties["stac_generator"]["column_info"] == [
         {"name": "Suburb_Name", "description": "Suburb_Name"}
@@ -74,7 +69,6 @@ def run_join_with_date_test(
     assert item.properties["stac_generator"]["join_config"]["date_column"] == "Date"
     assert item.properties["start_datetime"] == start
     assert item.properties["end_datetime"] == end
-    assert item.properties["timestamps"] == timestamps
 
 
 def test_given_invalid_wrong_layer_expects_raises() -> None:
@@ -168,11 +162,6 @@ def test_given_join_with_date_expects_correct_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/price.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-01T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-        ],
     )
 
 
@@ -184,11 +173,6 @@ def test_given_join_with_date_custom_tz_expects_correct_start_end_datetime() -> 
         "tests/files/unit_tests/vectors/price.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-01T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-        ],
     )
 
 
@@ -199,11 +183,6 @@ def test_given_join_with_date_no_tzexpects_correct_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/price_no_tz.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-01T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-        ],
     )
 
 
@@ -214,11 +193,6 @@ def test_given_join_with_date_no_tz_utc_timezone_expects_correct_start_end_datet
         "tests/files/unit_tests/vectors/price_no_tz.csv",
         "2020-01-01T11:00:00Z",
         "2025-01-01T11:00:00Z",
-        [
-            "2020-01-01T11:00:00+00:00",
-            "2024-01-01T11:00:00+00:00",
-            "2025-01-01T11:00:00+00:00",
-        ],
     )
 
 
@@ -229,29 +203,6 @@ def test_given_join_with_date_multi_tz_local_expects_correct_start_end_datetime(
         "tests/files/unit_tests/vectors/price_multi_tz_multi_area.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-07T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2020-01-02T00:00:00+00:00",
-            "2020-01-03T00:00:00+00:00",
-            "2020-01-04T00:00:00+00:00",
-            "2020-01-05T00:00:00+00:00",
-            "2020-01-06T00:00:00+00:00",
-            "2020-01-07T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2024-01-02T00:00:00+00:00",
-            "2024-01-03T00:00:00+00:00",
-            "2024-01-04T00:00:00+00:00",
-            "2024-01-05T00:00:00+00:00",
-            "2024-01-06T00:00:00+00:00",
-            "2024-01-07T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-            "2025-01-02T00:00:00+00:00",
-            "2025-01-03T00:00:00+00:00",
-            "2025-01-04T00:00:00+00:00",
-            "2025-01-05T00:00:00+00:00",
-            "2025-01-06T00:00:00+00:00",
-            "2025-01-07T00:00:00+00:00",
-        ],
     )
 
 
@@ -262,29 +213,6 @@ def test_given_join_with_date_multi_tz_sydney_expects_correct_start_end_datetime
         "tests/files/unit_tests/vectors/price_multi_tz_multi_area.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-07T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2020-01-02T00:00:00+00:00",
-            "2020-01-03T00:00:00+00:00",
-            "2020-01-04T00:00:00+00:00",
-            "2020-01-05T00:00:00+00:00",
-            "2020-01-06T00:00:00+00:00",
-            "2020-01-07T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2024-01-02T00:00:00+00:00",
-            "2024-01-03T00:00:00+00:00",
-            "2024-01-04T00:00:00+00:00",
-            "2024-01-05T00:00:00+00:00",
-            "2024-01-06T00:00:00+00:00",
-            "2024-01-07T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-            "2025-01-02T00:00:00+00:00",
-            "2025-01-03T00:00:00+00:00",
-            "2025-01-04T00:00:00+00:00",
-            "2025-01-05T00:00:00+00:00",
-            "2025-01-06T00:00:00+00:00",
-            "2025-01-07T00:00:00+00:00",
-        ],
     )
 
 
@@ -299,29 +227,6 @@ def test_given_join_with_date_multi_tz_utc_expects_correct_start_end_datetime() 
         "tests/files/unit_tests/vectors/price_multi_tz_multi_area.csv",
         "2020-01-01T00:00:00Z",
         "2025-01-07T00:00:00Z",
-        [
-            "2020-01-01T00:00:00+00:00",
-            "2020-01-02T00:00:00+00:00",
-            "2020-01-03T00:00:00+00:00",
-            "2020-01-04T00:00:00+00:00",
-            "2020-01-05T00:00:00+00:00",
-            "2020-01-06T00:00:00+00:00",
-            "2020-01-07T00:00:00+00:00",
-            "2024-01-01T00:00:00+00:00",
-            "2024-01-02T00:00:00+00:00",
-            "2024-01-03T00:00:00+00:00",
-            "2024-01-04T00:00:00+00:00",
-            "2024-01-05T00:00:00+00:00",
-            "2024-01-06T00:00:00+00:00",
-            "2024-01-07T00:00:00+00:00",
-            "2025-01-01T00:00:00+00:00",
-            "2025-01-02T00:00:00+00:00",
-            "2025-01-03T00:00:00+00:00",
-            "2025-01-04T00:00:00+00:00",
-            "2025-01-05T00:00:00+00:00",
-            "2025-01-06T00:00:00+00:00",
-            "2025-01-07T00:00:00+00:00",
-        ],
     )
 
 
@@ -332,7 +237,6 @@ def test_given_join_no_date_expects_same_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/distance.csv",
         "2024-12-31T13:00:00Z",
         "2024-12-31T13:00:00Z",
-        ["2024-12-31T13:00:00+00:00"],
     )
     assert pd.Timestamp(item.properties["start_datetime"]) == item.datetime
 
@@ -344,7 +248,6 @@ def test_given_join_no_date_adelaide_expects_same_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/distance.csv",
         "2024-12-31T13:30:00Z",
         "2024-12-31T13:30:00Z",
-        ["2024-12-31T13:30:00+00:00"],
     )
     assert pd.Timestamp(item.properties["start_datetime"]) == item.datetime
 
@@ -356,7 +259,6 @@ def test_given_join_no_date_melbourne_expects_same_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/distance.csv",
         "2024-12-31T13:00:00Z",
         "2024-12-31T13:00:00Z",
-        ["2024-12-31T13:00:00+00:00"],
     )
     assert pd.Timestamp(item.properties["start_datetime"]) == item.datetime
 
@@ -368,6 +270,5 @@ def test_given_join_no_date_utc_expects_same_start_end_datetime() -> None:
         "tests/files/unit_tests/vectors/distance.csv",
         "2025-01-01T00:00:00Z",
         "2025-01-01T00:00:00Z",
-        ["2025-01-01T00:00:00+00:00"],
     )
     assert pd.Timestamp(item.properties["start_datetime"]) == item.datetime

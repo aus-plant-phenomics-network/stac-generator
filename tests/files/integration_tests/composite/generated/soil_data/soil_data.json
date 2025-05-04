@@ -46,18 +46,11 @@
           "description": "Ca concentration"
         }
       ],
-      "id": "soil_data",
-      "collection_date": "2023-01-01",
-      "collection_time": "09:00:00",
-      "location": "tests/files/integration_tests/point/data/soil_data.csv",
       "X": "Longitude",
       "Y": "Latitude",
       "Z": "mid_depth",
       "epsg": 4326
     },
-    "timestamps": [
-      "2022-12-31T23:00:00+00:00"
-    ],
     "start_datetime": "2022-12-31T23:00:00Z",
     "end_datetime": "2022-12-31T23:00:00Z",
     "proj:code": "EPSG:4326",
@@ -67,24 +60,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/soil_data/soil_data.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/soil_data/soil_data.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

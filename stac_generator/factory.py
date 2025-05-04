@@ -14,17 +14,17 @@ from stac_generator.core.base import (
 from stac_generator.core.base.schema import SourceConfig
 from stac_generator.core.base.utils import read_source_config
 from stac_generator.core.point import PointGenerator
-from stac_generator.core.point.schema import PointConfig
+from stac_generator.core.point.schema import PointConfig, PointOwnConfig
 from stac_generator.core.raster import RasterGenerator
-from stac_generator.core.raster.schema import RasterConfig
+from stac_generator.core.raster.schema import RasterConfig, RasterOwnConfig
 from stac_generator.core.vector import VectorGenerator
-from stac_generator.core.vector.schema import VectorConfig
+from stac_generator.core.vector.schema import VectorConfig, VectorOwnConfig
 
 if TYPE_CHECKING:
     from concurrent.futures import Executor
 
     import pystac
-
+    from pydantic import BaseModel
 
 EXTENSION_MAP: dict[str, type[SourceConfig]] = {
     "csv": PointConfig,
@@ -37,6 +37,19 @@ EXTENSION_MAP: dict[str, type[SourceConfig]] = {
     "json": VectorConfig,
     "gpkg": VectorConfig,  # Can also contain raster data. TODO: overhaul interface
     "shp": VectorConfig,
+}
+
+EXTENSION_CONFIG_MAP: dict[str, type[BaseModel]] = {
+    "csv": PointOwnConfig,
+    "txt": PointOwnConfig,
+    "geotiff": RasterOwnConfig,
+    "tiff": RasterOwnConfig,
+    "tif": RasterOwnConfig,
+    "zip": VectorOwnConfig,
+    "geojson": VectorOwnConfig,
+    "json": VectorOwnConfig,
+    "gpkg": VectorOwnConfig,  # Can also contain raster data. TODO: overhaul interface
+    "shp": VectorOwnConfig,
 }
 
 CONFIG_GENERATOR_MAP: dict[type[SourceConfig], type[ItemGenerator]] = {
@@ -59,11 +72,20 @@ Config_T = BaseConfig_T | Sequence[BaseConfig_T]
 
 class StacGeneratorFactory:
     @staticmethod
+    def get_extension_config_handler(extension: str) -> type[BaseModel]:
+        """Match file extension with SourceConfig type"""
+        if extension not in EXTENSION_CONFIG_MAP:
+            raise ValueError(
+                f"No config matches extension: {extension}. Either change the extension or register a handler with the method `register_extension_handler`"
+            )
+        return EXTENSION_CONFIG_MAP[extension]
+
+    @staticmethod
     def get_extension_handler(extension: str) -> type[SourceConfig]:
         """Match file extension with SourceConfig type"""
         if extension not in EXTENSION_MAP:
             raise ValueError(
-                f"No SourceConfig matches extension: {extension}. Either change the extension or register a handler with the method `register_extension_handler`"
+                f"No config matches extension: {extension}. Either change the extension or register a handler with the method `register_extension_handler`"
             )
         return EXTENSION_MAP[extension]
 
@@ -82,12 +104,11 @@ class StacGeneratorFactory:
 
     @staticmethod
     def register_generator_handler(
-        config: SourceConfig,
+        config_type: type[SourceConfig],
         handler: type[ItemGenerator],
         force: bool = False,
     ) -> None:
         """Dynamically register a customer ItemGenerator class based on (new/existing) config type. Use force to overwrite existing handler"""
-        config_type = type(config)
         if config_type in CONFIG_GENERATOR_MAP and not force:
             raise ValueError(
                 f"Handler for config: {config_type.__name__} already exists: {CONFIG_GENERATOR_MAP[config_type].__name__}. If this is intentional, use register_generator_handler with force=True"
@@ -109,12 +130,12 @@ class StacGeneratorFactory:
         return CONFIG_GENERATOR_MAP[config_type]
 
     @staticmethod
-    def extract_item_config(item: pystac.Item) -> SourceConfig:
+    def extract_item_config(item: pystac.Item) -> BaseModel:
         """Get stac_generator properties. Used by the MCCN engine"""
         if "stac_generator" not in item.properties:
             raise ValueError(f"Missing stac_generator properties for item: {item.id}")
-        ext = item.properties["stac_generator"]["location"].split(".")[-1]
-        handler = StacGeneratorFactory.get_extension_handler(ext)
+        ext = item.properties["assets"]["data"]["href"].split(".")[-1]
+        handler = StacGeneratorFactory.get_extension_config_handler(ext)
         return handler.model_validate(item.properties["stac_generator"])
 
     @staticmethod
@@ -146,8 +167,6 @@ class StacGeneratorFactory:
                 configs.append(config)
             elif isinstance(config, dict):
                 configs.append(handle_dict_config(config))
-            else:
-                raise TypeError(f"Invalid config item type: {type(config)}")
             return configs
 
         def handle_config(config: Config_T) -> list[SourceConfig]:

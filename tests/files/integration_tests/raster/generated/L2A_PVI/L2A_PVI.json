@@ -13,7 +13,7 @@
       [
         [
           15.110630736098942,
-          36.9529253827587
+          36.95292538275869
         ],
         [
           15.110630736098942,
@@ -25,27 +25,23 @@
         ],
         [
           13.876365195204773,
-          36.9529253827587
+          36.95292538275869
         ],
         [
           15.110630736098942,
-          36.9529253827587
+          36.95292538275869
         ]
       ]
     ]
   },
   "bbox": [
     13.876365195204773,
-    36.9529253827587,
+    36.95292538275869,
     15.110630736098942,
     37.947537561322136
   ],
   "properties": {
     "stac_generator": {
-      "id": "L2A_PVI",
-      "collection_date": "2021-02-21",
-      "collection_time": "10:00:17",
-      "location": "tests/files/integration_tests/raster/data/L2A_PVI.tif",
       "band_info": [
         {
           "name": "b04",
@@ -67,9 +63,6 @@
         }
       ]
     },
-    "timestamps": [
-      "2021-02-21T09:00:17+00:00"
-    ],
     "start_datetime": "2021-02-21T09:00:17Z",
     "end_datetime": "2021-02-21T09:00:17Z",
     "proj:code": "EPSG:32633",
@@ -94,24 +87,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

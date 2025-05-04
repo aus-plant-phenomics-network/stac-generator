@@ -125,8 +125,8 @@ class SourceConfig(StacItemConfig):
 
     def to_common_metadata(self) -> dict[str, Any]:
         return StacCollectionConfig.model_construct(
-            **self.model_dump(mode="python", exclude_unset=True, exclude_none=True)
-        ).model_dump(mode="json", exclude_unset=True, exclude_none=True)
+            **self.model_dump(mode="python", exclude_unset=True, exclude_none=True, exclude={"id"})
+        ).model_dump(mode="json", exclude_unset=True, exclude_none=True, warnings=False)
 
     def to_asset_config(self) -> dict[str, Any]:
         raise NotImplementedError

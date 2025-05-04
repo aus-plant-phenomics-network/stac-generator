@@ -6,18 +6,18 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/L2A_PVI/L2A_PVI.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/raster/generated/collection.json",
       "type": "application/json"
     }
   ],
@@ -27,7 +27,7 @@
       "bbox": [
         [
           13.876365195204773,
-          36.9529253827587,
+          36.95292538275869,
           15.110630736098942,
           37.947537561322136
         ]

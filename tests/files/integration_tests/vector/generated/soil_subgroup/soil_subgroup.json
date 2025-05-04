@@ -309,17 +309,10 @@
           "name": "XX",
           "description": "Percentage of map unit which is not applicable"
         }
-      ],
-      "id": "soil_subgroup",
-      "title": "soil subgroup data - DEWNR Soil and Land Program",
-      "description": "61 soils have been identified, representative of the range occurring across southern South Australia, based on an interpretation of Soil Landscape Map Units. These Soils (soil type) classes are also termed 'subgroup soils' in the reference text Hall et al. 2009, 'The Soils of Southern South Australia', where they are described in detail. Each of these soils has a two character alphanumeric code. The first character (letter) represents the relevant Soil GroupSELECT 1 FROM DUAL; the second character (number) represents a particular Soil within the Soil Group. Three additional miscellaneous classes (rock, water, not applicable) are also provided. Hence, 64 attribute (or 'analysis data') classes have been supplied, as percentage (areal extent) values of each possible soil type within each Soil Landscape Map Unit. Note: the sum of all percentage values for each map unit totals 100%. This analysis data is to be used for the creation of spatial data statistics. For map display purposes, the most commonly occurring Soil (SOIL_SUBGR legend category) is defined, however, it should be noted that this often accounts for less than 50% of a Soil Landscape Map Unit.",
-      "collection_date": "2016-06-09",
-      "collection_time": "09:00:00",
-      "location": "tests/files/integration_tests/vector/data/soil_subgroup.zip"
+      ]
     },
-    "timestamps": [
-      "2016-06-08T23:30:00+00:00"
-    ],
+    "title": "soil subgroup data - DEWNR Soil and Land Program",
+    "description": "61 soils have been identified, representative of the range occurring across southern South Australia, based on an interpretation of Soil Landscape Map Units. These Soils (soil type) classes are also termed 'subgroup soils' in the reference text Hall et al. 2009, 'The Soils of Southern South Australia', where they are described in detail. Each of these soils has a two character alphanumeric code. The first character (letter) represents the relevant Soil GroupSELECT 1 FROM DUAL; the second character (number) represents a particular Soil within the Soil Group. Three additional miscellaneous classes (rock, water, not applicable) are also provided. Hence, 64 attribute (or 'analysis data') classes have been supplied, as percentage (areal extent) values of each possible soil type within each Soil Landscape Map Unit. Note: the sum of all percentage values for each map unit totals 100%. This analysis data is to be used for the creation of spatial data statistics. For map display purposes, the most commonly occurring Soil (SOIL_SUBGR legend category) is defined, however, it should be noted that this often accounts for less than 50% of a Soil Landscape Map Unit.",
     "start_datetime": "2016-06-08T23:30:00Z",
     "end_datetime": "2016-06-08T23:30:00Z",
     "proj:code": "EPSG:1168",
@@ -329,24 +322,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_subgroup/soil_subgroup.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

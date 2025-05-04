@@ -55,4 +55,4 @@ class RasterConfig(SourceConfig, RasterOwnConfig):
     def to_asset_config(self) -> dict[str, Any]:
         return RasterOwnConfig.model_construct(
             **self.model_dump(mode="json", exclude_none=True, exclude_unset=True)
-        ).model_dump(mode="json", exclude_none=True, exclude_unset=True)
+        ).model_dump(mode="json", exclude_none=True, exclude_unset=True, warnings=False)

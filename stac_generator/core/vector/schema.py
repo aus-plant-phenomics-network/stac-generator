@@ -5,7 +5,7 @@ from typing import Annotated, Any, Self
 from pydantic import BaseModel, BeforeValidator, field_validator, model_validator
 
 from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
-from stac_generator.core.base.utils import is_string_convertible
+from stac_generator.core.base.utils import is_string_convertible  # noqa: TCH001
 
 
 class JoinConfig(BaseModel):
@@ -51,4 +51,4 @@ class VectorConfig(SourceConfig, VectorOwnConfig):
     def to_asset_config(self) -> dict[str, Any]:
         return VectorOwnConfig.model_construct(
             **self.model_dump(mode="json", exclude_none=True, exclude_unset=True)
-        ).model_dump(mode="json", exclude_none=True, exclude_unset=True)
+        ).model_dump(mode="json", exclude_none=True, exclude_unset=True, warnings=False)

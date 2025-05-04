@@ -34,7 +34,6 @@ from stac_generator.core.base.schema import (
     T,
 )
 from stac_generator.core.base.utils import (
-    add_timestamps,
     force_write_to_stac_api,
     get_timezone,
     href_is_stac_api_endpoint,
@@ -47,8 +46,6 @@ from stac_generator.exceptions import StacConfigException
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from concurrent.futures import Executor
-
-    from stac_generator._types import TimeSequence
 
 
 logger = logging.getLogger(__name__)
@@ -298,7 +295,6 @@ class VectorGenerator(ItemGenerator[T]):
         # Process timestamps
         if time_column is None:
             # Item TS should be UTC by default
-            timestamps: TimeSequence = [item_ts]
             start_datetime = item_ts
             end_datetime = item_ts
         else:
@@ -306,7 +302,6 @@ class VectorGenerator(ItemGenerator[T]):
             timestamps = localise_timezone(sorted_ts, item_tz)
             start_datetime = timestamps.min()
             end_datetime = timestamps.max()
-        add_timestamps(properties, timestamps)
 
         item = pystac.Item(
             source_config.id,

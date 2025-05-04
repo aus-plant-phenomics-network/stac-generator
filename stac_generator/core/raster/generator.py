@@ -15,7 +15,6 @@ from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import add_timestamps
 from stac_generator.exceptions import SourceAssetException
 
 from .schema import RasterConfig
@@ -67,9 +66,9 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
         # Create STAC Item
         # Start datetime and end_datetime are set to be collection datetime for Raster data
         properties = {
-            "stac_generator": self.config.to_properties(),
+            "stac_generator": self.config.to_asset_config(),
+            **self.config.to_common_metadata(),
         }
-        add_timestamps(properties, [item_ts])
         item = pystac.Item(
             id=self.config.id,
             geometry=geometry_geojson,

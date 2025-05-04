@@ -1,6 +1,18 @@
+from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+
+def compare_assets(exp: dict[str, Any], ref: dict[str, Any]) -> None:
+    assert exp.keys() == ref.keys()
+    for k in exp.keys():
+        if k != "href":
+            assert exp[k] == ref[k]
+        else:
+            exp_p = Path(exp[k])
+            ref_p = Path(ref[k])
+            assert exp_p == ref_p
 
 
 def compare_items(exp: dict[str, Any], ref: dict[str, Any]) -> None:
@@ -12,7 +24,9 @@ def compare_items(exp: dict[str, Any], ref: dict[str, Any]) -> None:
         exp["geometry"]["coordinates"], ref["geometry"]["coordinates"]
     )
     assert exp["properties"] == ref["properties"]
-    assert exp["assets"] == ref["assets"]
+    assert exp["assets"].keys() == ref["assets"].keys()
+    for k in exp["assets"].keys():
+        compare_assets(exp["assets"][k], ref["assets"][k])
 
 
 def compare_extent(exp: dict[str, Any], ref: dict[str, Any]) -> None:
