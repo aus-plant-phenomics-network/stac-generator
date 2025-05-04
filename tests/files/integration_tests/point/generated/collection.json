@@ -6,63 +6,63 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/adelaide_airport/adelaide_airport.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/adelaide_airport/adelaide_airport.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/adelaide_salisbury_bowling_club/adelaide_salisbury_bowling_club.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/aston_coop/aston_coop.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/aston_coop/aston_coop.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/belair/belair.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/belair/belair.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/edinburg_raaf/edinburg_raaf.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/edinburg_raaf/edinburg_raaf.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/glen_osmond/glen_osmond.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/glen_osmond/glen_osmond.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/happy_valley_reservoir/happy_valley_reservoir.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/happy_valley_reservoir/happy_valley_reservoir.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/hope_valley_reservoir/hope_valley_reservoir.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/hope_valley_reservoir/hope_valley_reservoir.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/north_adelaide/north_adelaide.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/north_adelaide/north_adelaide.json",
       "type": "application/geo+json"
     },
     {
       "rel": "item",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/soil_data/soil_data.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/soil_data/soil_data.json",
       "type": "application/geo+json"
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/point/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/point/generated/collection.json",
       "type": "application/json"
     }
   ],

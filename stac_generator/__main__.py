@@ -11,11 +11,8 @@ r"""
 
 from __future__ import annotations
 
-import json
 import logging
 from argparse import ArgumentParser, Namespace, _SubParsersAction
-from concurrent.futures import ProcessPoolExecutor
-from pathlib import Path
 
 from pydantic import ValidationError
 from rich_argparse import RawDescriptionRichHelpFormatter
@@ -33,59 +30,28 @@ def log_exception(e: Exception, show_stack_trace: bool = False) -> None:
 
 
 def serialise_handler(args: Namespace) -> None:
-    from stac_generator.core.base.generator import StacSerialiser
-    from stac_generator.core.base.schema import StacCollectionConfig
-    from stac_generator.factory import StacGeneratorFactory
+    from stac_generator.cli.serialise import serialise_handler as _serialise_handler
 
     show_stack_trace = False
     if args.v:
         root_logger.setLevel(logging.DEBUG)
         show_stack_trace = True
-    # Build collection config and catalog config
-    metadata_json = {}
-    if args.metadata_json:
-        with Path(args.metadata_json).open("r") as file:
-            metadata_json = json.load(file)
 
     # CLI args take precedence over metadata fields
-    collection_config = StacCollectionConfig(
-        id=args.id,
-        title=args.title,
-        description=args.description,
-        license=args.license if args.license else metadata_json.get("license"),
-        platform=args.platform if args.platform else metadata_json.get("platform"),
-        constellation=args.constellation
-        if args.constellation
-        else metadata_json.get("constellation"),
-        mission=args.mission if args.mission else metadata_json.get("mission"),
-        instruments=args.instruments if args.instruments else metadata_json.get("instruments"),
-        providers=metadata_json.get("providers"),
-    )
-
-    # Generate
     try:
-        if args.num_workers == 1:
-            # Use a single thread
-            generator = StacGeneratorFactory.get_collection_generator(
-                source_configs=args.src,
-                collection_config=collection_config,
-            )
-            # Save
-            serialiser = StacSerialiser(generator, args.dst)
-            serialiser()
-        elif args.num_workers > 1:
-            with ProcessPoolExecutor(max_workers=args.num_workers) as executor:
-                generator = StacGeneratorFactory.get_collection_generator(
-                    source_configs=args.src,
-                    collection_config=collection_config,
-                    pool=executor,
-                )
-                serialiser = StacSerialiser(generator, args.dst)
-                serialiser()
-        else:
-            raise ValueError(
-                f"Invalid number of threads: {args.num_workers}. Must be greater than 0."
-            )
+        _serialise_handler(
+            id=args.id,
+            src=args.src,
+            dst=args.dst,
+            title=args.title,
+            description=args.description,
+            license=args.license,
+            platform=args.platform,
+            instruments=args.instruments,
+            constellation=args.constellation,
+            mission=args.mission,
+            num_workers=args.num_workers,
+        )
     except ValidationError as e:
         logger.info(
             "Error encountered while parsing config. Fix the error by addressing the following:"
@@ -162,13 +128,6 @@ def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
         required=False,
         default=None,
         help="STAC instrument",
-    )
-    common_metadata.add_argument(
-        "--metadata_json",
-        type=str,
-        required=False,
-        default=None,
-        help="path to json file describing the metadata",
     )
 
     # Serialiser metadata

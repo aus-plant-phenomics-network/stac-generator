@@ -36,8 +36,8 @@ stac_generator="stac_generator.__main__:run_cli"
 [tool.coverage.run]
 source=["stac_generator"]
 omit = [
-    "stac_generator.__main__",
-    "stac_generator.__version__"
+    "stac_generator/__main__.py",
+    "stac_generator/__version__.py"
 ]
 
 [tool.coverage.report]
@@ -48,6 +48,7 @@ exclude_also = [
     "if TYPE_CHECKING:",
     "pragma: no cover"
 ]
+
 
 [tool.ruff]
 lint.select = [

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Annotated, Literal
+from typing import Annotated, Any, Literal
 
 from pydantic import AfterValidator, BaseModel, BeforeValidator
 
@@ -42,8 +42,17 @@ class BandInfo(BaseModel):
     description: str | None = None
 
 
-class RasterConfig(SourceConfig):
+class RasterOwnConfig(BaseModel):
     """Configuration for raster data sources"""
 
     band_info: list[BandInfo]
     """List of band information - REQUIRED"""
+
+
+class RasterConfig(SourceConfig, RasterOwnConfig):
+    """Configuration for raster data sources"""
+
+    def to_asset_config(self) -> dict[str, Any]:
+        return RasterOwnConfig.model_construct(
+            **self.model_dump(mode="json", exclude_none=True, exclude_unset=True)
+        ).model_dump(mode="json", exclude_none=True, exclude_unset=True, warnings=False)

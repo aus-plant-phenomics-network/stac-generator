@@ -1,4 +1,4 @@
 from stac_generator.core.point.generator import PointGenerator
-from stac_generator.core.point.schema import PointConfig
+from stac_generator.core.point.schema import PointConfig, PointOwnConfig
 
-__all__ = ("PointConfig", "PointGenerator")
+__all__ = ("PointConfig", "PointGenerator", "PointOwnConfig")
