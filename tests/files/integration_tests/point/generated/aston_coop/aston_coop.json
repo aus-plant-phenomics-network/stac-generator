@@ -19,6 +19,7 @@
     -34.9423
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {
       "column_info": [
         {

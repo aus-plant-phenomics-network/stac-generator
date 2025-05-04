@@ -114,16 +114,11 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 time_column = join_config.date_column
 
         # Make properties
-        properties = {
-            "stac_generator": self.config.to_asset_config(),
-            **self.config.to_common_metadata(),
-        }
-
         return self.df_to_item(
             raw_df,
             assets,
             self.config,
-            properties=properties,
+            properties=self.config.to_properties(),
             epsg=epsg,
             time_column=time_column,
         )

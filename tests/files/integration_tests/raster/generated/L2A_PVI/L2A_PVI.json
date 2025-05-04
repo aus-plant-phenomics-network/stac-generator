@@ -41,6 +41,7 @@
     37.947537561322136
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {
       "band_info": [
         {

@@ -45,15 +45,11 @@ class PointGenerator(VectorGenerator[PointConfig]):
             self.config.timezone,
         )
 
-        properties = {
-            "stac_generator": self.config.to_asset_config(),
-            **self.config.to_common_metadata(),
-        }
         return self.df_to_item(
             raw_df,
             assets,
             self.config,
-            properties=properties,
+            properties=self.config.to_properties(),
             epsg=self.config.epsg,
             time_column=self.config.T,
         )

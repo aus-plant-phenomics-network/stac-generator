@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Sequence
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import pystac
 
@@ -134,9 +134,17 @@ class StacGeneratorFactory:
         """Get stac_generator properties. Used by the MCCN engine"""
         if "stac_generator" not in item.properties:
             raise ValueError(f"Missing stac_generator properties for item: {item.id}")
-        ext = item.properties["assets"]["data"]["href"].split(".")[-1]
+        ext = item.assets["data"].href.split(".")[-1]
         handler = StacGeneratorFactory.get_extension_config_handler(ext)
         return handler.model_validate(item.properties["stac_generator"])
+
+    @staticmethod
+    def get_item_timezone(item: pystac.Item) -> str:
+        return cast(str, item.properties.get("timezone", "local"))
+
+    @staticmethod
+    def get_item_asset_href(item: pystac.Item) -> str:
+        return item.assets["data"].href
 
     @staticmethod
     def get_item_generators(  # noqa: C901

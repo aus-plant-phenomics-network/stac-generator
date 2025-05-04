@@ -39,6 +39,7 @@
     -34.96855545871302
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {},
     "title": "waite oval mask",
     "description": "waite oval mask",

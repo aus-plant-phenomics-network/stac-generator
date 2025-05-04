@@ -65,16 +65,12 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
         # Create STAC Item
         # Start datetime and end_datetime are set to be collection datetime for Raster data
-        properties = {
-            "stac_generator": self.config.to_asset_config(),
-            **self.config.to_common_metadata(),
-        }
         item = pystac.Item(
             id=self.config.id,
             geometry=geometry_geojson,
             bbox=list(bbox),
             datetime=item_ts,
-            properties=properties,
+            properties=self.config.to_properties(),
             start_datetime=item_ts,
             end_datetime=item_ts,
         )

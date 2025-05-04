@@ -1,4 +1,4 @@
 from stac_generator.core.raster.generator import RasterGenerator
-from stac_generator.core.raster.schema import RasterConfig
+from stac_generator.core.raster.schema import RasterConfig, RasterOwnConfig
 
-__all__ = ("RasterGenerator", "RasterConfig")
+__all__ = ("RasterConfig", "RasterGenerator", "RasterOwnConfig")
