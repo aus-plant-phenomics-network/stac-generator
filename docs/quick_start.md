@@ -1,17 +1,5 @@
 # Quickstart
 
-## Setup
-
-In this tutorial, we will show how you can use the stac generator as a command line interface to describe spatio-temporal assets under different scenarios, with different data types. For starter, please [download]() the following zip file which contains the raw assets to be used throughout the tutorial. If you haven't done so, please [install](./index.md#installation) the stac_generator (either in a virtual environment for the current project or globally). Extract the zip file into a folder and name it `Example`. Enter the folder `Example` and open a terminal in the `Example` directory.
-- For Windows, you can right click and select the option `Open in Terminal`.
-- For Mac, you can right click and select the option `New Terminal at Folder`.
-- For Linux, you can right click and select `Open in Terminal`.
-
-To verify that stac_generator has been correctly installed, type `stac_generator --version` into the terminal. You should see something similar to this:
-
-![](images/terminal-setup.png)
-
-To generate a compliant stac record, some additional metadata is required from the user via the use of configs. A config describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Acceptable config formats are `json` and `yaml`, though `csv` can be used in very limited cases. In the following examples, we shall use `json` as the config format. Note that in the zip folder, we also provide the configs used in the tutorial under the folder `config`. Note that the configs in that folder are similar to the tutorial except for the `location` field, which we use URLs for the cloud stored versions of the asset.
 
 
 ## Vector Data
@@ -19,40 +7,49 @@ To generate a compliant stac record, some additional metadata is required from t
 
 ### Describing a vector file
 
-We want to describe the shape file `Werribee.geojson` in the accompanied zip. If you have QGIS, you open the file in QGIS to visualise the data:
+In this section, we will describe the shape file `Werribee.geojson`, included in the downloaded zip file. 
+
+If you have QGIS installed, you can open the file in QGIS to visualize the data:
 
 ![](images/quick_start_Werribee.png)
 
-Create a simple_vector config as follows:
+#### Config
 
-<details>
-<summary>JSON</summary>
+To describe the shape file, create a configuration file named `vector_simple_config` in one of the supported formats: JSON or YAML.
 
-```json title="vector_simple_config.json"
-[
-    {
-        "id": "Werribee",
-        "location": "Werribee.geojson",
-        "collection_date": "2025-01-01",
-        "collection_time": "00:00:00"
-    }
-]
-```
-</details>
+=== "json"
 
-<details>
-<summary>YAML</summary>
+    ``` json title="vector_simple_config.json"
+    [
+        {
+            "id": "Werribee",
+            "location": "Werribee.geojson",
+            "collection_date": "2025-01-01",
+            "collection_time": "00:00:00"
+        }
+    ]
+    ```
 
-```yaml title="vector_simple_config.yaml"
-- id: "Werribee"
-  location: "Werribee.geojson"
-  collection_date: "2025-01-01"
-  collection_time: "00:00:00"
-```
-</details>
+=== "yaml"
+
+    ``` yaml title="vector_simple_config.yaml"
+    - id: "Werribee"
+      location: "Werribee.geojson"
+      collection_date: "2025-01-01"
+      collection_time: "00:00:00"
+    ```
 
 
-In this example, the item's id is `Werribee`. The asset location is `Werribee.geojson`, which points to the file in the extracted folder in `Example`. The required fields `collection_date` and `collection_time` are also provided in the config. Save the config file (either the yaml or json version) in the current directory - i.e `vector_simple_config.json` or `vector_simple_config.csv`.
+#### Explanation of Fields
+
+- `id`: The unique identifier for the item. Here, it is Werribee.
+- `location`: The relative path to the asset file (Werribee.geojson) in the Example directory.
+- `collection_date`: The date the asset was collected.
+- `collection_time`: The time the asset was collected.
+
+Save the file in the current directory as vector_simple_config.json or vector_simple_config.yaml.
+
+#### Commands and Output
 
 Now run the stac generator serialise command from the terminal:
 
@@ -60,59 +57,85 @@ Now run the stac generator serialise command from the terminal:
 stac_generator serialise vector_simple_config.json
 ```
 
-Once this command is run, we should see a `generated` folder in the current directory. Upon opening `generated`, you will see a `collection.json` which is the STAC Collection metadata, and a `Werribee` folder containing `Werribee.json`, which is the STAC item metadata.
+After running the command, a new folder named generated will appear in the current directory. Inside the generated folder, you will find:
+
+- collection.json: Contains the STAC Collection metadata.
+
+- Werribee/Werribee.json: Contains the STAC Item metadata for our simple vector.
+
+The `collection.json` and `Werribee.json` files represent the metadata for your asset, compliant with the STAC specification.
 
 ### Describing vector attributes
 
-So far, we manage to write a bare-minimum config to describe a vector asset and use the stac generator command to generate the metadata record. In this example, we will learn how to add additional metadata to better describe the asset. For instance, we may now want to add a `title` and a `description` to our STAC record and also to describe some attributes contained in the vector file. We can see that `Werribee.geojson` has an attribute called `Suburb_Name`:
+Previously, we created a bare-minimum configuration to describe a vector asset and generated the corresponding STAC metadata. In this example, we will enhance the metadata by adding more descriptive fields such as `title` and `description`. Additionally, we will describe attributes contained within the vector file.
+
+For instance, the shape file `Werribee.geojson` has an attribute called `Suburb_Name`:
 
 ![](images/quick_start_Werribee_Attribute.png)
 
-<details>
-<summary>JSON</summary>
+---
 
-```json title="vector_detailed_config.json"
-[
-    {
-        "id": "Werribee",
-        "location": "Werribee.geojson",
-        "collection_date": "2025-01-01",
-        "collection_time": "00:00:00",
-        "title": "Werribee Item",
-        "description": "Suburbs near Werribee Melbourne",
-        "column_info": [{"name": "Suburb_Name", "description": "suburb name"}]
-    }
-]
-```
-</details>
+#### Config 
 
-<details>
-<summary>YAML</summary>
+=== "json"
 
-```yaml title="vector_detailed_config.yaml"
-- id: "Werribee"
-  location: "Werribee.geojson"
-  collection_date: "2025-01-01"
-  collection_time: "00:00:00"
-  title: "Werribee Item"
-  description: "Suburbs near Werribee Melbourne"
-  column_info:
-    - name: "Suburb_Name"
-      description: "suburb name"
-```
-</details>
+    ```json title="vector_detailed_config.json"
+    [
+        {
+            "id": "Werribee",
+            "location": "Werribee.geojson",
+            "collection_date": "2025-01-01",
+            "collection_time": "00:00:00",
+            "title": "Werribee Item",
+            "description": "Suburbs near Werribee Melbourne",
+            "column_info": [{"name": "Suburb_Name", "description": "suburb name"}]
+        }
+    ]
+    ```
+=== "yaml"
 
-Save this config as `vector_detailed_config.json` in the same folder and run the serialisation command:
+    ```yaml title="vector_detailed_config.yaml"
+    - id: "Werribee"
+      location: "Werribee.geojson"
+      collection_date: "2025-01-01"
+      collection_time: "00:00:00"
+      title: "Werribee Item"
+      description: "Suburbs near Werribee Melbourne"
+      column_info:
+        - name: "Suburb_Name"
+          description: "suburb name"
+    ```
+
+#### Explanation of Fields
+
+- `title`: item's title 
+- `description`: item's description 
+- `column_info`: contains a list of column objects with attribute `name` and `description`. This field is used 
+to represent the attributes contained in the vector file.
+
+STAC Common-metadata like `title` and `description` can be included in generated STAC records by adding them in the item config. To see a list of supported metadata, please refer to the relevant [documentation]().
+
+### Commands and Output
+
+Save this config as `vector_detailed_config.json`/`vector_detailed_config.yaml` in the same folder and run the serialisation command:
 
 ```bash
 stac_generator serialise vector_detailed_config.json
 ```
 
-Upon checking the generated STAC Item `Werribee.json`, we now see `column_info`, `title`, and `description` fields appearing under the item's `properties` field.
+The fields `title`, `description`, and `column_info` should appear correctly under the generated item's `properties`. 
 
 ### Describing joined attributes
 
-A common practice in spatial application involves storing geometry information in one table and attributes in another, and a join operation is performed at run time to generate the combined data. To simplify the workflow, we assume the geometry information is stored in a vector file and the attributes stored in a csv. The stac generator can describe the join operation with a few extra keywords in the config. Before running the stac generator, download the join [file](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/quickstart/distance.csv) and put it in the current directory `Example`. Our config now looks like this:
+In many spatial applications, geometry information is stored separately from attributes, typically in different tables. A join operation is performed at runtime to combine the two datasets. To simplify this workflow, we assume:
+
+- Geometry information is stored in a vector file (e.g., `Werribee.geojson`).
+- Attributes are stored in a CSV file.
+
+The STAC generator can describe this join operation by including a few additional keywords in the configuration.
+
+For this example, we assume the vector file `Werribee.geojson` has an accompanied attribute table stored in the file `distance.csv`. 
+
 
 <details>
 <summary>JSON</summary>

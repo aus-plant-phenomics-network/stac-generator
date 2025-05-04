@@ -21,6 +21,7 @@ theme:
       - search.suggest
       - search.highlight
       - search.share
+      - content.tabs.link
 
 repo_url: https://github.com/aus-plant-phenomics-network/stac-generator
 
@@ -68,10 +69,12 @@ plugins:
             annotations_path: source
 
 markdown_extensions:
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
