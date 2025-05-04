@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-from typing import Annotated, Self
+from typing import Annotated, Any, Self
 
 from pydantic import BaseModel, BeforeValidator, field_validator, model_validator
 
 from stac_generator.core.base.schema import ColumnInfo, HasColumnInfo, SourceConfig
-from stac_generator.core.base.utils import is_string_convertible  # noqa: TCH001
+from stac_generator.core.base.utils import is_string_convertible
 
 
 class JoinConfig(BaseModel):
@@ -24,7 +24,7 @@ class JoinConfig(BaseModel):
         return value
 
 
-class VectorConfig(SourceConfig, HasColumnInfo):
+class VectorOwnConfig(HasColumnInfo):
     """Extended source config with EPSG code."""
 
     layer: str | None = None
@@ -43,3 +43,12 @@ class VectorConfig(SourceConfig, HasColumnInfo):
             if self.join_config.right_on not in join_columns:
                 raise ValueError("Join field must be described using join file column_info")
         return self
+
+
+class VectorConfig(SourceConfig, VectorOwnConfig):
+    """Extended source config with EPSG code."""
+
+    def to_asset_config(self) -> dict[str, Any]:
+        return VectorOwnConfig.model_construct(
+            **self.model_dump(mode="json", exclude_none=True, exclude_unset=True)
+        ).model_dump(mode="json", exclude_none=True, exclude_unset=True)

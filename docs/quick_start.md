@@ -1,17 +1,17 @@
 # Quickstart
 
-## Setup 
+## Setup
 
-In this tutorial, we will show how you can use the stac generator as a command line interface to describe spatio-temporal assets under different scenarios, with different data types. For starter, please [download]() the following zip file which contains the raw assets to be used throughout the tutorial. If you haven't done so, please [install](./index.md#installation) the stac_generator (either in a virtual environment for the current project or globally). Extract the zip file into a folder and name it `Example`. Enter the folder `Example` and open a terminal in the `Example` directory. 
+In this tutorial, we will show how you can use the stac generator as a command line interface to describe spatio-temporal assets under different scenarios, with different data types. For starter, please [download]() the following zip file which contains the raw assets to be used throughout the tutorial. If you haven't done so, please [install](./index.md#installation) the stac_generator (either in a virtual environment for the current project or globally). Extract the zip file into a folder and name it `Example`. Enter the folder `Example` and open a terminal in the `Example` directory.
 - For Windows, you can right click and select the option `Open in Terminal`.
-- For Mac, you can right click and select the option `New Terminal at Folder`. 
-- For Linux, you can right click and select `Open in Terminal`. 
+- For Mac, you can right click and select the option `New Terminal at Folder`.
+- For Linux, you can right click and select `Open in Terminal`.
 
-To verify that stac_generator has been correctly installed, type `stac_generator --version` into the terminal. You should see something similar to this: 
+To verify that stac_generator has been correctly installed, type `stac_generator --version` into the terminal. You should see something similar to this:
 
 ![](images/terminal-setup.png)
 
-To generate a compliant stac record, some additional metadata is required from the user via the use of configs. A config describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Acceptable config formats are `json` and `yaml`, though `csv` can be used in very limited cases. In the following examples, we shall use `json` as the config format. Note that in the zip folder, we also provide the configs used in the tutorial under the folder `config`. Note that the configs in that folder are similar to the tutorial except for the `location` field, which we use URLs for the cloud stored versions of the asset. 
+To generate a compliant stac record, some additional metadata is required from the user via the use of configs. A config describes a set of STAC items in a collection. At the bare minimum, it must contain the path to the asset, the STAC Item unique identifier (id), and the date and time when the asset was collected. Acceptable config formats are `json` and `yaml`, though `csv` can be used in very limited cases. In the following examples, we shall use `json` as the config format. Note that in the zip folder, we also provide the configs used in the tutorial under the folder `config`. Note that the configs in that folder are similar to the tutorial except for the `location` field, which we use URLs for the cloud stored versions of the asset.
 
 
 ## Vector Data
@@ -19,11 +19,11 @@ To generate a compliant stac record, some additional metadata is required from t
 
 ### Describing a vector file
 
-We want to describe the shape file `Werribee.geojson` in the accompanied zip. If you have QGIS, you open the file in QGIS to visualise the data: 
+We want to describe the shape file `Werribee.geojson` in the accompanied zip. If you have QGIS, you open the file in QGIS to visualise the data:
 
 ![](images/quick_start_Werribee.png)
 
-Create a simple_vector config as follows: 
+Create a simple_vector config as follows:
 
 <details>
 <summary>JSON</summary>
@@ -95,7 +95,7 @@ So far, we manage to write a bare-minimum config to describe a vector asset and 
   collection_date: "2025-01-01"
   collection_time: "00:00:00"
   title: "Werribee Item"
-  description: "Suburbs near Werribee Melbourne" 
+  description: "Suburbs near Werribee Melbourne"
   column_info:
     - name: "Suburb_Name"
       description: "suburb name"

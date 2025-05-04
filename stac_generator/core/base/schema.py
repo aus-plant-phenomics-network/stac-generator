@@ -123,6 +123,14 @@ class SourceConfig(StacItemConfig):
     json_body: Any = None
     """HTTP query body content for getting file from `location`"""
 
+    def to_common_metadata(self) -> dict[str, Any]:
+        return StacCollectionConfig.model_construct(
+            **self.model_dump(mode="python", exclude_unset=True, exclude_none=True)
+        ).model_dump(mode="json", exclude_unset=True, exclude_none=True)
+
+    def to_asset_config(self) -> dict[str, Any]:
+        raise NotImplementedError
+
     def to_properties(self) -> dict[str, Any]:
         return self.model_dump(mode="json", exclude_unset=True, exclude_none=True)
 
