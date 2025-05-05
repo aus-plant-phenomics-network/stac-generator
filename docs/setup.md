@@ -6,7 +6,7 @@ This tutorial demonstrates how to use the STAC generator command-line interface 
 
 1. **Download Assets**
 
-    Download the zip file containing the raw assets for this tutorial [here](). Extract it into a folder named `Example`.
+    Download the zip file containing the raw assets for this tutorial [here](https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/example.zip). Extract it into a folder named `Example`.
 
 2. **Install STAC Generator**
 
