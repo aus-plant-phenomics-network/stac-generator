@@ -1,0 +1,17 @@
+[
+  {
+    "id": "soil_data",
+    "location": "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/soil_data.csv",
+    "collection_date": "2020-01-01",
+    "collection_time": "10:00:00",
+    "X": "Longitude",
+    "Y": "Latitude",
+    "epsg": 4326,
+    "column_info": [
+      {
+        "name": "Ca_Soln",
+        "description": "Calcium solution in ppm"
+      }
+    ]
+  }
+]

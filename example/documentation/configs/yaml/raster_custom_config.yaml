@@ -1,0 +1,7 @@
+- id: vegetation_cover
+  location: "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/vegetation_cover.tif"
+  collection_date: '2021-02-21'
+  collection_time: '10:00:17'
+  band_info:
+  - description: Vegetation cover level
+    name: vegetation

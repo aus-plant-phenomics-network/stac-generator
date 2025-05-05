@@ -29,7 +29,7 @@ The config - `point_simple_config.json` is described below:
     [
       {
         "id": "soil_data",
-        "location": "soil.csv",
+        "location": "soil_data.csv",
         "collection_date": "2020-01-01",
         "collection_time": "10:00:00",
         "X": "Longitude",
@@ -39,7 +39,7 @@ The config - `point_simple_config.json` is described below:
           {
             "name": "Ca_Soln",
             "description": "Calcium solution in ppm"
-          },
+          }
         ]
       }
     ]
@@ -92,7 +92,7 @@ We prepare the `point_time_series_config.json` as follows:
     [
       {
         "id": "adelaide_airport",
-        "location": "tests/files/integration_tests/point/data/adelaide_airport.csv",
+        "location": "adelaide_airport.csv",
         "collection_date": "2023-01-01",
         "collection_time": "09:00:00",
         "X": "longitude",

@@ -1,0 +1,21 @@
+- id: adelaide_airport
+  location: "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/adelaide_airport.csv"
+  collection_date: '2023-01-01'
+  collection_time: 09:00:00
+  X: longitude
+  Y: latitude
+  Z: elevation
+  T: YYYY-MM-DD
+  epsg: 7843
+  column_info:
+  - description: Observed daily rain fall in mm
+    name: daily_rain
+  - description: Observed daily maximum temperature in degree C
+    name: max_temp
+  - description: Observed daily minimum temperature in degree C
+    name: min_temp
+  - description: Total incoming downward shortwave radiation on a horizontal surface
+      MJ/sqm
+    name: radiation
+  - description: Mean sea level pressure in hPa
+    name: mslp

@@ -80,8 +80,8 @@ The asset contains some attributes associated with different suburbs near Werrib
         left_on: Suburb_Name
         right_on: Area
         column_info:
-          - description: Area
-            name: Area name
+          - description: Area Name
+            name: Area
           - description: Driving Distance to CBD in km
             name: Distance
           - description: Time taken to reach CBD by public transport in minutes
