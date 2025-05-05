@@ -9,21 +9,25 @@
       
       
       
+        <link rel="prev" href="../stac_metadata/">
       
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+        <link rel="next" href="../module/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
-        <title>Raster - STAC Generator</title>
+        <title>STAC Generator Architecture - STAC Generator</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -42,9 +46,9 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -70,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#ozbarley-raster-data" class="md-skip">
+        <a href="#workflow" class="md-skip">
           Skip to content
         </a>
       
@@ -90,7 +94,7 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="STAC Generator" class="md-header__button md-logo" aria-label="STAC Generator" data-md-component="logo">
+    <a href=".." title="STAC Generator" class="md-header__button md-logo" aria-label="STAC Generator" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Raster
+              STAC Generator Architecture
             
           </span>
         </div>
@@ -230,7 +234,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="STAC Generator" class="md-nav__button md-logo" aria-label="STAC Generator" data-md-component="logo">
+    <a href=".." title="STAC Generator" class="md-nav__button md-logo" aria-label="STAC Generator" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -260,7 +264,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -317,7 +321,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../setup/" class="md-nav__link">
+      <a href="../setup/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -339,7 +343,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../vector_geometry/" class="md-nav__link">
+      <a href="../vector_geometry/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -361,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../vector_attributes/" class="md-nav__link">
+      <a href="../vector_attributes/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -383,7 +387,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../vector_joined/" class="md-nav__link">
+      <a href="../vector_joined/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -405,7 +409,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../vector_multilayered/" class="md-nav__link">
+      <a href="../vector_multilayered/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,7 +431,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../point/" class="md-nav__link">
+      <a href="../point/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -449,7 +453,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../raster/" class="md-nav__link">
+      <a href="../raster/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -471,7 +475,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../composite/" class="md-nav__link">
+      <a href="../composite/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -493,7 +497,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../misc/" class="md-nav__link">
+      <a href="../misc/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -519,17 +523,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -544,7 +550,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Concepts
@@ -558,7 +564,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../stac_metadata/" class="md-nav__link">
+      <a href="../stac_metadata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -577,10 +583,29 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../stac_generator_architecture/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    STAC Generator Architecture
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -590,6 +615,120 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#faq" class="md-nav__link">
+    <span class="md-ellipsis">
+      FAQ
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-collections-spatial-extent-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Collection's spatial extent attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-collections-temporal-extent-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Collection's temporal extent attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-geometry-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's geometry attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-bbox-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's bbox attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-datetime-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's datetime attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-start_datetime-and-end_datetime-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's start_datetime and end_datetime attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-assets-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's assets attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-property-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's property attributes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -602,7 +741,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../module/" class="md-nav__link">
+      <a href="../module/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -667,7 +806,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../schema/" class="md-nav__link">
+      <a href="../schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -689,7 +828,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../utils/" class="md-nav__link">
+      <a href="../utils/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -783,7 +922,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/point/generator/" class="md-nav__link">
+      <a href="../extensions/point/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -805,7 +944,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/point/schema/" class="md-nav__link">
+      <a href="../extensions/point/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -871,7 +1010,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/vector/generator/" class="md-nav__link">
+      <a href="../extensions/vector/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -893,7 +1032,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/vector/schema/" class="md-nav__link">
+      <a href="../extensions/vector/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -959,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/raster/generator/" class="md-nav__link">
+      <a href="../extensions/raster/generator/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -981,7 +1120,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../extensions/raster/schema/" class="md-nav__link">
+      <a href="../extensions/raster/schema/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1044,20 +1183,98 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ozbarley-raster-data" class="md-nav__link">
+  <a href="#workflow" class="md-nav__link">
     <span class="md-ellipsis">
-      OZBarley Raster Data
+      Workflow
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#llaracampey-raster-data" class="md-nav__link">
+  <a href="#faq" class="md-nav__link">
     <span class="md-ellipsis">
-      LlaraCampey Raster Data
+      FAQ
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="FAQ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-collections-spatial-extent-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Collection's spatial extent attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-collections-temporal-extent-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Collection's temporal extent attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-geometry-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's geometry attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-bbox-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's bbox attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-datetime-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's datetime attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-start_datetime-and-end_datetime-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's start_datetime and end_datetime attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-assets-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's assets attributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#handling-of-items-property-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Handling of Item's property attributes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1080,12 +1297,50 @@
   
 
 
-  <h1>Raster</h1>
+  <h1>STAC Generator Architecture</h1>
 
-<h2 id="ozbarley-raster-data">OZBarley Raster Data</h2>
-<p>OZBarley contains 6 orthomosaics covering 2 areas over 3 time periods. The dataset also contains 2 DSM tifs. The config can be downloaded <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/remote_config.json">here</a>. The actual assets can be downloaded by following the <code>location</code> field in corresponding entry in the config file. Please note how the <code>band_info</code> field is used to describe the raster bands.</p>
-<h2 id="llaracampey-raster-data">LlaraCampey Raster Data</h2>
-<p>Llara Campey contains 4 tifs of krigged ECa and Gamma K measurements. The config can be downloaded <a href="https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/LlaraCampey/LlaraCampey_config_simplified.json">here</a>. The actual assets can be downloaded by following the <code>location</code> field in the corresponding entry. Please note how the <code>band_info</code> field is used to describe the raster bands.</p>
+<h2 id="workflow">Workflow</h2>
+<p><img alt="" src="../images/StacGeneratorFactory.svg" /></p>
+<ol>
+<li>
+<p><strong>I/O</strong></p>
+<p>Users provides as input various configuration formats. Configurations can be paths to json/yaml config files, python dictionaries or subclasses of <code>SourceConfig</code>.</p>
+</li>
+<li>
+<p><strong>Classification/Validation</strong></p>
+<p>The configs are passed to <code>StacGeneratorFactory</code> which matches raw configurations to the appropriate configuration subclass - <code>RasterConfig</code>, <code>VectorConfig</code> and <code>PointConfig</code>. The matching process is performed using the config's <code>location</code> extension. The promotion step also involves data validation, which checks whether the required fields are provided.</p>
+</li>
+<li>
+<p><strong>Conversion to ItemGenerator</strong></p>
+<p>The <code>SourceConfig</code> instances are then promoted to an appropriate <code>ItemGenerator</code> instance (<code>RasterGenerator</code>, <code>VectorGenerator</code>, and <code>PointGenerator</code>).</p>
+</li>
+<li>
+<p><strong>Instantiate CollectionGenerator</strong></p>
+<p>Together with the list of <code>ItemGenerator</code> subjects, a set of collection's fields and keywords is used to instantiate the <code>CollectionGenerator</code> object.</p>
+</li>
+<li>
+<p><strong>Serialisation</strong></p>
+<p>Using the <code>CollectionGenerator</code> object, the STAC generator uses the <code>StacSerialiser</code> class for writing the metadata locally or to a remote API.</p>
+</li>
+</ol>
+<h2 id="faq">FAQ</h2>
+<h3 id="handling-of-collections-spatial-extent-attributes">Handling of Collection's spatial extent attributes</h3>
+<p>The spatial extent is determined as enclosing bounding box of all items' bounding boxes. This bounding box is in WGS 84.</p>
+<h3 id="handling-of-collections-temporal-extent-attributes">Handling of Collection's temporal extent attributes</h3>
+<p>The temporal extent is determined as the minimum <code>start_datetime</code> and the maximum <code>end_datetime</code> in UTC.</p>
+<h3 id="handling-of-items-geometry-attributes">Handling of Item's geometry attributes</h3>
+<p>The item's geometry is read from the asset. If the asset's geometry is not in WGS 84 (EPSG 4326), the values are converted to WGS 84 before serialisation.</p>
+<h3 id="handling-of-items-bbox-attributes">Handling of Item's bbox attributes</h3>
+<p>An item's bounding box (top, left, bottom, right) is determined from the smallest bounding box that encloses the item's geometry. The values are converted to WGS 84 before serialisation.</p>
+<h3 id="handling-of-items-datetime-attributes">Handling of Item's datetime attributes</h3>
+<p>The item's datetime value is determined from the config's fields <code>collection_date</code>, <code>collection_time</code>, and <code>timezone</code>. If <code>timezone</code> is not provided or <code>timezone</code> is <code>local</code>, the data's timezone is inferred using the asset's geometry. The <code>collection_date</code> and <code>collection_time</code> are then combined and converted from the <code>timezone</code> value to <code>utc</code>.</p>
+<h3 id="handling-of-items-start_datetime-and-end_datetime-attributes">Handling of Item's start_datetime and end_datetime attributes</h3>
+<p>For asset that are time-series based (either a point asset with a <code>T</code> attribute or a joined vector asset with a <code>date_column</code> in <code>join_config</code>), the date values are extracted from the asset. Any timestamp that are not timezone-awared will be assigned a timezone value based on the <code>timezone</code> config field as described <a href="#handling-of-items-datetime-attributes">previously</a>. All timestamps are then converted to UTC. <code>start_datetime</code> and <code>end_datetime</code> are the minimum and maximum values of the UTC timestamps.</p>
+<p>For assets that do not contain timeseries, <code>start_datetime</code> and <code>end_datetime</code> are assigned the value of <code>datetime</code>.</p>
+<h3 id="handling-of-items-assets-attributes">Handling of Item's assets attributes</h3>
+<p>Unlike a generic STAC item that can contain multiple assets, a STAC Generator generated Item contains only a single asset which has the key <code>data</code>. The asset's role is also <code>data</code>.</p>
+<h3 id="handling-of-items-property-attributes">Handling of Item's property attributes</h3>
+<p>Each STAC Generator generated STAC Item contains an object under the key <code>stac_generator</code> in <code>properties</code>. The object is required for subsequent asset parsing in the <code>mccn-engine</code>.</p>
 
 
 
@@ -1134,10 +1389,10 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.code.select", "search.suggest", "search.highlight", "search.share", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["content.code.copy", "content.code.select", "search.suggest", "search.highlight", "search.share", "content.tabs.link"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   </body>
