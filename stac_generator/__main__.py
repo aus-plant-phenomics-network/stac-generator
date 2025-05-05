@@ -46,10 +46,6 @@ def serialise_handler(args: Namespace) -> None:
             title=args.title,
             description=args.description,
             license=args.license,
-            platform=args.platform,
-            instruments=args.instruments,
-            constellation=args.constellation,
-            mission=args.mission,
             num_workers=args.num_workers,
         )
     except ValidationError as e:
@@ -105,29 +101,8 @@ def add_serialise_sub_command(sub_parser: _SubParsersAction) -> None:
         required=False,
         default="Auto-generated",
     )
-
-    # STAC Common Metadata
-    common_metadata = parser.add_argument_group("STAC common metadata")
-    common_metadata.add_argument(
+    collection_metadata.add_argument(
         "--license", type=str, help="STAC license", required=False, default="proprietary"
-    )
-    common_metadata.add_argument(
-        "--platform", type=str, help="STAC platform", required=False, default=None
-    )
-    common_metadata.add_argument(
-        "--constellation", type=str, help="STAC constellation", required=False, default=None
-    )
-    common_metadata.add_argument(
-        "--mission", type=str, help="STAC mission", required=False, default=None
-    )
-    common_metadata.add_argument(
-        "--instruments",
-        action="extend",
-        nargs="+",
-        type=str,
-        required=False,
-        default=None,
-        help="STAC instrument",
     )
 
     # Serialiser metadata

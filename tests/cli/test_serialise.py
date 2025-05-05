@@ -9,10 +9,10 @@ from tests.utils import compare_extent, compare_items
 
 
 @pytest.mark.parametrize(
-    "id,title,description,license,platform,instruments,constellation,mission,num_workers",
+    "id,title,description,license,num_workers",
     [
-        ("my_collection", "my_title", "my_description", "MIT", None, None, None, None, 1),
-        ("my_collection", None, "my_description", "MIT", None, None, None, None, 4),
+        ("my_collection", "my_title", "my_description", "MIT", 1),
+        ("my_collection", None, "my_description", "MIT", 4),
     ],
 )
 def test_serialise(
@@ -20,10 +20,6 @@ def test_serialise(
     title: str | None,
     description: str | None,
     license: str | None,
-    platform: str | None,
-    instruments: list[str],
-    constellation: str | None,
-    mission: str | None,
     num_workers: int,
     tmp_path: Path,
 ) -> None:
@@ -35,10 +31,6 @@ def test_serialise(
         title=title,
         description=description,
         license=license,
-        platform=platform,
-        instruments=instruments,
-        constellation=constellation,
-        mission=mission,
         num_workers=num_workers,
     )
     generated_path = Path("tests/files/integration_tests/composite/generated")
@@ -73,9 +65,5 @@ def test_given_invalid_num_workers_expect_raises(num_workers: int) -> None:
             title=None,
             description=None,
             license=None,
-            platform=None,
-            instruments=None,
-            constellation=None,
-            mission=None,
             num_workers=num_workers,
         )

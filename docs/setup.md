@@ -18,14 +18,14 @@ This tutorial demonstrates how to use the STAC generator command-line interface 
     - **Mac**: right click and select the option `New Terminal at Folder`.
     - **Linux**: right click and select `Open in Terminal`.
 
-#### Verify Installation 
+### Verifying Installation
 
 Run the following command in the terminal to ensure the stac_generator is installed correctly:
 
 ```bash
 stac_generator --version
 ```
-Expected output: 
+Expected output:
 
 ![](images/terminal-setup.png)
 
@@ -33,15 +33,18 @@ Expected output:
 
 To create a STAC-compliant record, you need to provide additional metadata using configuration files. Configurations define STAC items in a collection. At a minimum, a config file should include:
 
-- Path to the asset
-- Unique identifier (id)
-- Date and time of asset collection
+- `location`: path to the asset
+- `id`: Unique identifier
+- `collection_date`: date of asset collection
+- `collection_time`: time of asset collection 
+
+Note that config fields can be entered in any order. 
 
 Supported config formats:
 
 - Preferred: json, yaml
 - Limited use: csv
 
-Example configurations are included in the config folder of the extracted zip file. 
+Example configurations are included in the config folder of the extracted zip file.
 
 *Note*: The tutorial configs differ slightly from these due to their use of cloud-based asset URLs.

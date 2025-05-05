@@ -31,13 +31,23 @@ extra:
 
 nav:
   - Home: index.md
-  - Quickstart: quick_start.md
-  - Advanced Quickstart: advanced_quick_start.md
-  - Introduction: introduction.md
-  # - Metadata Examples:
-  #   - Point: metadata_examples/point.md
-  #   - Vector: metadata_examples/vector.md
-  #   - Raster: metadata_examples/raster.md
+  - Quickstart:
+    - Setup: setup.md
+    - Vector - Geometry: vector_geometry.md
+    - Vector - Attributes: vector_attributes.md
+    - Vector - Joined Attributes: vector_joined.md
+    - Vector - Multilayered: vector_multilayered.md
+    - Point: point.md
+    - Raster: raster.md
+    - Composite: composite.md
+    - Misc: misc.md
+  - Concepts: 
+    - STAC Metadata: stac_metadata.md
+    - STAC Generator Architecture: stac_generator_architecture.md
+    - Deviatons from STAC Standards: deviations.md
+    - Module: module.md 
+  - Contact: contact.md 
+  - CLI Reference: cli.md
   - API Reference:
   #   - Generator: generator.md
     - Schema: schema.md
@@ -55,6 +65,7 @@ nav:
 
 plugins:
   - search
+  - table-reader 
   - autorefs
   - mkdocstrings:
       enable_inventory: true

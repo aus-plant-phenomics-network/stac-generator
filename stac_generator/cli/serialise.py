@@ -15,10 +15,6 @@ def serialise_handler(
     title: str | None = "Auto-generated Stac Item",
     description: str | None = "Auto-generated Stac Item",
     license: str | None = None,
-    platform: str | None = None,
-    instruments: list[str] | None = None,
-    constellation: str | None = None,
-    mission: str | None = None,
     providers: list[Provider] | None = None,
     num_workers: int = 1,
 ) -> None:
@@ -33,10 +29,6 @@ def serialise_handler(
         title=title,
         description=description,
         license=license,
-        platform=platform,
-        constellation=constellation,
-        mission=mission,
-        instruments=instruments,
         providers=providers,
     )
 
