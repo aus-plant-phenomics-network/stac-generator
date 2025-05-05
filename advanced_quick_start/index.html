@@ -1092,7 +1092,7 @@
   <h1>Advanced quick start</h1>
 
 <h2 id="using-stac_generator-as-a-python-module">Using <code>stac_generator</code> as a python module</h2>
-<p>In the previous <a href="../quick_start/">tutorial</a>, we have seen how <code>stac_generator</code> can be used as a command line tool to generate STAC metadata. In this section, we will demonstrate how to write a Python script that imports the <code>stac_generator</code> modules and perform tasks in the <a href="../quick_start/#using-a-combined-config">previous</a> section:</p>
+<p>In the previous <a href="./quick_start.md">tutorial</a>, we have seen how <code>stac_generator</code> can be used as a command line tool to generate STAC metadata. In this section, we will demonstrate how to write a Python script that imports the <code>stac_generator</code> modules and perform tasks in the <a href="./quick_start.md/#using-a-combined-config">previous</a> section:</p>
 <details>
 
 <summary>PYTHON</summary>
@@ -1258,8 +1258,8 @@
 <li>Using a regular python dictionary.</li>
 <li>Using a known config class.</li>
 </ul>
-<p>To declare the config from a file, you will need to provide the path to the config file that can be accessed in the current path. For instance, in the previous example, we use <a href="../quick_start/#describing-vector-attributes">vector_detailed_config.json</a> as the vector config.</p>
-<p>To declare the config using a dictionary, you will need to write a python dictionary with the necessary fields declared. Note how the python dictionary in the previous example has the exact same content as the config in the <a href="../quick_start/#describing-generic-point-data">previous</a> tutorial.</p>
+<p>To declare the config from a file, you will need to provide the path to the config file that can be accessed in the current path. For instance, in the previous example, we use <a href="./quick_start.md/#describing-vector-attributes">vector_detailed_config.json</a> as the vector config.</p>
+<p>To declare the config using a dictionary, you will need to write a python dictionary with the necessary fields declared. Note how the python dictionary in the previous example has the exact same content as the config in the <a href="./quick_start.md/#describing-generic-point-data">previous</a> tutorial.</p>
 <p>Using a known config class in the recommended approach. If you already know the data type of the asset, you can use one of <code>VectorConfig</code>, <code>RasterConfig</code>, <code>PointConfig</code> to declare the config. If you have a linter available, the linter can help pre-validate your input or suggest missing required fields when using the config classes.</p>
 <h2 id="saving-configs-to-file">Saving configs to file</h2>
 <p>This section describes how you can save the configs declared programmatically to a json file. We provide two convenient methods for serialising configs:</p>
