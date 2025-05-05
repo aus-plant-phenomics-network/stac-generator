@@ -24,7 +24,7 @@ STAC is extensible, allowing additional fields to describe specific domains or u
 
 - [Raster Extension](https://github.com/stac-extensions/raster): describes additional raster metadata such as sampling, scale, offset etc.
 - [Electro-Optical Extension](https://github.com/stac-extensions/eo): for satellite images, describing bands, cloud cover, etc.
-- [Projection Extension](https://github.com/stac-extensions/projection): provides a way to describe the primary asset's coordinates referencing system (CRS). 
+- [Projection Extension](https://github.com/stac-extensions/projection): provides a way to describe the primary asset's coordinates referencing system (CRS).
 
 STAC metadata is typically stored in JSON format and is widely used in platforms and services dealing with geospatial data to improve accessibility and usability.
 

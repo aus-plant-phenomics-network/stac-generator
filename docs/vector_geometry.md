@@ -1,5 +1,5 @@
 
-This section focuses on describing only the geometry of a shape file (`.shp`, `.geojson`, etc). We will use the asset `Werribee.geojson` included in the downloaded zip file. 
+This section focuses on describing only the geometry of a shape file (`.shp`, `.geojson`, etc). We will use the asset `Werribee.geojson` included in the downloaded zip file.
 
 If you have QGIS installed, you can open the file in QGIS to visualize the data:
 

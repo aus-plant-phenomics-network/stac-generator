@@ -41,13 +41,10 @@ nav:
     - Raster: raster.md
     - Composite: composite.md
     - Misc: misc.md
-  - Concepts: 
+  - Concepts:
     - STAC Metadata: stac_metadata.md
     - STAC Generator Architecture: stac_generator_architecture.md
-    - Deviatons from STAC Standards: deviations.md
-    - Module: module.md 
-  - Contact: contact.md 
-  - CLI Reference: cli.md
+    - Module: module.md
   - API Reference:
   #   - Generator: generator.md
     - Schema: schema.md
@@ -65,7 +62,7 @@ nav:
 
 plugins:
   - search
-  - table-reader 
+  - table-reader
   - autorefs
   - mkdocstrings:
       enable_inventory: true

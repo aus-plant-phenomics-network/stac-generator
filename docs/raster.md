@@ -1,4 +1,4 @@
-For raster assets (`tif`, `geotif`, `tiff`, `geotiff` extensions), in addition to the required [fields](./setup.md#generating-stac-records), users are required to declare recorded bands under `band_info` field. 
+For raster assets (`tif`, `geotif`, `tiff`, `geotiff` extensions), in addition to the required [fields](./setup.md#generating-stac-records), users are required to declare recorded bands under `band_info` field.
 
 ## Common bands
 
@@ -65,23 +65,23 @@ We will prepare the following `raster_simple_config.json`:
         wavelength: 0.4966
     ```
 
-### Field explanation: 
+### Field explanation:
 
-`band_info` is a list of band objects represented in the raster: 
+`band_info` is a list of band objects represented in the raster:
 
-- `name`: band's name 
+- `name`: band's name
 - `common_name`: band's name that are more well-known.
-- `wavelength`: band's wavelength 
-- `description`: band's description 
+- `wavelength`: band's wavelength
+- `description`: band's description
 
-Aside from `name`, other fields are optional. Note that `common_name` supports a very small subset of well-known [names](https://github.com/stac-extensions/eo/blob/main/README.md#common-band-names). If users provide a `common_name` value that is not on this list, the program will raise an error. 
+Aside from `name`, other fields are optional. Note that `common_name` supports a very small subset of well-known [names](https://github.com/stac-extensions/eo/blob/main/README.md#common-band-names). If users provide a `common_name` value that is not on this list, the program will raise an error.
 
 ### Command and Output
 
-Save the config as `raster_simple_config.json` and run the following command: 
+Save the config as `raster_simple_config.json` and run the following command:
 
 ```bash
-stac_generator serialise raster_simple_config.json 
+stac_generator serialise raster_simple_config.json
 ```
 
 ## Uncommon/unknown bands
@@ -122,10 +122,10 @@ We will prepare the following `raster_custom_config.json`:
       collection_time: '10:00:17'
       band_info:
       - description: Vegetation cover level
-        name: vegetation  
+        name: vegetation
     ```
 
-Note that we only provide name and description since other information is unknown. 
+Note that we only provide name and description since other information is unknown.
 
 ### Command and Output
 

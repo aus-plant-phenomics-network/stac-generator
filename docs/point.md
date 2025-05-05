@@ -1,4 +1,4 @@
-The `stac_generator` uses the `csv` and `txt` extensions to describe point data. In addition to the minimum required [fields](./setup.md#generating-stac-records), the STAC generator requires a few additional parameters to properly parse the asset. 
+The `stac_generator` uses the `csv` and `txt` extensions to describe point data. In addition to the minimum required [fields](./setup.md#generating-stac-records), the STAC generator requires a few additional parameters to properly parse the asset.
 
 Given the flexibility of the csv format, we require point dataset to be structured in a particular way. Each row of the csv file describes a point, with columns being the attributes. At the minimum, there must be two columns describing the coordinates of the points, with the common options being `lat/lon`, `y/x`, `northings/eastings`, etc. The required config fields include:
 
@@ -19,7 +19,7 @@ In this tutorial, we will describe the asset `soil_data.csv` contained in the zi
 
 {{ read_csv("tests/files/integration_tests/point/data/soil_data.csv") }}
 
-### Config 
+### Config
 
 The config - `point_simple_config.json` is described below:
 
@@ -67,9 +67,9 @@ The config - `point_simple_config.json` is described below:
 - `epsg`: we assume the data is recorded in WGS84 or epsg 4326.
 - `column_info`: similar to the same field in [vector](./vector_attributes.md) assets. This is a list of column objects with fields `name` and `description`. In this example, we describe the attribute `ca_soln`.
 
-### Command and Output 
+### Command and Output
 
-Save the config file as `point_simple_config.json` and run the follow serialisation command: 
+Save the config file as `point_simple_config.json` and run the follow serialisation command:
 
 ```bash
 stac_generator serialise point_simple_config.json
@@ -77,7 +77,7 @@ stac_generator serialise point_simple_config.json
 
 ## Timeseries Point Data
 
-In this tutorial, we describe the asset `adelaide_airport.csv` which contains weather station collected by a BOM station in the area: 
+In this tutorial, we describe the asset `adelaide_airport.csv` which contains weather station collected by a BOM station in the area:
 
 {{ read_csv("tests/files/integration_tests/point/data/adelaide_airport.csv") }}
 

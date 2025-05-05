@@ -36,9 +36,9 @@ To create a STAC-compliant record, you need to provide additional metadata using
 - `location`: path to the asset
 - `id`: Unique identifier
 - `collection_date`: date of asset collection
-- `collection_time`: time of asset collection 
+- `collection_time`: time of asset collection
 
-Note that config fields can be entered in any order. 
+Note that config fields can be entered in any order.
 
 Supported config formats:
 

@@ -46,9 +46,9 @@ Here we have two layers - Sunbury and Werribee, and each layer will be generated
 
 - `layer`: the layer name in the zip file.
 
-Note that if layer name is not present in the zip file, the program will raise an error. 
+Note that if layer name is not present in the zip file, the program will raise an error.
 
-### Command and Output 
+### Command and Output
 
 Save the new config as `vector_layer_config.json` and run the command:
 

@@ -1,4 +1,4 @@
-In the [previous](./vector_geometry.md) tutorial, we created a bare minimum config to describe a vector asset. The generated STAC thus contains only the geometry information. In this example, we will enhance the metadata by adding more descriptive fields such as `title` and `description`. Additionally, we will describe attributes contained within the vector file. We still use the same asset `Werribee.json` in the downloaded zip file. 
+In the [previous](./vector_geometry.md) tutorial, we created a bare minimum config to describe a vector asset. The generated STAC thus contains only the geometry information. In this example, we will enhance the metadata by adding more descriptive fields such as `title` and `description`. Additionally, we will describe attributes contained within the vector file. We still use the same asset `Werribee.json` in the downloaded zip file.
 
 For instance, the shape file `Werribee.geojson` has an attribute called `Suburb_Name`:
 
@@ -44,14 +44,14 @@ For instance, the shape file `Werribee.geojson` has an attribute called `Suburb_
 
 #### Field Explanation
 
-The basic fields are the same as those in the [previous](./vector_geometry.md) section. The additional fields are: 
+The basic fields are the same as those in the [previous](./vector_geometry.md) section. The additional fields are:
 
 - `title`: item's title
 - `description`: item's description
 - `column_info`: contains a list of column objects with attribute `name` and `description`. This field is used
 to represent the attributes contained in the vector file.
 
-STAC Common-metadata like `title` and `description` can be included in generated STAC records by adding them in the item config. Users can describe the attributes associated with the vector file through the keyword `column_info`. Users don't need to describe all attributes, but if one of the column objects provided in `column_info` is not present, the program will raise an error. 
+STAC Common-metadata like `title` and `description` can be included in generated STAC records by adding them in the item config. Users can describe the attributes associated with the vector file through the keyword `column_info`. Users don't need to describe all attributes, but if one of the column objects provided in `column_info` is not present, the program will raise an error.
 
 To see a list of supported metadata, please refer to the relevant [documentation]().
 
