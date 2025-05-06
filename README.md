@@ -1,21 +1,72 @@
-# stac-generator
+# STAC Generator
 
-Documentation [page](https://aus-plant-phenomics-network.github.io/stac-generator/)
+<!-- markdownlint-disable -->
+<p align="center">
+  <!-- github-banner-start -->
+  <!-- github-banner-end -->
+</p>
+<!-- markdownlint-restore -->
 
-Examples of stac generator [configs](./example/configs/) in csv/json/yaml
+<div align="center">
 
-Examples of generated stac items for [point]() data, [vector]() data, [raster]() data
+<!-- prettier-ignore-start -->
 
-## CLI Commands
+| Project |     | Status|
+|---------|:----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| CI/CD   |     | [![CI](https://github.com/aus-plant-phenomics-network/stac-generator/actions/workflows/github-actions.yml/badge.svg)](https://github.com/aus-plant-phenomics-network/stac-generator/actions/workflows/github-actions.yml) [![documentation](https://github.com/aus-plant-phenomics-network/stac-generator/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/aus-plant-phenomics-network/stac-generator/actions/workflows/pages/pages-build-deployment) |
 
-Generating collection and push to remote
+<!-- prettier-ignore-end -->
+</div>
 
-```bash
-pdm run stac_generator https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/OZBarley/remote_config.json --dst http://203.101.227.130:8082 --id OZBarleyTestData
+<hr>
+
+Check out the [documentation 📚](https://aus-plant-phenomics-network.github.io/stac-generator/)
+
+Examples of stac generator [configs](./example) in csv/json/yaml
+
+## Overview
+
+[STAC](https://stacspec.org/en) is a json-based metadata standard for describing spatial-temporal assets, particularly satellite and Earth observation data. STAC allows users to quickly search, discover and use geospatial assets by providing a consistent structure for query and storage.
+
+The stac_generator can be used as a cross-platform command line interface (CLI) program or a python library that combines automatically extracted geospatial information from raw assets and other user-provided metadata to build a STAC-compliant metadata record for further use. Generated STAC records can be saved locally or behind a STAC API-compliant server.
+
+The stac_generator was developed as part of the Multiscalar Crop Characterisation Project (MCCN). Using the STAC generator to describe an asset collection is the first step in building a datacube with the MCCN engine.
+
+## Installation
+
+Requirements: python3.11-3.12
+
+STAC Generator can be installed directly from Pypi:
+
+``` { .sh }
+pip install pystac-generator
+```
+
+Note that if you want STAC Generator to be accessible from everywhere (outside the environment where it is installed), you can install STAC Generator with pipx instead of pip. To install pipx, visit [this](https://pipx.pypa.io/stable/installation/).
+
+``` { .sh }
+pipx install pystac-generator
+```
+
+## Upgrade
+
+Using pip:
+
+``` { .sh}
+pip install pystac-generator --upgrade
+```
+
+Using pipx:
+
+``` { .sh}
+pipx upgrade pystac-generator
 ```
 
 
+
 ## For developers
+
+We use [pdm](https://pdm-project.org/en/latest/#installation) as the project's package manager.
 
 Clone:
 
@@ -30,9 +81,6 @@ pdm install
 ```
 
 Run tests:
-
-Note that you may need to set the environment variable `REMOTE_FIXTURE_URL` either through commands or via a `.env` file. The value of this variable
-can be found on the github [repository](https://github.com/aus-plant-phenomics-network/stac-generator/settings/environments/4607709709/edit) under Settings - Environments - Environment Variables.
 
 ```bash
 make test

@@ -23,13 +23,12 @@ from stac_generator.exceptions import TimezoneException
 
 T = TypeVar("T", bound="SourceConfig")
 ASSET_KEY = "data"
+"""Constant describing the primary asset key"""
 logger = logging.getLogger(__name__)
 
 
 class StacCollectionConfig(BaseModel):
     """Contains parameters to pass to Collection constructor. Also contains other metadata except for datetime related metadata.
-
-    Collection's datetime, start_datetime and end_datetime will be derived from the time information of its children items
 
     This config provides additional information that can not be derived from source file, which includes
     <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
@@ -40,33 +39,29 @@ class StacCollectionConfig(BaseModel):
     id: str
     """Item id"""
     title: str | None = "Auto-generated Stac Item"
-    """A human readable title describing the item entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics"""
+    """A human readable title describing the item entity. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics>See more</a>"""
     description: str | None = "Auto-generated Stac Item"
-    """Detailed multi-line description to fully explain the STAC entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics"""
+    """Detailed multi-line description to fully explain the STAC entity. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics>See more</a>"""
     license: str | None = None
-    """License(s) of the data as SPDX License identifier, SPDX License expression, or other - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#licensing"""
+    """License(s) of the data as SPDX License identifier, SPDX License expression, or other - <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#licensing>See more</a>"""
     providers: list[Provider] | None = None
-    """A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list. - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#provider"""
+    """A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list. - <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#provider>See more</a>"""
     platform: str | None = None
-    """Unique name of the specific platform to which the instrument is attached. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#platform"""
+    """Unique name of the specific platform to which the instrument is attached. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#platform>See more</a>"""
     instruments: list[str] | None = None
-    """Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1). https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument"""
+    """Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1). <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument>See more</a>"""
     constellation: str | None = None
-    """Name of the constellation to which the platform belongs. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#constellation"""
+    """Name of the constellation to which the platform belongs. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#constellation>See more</a>"""
     mission: str | None = None
-    """Name of the mission for which data is collected. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#mission"""
+    """Name of the mission for which data is collected. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#mission>See more</a>"""
 
 
 class StacItemConfig(StacCollectionConfig):
-    """Contains parameters to pass to Item constructor. Also contains other metadata except for datetime related metadata.
+    """Contains parameters related to collection date, time and timezone.
 
-    Item's datetime will be superseded by `collection_date` and `collection_time` recorded in local timezone. The STAC `datetime`
-    metadata is obtained from the method `get_datetime` by providing the local timezone, which will be automatically derived from
-    the crs information.
-
-    This config provides additional information that can not be derived from source file, which includes
-    <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
-    and other descriptive information such as the id of the new entity
+    A STAC Item's `datetime` field is derived from the combination of `collection_date`, `collection_time` and `timezone`.
+    If the asset contains a timeseries, in which some values are not timezone aware, the timestamp is embedded with timezone
+    information from the parameter `timezone`.
     """
 
     collection_date: datetime.date
@@ -74,9 +69,10 @@ class StacItemConfig(StacCollectionConfig):
     collection_time: datetime.time
     """Time when the data is collected"""
     timezone: str | Literal["utc", "local"] = "local"
-    """Timezone"""
+    """How timestamps associated with the Item is interpreted. If timezone is local, timezone information is derived from geometry. If timezone is a valid IANA timezone, non tz-aware timestamps will be embedded with timezone information. If an invalid timezone is provided, will raise an error."""
 
     def get_datetime(self, geometry: Geometry | Sequence[Geometry]) -> pd.Timestamp:
+        """Method to derive item's datetime based on collection date, collection time, and potentially geometry"""
         timezone = get_timezone(self.timezone, geometry)
         try:
             local_dt = pd.Timestamp(
@@ -123,8 +119,27 @@ class SourceConfig(StacItemConfig):
     json_body: Any = None
     """HTTP query body content for getting file from `location`"""
 
+    def to_common_metadata(self) -> dict[str, Any]:
+        """Method to convert config to a python dictionary of common metadata excluding id"""
+        return StacCollectionConfig.model_construct(
+            **self.model_dump(mode="python", exclude_unset=True, exclude_none=True, exclude={"id"})
+        ).model_dump(mode="json", exclude_unset=True, exclude_none=True, warnings=False)
+
+    def to_asset_config(self) -> dict[str, Any]:
+        """Abstract method that dictates how config should be serialised that contains the minimum information
+        to intepret the asset. SourceConfig subclasses should inherit and override this method.
+        """
+        raise NotImplementedError
+
     def to_properties(self) -> dict[str, Any]:
-        return self.model_dump(mode="json", exclude_unset=True, exclude_none=True)
+        """Method to convert config to properties dictionary to be added to Item's properties field. This
+        includes `timezone` attribute and `stac_generator` key value pairs derived from `to_asset_config`.
+        """
+        return {
+            "timezone": self.timezone,
+            "stac_generator": self.to_asset_config(),
+            **self.to_common_metadata(),
+        }
 
 
 DTYPE = Literal[
@@ -163,5 +178,7 @@ class ColumnInfo(TypedDict):
 
 
 class HasColumnInfo(BaseModel):
+    """Mixin that provides column info field"""
+
     column_info: list[ColumnInfo] = Field(default_factory=list)
     """List of attributes associated with point/vector data"""

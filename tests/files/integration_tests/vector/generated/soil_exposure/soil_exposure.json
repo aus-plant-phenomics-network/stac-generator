@@ -39,6 +39,7 @@
     -34.65075983699995
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {
       "column_info": [
         {
@@ -77,17 +78,10 @@
           "name": "SHAPE_Area",
           "description": "Shape area"
         }
-      ],
-      "id": "soil_exposure",
-      "title": "soil exposure data - DEWNR Soil and Land Program",
-      "description": "Exposure of land to wind, and to some extent to the sun, on west facing slopes can significantly reduce productivity. Assessment of exposure is highly subjective, and is designed to do no more than signal that it is a factor to consider in certain situations. Exposure is simply assessed for the purposes of this classification by judging whether or not the land is unprotected by nearby high ground. Three Exposure attribute classes are considered: Y1, Y2, Y3. Assessments are based on an interpretation of Soil landscape map units which are categorised into legend categories according to the proportion of the landscape with the highest degree of exposure, provided that it accounts for at least 30% of the area of the map unit.",
-      "collection_date": "2016-06-09",
-      "collection_time": "09:00:00",
-      "location": "tests/files/integration_tests/vector/data/soil_exposure.geojson"
+      ]
     },
-    "timestamps": [
-      "2016-06-08T23:30:00+00:00"
-    ],
+    "title": "soil exposure data - DEWNR Soil and Land Program",
+    "description": "Exposure of land to wind, and to some extent to the sun, on west facing slopes can significantly reduce productivity. Assessment of exposure is highly subjective, and is designed to do no more than signal that it is a factor to consider in certain situations. Exposure is simply assessed for the purposes of this classification by judging whether or not the land is unprotected by nearby high ground. Three Exposure attribute classes are considered: Y1, Y2, Y3. Assessments are based on an interpretation of Soil landscape map units which are categorised into legend categories according to the proportion of the landscape with the highest degree of exposure, provided that it accounts for at least 30% of the area of the map unit.",
     "start_datetime": "2016-06-08T23:30:00Z",
     "end_datetime": "2016-06-08T23:30:00Z",
     "proj:code": "EPSG:7844",
@@ -97,24 +91,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/soil_exposure/soil_exposure.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

@@ -28,13 +28,12 @@ def test_no_date_expects_start_datetime_end_datetime_same_as_datetime() -> None:
     item = load_item("no_date.json")
     assert item.datetime == pd.Timestamp(item.properties["start_datetime"])
     assert item.datetime == pd.Timestamp(item.properties["end_datetime"])
-    assert item.properties["timestamps"] == [pd.Timestamp(item.datetime).isoformat()]
 
 
 def test_non_default_fields_expects_same_properties() -> None:
     item = load_item("non_default_fields.json")
-    assert item.properties["stac_generator"]["description"] == "Non default description"
-    assert item.properties["stac_generator"]["license"] == "MIT"
+    assert item.properties["description"] == "Non default description"
+    assert item.properties["license"] == "MIT"
 
 
 def test_with_altitude_expects_Z_value_in_properties() -> None:
@@ -56,18 +55,12 @@ def test_with_date_no_tzinfo_expects_utc_start_end_datetime() -> None:
     item = load_item("with_date_no_tzinfo.json")
     assert item.properties["start_datetime"] == "2022-12-31T13:30:00Z"
     assert item.properties["end_datetime"] == "2023-01-02T13:30:00Z"
-    date_range = pd.date_range("2022-12-31T13:30:00Z", "2023-01-02T13:30:00Z")
-    exp_ts = [item.isoformat() for item in date_range]
-    assert item.properties["timestamps"] == exp_ts
 
 
 def test_with_date_with_utc_tz_expects_utc_start_end_datetime() -> None:
     item = load_item("with_date_with_utc_tz.json")
     assert item.properties["start_datetime"] == "2023-01-01T00:00:00Z"
     assert item.properties["end_datetime"] == "2023-01-03T00:00:00Z"
-    date_range = pd.date_range("2023-01-01T00:00:00Z", "2023-01-03T00:00:00Z")
-    exp_ts = [item.isoformat() for item in date_range]
-    assert item.properties["timestamps"] == exp_ts
 
 
 def test_no_date_with_utc_tz_expects_utc_start_end_datetime() -> None:
@@ -75,40 +68,24 @@ def test_no_date_with_utc_tz_expects_utc_start_end_datetime() -> None:
     assert item.datetime == pd.Timestamp(item.properties["start_datetime"])
     assert item.properties["start_datetime"] == "2017-01-01T00:00:00Z"
     assert item.properties["end_datetime"] == item.properties["start_datetime"]
-    assert item.properties["timestamps"] == [pd.Timestamp(item.datetime).isoformat()]
 
 
 def test_with_date_with_tzinfo_expects_start_end_datetime() -> None:
     item = load_item("with_date_with_tzinfo.json")
     assert item.properties["start_datetime"] == "2023-01-01T00:00:00Z"
     assert item.properties["end_datetime"] == "2023-01-03T00:00:00Z"
-    date_range = pd.date_range("2023-01-01T00:00:00Z", "2023-01-03T00:00:00Z")
-    exp_ts = [item.isoformat() for item in date_range]
-    assert item.properties["timestamps"] == exp_ts
 
 
 def test_with_date_with_date_multi_tz_unsorted_utc_expects_start_end_datetime() -> None:
     item = load_item("with_date_multi_tz_unsorted_utc.json")
     assert item.properties["start_datetime"] == "2023-01-01T00:00:00Z"
     assert item.properties["end_datetime"] == "2023-01-03T00:00:00Z"
-    date_range = pd.date_range("2023-01-01T00:00:00Z", "2023-01-03T00:00:00Z")
-    exp_ts = [item.isoformat() for item in date_range]
-    assert item.properties["timestamps"] == exp_ts
 
 
 def test_with_date_with_date_multi_tz_unsorted_local_expects_start_end_datetime() -> None:
     item = load_item("with_date_multi_tz_unsorted_local.json")
     assert item.properties["start_datetime"] == "2022-12-31T13:30:00Z"
     assert item.properties["end_datetime"] == "2023-01-03T00:00:00Z"
-    exp_ts = [
-        "2022-12-31T13:30:00+00:00",
-        "2023-01-01T00:00:00+00:00",
-        "2023-01-01T13:30:00+00:00",
-        "2023-01-02T00:00:00+00:00",
-        "2023-01-02T13:30:00+00:00",
-        "2023-01-03T00:00:00+00:00",
-    ]
-    assert item.properties["timestamps"] == exp_ts
 
 
 def test_invalid_altitude_expects_raises() -> None:

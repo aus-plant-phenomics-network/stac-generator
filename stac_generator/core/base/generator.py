@@ -34,7 +34,6 @@ from stac_generator.core.base.schema import (
     T,
 )
 from stac_generator.core.base.utils import (
-    add_timestamps,
     force_write_to_stac_api,
     get_timezone,
     href_is_stac_api_endpoint,
@@ -47,8 +46,6 @@ from stac_generator.exceptions import StacConfigException
 if TYPE_CHECKING:
     from collections.abc import Sequence
     from concurrent.futures import Executor
-
-    from stac_generator._types import TimeSequence
 
 
 logger = logging.getLogger(__name__)
@@ -67,12 +64,12 @@ class CollectionGenerator:
         generators: Sequence[ItemGenerator[T]],
         pool: Executor | None = None,
     ) -> None:
-        """CollectionGenerator - generate collection from generators attribute
+        """Constructor
 
-        :param collection_config: collection metadata
-        :type collection_config: StacCollectionConfig
-        :param generators: sequence of ItemGenerator subclasses.
-        :type generators: Sequence[ItemGenerator]
+        Args:
+            collection_config (StacCollectionConfig): collection metadata as a `StacCollectionConfig` object.
+            generators (Sequence[ItemGenerator[T]]): sequence of `ItemGenerator` objects.
+            pool (Executor | None, optional): Executor pool for parallel processing. Defaults to None.
         """
         self.collection_config = collection_config
         self.generators = generators
@@ -80,6 +77,7 @@ class CollectionGenerator:
         self.check_duplicated_id()
 
     def check_duplicated_id(self) -> None:
+        """Validates that the items have unique id within this collection"""
         id_set: set[str] = set()
         for item in self.generators:
             item_id = item.config.id
@@ -91,12 +89,15 @@ class CollectionGenerator:
 
     @staticmethod
     def spatial_extent(items: Sequence[pystac.Item]) -> pystac.SpatialExtent:
-        """Extract a collection's spatial extent based on geometry information of its items
+        """Extract a collection's spatial extent based on geometry information of its items.
 
-        :param items: a list of children items in the collection
-        :type items: Sequence[pystac.Item]
-        :return: a bbox enveloping all items
-        :rtype: pystac.SpatialExtent
+        Produces the smallest bounding box that encloses all items.
+
+        Args:
+            items (Sequence[pystac.Item]): sequence of generated items
+
+        Returns:
+            pystac.SpatialExtent: the calculated spatial extent object
         """
         geometries: list[Geometry] = []
         for item in items:
@@ -109,12 +110,19 @@ class CollectionGenerator:
 
     @staticmethod
     def temporal_extent(items: Sequence[pystac.Item]) -> pystac.TemporalExtent:
-        """Extract a collection's temporal extent based on time information of its items
+        """Extract a collection's temporal extent based on time information of its items.
 
-        :param items: a list of children items in the collection
-        :type items: Sequence[pystac.Item]
-        :return: [start_time, end_time] enveloping all items
-        :rtype: pystac.TemporalExtent
+        Produces the tuple (start_ts, end_ts) which are the smallest and largest timestamps
+        of the Items' start_datetime and end_datetime values.
+
+        Args:
+            items (Sequence[pystac.Item]): sequence of generated items
+
+        Raises:
+            ValueError: if an item's datetime attribute cannot be accessed
+
+        Returns:
+            pystac.TemporalExtent: the calculated [start_ts, end_ts] object.
         """
         min_dt = pydatetime.datetime.now(pydatetime.UTC)
         max_dt = pydatetime.datetime(1, 1, 1, tzinfo=pydatetime.UTC)
@@ -160,6 +168,7 @@ class CollectionGenerator:
         return collection
 
     def __call__(self) -> pystac.Collection:
+        """Generate all items from `ItemGenerator` then generate the Collection object"""
         if self.pool:
             result = list(self.pool.map(run_generator, self.generators))
         else:
@@ -184,8 +193,11 @@ class ItemGenerator(abc.ABC, Generic[T]):
     ) -> None:
         """Base ItemGenerator object. Users should extend this class for handling different file extensions.
 
-        :param configs: source data configs - either from csv config or yaml/json
-        :type configs: Mapping[str, Any]
+        Args:
+            config (dict[str, Any] | T): source data configs - either from csv config or yaml/json
+
+        Raises:
+            TypeError: if an invalid config is provided
         """
         logger.debug(
             f"validating config: {config.get('id', 'invalid') if isinstance(config, dict) else getattr(config, 'id', 'invalid')}"
@@ -203,11 +215,13 @@ class ItemGenerator(abc.ABC, Generic[T]):
         raise NotImplementedError
 
 
-class VectorGenerator(ItemGenerator[T]):
+class BaseVectorGenerator(ItemGenerator[T]):
+    """Base Generator Object for handling vector and point assets"""
+
     @classmethod
     def __class_getitem__(cls, source_type: type) -> type:
         kwargs = {"source_type": source_type}
-        return type(f"VectorGenerator[{source_type.__name__}]", (VectorGenerator,), kwargs)
+        return type(f"BaseVectorGenerator[{source_type.__name__}]", (BaseVectorGenerator,), kwargs)
 
     @staticmethod
     def geometry(  # noqa: C901
@@ -221,8 +235,9 @@ class VectorGenerator(ItemGenerator[T]):
         If there are more than 10 items of the same type or there are items of different types i.e. Point and LineString, the returned
         geometry will be the Polygon of the bounding box. Note that Point and MultiPoint are treated as the same type (so are type and its Multi version).
 
-        :param df: input dataframe
-        :type df: gpd.GeoDataFrame
+
+        Returns:
+            Geometry: extracted geometry
         """
         points: Sequence[Geometry] = df["geometry"].unique()
         # One item
@@ -269,22 +284,18 @@ class VectorGenerator(ItemGenerator[T]):
         epsg: int = 4326,
         time_column: str | None = None,
     ) -> pystac.Item:
-        """Convert geopandas dataframe to pystac.Item
+        """Convert dataframe to pystac.Item
 
-        :param df: input dataframe
-        :type df: gpd.GeoDataFrame
-        :param assets: source data asset_
-        :type assets: dict[str, pystac.Asset]
-        :param source_config: config
-        :type source_config: SourceConfig
-        :param properties: pystac Item properties
-        :type properties: dict[str, Any]
-        :param time_col: time_col if there are time information in the input df, defaults to None
-        :type time_col: str | None, optional
-        :param epsg: epsg information, defaults to 4326
-        :type epsg: int, optional
-        :return: generated pystac Item
-        :rtype: pystac.Item
+        Args:
+            df (gpd.GeoDataFrame): input dataframe
+            assets (dict[str, pystac.Asset]): data asset object
+            source_config (SourceConfig): config object
+            properties (dict[str, Any]): serialised properties
+            epsg (int, optional): frame's epsg code. Defaults to 4326.
+            time_column (str | None, optional): datetime column in the dataframe. Defaults to None.
+
+        Returns:
+            pystac.Item: generated STAC Item
         """
         crs = cast(CRS, df.crs)
         # Convert to WGS 84 for computing geometry and bbox
@@ -293,12 +304,11 @@ class VectorGenerator(ItemGenerator[T]):
         item_tz = get_timezone(source_config.timezone, geometry)
         item_ts = source_config.get_datetime(geometry)
 
-        geometry = json.loads(to_geojson(VectorGenerator.geometry(df)))
+        geometry = json.loads(to_geojson(BaseVectorGenerator.geometry(df)))
 
         # Process timestamps
         if time_column is None:
             # Item TS should be UTC by default
-            timestamps: TimeSequence = [item_ts]
             start_datetime = item_ts
             end_datetime = item_ts
         else:
@@ -306,7 +316,6 @@ class VectorGenerator(ItemGenerator[T]):
             timestamps = localise_timezone(sorted_ts, item_tz)
             start_datetime = timestamps.min()
             end_datetime = timestamps.max()
-        add_timestamps(properties, timestamps)
 
         item = pystac.Item(
             source_config.id,
@@ -324,7 +333,15 @@ class VectorGenerator(ItemGenerator[T]):
 
 
 class StacSerialiser:  # pragma: no cover
+    """Class that handles validating generated stac metadata and storing them locally or remotely"""
+
     def __init__(self, generator: CollectionGenerator, href: str | Path) -> None:
+        """Constructor
+
+        Args:
+            generator (CollectionGenerator): collection generator object
+            href (str | Path): serialisation location
+        """
         self.generator = generator
         self.collection = generator()
         self.href = is_string_convertible(href)
@@ -333,16 +350,16 @@ class StacSerialiser:  # pragma: no cover
         """Hook that can be overwritten to provide pre-serialisation functionality.
         By default, this normalises collection href and performs validation
 
-        :param collection: collection object
-        :type collection: pystac.Collection
-        :param href: serialisation href
-        :type href: str
+        Args:
+            collection (pystac.Collection): stac Collection
+            href (str): href for normalisation
         """
         logger.debug("Validating generated collection and items")
         collection.normalize_hrefs(href)
         collection.validate_all()
 
     def __call__(self) -> None:
+        """Call API for serialisation"""
         self.pre_serialisation_hook(self.collection, self.href)
         if href_is_stac_api_endpoint(self.href):
             self.to_api()
@@ -354,6 +371,7 @@ class StacSerialiser:  # pragma: no cover
     def prepare_collection_configs(
         collection_generator: CollectionGenerator,
     ) -> list[dict[str, Any]]:
+        """Convert the configs of all items in the collection to a list of python dictionaries"""
         items = collection_generator.generators
         result = []
         for item in items:
@@ -362,6 +380,7 @@ class StacSerialiser:  # pragma: no cover
 
     @staticmethod
     def prepare_config(config: T) -> dict[str, Any]:
+        """Convert config object to python dictionary"""
         return config.model_dump(
             mode="json",
             exclude_none=True,
@@ -370,12 +389,14 @@ class StacSerialiser:  # pragma: no cover
         )
 
     def save_collection_config(self, dst: str | Path) -> None:
+        """Convenient API for writing all the config of all items in the collection to a dst"""
         config = self.prepare_collection_configs(self.generator)
         with Path(dst).open("w") as file:
             json.dump(config, file)
 
     @staticmethod
     def save_configs(configs: Sequence[T], dst: str | Path) -> None:
+        """Convenient API for writing a sequence of config objects to dst"""
         config = [StacSerialiser.prepare_config(con) for con in configs]
         with Path(dst).open("w") as file:
             json.dump(config, file)

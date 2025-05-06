@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import urllib.parse
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, cast, overload
@@ -28,6 +29,8 @@ from stac_generator.exceptions import (
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from pyproj.crs.crs import CRS
+
     from stac_generator._types import TimeSequence, TimeSeries, Timestamp
     from stac_generator.core.base.schema import ColumnInfo
 
@@ -38,20 +41,48 @@ TZFinder = TimezoneFinder()
 
 
 def parse_href(base_url: str, collection_id: str, item_id: str | None = None) -> str:
-    """Generate href for collection or item based on id"""
+    """Generate href for collection or item based on id. This is used for generating
+    STAC API URL.
+
+    Args:
+        base_url (str): base url
+        collection_id (str): collection id
+        item_id (str | None, optional): item's id. Defaults to None.
+
+    Returns:
+        str: built url
+    """
     if item_id:
         return urllib.parse.urljoin(base_url, f"{collection_id}/{item_id}")
     return urllib.parse.urljoin(base_url, f"{collection_id}")
 
 
 def href_is_stac_api_endpoint(href: str) -> bool:
-    """Check if href points to a resource behind a stac api"""
+    """Check if href points to a resource behind a stac api
+
+    Args:
+        href (str): url
+
+    Returns:
+        bool: boolean result
+    """
     output = urllib.parse.urlsplit(href)
     return output.scheme in ["http", "https"]
 
 
 def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
-    """Force write a json object to a stac api endpoint."""
+    """Force write a json object to a stac api endpoint.
+
+    Initially try to POST the json. If 409 error encountered, will try a PUT.
+
+    Args:
+        url (str): endpoint url
+        id (str): collection's id
+        json (dict[str, Any]): json body
+
+    Raises:
+        err: error encountered other than integrity error
+    """
     try:
         logger.debug(f"Sending POST request to {url}")
         response = httpx.post(url=url, json=json)
@@ -66,6 +97,19 @@ def force_write_to_stac_api(url: str, id: str, json: dict[str, Any]) -> None:
 
 
 def read_source_config(href: str) -> list[dict[str, Any]]:
+    """Read in config from location
+
+    Args:
+        href (str): config location
+
+    Raises:
+        InvalidExtensionException: if an unrecognised extension is provided. Only accepts json, yaml, yml, csv
+        StacConfigException: if the config file cannot be read
+        ConfigFormatException: if the config is not a dictionary or a list
+
+    Returns:
+        list[dict[str, Any]]: list of raw configs as dictionaries.
+    """
     logger.debug(f"Reading config file from {href}")
     if not href.endswith(("json", "yaml", "yml", "csv")):
         raise InvalidExtensionException(f"Expects one of json, yaml, yml, csv. Received: {href}")
@@ -100,7 +144,20 @@ def read_source_config(href: str) -> list[dict[str, Any]]:
 
 
 def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
-    """Calculate timezone from geometry"""
+    """Method to calculate timezone string from a geometry or a sequence of geometries
+
+    If a sequence of geometries is provided, the timezone is provided for the centroid of
+    the sequence of geometries.
+
+    Args:
+        geometry (Geometry | Sequence[Geometry]): geometry object
+
+    Raises:
+        TimezoneException: if timezone cannot be determined from geometry
+
+    Returns:
+        str: timezone string
+    """
     point = (
         centroid(geometry)
         if isinstance(geometry, Geometry)
@@ -119,6 +176,17 @@ def calculate_timezone(geometry: Geometry | Sequence[Geometry]) -> str:
 def get_timezone(
     timezone: str | Literal["local", "utc"], geometry: Geometry | Sequence[Geometry]
 ) -> str:
+    """Get timezone string based on provided timezone option and geometry.
+
+    This invokes the `calculate_timezone` method under the hood if appropriate.
+
+    Args:
+        timezone (str | Literal[&quot;local&quot;, &quot;utc&quot;]): timezone parameter from SourceConfig
+        geometry (Geometry | Sequence[Geometry]): asset's geometry.
+
+    Returns:
+        str: timezone string
+    """
     if timezone == "local":
         return calculate_timezone(geometry)
     return timezone
@@ -131,7 +199,18 @@ def localise_timezone(data: TimeSeries, tzinfo: str) -> TimeSeries: ...
 
 
 def localise_timezone(data: Timestamp | TimeSeries, tzinfo: str) -> Timestamp | TimeSeries:
-    """Add timezone information to data then converts to UTC"""
+    """Add timezone information to data then converts to UTC
+
+    Args:
+        data (Timestamp | TimeSeries): series of timestamps or a single timestamp
+        tzinfo (str): parsed timezone
+
+    Raises:
+        TimezoneException: an invalid timezone is provided
+
+    Returns:
+        Timestamp | TimeSeries: utc localised timestamp
+    """
     try:
         tz = pytz.timezone(tzinfo)
     except Exception as e:
@@ -183,6 +262,19 @@ def _read_csv(
 
 
 def is_string_convertible(value: Any) -> str:
+    """Check whether value is string or path
+
+    If value is Path, converts to string via `as_posix`
+
+    Args:
+        value (Any): input value
+
+    Raises:
+        ValueError: is not a string or Path
+
+    Returns:
+        str: string path
+    """
     if isinstance(value, str):
         return value
     if isinstance(value, Path):
@@ -201,10 +293,29 @@ def read_point_asset(
     columns: set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None = None,
     timezone: str | Literal["utc", "local"] = "local",
 ) -> gpd.GeoDataFrame:
-    """Read in csv from local disk
+    """Read in point data from disk or remote
+
     Users must provide at the bare minimum the location of the csv, and the names of the columns to be
     treated as the X and Y coordinates. By default, will read in all columns in the csv. If columns and groupby
     columns are provided, will selectively read specified columns together with the coordinate columns (X, Y, T).
+
+    Timezone information is used to convert all timestamps to timezone-aware timestamps. Timestamps that are originally
+    timezone awared will not be affected. Timestamps that are originally non-timezone awared will be embeded with timezone information.
+    Timestamps are subsequently converted to UTC.
+
+    Args:
+        src_path (str): source location
+        X_coord (str): column to be treated as the x_coordinate
+        Y_coord (str): column to be treated as the y coordinate
+        epsg (int): epsg code
+        Z_coord (str | None, optional): column to be treated as the z coordinate. Defaults to None.
+        T_coord (str | None, optional): column to be treated as timestamps. Defaults to None.
+        date_format (str, optional): date intepretation method. Defaults to "ISO8601".
+        columns (set[str] | set[ColumnInfo] | Sequence[str] | Sequence[ColumnInfo] | None, optional): columns to be read from the point asset. Defaults to None.
+        timezone (str | Literal[&quot;utc&quot;, &quot;local&quot;], optional): timezone parameter for embedding non-timezone-aware timestamps. Defaults to "local".
+
+    Returns:
+        gpd.GeoDataFrame: read dataframe
     """
     df = _read_csv(
         src_path=src_path,
@@ -228,6 +339,25 @@ def read_vector_asset(
     columns: set[str] | Sequence[str] | None = None,
     layer: str | int | None = None,
 ) -> gpd.GeoDataFrame:
+    """Read in vector asset from disk or remote.
+
+    Users can provide an optional bbox for constraining the region of the vector data to be read, a set
+    of columns describing the attributes of interest, and a layer parameter if the asset is a multilayered
+    vector asset.
+
+    Args:
+        src_path (str | Path): path to asset.
+        bbox (tuple[float, float, float, float] | None, optional): bbox to define the region of interest. Defaults to None.
+        columns (set[str] | Sequence[str] | None, optional): sequence of columns to be read from the vector file. Defaults to None.
+        layer (str | int | None, optional): layer indentifier for a multilayered asset. Defaults to None.
+
+    Raises:
+        StacConfigException: if the provided layer is non-existent
+        SourceAssetException: if the asset cannot be accessed or is malformatted
+
+    Returns:
+        gpd.GeoDataFrame: read dataframe
+    """
     try:
         return gpd.read_file(
             filename=src_path,
@@ -252,6 +382,19 @@ def read_join_asset(
     columns: set[str] | Sequence[str] | set[ColumnInfo] | Sequence[ColumnInfo],
     tzinfo: str,
 ) -> pd.DataFrame:
+    """Read the join asset from disk or remote
+
+    Args:
+        src_path (str): path to join asset
+        right_on (str): right on attribute from join config
+        date_format (str): date format from join config
+        date_column (str | None): date column from join config
+        columns (set[str] | Sequence[str] | set[ColumnInfo] | Sequence[ColumnInfo]): list of columns to be read in from the asset
+        tzinfo (str): timezone information - already parsed using get_timezone
+
+    Returns:
+        pd.DataFrame: _description_
+    """
     df = _read_csv(
         src_path=src_path,
         required=[right_on],
@@ -267,3 +410,31 @@ def read_join_asset(
 def add_timestamps(properties: dict[Any, Any], timestamps: TimeSequence) -> None:
     timestamps_str = [item.isoformat(sep="T") for item in timestamps]
     properties["timestamps"] = timestamps_str
+
+
+def extract_epsg(crs: CRS) -> tuple[int, bool]:
+    """Extract epsg information from crs object.
+    If epsg info can be extracted directly from crs, return that value.
+    Otherwise, try to convert the crs info to WKT2 and extract EPSG using regex
+
+    Note that this method may yield unreliable result
+
+    Args:
+        crs (CRS): crs object
+
+    Returns:
+        tuple[int, bool]: epsg code and reliability flag
+    """
+    if (result := crs.to_epsg()) is not None:
+        return (result, True)
+    # Handle WKT1 edge case
+    wkt = crs.to_wkt()
+    match = re.search(r'ID\["EPSG",(\d+)\]', wkt)
+    if match:
+        return (int(match.group(1)), True)
+    # No match - defaults to 4326
+
+    logger.warning(
+        "Cannot determine epsg from vector file. Either provide it in the config or change the source file. Defaults to 4326 but can be incorrect."
+    )  # pragma: no cover
+    return (4326, False)  # pragma: no cover

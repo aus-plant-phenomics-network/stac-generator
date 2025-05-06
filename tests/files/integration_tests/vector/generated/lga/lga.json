@@ -39,6 +39,7 @@
     -25.9961464901133
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {
       "column_info": [
         {
@@ -73,15 +74,8 @@
           "name": "st_area(shape)",
           "description": "Shape area"
         }
-      ],
-      "id": "lga",
-      "collection_date": "2023-04-01",
-      "collection_time": "09:00:00",
-      "location": "tests/files/integration_tests/vector/data/lga.gpkg"
+      ]
     },
-    "timestamps": [
-      "2023-03-31T22:30:00+00:00"
-    ],
     "start_datetime": "2023-03-31T22:30:00Z",
     "end_datetime": "2023-03-31T22:30:00Z",
     "proj:code": "EPSG:3857",
@@ -91,24 +85,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/lga/lga.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/vector/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

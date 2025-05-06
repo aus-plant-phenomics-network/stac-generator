@@ -19,6 +19,7 @@
     -34.9423
   ],
   "properties": {
+    "timezone": "local",
     "stac_generator": {
       "column_info": [
         {
@@ -34,50 +35,12 @@
           "description": "Observed daily minimum temperature in degree C"
         }
       ],
-      "id": "aston_coop",
-      "collection_date": "2023-01-03",
-      "collection_time": "09:00:00",
-      "location": "tests/files/integration_tests/point/data/aston_coop.csv",
       "X": "longitude",
       "Y": "latitude",
       "Z": "elevation",
       "T": "YYYY-MM-DD",
       "epsg": 7843
     },
-    "timestamps": [
-      "2022-12-31T13:30:00+00:00",
-      "2023-01-01T13:30:00+00:00",
-      "2023-01-02T13:30:00+00:00",
-      "2023-01-03T13:30:00+00:00",
-      "2023-01-04T13:30:00+00:00",
-      "2023-01-05T13:30:00+00:00",
-      "2023-01-06T13:30:00+00:00",
-      "2023-01-07T13:30:00+00:00",
-      "2023-01-08T13:30:00+00:00",
-      "2023-01-09T13:30:00+00:00",
-      "2023-01-10T13:30:00+00:00",
-      "2023-01-11T13:30:00+00:00",
-      "2023-01-12T13:30:00+00:00",
-      "2023-01-13T13:30:00+00:00",
-      "2023-01-14T13:30:00+00:00",
-      "2023-01-15T13:30:00+00:00",
-      "2023-01-16T13:30:00+00:00",
-      "2023-01-17T13:30:00+00:00",
-      "2023-01-18T13:30:00+00:00",
-      "2023-01-19T13:30:00+00:00",
-      "2023-01-20T13:30:00+00:00",
-      "2023-01-21T13:30:00+00:00",
-      "2023-01-22T13:30:00+00:00",
-      "2023-01-23T13:30:00+00:00",
-      "2023-01-24T13:30:00+00:00",
-      "2023-01-25T13:30:00+00:00",
-      "2023-01-26T13:30:00+00:00",
-      "2023-01-27T13:30:00+00:00",
-      "2023-01-28T13:30:00+00:00",
-      "2023-01-29T13:30:00+00:00",
-      "2023-01-30T13:30:00+00:00",
-      "2023-01-31T13:30:00+00:00"
-    ],
     "start_datetime": "2022-12-31T13:30:00Z",
     "end_datetime": "2023-01-31T13:30:00Z",
     "proj:code": "EPSG:7843",
@@ -87,24 +50,24 @@
   "links": [
     {
       "rel": "root",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "collection",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     },
     {
       "rel": "self",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/aston_coop/aston_coop.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/aston_coop/aston_coop.json",
       "type": "application/json"
     },
     {
       "rel": "parent",
-      "href": "/home/harry/WorkProjects/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
+      "href": "/home/harry/CodingProject/stac-generator/tests/files/integration_tests/composite/generated/collection.json",
       "type": "application/json",
       "title": "Auto-generated."
     }

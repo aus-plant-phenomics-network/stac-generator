@@ -15,7 +15,6 @@ from shapely import box, to_geojson
 
 from stac_generator.core.base.generator import ItemGenerator
 from stac_generator.core.base.schema import ASSET_KEY
-from stac_generator.core.base.utils import add_timestamps
 from stac_generator.exceptions import SourceAssetException
 
 from .schema import RasterConfig
@@ -27,13 +26,13 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
 
     def generate(self) -> pystac.Item:
-        """Generate Raster Item from config
+        """Generate a STAC Item from RasterConfig
 
-        :param self.config: raster config - must contain band info
-        :type self.config: RasterConfig
-        :raises ValueError: if epsg code is provided in config but does not match that extracted from the asset
-        :return: generated item
-        :rtype: pystac.Item
+        Raises:
+            SourceAssetException: if the data cannot be accessed
+
+        Returns:
+            pystac.Item: generated STAC Item
         """
         try:
             logger.info(f"Reading raster asset: {self.config.id}")
@@ -66,16 +65,12 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
 
         # Create STAC Item
         # Start datetime and end_datetime are set to be collection datetime for Raster data
-        properties = {
-            "stac_generator": self.config.to_properties(),
-        }
-        add_timestamps(properties, [item_ts])
         item = pystac.Item(
             id=self.config.id,
             geometry=geometry_geojson,
             bbox=list(bbox),
             datetime=item_ts,
-            properties=properties,
+            properties=self.config.to_properties(),
             start_datetime=item_ts,
             end_datetime=item_ts,
         )

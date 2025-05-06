@@ -1,0 +1,21 @@
+- id: Werribee
+  collection_date: '2025-01-01'
+  collection_time: 00:00:00
+  location: "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/Werribee.geojson"
+  column_info:
+  - description: Suburb_Name
+    name: Suburb_Name
+  join_config:
+    file: "https://object-store.rc.nectar.org.au/v1/AUTH_2b454f47f2654ab58698afd4b4d5eba7/mccn-test-data/documentation/price.csv"
+    left_on: Suburb_Name
+    right_on: Area
+    date_column: Date
+    column_info:
+    - description: Area Name
+      name: Area
+    - description: Median Sales Price in 2025
+      name: Sell_Price
+    - description: Median Rental Price in 2025
+      name: Rent_Price
+    - description: Ratio of Sales Price (in $1000) over Rental Price (in $)
+      name: Sell/Rent
