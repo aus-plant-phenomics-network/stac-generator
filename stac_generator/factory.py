@@ -206,9 +206,7 @@ class StacGeneratorFactory:
         """Get a CollectionGenerator instance based on source configs and
         collection config
 
-        Args:
-            source_configs (Config_T): extra metadata/generation parameters for
-            the collection's items. Source configs can be given as:
+        Source configs can be given as:
             - a string path to a config.json file
             - a list of string paths to different config.json files
             - an instance of SourceConfig class (VectorConfig, PointConfig, RasterConfig), etc
@@ -218,12 +216,14 @@ class StacGeneratorFactory:
             If file paths are given, the files will be parsed into instances of SourceConfig.
             If dictionaries are given, they will be parsed into istances of SourceConfig using
             pydantic model_valiate.
+
+        Args:
+            source_configs (Config_T): extra metadata/generation parameters for the collection's items
             collection_config (StacCollectionConfig): collection metadata.
-            pool (Executor | None): optional threadpool/process pool for parallel processing.
+            pool (Executor | None, optional): optional threadpool/process pool for parallel processing.. Defaults to None.
 
         Returns:
-            CollectionGenerator: a collection generator instance, in which all items are derived
-            from source _configs and general metadata derived from collection_config.
+            CollectionGenerator: a collection generator instance, in which all items are derived from source _configs and general metadata derived from collection_config.
         """
         handlers = StacGeneratorFactory.get_item_generators(source_configs)
         return CollectionGenerator(collection_config, handlers, pool)
