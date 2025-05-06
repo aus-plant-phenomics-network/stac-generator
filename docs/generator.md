@@ -1,7 +1,7 @@
-:::core.base.generator 
+:::core.base.generator
 
-:::core.point.generator 
+:::core.point.generator
 
-:::core.vector.generator 
+:::core.vector.generator
 
-:::core.raster.generator 
+:::core.raster.generator
