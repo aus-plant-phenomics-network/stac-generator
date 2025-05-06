@@ -12,7 +12,7 @@
         <link rel="prev" href="../module/">
       
       
-        <link rel="next" href="../utils/">
+        <link rel="next" href="../generator/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -726,6 +726,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#core.base.schema.ASSET_KEY" class="md-nav__link">
+    <span class="md-ellipsis">
+      ASSET_KEY
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#core.base.schema.StacCollectionConfig" class="md-nav__link">
     <span class="md-ellipsis">
       StacCollectionConfig
@@ -858,6 +867,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#core.base.schema.StacItemConfig.get_datetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_datetime
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -954,6 +972,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_common_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_common_metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_properties
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1025,6 +1070,387 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#core.vector.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      VectorOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VectorOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      layer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.join_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      join_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.check_join_fields_described" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_join_fields_described
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      VectorConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VectorConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      JoinConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JoinConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.file" class="md-nav__link">
+    <span class="md-ellipsis">
+      file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.left_on" class="md-nav__link">
+    <span class="md-ellipsis">
+      left_on
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.right_on" class="md-nav__link">
+    <span class="md-ellipsis">
+      right_on
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.date_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.date_format" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.column_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      column_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.check_non_empty_column_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_non_empty_column_info
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.X" class="md-nav__link">
+    <span class="md-ellipsis">
+      X
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.Y" class="md-nav__link">
+    <span class="md-ellipsis">
+      Y
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.Z" class="md-nav__link">
+    <span class="md-ellipsis">
+      Z
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.T" class="md-nav__link">
+    <span class="md-ellipsis">
+      T
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.date_format" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.epsg" class="md-nav__link">
+    <span class="md-ellipsis">
+      epsg
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema.PointConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      RasterOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RasterOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterOwnConfig.band_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      band_info
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      RasterConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RasterConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      BandInfo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BandInfo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.common_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      common_name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.wavelength" class="md-nav__link">
+    <span class="md-ellipsis">
+      wavelength
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.nodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.data_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      data_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.description" class="md-nav__link">
+    <span class="md-ellipsis">
+      description
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1041,7 +1467,51 @@
   
   
     <li class="md-nav__item">
-      <a href="../utils/" class="md-nav__link">
+      <a href="../generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../factory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Factory
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utility/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1062,303 +1532,17 @@
   
   
   
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Extension
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
-            <span class="md-nav__icon md-icon"></span>
-            Extension
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_1" id="__nav_4_3_1_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Point
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_1">
-            <span class="md-nav__icon md-icon"></span>
-            Point
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="../extensions/point/generator/" class="md-nav__link">
+      <a href="../exception/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Generator
+    Exceptions
     
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/point/schema/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Schema
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_2" id="__nav_4_3_2_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Vector
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_2">
-            <span class="md-nav__icon md-icon"></span>
-            Vector
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/vector/generator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Generator
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/vector/schema/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Schema
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_3" id="__nav_4_3_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Raster
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            Raster
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/raster/generator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Generator
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/raster/schema/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Schema
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1405,6 +1589,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#core.base.schema.ASSET_KEY" class="md-nav__link">
+    <span class="md-ellipsis">
+      ASSET_KEY
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#core.base.schema.StacCollectionConfig" class="md-nav__link">
     <span class="md-ellipsis">
       StacCollectionConfig
@@ -1537,6 +1730,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#core.base.schema.StacItemConfig.get_datetime" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_datetime
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1633,6 +1835,33 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_common_metadata" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_common_metadata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.base.schema.SourceConfig.to_properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_properties
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1694,6 +1923,387 @@
   <a href="#core.base.schema.HasColumnInfo.column_info" class="md-nav__link">
     <span class="md-ellipsis">
       column_info
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      VectorOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VectorOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      layer
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.join_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      join_config
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorOwnConfig.check_join_fields_described" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_join_fields_described
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      VectorConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="VectorConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.VectorConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      JoinConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="JoinConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.file" class="md-nav__link">
+    <span class="md-ellipsis">
+      file
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.left_on" class="md-nav__link">
+    <span class="md-ellipsis">
+      left_on
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.right_on" class="md-nav__link">
+    <span class="md-ellipsis">
+      right_on
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.date_column" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_column
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.date_format" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.column_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      column_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.vector.schema.JoinConfig.check_non_empty_column_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      check_non_empty_column_info
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.X" class="md-nav__link">
+    <span class="md-ellipsis">
+      X
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.Y" class="md-nav__link">
+    <span class="md-ellipsis">
+      Y
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.Z" class="md-nav__link">
+    <span class="md-ellipsis">
+      Z
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.T" class="md-nav__link">
+    <span class="md-ellipsis">
+      T
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.date_format" class="md-nav__link">
+    <span class="md-ellipsis">
+      date_format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointOwnConfig.epsg" class="md-nav__link">
+    <span class="md-ellipsis">
+      epsg
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.point.schema.PointConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      PointConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PointConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.point.schema.PointConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      schema
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterOwnConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      RasterOwnConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RasterOwnConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterOwnConfig.band_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      band_info
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterConfig" class="md-nav__link">
+    <span class="md-ellipsis">
+      RasterConfig
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="RasterConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.RasterConfig.to_asset_config" class="md-nav__link">
+    <span class="md-ellipsis">
+      to_asset_config
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo" class="md-nav__link">
+    <span class="md-ellipsis">
+      BandInfo
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="BandInfo">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.common_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      common_name
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.wavelength" class="md-nav__link">
+    <span class="md-ellipsis">
+      wavelength
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.nodata" class="md-nav__link">
+    <span class="md-ellipsis">
+      nodata
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.data_type" class="md-nav__link">
+    <span class="md-ellipsis">
+      data_type
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core.raster.schema.BandInfo.description" class="md-nav__link">
+    <span class="md-ellipsis">
+      description
     </span>
   </a>
   
@@ -1747,6 +2357,27 @@
 
 
 
+<div class="doc doc-object doc-attribute">
+
+
+
+<h2 id="core.base.schema.ASSET_KEY" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ASSET_KEY</span> <span class="o">=</span> <span class="s1">&#39;data&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-module-attribute"><code>module-attribute</code></small>
+  </span>
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Constant describing the primary asset key</p>
+    </div>
+
+</div>
+
 
 <div class="doc doc-object doc-class">
 
@@ -1765,7 +2396,6 @@
 
 
         <p>Contains parameters to pass to Collection constructor. Also contains other metadata except for datetime related metadata.</p>
-<p>Collection's datetime, start_datetime and end_datetime will be derived from the time information of its children items</p>
 <p>This config provides additional information that can not be derived from source file, which includes
 <a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
 and other descriptive information such as the id of the new entity</p>
@@ -1824,7 +2454,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>A human readable title describing the item entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics</p>
+        <p>A human readable title describing the item entity. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics>See more</a></p>
     </div>
 
 </div>
@@ -1846,7 +2476,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Detailed multi-line description to fully explain the STAC entity. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics</p>
+        <p>Detailed multi-line description to fully explain the STAC entity. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#basics>See more</a></p>
     </div>
 
 </div>
@@ -1868,7 +2498,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>License(s) of the data as SPDX License identifier, SPDX License expression, or other - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#licensing</p>
+        <p>License(s) of the data as SPDX License identifier, SPDX License expression, or other - <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#licensing>See more</a></p>
     </div>
 
 </div>
@@ -1890,7 +2520,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list. - https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#provider</p>
+        <p>A list of providers, which may include all organizations capturing or processing the data or the hosting provider. Providers should be listed in chronological order with the most recent provider being the last element of the list. - <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#provider>See more</a></p>
     </div>
 
 </div>
@@ -1912,7 +2542,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Unique name of the specific platform to which the instrument is attached. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#platform</p>
+        <p>Unique name of the specific platform to which the instrument is attached. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#platform>See more</a></p>
     </div>
 
 </div>
@@ -1934,7 +2564,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1). https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument</p>
+        <p>Name of instrument or sensor used (e.g., MODIS, ASTER, OLI, Canon F-1). <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#instrument>See more</a></p>
     </div>
 
 </div>
@@ -1956,7 +2586,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Name of the constellation to which the platform belongs. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#constellation</p>
+        <p>Name of the constellation to which the platform belongs. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#constellation>See more</a></p>
     </div>
 
 </div>
@@ -1978,7 +2608,7 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Name of the mission for which data is collected. https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#mission</p>
+        <p>Name of the mission for which data is collected. <a href=https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#mission>See more</a></p>
     </div>
 
 </div>
@@ -2009,13 +2639,10 @@ and other descriptive information such as the id of the new entity</p>
               Bases: <code><a class="autorefs autorefs-internal" title="core.base.schema.StacCollectionConfig" href="#core.base.schema.StacCollectionConfig">StacCollectionConfig</a></code></p>
 
 
-        <p>Contains parameters to pass to Item constructor. Also contains other metadata except for datetime related metadata.</p>
-<p>Item's datetime will be superseded by <code>collection_date</code> and <code>collection_time</code> recorded in local timezone. The STAC <code>datetime</code>
-metadata is obtained from the method <code>get_datetime</code> by providing the local timezone, which will be automatically derived from
-the crs information.</p>
-<p>This config provides additional information that can not be derived from source file, which includes
-<a href="https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md">Stac Common Metadata</a>
-and other descriptive information such as the id of the new entity</p>
+        <p>Contains parameters related to collection date, time and timezone.</p>
+<p>A STAC Item's <code>datetime</code> field is derived from the combination of <code>collection_date</code>, <code>collection_time</code> and <code>timezone</code>.
+If the asset contains a timeseries, in which some values are not timezone aware, the timestamp is embedded with timezone
+information from the parameter <code>timezone</code>.</p>
 
 
 
@@ -2092,12 +2719,29 @@ and other descriptive information such as the id of the new entity</p>
 
     <div class="doc doc-contents ">
 
-        <p>Timezone</p>
+        <p>How timestamps associated with the Item is interpreted. If timezone is local, timezone information is derived from geometry. If timezone is a valid IANA timezone, non tz-aware timestamps will be embedded with timezone information. If an invalid timezone is provided, will raise an error.</p>
     </div>
 
 </div>
 
 
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.base.schema.StacItemConfig.get_datetime" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_datetime</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Method to derive item's datetime based on collection date, collection time, and potentially geometry</p>
+
+    </div>
+
+</div>
 
 
 
@@ -2349,6 +2993,59 @@ currently unsupported.</li>
 
 
 
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.base.schema.SourceConfig.to_common_metadata" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_common_metadata</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Method to convert config to a python dictionary of common metadata excluding id</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.base.schema.SourceConfig.to_asset_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_asset_config</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Abstract method that dictates how config should be serialised that contains the minimum information
+to intepret the asset. SourceConfig subclasses should inherit and override this method.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.base.schema.SourceConfig.to_properties" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_properties</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Method to convert config to properties dictionary to be added to Item's properties field. This
+includes <code>timezone</code> attribute and <code>stac_generator</code> key value pairs derived from <code>to_asset_config</code>.</p>
+
+    </div>
+
+</div>
+
 
 
   </div>
@@ -2480,6 +3177,8 @@ currently unsupported.</li>
               Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
 
 
+        <p>Mixin that provides column info field</p>
+
 
 
 
@@ -2514,6 +3213,1002 @@ currently unsupported.</li>
     <div class="doc doc-contents ">
 
         <p>List of attributes associated with point/vector data</p>
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="core.vector.schema"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.vector.schema.VectorOwnConfig" class="doc doc-heading">
+            <code>VectorOwnConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="stac_generator.core.base.schema.HasColumnInfo">HasColumnInfo</span></code></p>
+
+
+        <p>Config that defines the minimum information for parsing and reading vector asset.
+This config is produced for vector asset when the method <code>to_asset_config</code> is invoked,
+or when <code>StacGeneratorFactory.extract_item_config</code> is called on a vector STAC Item.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.VectorOwnConfig.layer" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">layer</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Vector layer for multi-layer shapefile.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.VectorOwnConfig.join_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">join_config</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Config for join asset if valid available.</p>
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.vector.schema.VectorOwnConfig.check_join_fields_described" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">check_join_fields_described</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Validates that if join config is provided, the field <code>left_on</code> must be described by the vector's <code>column_info</code>. Also
+validates that <code>right_on</code> must be described by the join config's <code>column_info</code>.</p>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.vector.schema.VectorConfig" class="doc doc-heading">
+            <code>VectorConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="stac_generator.core.base.schema.SourceConfig">SourceConfig</span></code>, <code><a class="autorefs autorefs-internal" title="core.vector.schema.VectorOwnConfig" href="#core.vector.schema.VectorOwnConfig">VectorOwnConfig</a></code></p>
+
+
+        <p>Extends SourceConfig to describe vector asset.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.vector.schema.VectorConfig.to_asset_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_asset_config</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Produce a dictionary that has the signature of <code>VectorOwnConfig</code></p>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.vector.schema.JoinConfig" class="doc doc-heading">
+            <code>JoinConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Schema for join asset. This also contains information on how the vector asset and the join asset should be merged.</p>
+<p>Merge terminologies are consistent with <a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html">pandas'</a>, where
+the vector asset is treated as the left table, and the join asset is the right table.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">file</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Path to asset. Must be a string or a Path.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.left_on" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">left_on</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Vector asset's attribute for joining.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.right_on" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">right_on</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Join asset's attribute for joining.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.date_column" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">date_column</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Name of the attribute in the join asset to be treated as timestamps.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.date_format" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">date_format</span> <span class="o">=</span> <span class="s1">&#39;ISO8601&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Format for intepreting timestamps. Accepted values follows <a href="https://docs.python.org/3/library/datetime.html#strftime-and-strptime-format-codes">strptime/strftime</a> formats.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.vector.schema.JoinConfig.column_info" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">column_info</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>List of join asset column attribute. Note that for join assset, this cannot be empty.</p>
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.vector.schema.JoinConfig.check_non_empty_column_info" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">check_non_empty_column_info</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Method to validate that column info is non empty</p>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="core.point.schema"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.point.schema.PointOwnConfig" class="doc doc-heading">
+            <code>PointOwnConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="stac_generator.core.base.schema.HasColumnInfo">HasColumnInfo</span></code></p>
+
+
+        <p>Source config for point(csv) data. This config is produced for point asset when the method <code>to_asset_config</code> is invoked, or when <code>StacGeneratorFactory.extract_item_config</code> is called on a point STAC Item.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.X" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">X</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Column to be treated as longitude/X coordinate</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.Y" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Y</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Column to be treated as latitude/Y coordinate</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.Z" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">Z</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Column to be treated as altitude/Z coordinate</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.T" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">T</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Column to be treated as time coordinate</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.date_format" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">date_format</span> <span class="o">=</span> <span class="s1">&#39;ISO8601&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Format to parse dates - will be used if T column is provided</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.point.schema.PointOwnConfig.epsg" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">epsg</span> <span class="o">=</span> <span class="mi">4326</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>EPSG code</p>
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.point.schema.PointConfig" class="doc doc-heading">
+            <code>PointConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="stac_generator.core.base.schema.SourceConfig">SourceConfig</span></code>, <code><a class="autorefs autorefs-internal" title="core.point.schema.PointOwnConfig" href="#core.point.schema.PointOwnConfig">PointOwnConfig</a></code></p>
+
+
+        <p>Extends SourceConfig to describe point asset.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.point.schema.PointConfig.to_asset_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_asset_config</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Produce a dictionary that has the signature of <code>PointOwnConfig</code></p>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="core.raster.schema"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.raster.schema.RasterOwnConfig" class="doc doc-heading">
+            <code>RasterOwnConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Config that defines the minimum information for parsing and reading raster asset. This config is produced for raster asset when the method <code>to_asset_config</code> is invoked, or when <code>StacGeneratorFactory.extract_item_config</code> is called on a raster STAC Item.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.RasterOwnConfig.band_info" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">band_info</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>List of band information - REQUIRED</p>
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.raster.schema.RasterConfig" class="doc doc-heading">
+            <code>RasterConfig</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="stac_generator.core.base.schema.SourceConfig">SourceConfig</span></code>, <code><a class="autorefs autorefs-internal" title="core.raster.schema.RasterOwnConfig" href="#core.raster.schema.RasterOwnConfig">RasterOwnConfig</a></code></p>
+
+
+        <p>Extends SourceConfig to describe raster asset.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="core.raster.schema.RasterConfig.to_asset_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_asset_config</span><span class="p">()</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Produce a dictionary that has the signature of <code>RasterOwnConfig</code></p>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="core.raster.schema.BandInfo" class="doc doc-heading">
+            <code>BandInfo</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Band information for raster data</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">name</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band name. Will be converted to lower case for serialisation</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.common_name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">common_name</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band's common name. Users should only provide one of the <a href="https://github.com/stac-extensions/eo/blob/main/README.md#common-band-names">supported</a> names.</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.wavelength" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">wavelength</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band's wavelength</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.nodata" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">nodata</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band's nodata value</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.data_type" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">data_type</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band's data_type</p>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="core.raster.schema.BandInfo.description" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">description</span> <span class="o">=</span> <span class="kc">None</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Band's description</p>
     </div>
 
 </div>

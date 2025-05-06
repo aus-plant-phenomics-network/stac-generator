@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../schema/">
+        <link rel="prev" href="../generator/">
       
       
-        <link rel="next" href="../extensions/point/generator/">
+        <link rel="next" href="../utility/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Utility - STAC Generator</title>
+        <title>Factory - STAC Generator</title>
       
     
     
@@ -74,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#core.base.utils" class="md-skip">
+        <a href="#factory" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Utility
+              Factory
             
           </span>
         </div>
@@ -692,6 +692,28 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../generator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generator
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -706,7 +728,7 @@
           
   
   <span class="md-ellipsis">
-    Utility
+    Factory
     
   </span>
   
@@ -718,7 +740,7 @@
         
   
   <span class="md-ellipsis">
-    Utility
+    Factory
     
   </span>
   
@@ -739,65 +761,89 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#core.base.utils" class="md-nav__link">
+  <a href="#factory" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
+      factory
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core.base.utils.parse_href" class="md-nav__link">
+  <a href="#factory.StacGeneratorFactory" class="md-nav__link">
     <span class="md-ellipsis">
-      parse_href
+      StacGeneratorFactory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StacGeneratorFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_extension_config_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_extension_config_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_extension_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      href_is_stac_api_endpoint
+      get_extension_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.force_write_to_stac_api" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.register_extension_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      force_write_to_stac_api
+      register_extension_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.calculate_timezone" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.register_generator_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      calculate_timezone
+      register_generator_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.localise_timezone" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_generator_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      localise_timezone
+      get_generator_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.read_point_asset" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.extract_item_config" class="md-nav__link">
     <span class="md-ellipsis">
-      read_point_asset
+      extract_item_config
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_collection_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_collection_generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -816,84 +862,12 @@
   
   
   
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Extension
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3">
-            <span class="md-nav__icon md-icon"></span>
-            Extension
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_1" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_1" id="__nav_4_3_1_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Point
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_1_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_1">
-            <span class="md-nav__icon md-icon"></span>
-            Point
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
-      <a href="../extensions/point/generator/" class="md-nav__link">
+      <a href="../utility/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Generator
+    Utility
     
   </span>
   
@@ -911,208 +885,16 @@
   
   
     <li class="md-nav__item">
-      <a href="../extensions/point/schema/" class="md-nav__link">
+      <a href="../exception/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    Schema
+    Exceptions
     
   </span>
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_2" id="__nav_4_3_2_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Vector
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_2">
-            <span class="md-nav__icon md-icon"></span>
-            Vector
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/vector/generator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Generator
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/vector/schema/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Schema
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_3_3" id="__nav_4_3_3_label" tabindex="0">
-            
-  
-  <span class="md-ellipsis">
-    Raster
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_3_3">
-            <span class="md-nav__icon md-icon"></span>
-            Raster
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/raster/generator/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Generator
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../extensions/raster/schema/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    Schema
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1150,65 +932,89 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#core.base.utils" class="md-nav__link">
+  <a href="#factory" class="md-nav__link">
     <span class="md-ellipsis">
-      utils
+      factory
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#core.base.utils.parse_href" class="md-nav__link">
+  <a href="#factory.StacGeneratorFactory" class="md-nav__link">
     <span class="md-ellipsis">
-      parse_href
+      StacGeneratorFactory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="StacGeneratorFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_extension_config_handler" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_extension_config_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.href_is_stac_api_endpoint" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_extension_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      href_is_stac_api_endpoint
+      get_extension_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.force_write_to_stac_api" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.register_extension_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      force_write_to_stac_api
+      register_extension_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.calculate_timezone" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.register_generator_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      calculate_timezone
+      register_generator_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.localise_timezone" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_generator_handler" class="md-nav__link">
     <span class="md-ellipsis">
-      localise_timezone
+      get_generator_handler
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#core.base.utils.read_point_asset" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.extract_item_config" class="md-nav__link">
     <span class="md-ellipsis">
-      read_point_asset
+      extract_item_config
     </span>
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#factory.StacGeneratorFactory.get_collection_generator" class="md-nav__link">
+    <span class="md-ellipsis">
+      get_collection_generator
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1231,14 +1037,47 @@
   
 
 
-  <h1>Utility</h1>
+  <h1>Factory</h1>
 
 <div class="doc doc-object doc-module">
 
 
 
-<a id="core.base.utils"></a>
+<a id="factory"></a>
     <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="factory.StacGeneratorFactory" class="doc doc-heading">
+            <code>StacGeneratorFactory</code>
+
+
+</h2>
+
+
+    <div class="doc doc-contents ">
+
+
+        <p>StacGeneratorFactory provides a factory method for getting configs and generating CollectionGenerator</p>
+
 
 
 
@@ -1260,15 +1099,19 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.parse_href" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">parse_href</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">collection_id</span><span class="p">,</span> <span class="n">item_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.get_extension_config_handler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_extension_config_handler</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span></code>
 
-</h2>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Generate href for collection or item based on id</p>
+        <p>Match file extension with SourceConfig type</p>
 
     </div>
 
@@ -1277,15 +1120,19 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.href_is_stac_api_endpoint" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">href_is_stac_api_endpoint</span><span class="p">(</span><span class="n">href</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.get_extension_handler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_extension_handler</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span></code>
 
-</h2>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Check if href points to a resource behind a stac api</p>
+        <p>Match file extension with SourceConfig type</p>
 
     </div>
 
@@ -1294,15 +1141,19 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.force_write_to_stac_api" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">force_write_to_stac_api</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">json</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.register_extension_handler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">register_extension_handler</span><span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-</h2>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Force write a json object to a stac api endpoint.</p>
+        <p>Dynamically register extension handler</p>
 
     </div>
 
@@ -1311,15 +1162,19 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.calculate_timezone" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">calculate_timezone</span><span class="p">(</span><span class="n">geometry</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.register_generator_handler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">register_generator_handler</span><span class="p">(</span><span class="n">config_type</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
 
-</h2>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Calculate timezone from geometry</p>
+        <p>Dynamically register a customer ItemGenerator class based on (new/existing) config type. Use force to overwrite existing handler</p>
 
     </div>
 
@@ -1328,23 +1183,19 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.localise_timezone" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">localise_timezone</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">tzinfo</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.get_generator_handler" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_generator_handler</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></code>
 
-</h2>
-          <div class="doc-overloads">
-<div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">localise_timezone</span><span class="p">(</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">Timestamp</span><span class="p">,</span> <span class="n">tzinfo</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Timestamp</span>
-</span></code></pre></div><div class="language-python doc-signature highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">localise_timezone</span><span class="p">(</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">data</span><span class="p">:</span> <span class="n">TimeSeries</span><span class="p">,</span> <span class="n">tzinfo</span><span class="p">:</span> <span class="nb">str</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TimeSeries</span>
-</span></code></pre></div>          </div>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Add timezone information to data then converts to UTC</p>
+        <p>Match ItemGenrator class based on config type</p>
 
     </div>
 
@@ -1353,22 +1204,166 @@
 <div class="doc doc-object doc-function">
 
 
-<h2 id="core.base.utils.read_point_asset" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">read_point_asset</span><span class="p">(</span><span class="n">src_path</span><span class="p">,</span> <span class="n">X_coord</span><span class="p">,</span> <span class="n">Y_coord</span><span class="p">,</span> <span class="n">epsg</span><span class="p">,</span> <span class="n">Z_coord</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">T_coord</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">date_format</span><span class="o">=</span><span class="s1">&#39;ISO8601&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="s1">&#39;local&#39;</span><span class="p">)</span></code>
+<h3 id="factory.StacGeneratorFactory.extract_item_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">extract_item_config</span><span class="p">(</span><span class="n">item</span><span class="p">)</span></code>
 
-</h2>
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Read in csv from local disk
-Users must provide at the bare minimum the location of the csv, and the names of the columns to be
-treated as the X and Y coordinates. By default, will read in all columns in the csv. If columns and groupby
-columns are provided, will selectively read specified columns together with the coordinate columns (X, Y, T).</p>
+        <p>Get stac_generator properties. Used by the MCCN engine</p>
 
     </div>
 
 </div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="factory.StacGeneratorFactory.get_collection_generator" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_collection_generator</span><span class="p">(</span><span class="n">source_configs</span><span class="p">,</span> <span class="n">collection_config</span><span class="p">,</span> <span class="n">pool</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+  </span>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Get a CollectionGenerator instance based on source configs and
+collection config</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>source_configs</code>
+            </td>
+            <td>
+                  <code><span title="factory.Config_T">Config_T</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>extra metadata/generation parameters for</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>the</code>
+            </td>
+            <td>
+                  <code>collection&#39;s items. Source configs can be given as</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>collection_config</code>
+            </td>
+            <td>
+                  <code><span title="stac_generator.core.base.StacCollectionConfig">StacCollectionConfig</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>collection metadata.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>pool</code>
+            </td>
+            <td>
+                  <code><span title="concurrent.futures.Executor">Executor</span> | None</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>optional threadpool/process pool for parallel processing.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>CollectionGenerator</code></td>            <td>
+                  <code><span title="stac_generator.core.base.CollectionGenerator">CollectionGenerator</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>a collection generator instance, in which all items are derived</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td></td>            <td>
+                  <code><span title="stac_generator.core.base.CollectionGenerator">CollectionGenerator</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>from source _configs and general metadata derived from collection_config.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
 
 
 
