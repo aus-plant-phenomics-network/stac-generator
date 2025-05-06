@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 import logging
-import re
-from typing import TYPE_CHECKING
 
 import pandas as pd
 import pystac
 
-from stac_generator.core.base.generator import VectorGenerator as BaseVectorGenerator
+from stac_generator.core.base.generator import BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import (
+    extract_epsg,
     get_timezone,
     read_join_asset,
     read_vector_asset,
@@ -17,50 +16,20 @@ from stac_generator.core.base.utils import (
 from stac_generator.core.vector.schema import VectorConfig
 from stac_generator.exceptions import StacConfigException
 
-if TYPE_CHECKING:
-    from pyproj.crs.crs import CRS
-
 logger = logging.getLogger(__name__)
-
-
-def extract_epsg(crs: CRS) -> tuple[int, bool]:
-    """Extract epsg information from crs object.
-    If epsg info can be extracted directly from crs, return that value.
-    Otherwise, try to convert the crs info to WKT2 and extract EPSG using regex
-
-    Note that this method may yield unreliable result
-
-    :param crs: crs object
-    :type crs: CRS
-    :return: epsg information
-    :rtype: tuple[int, bool] - epsg code and reliability flag
-    """
-    if (result := crs.to_epsg()) is not None:
-        return (result, True)
-    # Handle WKT1 edge case
-    wkt = crs.to_wkt()
-    match = re.search(r'ID\["EPSG",(\d+)\]', wkt)
-    if match:
-        return (int(match.group(1)), True)
-    # No match - defaults to 4326
-
-    logger.warning(
-        "Cannot determine epsg from vector file. Either provide it in the config or change the source file. Defaults to 4326 but can be incorrect."
-    )  # pragma: no cover
-    return (4326, False)  # pragma: no cover
 
 
 class VectorGenerator(BaseVectorGenerator[VectorConfig]):
     """ItemGenerator class that handles vector data with common vector formats - i.e (shp, zipped shp, gpkg, geojson)"""
 
     def generate(self) -> pystac.Item:
-        """Create item from vector config
+        """Create a STAC Item from a VectorConfig
 
-        :param self.config: config information
-        :type self.config: VectorConfig
-        :raises ValueError: if config epsg information is different from epsg information from vector file
-        :return: stac metadata of the file described by self.config
-        :rtype: pystac.Item
+        Raises:
+            StacConfigException: if the stac config fails a validation check
+
+        Returns:
+            pystac.Item: generated STAC Item
         """
 
         assets = {

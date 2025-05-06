@@ -10,7 +10,7 @@ import pytest_httpx
 import shapely
 from shapely import Geometry, LineString, MultiLineString, MultiPoint, MultiPolygon, Point, Polygon
 
-from stac_generator.core.base.generator import CollectionGenerator, VectorGenerator
+from stac_generator.core.base.generator import BaseVectorGenerator, CollectionGenerator
 from stac_generator.core.base.utils import (
     _read_csv,
     force_write_to_stac_api,
@@ -372,7 +372,7 @@ GEOMETRY_TEST_SET = {
 
 @pytest.mark.parametrize("df, geom", GEOMETRY_TEST_SET.values(), ids=GEOMETRY_TEST_SET.keys())
 def test_geometry(df: gpd.GeoDataFrame, geom: Geometry) -> None:
-    actual = VectorGenerator.geometry(df)
+    actual = BaseVectorGenerator.geometry(df)
     assert actual == geom
 
 

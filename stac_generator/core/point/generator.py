@@ -5,7 +5,7 @@ import logging
 import pystac
 
 from stac_generator._types import CsvMediaType
-from stac_generator.core.base.generator import VectorGenerator
+from stac_generator.core.base.generator import BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import read_point_asset
 from stac_generator.core.point.schema import PointConfig
@@ -13,16 +13,14 @@ from stac_generator.core.point.schema import PointConfig
 logger = logging.getLogger(__name__)
 
 
-class PointGenerator(VectorGenerator[PointConfig]):
+class PointGenerator(BaseVectorGenerator[PointConfig]):
     """ItemGenerator class that handles point data in csv format"""
 
     def generate(self) -> pystac.Item:
-        """Create item from source csv config
+        """Generate a STAC Item based on provided point config
 
-        :param self.config: config which contains csv metadata
-        :type self.config: PointConfig
-        :return: stac metadata of the item described in self.config
-        :rtype: pystac.Item
+        Returns:
+            pystac.Item: generated STAC Item
         """
         assets = {
             ASSET_KEY: pystac.Asset(

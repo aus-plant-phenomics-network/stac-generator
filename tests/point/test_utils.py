@@ -6,7 +6,7 @@ import pytest
 from shapely import Geometry
 
 from stac_generator._types import CsvMediaType
-from stac_generator.core.base.generator import VectorGenerator
+from stac_generator.core.base.generator import BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import read_point_asset
 from stac_generator.core.point.schema import PointConfig
@@ -158,7 +158,7 @@ def test_df_to_item(
     source_config: PointConfig,
     geometry: Geometry,
 ) -> None:
-    item = VectorGenerator.df_to_item(
+    item = BaseVectorGenerator.df_to_item(
         df=frame,
         assets={ASSET_KEY: asset},
         source_config=source_config,

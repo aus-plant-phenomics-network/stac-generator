@@ -71,6 +71,8 @@ Config_T = BaseConfig_T | Sequence[BaseConfig_T]
 
 
 class StacGeneratorFactory:
+    """StacGeneratorFactory provides a factory method for getting configs and generating CollectionGenerator"""
+
     @staticmethod
     def get_extension_config_handler(extension: str) -> type[BaseModel]:
         """Match file extension with SourceConfig type"""

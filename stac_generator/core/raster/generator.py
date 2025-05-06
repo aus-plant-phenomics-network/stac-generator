@@ -26,13 +26,13 @@ class RasterGenerator(ItemGenerator[RasterConfig]):
     """Raster Generator"""
 
     def generate(self) -> pystac.Item:
-        """Generate Raster Item from config
+        """Generate a STAC Item from RasterConfig
 
-        :param self.config: raster config - must contain band info
-        :type self.config: RasterConfig
-        :raises ValueError: if epsg code is provided in config but does not match that extracted from the asset
-        :return: generated item
-        :rtype: pystac.Item
+        Raises:
+            SourceAssetException: if the data cannot be accessed
+
+        Returns:
+            pystac.Item: generated STAC Item
         """
         try:
             logger.info(f"Reading raster asset: {self.config.id}")
