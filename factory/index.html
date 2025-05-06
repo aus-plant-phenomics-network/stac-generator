@@ -1241,6 +1241,21 @@
 collection config</p>
 
 
+<details class="source-configs-can-be-given-as" open>
+  <summary>Source configs can be given as</summary>
+  <ul>
+<li>a string path to a config.json file</li>
+<li>a list of string paths to different config.json files</li>
+<li>an instance of SourceConfig class (VectorConfig, PointConfig, RasterConfig), etc</li>
+<li>a list of instances of SourceConfig.</li>
+<li>a dictionary that follows the general structure of a SourceConfig class</li>
+<li>a list of dictionaries
+If file paths are given, the files will be parsed into instances of SourceConfig.
+If dictionaries are given, they will be parsed into istances of SourceConfig using
+pydantic model_valiate.</li>
+</ul>
+</details>
+
 <p><span class="doc-section-title">Parameters:</span></p>
     <table>
       <thead>
@@ -1261,23 +1276,7 @@ collection config</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>extra metadata/generation parameters for</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>the</code>
-            </td>
-            <td>
-                  <code>collection&#39;s items. Source configs can be given as</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                
+                <p>extra metadata/generation parameters for the collection's items</p>
               </div>
             </td>
             <td>
@@ -1309,7 +1308,7 @@ collection config</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>optional threadpool/process pool for parallel processing.</p>
+                <p>optional threadpool/process pool for parallel processing.. Defaults to None.</p>
               </div>
             </td>
             <td>
@@ -1335,17 +1334,7 @@ collection config</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>a collection generator instance, in which all items are derived</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="stac_generator.core.base.CollectionGenerator">CollectionGenerator</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>from source _configs and general metadata derived from collection_config.</p>
+                <p>a collection generator instance, in which all items are derived from source _configs and general metadata derived from collection_config.</p>
               </div>
             </td>
           </tr>
