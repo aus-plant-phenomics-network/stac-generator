@@ -1,3 +1,4 @@
+import abc
 import datetime
 import logging
 from collections.abc import Sequence
@@ -125,6 +126,7 @@ class SourceConfig(StacItemConfig):
             **self.model_dump(mode="python", exclude_unset=True, exclude_none=True, exclude={"id"})
         ).model_dump(mode="json", exclude_unset=True, exclude_none=True, warnings=False)
 
+    @abc.abstractmethod
     def to_asset_config(self) -> dict[str, Any]:
         """Abstract method that dictates how config should be serialised that contains the minimum information
         to intepret the asset. SourceConfig subclasses should inherit and override this method.

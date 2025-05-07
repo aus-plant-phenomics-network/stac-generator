@@ -5,14 +5,19 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
+import pystac
 import pytest
+import pytz
 
 from stac_generator.core.base import StacCollectionConfig
 from stac_generator.core.base.generator import CollectionGenerator
 from stac_generator.core.base.schema import SourceConfig
-from stac_generator.core.point.schema import PointConfig
+from stac_generator.core.point.generator import PointGenerator
+from stac_generator.core.point.schema import PointConfig, PointOwnConfig
+from stac_generator.core.raster.schema import RasterOwnConfig
 from stac_generator.core.vector import VectorGenerator
-from stac_generator.core.vector.schema import VectorConfig
+from stac_generator.core.vector.schema import VectorConfig, VectorOwnConfig
 from stac_generator.factory import StacGeneratorFactory
 from tests.utils import compare_extent, compare_items
 
@@ -28,7 +33,9 @@ CONFIGS_LIST = [
 COMPOSITE_CONFIG = FILE_PATH / "composite/config/composite_config.json"
 
 
-class DbfConfig(SourceConfig): ...
+class DbfConfig(SourceConfig):
+    def to_asset_config(self) -> dict[str, Any]:
+        return self.model_dump(mode="json")
 
 
 @pytest.fixture(scope="module")
@@ -349,6 +356,7 @@ def test_register_invalid_handler_exp_raises() -> None:
 def test_register_existing_ext_with_force_no_raises() -> None:
     StacGeneratorFactory.register_extension_handler("csv", DbfConfig, force=True)
     assert StacGeneratorFactory.get_extension_handler("csv") == DbfConfig
+    StacGeneratorFactory.register_extension_handler("csv", PointConfig, force=True)
 
 
 def test_register_existing_config_no_force_exp_raises() -> None:
@@ -374,3 +382,138 @@ def test_register_existing_config_force_no_raises() -> None:
 def test_register_invalid_config_handler_exp_raises() -> None:
     with pytest.raises(ValueError):
         StacGeneratorFactory.register_generator_handler(VectorConfig, VectorConfig, force=True)  # type: ignore[arg-type]
+
+
+@pytest.mark.parametrize(
+    "path, cfg_handler",
+    [
+        ("tests/files/integration_tests/point/config/point_config.json", PointOwnConfig),
+        ("tests/files/integration_tests/raster/config/raster_config.json", RasterOwnConfig),
+        ("tests/files/integration_tests/vector/config/vector_config.json", VectorOwnConfig),
+    ],
+)
+def test_extract_item_config(path: str, cfg_handler: type) -> None:
+    with Path(path).open() as file:
+        config = json.load(file)
+    generators = StacGeneratorFactory.get_item_generators(config)
+    for generator in generators:
+        parsed_config = generator.config
+        item = generator.generate()
+        href = StacGeneratorFactory.get_item_asset_href(item)
+        ext = href.split(".")[-1]
+        assert href == parsed_config.location
+        assert cfg_handler == StacGeneratorFactory.get_extension_config_handler(ext)
+        assert "timezone" in item.properties
+        assert item.properties["timezone"] == generator.config.timezone
+        assert (
+            StacGeneratorFactory.extract_item_config(item).model_dump(
+                mode="json", exclude_none=True, exclude_unset=True
+            )
+            == item.properties["stac_generator"]
+        )
+
+
+def test_extract_item_config_from_config_no_tz() -> None:
+    config = PointConfig.model_validate(
+        {
+            "id": "adelaide_salisbury_bowling_club",
+            "title": "adelaide salisbury bowling club weather data report",
+            "description": "weather station report at adelaide salisbury bowling club on 2023-01-02T09:00:00 local time",
+            "location": "tests/files/integration_tests/point/data/adelaide_salisbury_bowling_club.csv",
+            "collection_date": "2023-01-02",
+            "collection_time": "09:00:00",
+            "X": "longitude",
+            "Y": "latitude",
+            "Z": "elevation",
+            "T": "YYYY-MM-DD",
+            "epsg": 7843,
+            "column_info": [
+                {"name": "daily_rain", "description": "Observed daily rain fall in mm"},
+                {
+                    "name": "radiation",
+                    "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm",
+                },
+            ],
+        },
+    )
+    generator = PointGenerator(config)
+    item = generator.generate()
+    assert item.properties["title"] == config.title
+    assert item.properties["description"] == config.description
+    assert StacGeneratorFactory.get_item_asset_href(item) == config.location
+    assert item.properties["timezone"] == "local"
+    assert "stac_generator" in item.properties
+    assert item.properties["stac_generator"]["X"] == config.X
+    assert item.properties["stac_generator"]["Y"] == config.Y
+    assert item.properties["stac_generator"]["Z"] == config.Z
+    assert item.properties["stac_generator"]["T"] == config.T
+    assert item.properties["stac_generator"]["epsg"] == config.epsg
+    assert item.properties["stac_generator"]["column_info"] == config.column_info
+    assert item.datetime == pd.Timestamp(
+        year=config.collection_date.year,
+        month=config.collection_date.month,
+        day=config.collection_date.day,
+        hour=config.collection_time.hour,
+        tz=pytz.timezone("Australia/Adelaide"),
+    ).tz_convert("utc")
+
+
+def test_extract_item_config_from_config_with_tz() -> None:
+    config = PointConfig.model_validate(
+        {
+            "id": "adelaide_salisbury_bowling_club",
+            "title": "adelaide salisbury bowling club weather data report",
+            "description": "weather station report at adelaide salisbury bowling club on 2023-01-02T09:00:00 local time",
+            "location": "tests/files/integration_tests/point/data/adelaide_salisbury_bowling_club.csv",
+            "collection_date": "2023-01-02",
+            "collection_time": "09:00:00",
+            "timezone": "utc",
+            "X": "longitude",
+            "Y": "latitude",
+            "Z": "elevation",
+            "T": "YYYY-MM-DD",
+            "epsg": 7843,
+            "column_info": [
+                {"name": "daily_rain", "description": "Observed daily rain fall in mm"},
+                {
+                    "name": "radiation",
+                    "description": "Total incoming downward shortwave radiation on a horizontal surface MJ/sqm",
+                },
+            ],
+        },
+    )
+    generator = PointGenerator(config)
+    item = generator.generate()
+    assert item.properties["title"] == config.title
+    assert item.properties["description"] == config.description
+    assert StacGeneratorFactory.get_item_asset_href(item) == config.location
+    assert item.properties["timezone"] == "utc"
+    assert "stac_generator" in item.properties
+    assert item.properties["stac_generator"]["X"] == config.X
+    assert item.properties["stac_generator"]["Y"] == config.Y
+    assert item.properties["stac_generator"]["Z"] == config.Z
+    assert item.properties["stac_generator"]["T"] == config.T
+    assert item.properties["stac_generator"]["epsg"] == config.epsg
+    assert item.properties["stac_generator"]["column_info"] == config.column_info
+    assert item.datetime == datetime.datetime.combine(
+        config.collection_date, config.collection_time, tzinfo=datetime.UTC
+    )
+
+
+@pytest.fixture(scope="module")
+def non_compliant_stac_item() -> pystac.Item:
+    return pystac.Item.from_file("tests/files/integration_tests/stac_item_non_compat.json")
+
+
+def test_given_non_stac_generated_item_extract_item_config_raises(
+    non_compliant_stac_item: pystac.Item,
+) -> None:
+    with pytest.raises(ValueError):
+        StacGeneratorFactory.extract_item_config(non_compliant_stac_item)
+
+
+def test_given_non_stac_generated_item_get_href_raises(
+    non_compliant_stac_item: pystac.Item,
+) -> None:
+    with pytest.raises(KeyError):
+        StacGeneratorFactory.get_item_asset_href(non_compliant_stac_item)
