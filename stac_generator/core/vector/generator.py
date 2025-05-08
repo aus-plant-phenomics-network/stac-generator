@@ -53,6 +53,10 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
             raise StacConfigException(
                 f"Invalid columns for asset - {self.config.location!s}: {set(columns) - set(raw_df.columns)}. The config describes a column that is not present in the raw asset. Fix this error by removing the column info entry or changing the entry to an existing column."
             )
+        if raw_df.empty:
+            raise StacConfigException(
+                "Empty vector dataframe. This error can be due to column_info not defined properly."
+            )
 
         # Validate EPSG user-input vs extracted
         epsg, _ = extract_epsg(raw_df.crs)
@@ -78,10 +82,13 @@ class VectorGenerator(BaseVectorGenerator[VectorConfig]):
                 left_on=join_config.left_on,
                 right_on=join_config.right_on,
             )
+            if raw_df.empty:
+                raise StacConfigException(
+                    f"Empty join dataframe for id: {self.config.id}. This is often due to join columns have no overlapping value. Check join_config left_on, right_on and/or check join column values to address the problem."
+                )
             # Set asset start and end datetime based on date information
             if join_config.date_column:
                 time_column = join_config.date_column
-
         # Make properties
         return self.df_to_item(
             raw_df,

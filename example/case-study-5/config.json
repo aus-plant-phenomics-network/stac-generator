@@ -1,0 +1,85 @@
+[
+  {
+    "id": "biomass_gilbert_2022",
+    "location": "example/case-study-5/shp.zip",
+    "layer": "gat_22_shp_hiphen_final",
+    "collection_date": "2022-10-17T00:00:00Z",
+    "collection_time": "00:00:00Z",
+    "timezone": "UTC",
+    "geometry_type": "Polygon",
+    "column_info": [
+      {
+        "name": "plot_id",
+        "description": "Plot ID for joining with biomass data"
+      }
+    ],
+    "join_config": {
+      "file": "example/case-study-5/E10Biomass_Alldates_table_formatted.csv",
+      "left_on": "plot_id",
+      "right_on": "plot_id",
+      "date_column": "date",
+      "column_info": [
+        {
+          "name": "plot_id",
+          "description": "Plot ID for joining with spatial data"
+        },
+        {
+          "name": "main_fw",
+          "description": "main_fw"
+        },
+        {
+          "name": "greenleaf_fw",
+          "description": "greenleaf_fw"
+        },
+        {
+          "name": "greenleaf_area_FW",
+          "description": "greenleaf_area_FW"
+        },
+        {
+          "name": "stem_fw",
+          "description": "stem_fw"
+        },
+        {
+          "name": "head_fw",
+          "description": "head_fw"
+        },
+        {
+          "name": "deadleaf_fw",
+          "description": "deadleaf_fw"
+        },
+        {
+          "name": "greenleaf_area",
+          "description": "greenleaf_area"
+        },
+        {
+          "name": "greenleaf_dw",
+          "description": "greenleaf_dw"
+        },
+        {
+          "name": "greenleaf_area_dw",
+          "description": "greenleaf_area_dw"
+        },
+        {
+          "name": "stem_dw",
+          "description": "stem_dw"
+        },
+        {
+          "name": "head_dw",
+          "description": "head_dw"
+        },
+        {
+          "name": "deadleaf_dw",
+          "description": "deadleaf_dw"
+        },
+        {
+          "name": "main_dw",
+          "description": "main_dw"
+        },
+        {
+          "name": "TT_cumulative",
+          "description": "TT_cumulative"
+        }
+      ]
+    }
+  }
+]

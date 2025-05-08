@@ -9,6 +9,7 @@ from stac_generator.core.base.generator import BaseVectorGenerator
 from stac_generator.core.base.schema import ASSET_KEY
 from stac_generator.core.base.utils import read_point_asset
 from stac_generator.core.point.schema import PointConfig
+from stac_generator.exceptions import StacConfigException
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,10 @@ class PointGenerator(BaseVectorGenerator[PointConfig]):
             self.config.column_info,
             self.config.timezone,
         )
-
+        if raw_df.empty:
+            raise StacConfigException(
+                f"Empty dataframe for {self.config.id}. Check that the file is non-empty and that column_info values are provided."
+            )
         return self.df_to_item(
             raw_df,
             assets,
